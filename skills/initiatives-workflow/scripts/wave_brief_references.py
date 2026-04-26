@@ -41,6 +41,7 @@ class ReferenceReport:
 @dataclass(frozen=True, slots=True)
 class _Args:
     wave: str
+    repo_root: Path
 
 
 def _validate_wave_id(wave_id: str) -> None:
@@ -105,6 +106,7 @@ def collect_wave_brief_references(*, repo_root: Path, wave_id: str) -> Reference
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="List exact repo references to one wave brief path.")
     _ = parser.add_argument("--wave", required=True, help="Wave id, for example: hd-9")
+    _ = parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="Target project repository root.")
     return parser
 
 
@@ -113,14 +115,17 @@ def _parse_args(parser: argparse.ArgumentParser) -> _Args:
     wave = getattr(args, "wave", None)
     if not isinstance(wave, str):
         raise TypeError
-    return _Args(wave=wave)
+    repo_root = getattr(args, "repo_root", None)
+    if not isinstance(repo_root, Path):
+        raise TypeError
+    return _Args(wave=wave, repo_root=repo_root)
 
 
 def main() -> int:
     parser = _build_parser()
     args = _parse_args(parser)
     wave_id = args.wave
-    repo_root = Path(__file__).resolve().parents[3]
+    repo_root = args.repo_root.resolve()
     report = collect_wave_brief_references(repo_root=repo_root, wave_id=wave_id)
 
     print(f"wave: {wave_id}")

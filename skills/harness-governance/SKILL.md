@@ -16,3 +16,5 @@ Read only the references needed for the current task:
 - `references/just-command-router.md`
 - `references/repo-operating-posture.md`
 - `references/repo-structure-contract.md`
+- `references/internal-harness-baseline.md`
+- `references/skill-architecture.md`

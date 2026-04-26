@@ -1,0 +1,4 @@
+interface:
+  display_name: "Documentation Stewardship"
+  short_description: "Keep durable docs concise and correctly owned"
+  default_prompt: "Use $documentation-stewardship to update these durable docs without duplicating policy or leaking run-specific detail."

@@ -146,7 +146,7 @@ PATTERNS = {
 
 
 def _default_repo_root() -> Path:
-    return Path(__file__).resolve().parents[3]
+    return Path.cwd()
 
 
 def _is_test_file(path: Path) -> bool:

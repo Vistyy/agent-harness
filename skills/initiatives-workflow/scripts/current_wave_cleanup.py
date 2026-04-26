@@ -78,7 +78,7 @@ def delete_wave_dir(wave_dir: Path) -> int:
 
 
 def _default_current_work_root() -> Path:
-    return Path(__file__).resolve().parents[3] / "docs-ai" / "current-work"
+    return Path.cwd() / "docs-ai" / "current-work"
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -89,6 +89,12 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Delete the resolved directory. Without this flag the command is a dry-run.",
     )
+    _ = parser.add_argument(
+        "--current-work-root",
+        type=Path,
+        default=_default_current_work_root(),
+        help="Target docs-ai/current-work directory.",
+    )
     return parser
 
 
@@ -97,9 +103,10 @@ def main() -> int:
     args = parser.parse_args()
     wave = cast(str, args.wave)
     execute = cast(bool, args.execute)
+    current_work_root = cast(Path, args.current_work_root)
 
     wave_dir = resolve_wave_dir(
-        current_work_root=_default_current_work_root(),
+        current_work_root=current_work_root,
         wave=wave,
     )
     if not execute:

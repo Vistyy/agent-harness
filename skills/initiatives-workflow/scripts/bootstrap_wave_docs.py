@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import final
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path.cwd()
 WAVE_BRIEFS_ROOT = REPO_ROOT / "docs-ai" / "docs" / "initiatives" / "waves"
 DISCOVERY_TEMPLATE_REFERENCE = "skills/initiatives-workflow/assets/wave-brief-discovery-required.md"
 
@@ -38,6 +38,7 @@ class _Args(argparse.Namespace):
         self.status: str = "discovery-required"
         self.tasks: list[str] = []
         self.force: bool = False
+        self.repo_root: Path = Path.cwd()
 
 
 def _parse_args() -> _Args:
@@ -58,6 +59,7 @@ def _parse_args() -> _Args:
         help="Task slug to prefill. Repeat for multiple tasks.",
     )
     _ = parser.add_argument("--force", action="store_true", help="Overwrite existing files.")
+    _ = parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="Target project repository root.")
     return parser.parse_args(namespace=_Args())
 
 
@@ -129,6 +131,9 @@ def bootstrap_wave_docs(*, wave_id: str, title: str, status: str, tasks: list[st
 
 def main() -> int:
     parser = _parse_args()
+    global REPO_ROOT, WAVE_BRIEFS_ROOT
+    REPO_ROOT = parser.repo_root.resolve()
+    WAVE_BRIEFS_ROOT = REPO_ROOT / "docs-ai" / "docs" / "initiatives" / "waves"
     try:
         _ = bootstrap_wave_docs(
             wave_id=parser.wave_id,
