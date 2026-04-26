@@ -171,7 +171,10 @@ write_manifests() {
 }
 
 apply_symlinks() {
-  mkdir -p "$SKILLS_HOME" "$AGENTS_HOME"
+  while IFS=$'\t' read -r target _source; do
+    [[ -z "$target" ]] && continue
+    mkdir -p "$(dirname "$target")"
+  done
   local conflict
   for conflict in "${CONFLICTS[@]}"; do
     local target="${conflict%%$'\t'*}"
