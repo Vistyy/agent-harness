@@ -29,10 +29,10 @@ Do not create parallel design decision tracks in downstream skills.
 - `references/parity-dimensions.md`
 - `references/atomic-design.md`
 - `references/text-constraints.md`
-- `docs-ai/docs/conventions/web-frontend-boundaries.md`
+- `../system-boundary-architecture/references/web-frontend-boundaries.md`
   when shared web layer ownership, import direction, or public-surface hygiene
   changes in web app code
-- `docs-ai/docs/conventions/web-route-and-state-boundary-doctrine.md`
+- `../system-boundary-architecture/references/web-route-and-state-boundary-doctrine.md`
   when route shells, screen-facing state authority, or facade/screen-model
   boundaries change in web app code
 

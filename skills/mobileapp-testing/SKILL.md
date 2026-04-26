@@ -99,4 +99,4 @@ Runtime evidence reports should include:
 - `blocking` defects and `advisory` notes,
 - pass/fail and residual risk.
 
-Completion claim fields belong to `docs-ai/docs/conventions/review-governance.md`.
+Completion claim fields belong to `../code-review/references/review-governance.md`.

@@ -24,6 +24,7 @@ FORBIDDEN_TERMS = (
 FRONTMATTER_RE = re.compile(r"^---\nname: .+\ndescription: .+\n---\n", re.DOTALL)
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 INLINE_PATH_RE = re.compile(r"`((?:references|assets|scripts)/[^`]+)`")
+FORBIDDEN_PROJECT_OWNER_PATH_RE = re.compile(r"`(docs-ai/docs/conventions/[^`]+)`")
 
 
 def _is_source_path_citation(line: str) -> bool:
@@ -72,6 +73,10 @@ def validate(root: Path) -> list[str]:
         for line_number, line in enumerate(text.splitlines(), start=1):
             if _is_source_path_citation(line):
                 continue
+            for match in FORBIDDEN_PROJECT_OWNER_PATH_RE.finditer(line):
+                errors.append(
+                    f"{markdown_file.relative_to(root)}:{line_number} forbidden project owner path {match.group(1)!r}"
+                )
             for term in FORBIDDEN_TERMS:
                 if term in line:
                     errors.append(
@@ -105,12 +110,14 @@ def run_self_test() -> list[str]:
         (root / "README.md").write_text("Budgeat product fact\n", encoding="utf-8")
         (root / "SOURCE.md").write_text("source: Budgeat product fact without path\n", encoding="utf-8")
         (root / "CITATION.md").write_text("source: `docs-ai/docs/example.md` Budgeat source path\n", encoding="utf-8")
+        (root / "OWNER.md").write_text("See `docs-ai/docs/conventions/review-governance.md`.\n", encoding="utf-8")
         fixture_errors = validate(root)
         expected = (
             "missing required frontmatter",
             "broken reference references/foo.md",
             "README.md:1 forbidden project term",
             "SOURCE.md:1 forbidden project term",
+            "OWNER.md:1 forbidden project owner path",
         )
         for marker in expected:
             if not any(marker in error for error in fixture_errors):
