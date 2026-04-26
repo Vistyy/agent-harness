@@ -1,0 +1,30 @@
+[features]
+multi_agent = true
+
+[agents.explorer]
+description = "Default read-only discovery worker for repo exploration, strict code-path mapping, and context compression. Prefer delegating non-trivial file search/reading to it so the parent thread can stay in orchestration mode; returns relevant files, symbols, call paths, open questions, and next probes without proposing fixes by default."
+config_file = "agents/explorer.toml"
+
+[agents.check_runner]
+description = "Default worker for narrowed non-runtime verification and diagnostics triage. Prefer it for targeted tests, build checks, `just ... quality*` recipes, log/trace sweeps, and summarizing large outputs so the parent thread does not spend frontier-model budget on grunt work."
+config_file = "agents/check-runner.toml"
+
+[agents.planning_critic]
+description = "Use for non-trivial planning reviews."
+config_file = "agents/planning-critic.toml"
+
+[agents.implementer]
+description = "Use for one tightly scoped structured wave task card or approved standalone plan slice."
+config_file = "agents/implementer.toml"
+
+[agents.quality_guard]
+description = "Use for planning-gate reviews and implementation review chunks."
+config_file = "agents/quality-guard.toml"
+
+[agents.final_reviewer]
+description = "Use only for the final isolated closeout review after implementation and local verification; not for planning-gate or in-thread chunk review."
+config_file = "agents/final-reviewer.toml"
+
+[agents.runtime_evidence]
+description = "Live runtime validation worker. Prefer for browser-visible or device-visible acceptance, including internal/admin surfaces, once the parent agent has identified the target behavior to verify; use it for live behavior/UI/API validation that needs real interaction, real requests, or screenshot-backed verdicts with explicit behavioral/design-fidelity output, not routine bulk log archaeology."
+config_file = "agents/runtime-evidence.toml"
