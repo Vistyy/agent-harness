@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tailwind Design System"
+  short_description: "Apply stable Tailwind v4 design system rules"
+  default_prompt: "Use $tailwind-design-system to implement this Tailwind styling change with repo-stable conventions."

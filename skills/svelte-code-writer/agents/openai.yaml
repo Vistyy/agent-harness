@@ -1,0 +1,4 @@
+interface:
+  display_name: "Svelte Code Writer"
+  short_description: "Write Svelte code with docs and tooling support"
+  default_prompt: "Use $svelte-code-writer to implement this Svelte change with the right docs and tooling support."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flutter Expert"
+  short_description: "Implement and debug Flutter or Dart mobile work"
+  default_prompt: "Use $flutter-expert to implement or debug this Flutter or Dart mobile change."

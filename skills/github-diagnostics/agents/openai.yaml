@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Diagnostics"
+  short_description: "Inspect GitHub PRs, checks, and comments safely"
+  default_prompt: "Use $github-diagnostics to inspect this GitHub PR, checks, or comments in read-only mode."

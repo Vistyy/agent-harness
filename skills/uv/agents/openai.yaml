@@ -1,0 +1,4 @@
+interface:
+  display_name: "uv"
+  short_description: "Manage Python environments and commands with uv"
+  default_prompt: "Use $uv to handle the Python environment, dependency, and command workflow for this task."
