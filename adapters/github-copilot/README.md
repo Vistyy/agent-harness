@@ -1,12 +1,12 @@
 # GitHub Copilot Adapter
 
-Reusable Copilot custom agent profiles.
+Reusable Copilot custom agent profile sources.
 
 VS Code discovers workspace agents from `.github/agents` and user-level agents
-from `~/.copilot/agents` or VS Code profile user data. This adapter installs
-the reusable harness agents at user scope so projects do not need local copies.
+from `~/.copilot/agents` or VS Code profile user data. This adapter keeps the
+reusable harness agent sources in one place; user-scope installation is
+intentionally out of the baseline install scope.
 
 GitHub.com cloud agent repository/organization discovery is separate: repository
 agents live in `.github/agents`, and organization/enterprise agents live in
 `/agents` in a `.github-private` repository.
-

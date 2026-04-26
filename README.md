@@ -9,4 +9,4 @@ Project-specific facts stay in each project overlay.
 
 Adapters:
 - Codex: `adapters/codex/install.sh`
-- GitHub Copilot custom agents: `adapters/github-copilot/install.sh`
+- GitHub Copilot custom agent sources: `adapters/github-copilot/agents/`

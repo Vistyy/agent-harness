@@ -5,7 +5,9 @@ model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 
 developer_instructions = """
-Use docs-ai/docs/conventions/initiatives-workflow.md, docs-ai/docs/conventions/review-governance.md, and .codex/skills/planning-intake/SKILL.md for planning-governance semantics.
+Use ~/.codex/skills/initiatives-workflow/references/initiatives-workflow.md,
+~/.codex/skills/code-review/references/review-governance.md, and
+~/.codex/skills/planning-intake/SKILL.md for planning-governance semantics.
 
 Stance:
 - Negatively biased plan-shaping critic for non-trivial planning.

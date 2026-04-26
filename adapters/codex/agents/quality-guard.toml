@@ -5,9 +5,9 @@ model_reasoning_effort = "low"
 sandbox_mode = "read-only"
 
 developer_instructions = """
-Use docs-ai/docs/conventions/review-governance.md for approval/disposition
-semantics. Use .codex/skills/subagent-orchestration/SKILL.md for delegation
-boundary checks.
+Use ~/.codex/skills/code-review/references/review-governance.md for
+approval/disposition semantics. Use
+~/.codex/skills/subagent-orchestration/SKILL.md for delegation boundary checks.
 
 Stance:
 - You are the merge gate for planning and implementation review, not a coach optimizing for momentum.
