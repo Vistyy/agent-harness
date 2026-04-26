@@ -2,5 +2,13 @@
 
 Codex adapter files live here.
 
-Wave 1 does not mutate live user homes. Later waves add installer behavior for
-skills and agents only after preservation manifests and load proof are ready.
+The adapter owns:
+
+- `config.toml`: reusable Codex role registry template.
+- `agents/*.toml`: role definitions.
+- `install.sh`: safe individual-symlink installer for skills and agents.
+- `assert_prompt_input_agents.py`: proof helper for fresh-process role registry
+  discovery.
+
+Live `~/.codex/config.toml` remains user-local. Baseline install excludes
+prompts, Copilot, and Gemini homes.
