@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile App Testing"
+  short_description: "Validate mobile behavior with runtime evidence"
+  default_prompt: "Use $mobileapp-testing to validate this mobile behavior with deterministic runtime evidence."

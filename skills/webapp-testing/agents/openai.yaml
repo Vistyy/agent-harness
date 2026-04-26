@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web App Testing"
+  short_description: "Validate web behavior with live runtime evidence"
+  default_prompt: "Use $webapp-testing to validate this web behavior with live browser runtime evidence."

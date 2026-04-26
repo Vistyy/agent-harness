@@ -1,0 +1,4 @@
+interface:
+  display_name: "User Apps Design"
+  short_description: "Implement end-user UI to the expected quality bar"
+  default_prompt: "Use $user-apps-design to implement this end-user UI change with the expected design quality bar."
