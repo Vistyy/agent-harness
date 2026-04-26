@@ -1,0 +1,4 @@
+interface:
+  display_name: "Subagent Orchestration"
+  short_description: "Delegate bounded work cleanly"
+  default_prompt: "Use $subagent-orchestration to route bounded exploration, verification, runtime evidence, and review work to the right subagent."

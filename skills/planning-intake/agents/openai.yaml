@@ -1,0 +1,4 @@
+interface:
+  display_name: "Planning Intake"
+  short_description: "Harden vague work into an execution-ready wave"
+  default_prompt: "Use $planning-intake to harden this idea into an execution-ready wave or reject it as underspecified."

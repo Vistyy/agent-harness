@@ -1,0 +1,4 @@
+interface:
+  display_name: "Initiatives Workflow"
+  short_description: "Maintain waves, packets, backlog, and delivery map"
+  default_prompt: "Use $initiatives-workflow to update wave, delivery-map, packet, or backlog workflow state correctly."

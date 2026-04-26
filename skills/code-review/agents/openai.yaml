@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Full isolated review of implemented changes"
+  default_prompt: "Use $code-review to perform a full isolated review of these implemented changes."

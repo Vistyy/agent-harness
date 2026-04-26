@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Simplicity"
+  short_description: "Review changes for complexity and simplification"
+  default_prompt: "Use $code-simplicity to pressure-test this change for unnecessary complexity and simplification opportunities."
