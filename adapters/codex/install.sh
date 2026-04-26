@@ -3,10 +3,11 @@ set -euo pipefail
 
 MODE="dry-run"
 STAGE_ONLY="false"
+REPLACE_CONFLICTING_SYMLINKS="false"
 
 usage() {
   cat <<'EOF'
-Usage: install.sh [--dry-run|--apply] [--stage-harness-governance]
+Usage: install.sh [--dry-run|--apply] [--stage-harness-governance] [--replace-conflicting-symlinks]
 
 Installs Codex skills/agents with individual symlinks only.
 Baseline excludes config, prompts, Copilot, and Gemini homes.
@@ -23,6 +24,9 @@ while [[ $# -gt 0 ]]; do
       ;;
     --stage-harness-governance)
       STAGE_ONLY="true"
+      ;;
+    --replace-conflicting-symlinks)
+      REPLACE_CONFLICTING_SYMLINKS="true"
       ;;
     -h|--help)
       usage
@@ -74,18 +78,38 @@ target_matches() {
   [[ -L "$target" && "$(readlink "$target")" == "$source" ]]
 }
 
-check_conflicts() {
+CONFLICTS=()
+
+collect_conflicts() {
+  CONFLICTS=()
   local failed="false"
   while IFS=$'\t' read -r target source; do
     [[ -z "$target" ]] && continue
     if [[ -e "$target" || -L "$target" ]]; then
       if ! target_matches "$target" "$source"; then
-        echo "conflict: $target exists and does not point to $source" >&2
+        CONFLICTS+=("$target"$'\t'"$source")
+        if [[ "$REPLACE_CONFLICTING_SYMLINKS" != "true" || ! -L "$target" ]]; then
+          echo "conflict: $target exists and does not point to $source" >&2
+        fi
         failed="true"
       fi
     fi
   done
-  [[ "$failed" == "false" ]]
+  if [[ "$failed" == "false" ]]; then
+    return 0
+  fi
+  if [[ "$REPLACE_CONFLICTING_SYMLINKS" == "true" ]]; then
+    local conflict
+    for conflict in "${CONFLICTS[@]}"; do
+      local target="${conflict%%$'\t'*}"
+      if [[ ! -L "$target" ]]; then
+        echo "conflict: $target is not a symlink; refusing replacement" >&2
+        return 1
+      fi
+    done
+    return 0
+  fi
+  return 1
 }
 
 write_inventory() {
@@ -108,7 +132,22 @@ write_manifests() {
     echo "{"
     echo "  \"mode\": \"$MODE\","
     echo "  \"stage_only\": $STAGE_ONLY,"
-    echo "  \"entries\": []"
+    echo "  \"replaced_symlinks\": ["
+    local first_backup="true"
+    local conflict
+    for conflict in "${CONFLICTS[@]}"; do
+      local target="${conflict%%$'\t'*}"
+      local source="${conflict#*$'\t'}"
+      local old_source
+      old_source="$(readlink "$target")"
+      if [[ "$first_backup" == "false" ]]; then
+        echo ","
+      fi
+      first_backup="false"
+      printf '    {"target": "%s", "old_source": "%s", "new_source": "%s", "type": "symlink"}' "$target" "$old_source" "$source"
+    done
+    echo
+    echo "  ]"
     echo "}"
   } > "$RUN_DIR/backup-manifest.json"
   {
@@ -133,6 +172,13 @@ write_manifests() {
 
 apply_symlinks() {
   mkdir -p "$SKILLS_HOME" "$AGENTS_HOME"
+  local conflict
+  for conflict in "${CONFLICTS[@]}"; do
+    local target="${conflict%%$'\t'*}"
+    if [[ -L "$target" ]]; then
+      rm "$target"
+    fi
+  done
   while IFS=$'\t' read -r target source; do
     [[ -z "$target" ]] && continue
     if [[ -L "$target" ]]; then
@@ -168,7 +214,7 @@ fi
 
 echo "conflict policy: stop before replacing non-matching live targets"
 
-if ! { planned_skills; planned_agents; } | check_conflicts; then
+if ! collect_conflicts < <({ planned_skills; planned_agents; }); then
   exit 1
 fi
 

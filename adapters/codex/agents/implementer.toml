@@ -1,3 +1,5 @@
+name = "implementer"
+description = "One bounded approved task-card or standalone-plan implementation slice."
 model = "gpt-5.5"
 model_reasoning_effort = "low"
 

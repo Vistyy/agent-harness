@@ -1,3 +1,5 @@
+name = "check_runner"
+description = "Targeted checks, quality gates, logs, and diagnostics summary."
 model = "gpt-5.3-codex-spark"
 model_reasoning_effort = "medium"
 

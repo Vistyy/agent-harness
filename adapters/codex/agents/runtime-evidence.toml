@@ -1,3 +1,5 @@
+name = "runtime_evidence"
+description = "Live runtime, UI, or API proof."
 model = "gpt-5.5"
 model_reasoning_effort = "high"
 

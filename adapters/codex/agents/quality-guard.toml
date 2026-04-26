@@ -1,3 +1,5 @@
+name = "quality_guard"
+description = "Planning-gate and in-thread implementation quality gate."
 model = "gpt-5.5"
 model_reasoning_effort = "low"
 sandbox_mode = "read-only"
