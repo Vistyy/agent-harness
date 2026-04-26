@@ -1,7 +1,9 @@
 quality:
+    uv run python scripts/validate_harness.py --self-test
     uv run python scripts/validate_harness.py
 
 quality-fast:
+    uv run python scripts/validate_harness.py --self-test
     uv run python scripts/validate_harness.py
 
 fmt:
