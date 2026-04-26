@@ -9,8 +9,10 @@ usage() {
   cat <<'EOF'
 Usage: install.sh [--dry-run|--apply] [--stage-harness-governance] [--replace-conflicting-symlinks]
 
-Installs Codex skills/agents with individual symlinks only.
-Baseline excludes config, prompts, Copilot, and Gemini homes.
+Installs Codex skills/agents and global AGENTS.md with individual symlinks.
+Full apply also merges the required Codex agent-role config into
+~/.codex/config.toml after writing a backup.
+Baseline excludes prompts, Copilot, and Gemini homes.
 EOF
 }
 
@@ -46,6 +48,9 @@ ROOT="$(cd -- "$SCRIPT_DIR/../.." && pwd)"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 SKILLS_HOME="$CODEX_HOME/skills"
 AGENTS_HOME="$CODEX_HOME/agents"
+GLOBAL_AGENTS_PATH="$CODEX_HOME/AGENTS.md"
+CONFIG_PATH="$CODEX_HOME/config.toml"
+CONFIG_SOURCE="$SCRIPT_DIR/config.toml"
 
 BACKUP_ROOT="$CODEX_HOME/backups"
 RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -70,6 +75,13 @@ planned_agents() {
     name="$(basename "$agent_file")"
     printf '%s\t%s\n' "$AGENTS_HOME/$name" "$agent_file"
   done < <(find "$SCRIPT_DIR/agents" -mindepth 1 -maxdepth 1 -type f -name '*.toml' | sort)
+}
+
+planned_global_agents_md() {
+  if [[ "$STAGE_ONLY" == "true" ]]; then
+    return
+  fi
+  printf '%s\t%s\n' "$GLOBAL_AGENTS_PATH" "$ROOT/AGENTS.md"
 }
 
 target_matches() {
@@ -115,7 +127,7 @@ collect_conflicts() {
 write_inventory() {
   local path="$1"
   {
-    for item in "$CODEX_HOME/config.toml" "$CODEX_HOME/prompts" "$HOME/.copilot" "$HOME/.gemini" "$AGENTS_HOME"; do
+    for item in "$CODEX_HOME/config.toml" "$CODEX_HOME/AGENTS.md" "$CODEX_HOME/prompts" "$HOME/.copilot" "$HOME/.gemini" "$AGENTS_HOME"; do
       if [[ -e "$item" || -L "$item" ]]; then
         printf '%s\t%s\t%s\n' "$item" "$(stat -c '%F:%s' "$item")" "$(readlink "$item" || true)"
       else
@@ -125,6 +137,84 @@ write_inventory() {
   } > "$path"
 }
 
+merge_config() {
+  if [[ "$STAGE_ONLY" == "true" ]]; then
+    return
+  fi
+  mkdir -p "$CODEX_HOME" "$RUN_DIR"
+  if [[ -e "$CONFIG_PATH" || -L "$CONFIG_PATH" ]]; then
+    cp -a "$CONFIG_PATH" "$RUN_DIR/config.toml.before"
+  else
+    : > "$CONFIG_PATH"
+    cp -a "$CONFIG_PATH" "$RUN_DIR/config.toml.before"
+  fi
+  CONFIG_PATH="$CONFIG_PATH" CONFIG_SOURCE="$CONFIG_SOURCE" python3 - <<'PY'
+from __future__ import annotations
+
+import os
+import re
+from pathlib import Path
+
+config_path = Path(os.environ["CONFIG_PATH"])
+source_path = Path(os.environ["CONFIG_SOURCE"])
+text = config_path.read_text(encoding="utf-8")
+source = source_path.read_text(encoding="utf-8")
+
+
+def table_body(raw: str, table: str) -> str | None:
+    pattern = re.compile(rf"^\[{re.escape(table)}\]\s*$", re.MULTILINE)
+    match = pattern.search(raw)
+    if match is None:
+        return None
+    next_match = re.search(r"^\[[^\]]+\]\s*$", raw[match.end() :], re.MULTILINE)
+    end = match.end() + next_match.start() if next_match else len(raw)
+    return raw[match.end() : end]
+
+
+def ensure_features(raw: str) -> str:
+    table_pattern = re.compile(r"^\[features\]\s*$", re.MULTILINE)
+    match = table_pattern.search(raw)
+    if match is None:
+        suffix = "\n" if raw and not raw.endswith("\n") else ""
+        return raw + suffix + "\n[features]\nmulti_agent = true\n"
+
+    body_start = match.end()
+    next_match = re.search(r"^\[[^\]]+\]\s*$", raw[body_start:], re.MULTILINE)
+    body_end = body_start + next_match.start() if next_match else len(raw)
+    body = raw[body_start:body_end]
+    key_pattern = re.compile(r"^multi_agent\s*=.*$", re.MULTILINE)
+    if key_pattern.search(body):
+        body = key_pattern.sub("multi_agent = true", body, count=1)
+    else:
+        if body and not body.endswith("\n"):
+            body += "\n"
+        body += "multi_agent = true\n"
+    return raw[:body_start] + body + raw[body_end:]
+
+
+def source_agent_blocks(raw: str) -> dict[str, str]:
+    blocks: dict[str, str] = {}
+    for match in re.finditer(r"^\[agents\.([A-Za-z0-9_]+)\]\s*$", raw, re.MULTILINE):
+        name = match.group(1)
+        body_start = match.end()
+        next_match = re.search(r"^\[[^\]]+\]\s*$", raw[body_start:], re.MULTILINE)
+        body_end = body_start + next_match.start() if next_match else len(raw)
+        blocks[name] = raw[match.start() : body_end].strip() + "\n"
+    return blocks
+
+
+updated = ensure_features(text)
+existing_agents = set(re.findall(r"^\[agents\.([A-Za-z0-9_]+)\]\s*$", updated, re.MULTILINE))
+missing_blocks = [block for name, block in source_agent_blocks(source).items() if name not in existing_agents]
+if missing_blocks:
+    suffix = "\n" if updated and not updated.endswith("\n") else ""
+    updated = updated + suffix + "\n" + "\n".join(missing_blocks)
+
+config_path.write_text(updated, encoding="utf-8")
+PY
+  cp -a "$CONFIG_PATH" "$RUN_DIR/config.toml.after"
+}
+
 write_manifests() {
   mkdir -p "$RUN_DIR"
   write_inventory "$RUN_DIR/pre-inventory.tsv"
@@ -132,6 +222,11 @@ write_manifests() {
     echo "{"
     echo "  \"mode\": \"$MODE\","
     echo "  \"stage_only\": $STAGE_ONLY,"
+    if [[ "$STAGE_ONLY" == "true" ]]; then
+      echo "  \"config_merge\": false,"
+    else
+      echo "  \"config_merge\": true,"
+    fi
     echo "  \"replaced_symlinks\": ["
     local first_backup="true"
     local conflict
@@ -154,6 +249,11 @@ write_manifests() {
     echo "{"
     echo "  \"mode\": \"$MODE\","
     echo "  \"stage_only\": $STAGE_ONLY,"
+    if [[ "$STAGE_ONLY" == "true" ]]; then
+      echo "  \"config_merge\": false,"
+    else
+      echo "  \"config_merge\": true,"
+    fi
     echo "  \"symlinks\": ["
     local first="true"
     while IFS=$'\t' read -r target source; do
@@ -167,12 +267,14 @@ write_manifests() {
     echo
     echo "  ]"
     echo "}"
-  } < <({ planned_skills; planned_agents; }) > "$RUN_DIR/symlink-manifest.json"
+  } < <({ planned_global_agents_md; planned_skills; planned_agents; }) > "$RUN_DIR/symlink-manifest.json"
 }
 
 apply_symlinks() {
-  while IFS=$'\t' read -r target _source; do
+  local entries=()
+  while IFS=$'\t' read -r target source; do
     [[ -z "$target" ]] && continue
+    entries+=("$target"$'\t'"$source")
     mkdir -p "$(dirname "$target")"
   done
   local conflict
@@ -182,8 +284,10 @@ apply_symlinks() {
       rm "$target"
     fi
   done
-  while IFS=$'\t' read -r target source; do
-    [[ -z "$target" ]] && continue
+  local entry
+  for entry in "${entries[@]}"; do
+    local target="${entry%%$'\t'*}"
+    local source="${entry#*$'\t'}"
     if [[ -L "$target" ]]; then
       continue
     fi
@@ -194,10 +298,24 @@ apply_symlinks() {
 echo "mode: $MODE"
 echo "root: $ROOT"
 echo "codex_home: $CODEX_HOME"
-echo "excluded: $CODEX_HOME/config.toml"
+if [[ "$STAGE_ONLY" == "true" ]]; then
+  echo "config merge: skipped for staged install"
+else
+  echo "config merge: $CONFIG_PATH <= $CONFIG_SOURCE"
+fi
 echo "excluded: $CODEX_HOME/prompts"
 echo "excluded: $HOME/.copilot"
 echo "excluded: $HOME/.gemini"
+
+echo "planned global AGENTS.md:"
+if [[ "$STAGE_ONLY" == "true" ]]; then
+  echo "none"
+else
+  while IFS=$'\t' read -r target source; do
+    [[ -z "$target" ]] && continue
+    echo "$target -> $source"
+  done < <(planned_global_agents_md)
+fi
 
 echo "planned skills:"
 while IFS=$'\t' read -r target source; do
@@ -217,13 +335,14 @@ fi
 
 echo "conflict policy: stop before replacing non-matching live targets"
 
-if ! collect_conflicts < <({ planned_skills; planned_agents; }); then
+if ! collect_conflicts < <({ planned_global_agents_md; planned_skills; planned_agents; }); then
   exit 1
 fi
 
 if [[ "$MODE" == "apply" ]]; then
   write_manifests
-  { planned_skills; planned_agents; } | apply_symlinks
+  { planned_global_agents_md; planned_skills; planned_agents; } | apply_symlinks
+  merge_config
   write_inventory "$RUN_DIR/post-inventory.tsv"
   echo "manifest_dir: $RUN_DIR"
 fi

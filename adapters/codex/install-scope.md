@@ -2,16 +2,20 @@
 
 The baseline Codex adapter installs only individual symlinks:
 
+- `~/.codex/AGENTS.md` -> `AGENTS.md`
 - `~/.codex/skills/<skill-name>` -> `skills/<skill-name>`
 - `~/.codex/agents/<agent-name>.toml` -> `adapters/codex/agents/<agent-name>.toml`
 
 It never replaces whole directories.
 
+Full apply also merges the required Codex role config into
+`~/.codex/config.toml` after backing up the live file. It does not symlink or
+wholesale replace live config.
+
 ## Excluded Surfaces
 
 Baseline install must not mutate:
 
-- `~/.codex/config.toml`
 - `~/.codex/prompts`
 - `~/.copilot`
 - `~/.gemini`
