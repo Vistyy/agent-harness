@@ -9,7 +9,21 @@ Discovery plus intake before wave execution.
 
 Goal: close material decisions before execution starts.
 
-## Stance
+## Outcome
+
+Produce execution-ready wave planning only when scope, decisions, proof, and
+deferrals are closed enough that implementation does not need discovery or
+material design choices.
+
+## Success Criteria
+
+- user objective coverage is explicit
+- material decisions are closed or routed to the user with a recommendation
+- proof is allocated by owner layer, exact evidence, and counterfactual
+- deferrals are persisted in repo state, not chat
+- implementation handoff leaves no materially divergent plausible paths
+
+## Constraints
 
 - Be critical about scope, root cause, and proof.
 - Start from the simplest honest solution; delete, collapse, or leave manual
@@ -17,7 +31,7 @@ Goal: close material decisions before execution starts.
 - Default bounded local mechanics yourself.
 - Persist important deferrals in repo state, not chat.
 
-## Non-Negotiables
+## Required Behavior
 
 1. No silent material assumptions.
 2. Blocking user questions are only for `user-owned decisions`.
@@ -100,18 +114,18 @@ Use only for `user-owned decisions`.
 Reply with A/B/C, or say "yes" to accept recommendation.
 ```
 
-## Intake Gate
+## Continue Until
 
-Promotion needs all four:
+Continue intake until all four gate conditions are satisfied:
 
 1. `scope closed`
 2. `decisions closed`
 3. `proof allocated`
 4. `deferrals persisted`
 
-If any fail, keep questioning.
+If any fail, keep questioning or reshape the work.
 
-## Promotion Rules
+## Stop Conditions
 
 Do not promote to `execution-ready` while:
 - any material implementation-shaping question remains open
@@ -151,7 +165,7 @@ reshape.
 For each substantive user ask, record whether planning keeps it, shrinks it,
 rewrites the approach, or defers it.
 
-## Outputs
+## Output Shape
 
 1. `docs-ai/current-work/delivery-map.md`
 2. `docs-ai/docs/initiatives/waves/<wave-id>.md`

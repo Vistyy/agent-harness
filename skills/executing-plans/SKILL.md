@@ -13,7 +13,20 @@ Owners:
 - approval and review semantics: `../code-review/references/review-governance.md`
 - minor local assumptions: `../implementation-decision-ledger/SKILL.md`
 
-## Preflight
+## Outcome
+
+Execute one approved standalone plan without reopening its material design, and
+claim completion only after plan-scoped proof is fresh.
+
+## Success Criteria
+
+- plan readiness is confirmed before edits
+- each task follows approved scope and preserves decision closure
+- minor local assumptions are logged only when pre-authorized
+- verification evidence and quality gate outcomes are captured
+- unresolved material gaps return to planning
+
+## Preflight Constraints
 
 Check plan only for readiness:
 - `Decision Closure Check` closes material decisions
@@ -24,7 +37,7 @@ Check plan only for readiness:
 
 If material gap appears, stop and return to planning.
 
-## Execution Loop
+## Continue Until
 
 For each task:
 1. mark in progress
@@ -40,7 +53,7 @@ Use `verification-before-completion` for gate selection and completion claim rul
 Memory-only planning is not executable for non-trivial work. If the approval
 record is missing critic provenance, stop and return to planning.
 
-## Reporting
+## Output Shape
 
 After each batch, report:
 - tasks implemented

@@ -16,12 +16,24 @@ Packet schema stays in
 `../initiatives-workflow/references/wave-packet-contract.md`.
 Delegation policy stays in `../subagent-orchestration/SKILL.md`.
 
+## Outcome
+
+Execute one already-approved wave from its durable map, brief, and packet,
+keeping task evidence, review state, deferrals, and closeout state coherent.
+
 ## Inputs
 
 - required: `<wave-id>`
 - optional: constrained task subset
 
-## Preflight
+## Success Criteria
+
+- wave status and packet prove execution readiness before edits
+- each task completes only with fresh proof and required review
+- ambiguity, discovery leakage, boundary flaws, and proof drift stop execution
+- final closeout removes active wave state only after verification and review
+
+## Preflight Constraints
 
 Before edits:
 1. read map, wave brief, packet
@@ -35,7 +47,7 @@ Before edits:
 
 If execution still needs discovery or material design choice, stop and send back to `planning-intake`.
 
-## Task Loop
+## Continue Until
 
 For each task:
 1. execute from packet; no per-task artifacts
@@ -65,7 +77,7 @@ For each task:
 Stop if task uncovers material gap outside the task card's declared autonomy
 envelope.
 
-## Closeout
+## Closeout Conditions
 
 When targeted tasks are implemented:
 1. confirm touched task rows are done with fresh evidence
@@ -80,7 +92,7 @@ When targeted tasks are implemented:
 
 If final review is still pending, stop short of closeout and keep packet in place.
 
-## Reporting
+## Output Shape
 
 Per task, report:
 - task slug

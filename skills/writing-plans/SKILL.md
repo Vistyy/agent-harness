@@ -15,6 +15,19 @@ Owners:
 - approval and review semantics:
   `../code-review/references/review-governance.md`
 
+## Outcome
+
+Create a durable standalone implementation plan only when the work is non-wave,
+requirements are clear, and material decisions are already closed.
+
+## Success Criteria
+
+- plan has one short goal and architecture summary
+- decision closure and scope coverage are explicit
+- ordered tasks name exact paths and task proof
+- required follow-up is recorded
+- approval record reflects real `planning_critic` and `quality_guard` review
+
 ## Preconditions
 
 - requirements are closed,
@@ -42,7 +55,7 @@ Template/example:
 - required doc/backlog follow-up
 - `## Approval Record`
 
-## Workflow
+## Continue Until
 
 1. Map surfaces and owners.
 2. Close material decisions first.
@@ -54,7 +67,7 @@ Template/example:
 6. Re-read as executor. If implementer still needs discovery, plan is not
    ready.
 
-## Guardrails
+## Stop Conditions
 
 - no vague verbs like "handle" or "clean up"
 - use exact file paths

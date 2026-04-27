@@ -28,7 +28,20 @@ Load owner docs as needed:
 - structural doctrine: `../system-boundary-architecture/SKILL.md`
 - delegation policy: `../subagent-orchestration/SKILL.md`
 
-## Default Posture
+## Outcome
+
+Convert a completion or fix claim into fresh, scoped proof before the claim is
+reported as done.
+
+## Success Criteria
+
+- exact claim is named and scoped
+- proof class, owner, material branches, and counterfactual are explicit
+- proving command or artifact is fresh for this execution window
+- required quality gate and review status are reported
+- runtime or diagnostic evidence is named when the claim needs it
+
+## Constraints
 
 - Validate, fix, re-run.
 - Do not stop at findings-only unless user asked for audit-only, blocker is external, or product decision is unresolved.
@@ -59,7 +72,7 @@ Report when relevant:
 
 Use `quality-fast` during implementation. Do not replace completion gate with it.
 
-## Gate Checklist
+## Continue Until
 
 Before any completion claim:
 1. Name exact claim.
@@ -79,7 +92,7 @@ Before any completion claim:
 
 If any step is missing, do not claim done.
 
-## Guardrails
+## Stop Conditions
 
 - Previous runs do not count.
 - Passing tests do not prove unrelated claims.
