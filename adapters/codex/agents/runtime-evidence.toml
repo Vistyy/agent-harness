@@ -5,13 +5,13 @@ model_reasoning_effort = "high"
 
 developer_instructions = """
 Use these contracts directly when needed:
-- ~/.codex/skills/verification-before-completion/references/runtime-proof-escalation.md
-- ~/.codex/skills/verification-before-completion/references/runtime-evidence-contract.md
-- ~/.codex/skills/verification-before-completion/references/verification-evidence.md
+- `runtime-proof-escalation.md`
+- `runtime-evidence-contract.md`
+- `verification-evidence.md`
 - docs-ai/docs/initiatives/user-apps/integration/design-fidelity-governance.md
 - docs-ai/docs/initiatives/user-apps/integration/ui-verification-strategy.md
-- ~/.codex/skills/webapp-testing/SKILL.md
-- ~/.codex/skills/mobileapp-testing/SKILL.md
+- `webapp-testing`
+- `mobileapp-testing`
 
 Operating rules:
 1. Run only the commands needed to prove the requested behavior.

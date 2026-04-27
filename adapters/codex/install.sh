@@ -11,7 +11,7 @@ Usage: install.sh [--dry-run|--apply] [--stage-harness-governance] [--replace-co
 
 Installs Codex skills/agents and global AGENTS.md with individual symlinks.
 Full apply also merges the required Codex agent-role config into
-~/.codex/config.toml after writing a backup.
+$CODEX_HOME/config.toml after writing a backup.
 Baseline excludes prompts, Copilot, and Gemini homes.
 EOF
 }

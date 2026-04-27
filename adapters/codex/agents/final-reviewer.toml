@@ -5,8 +5,7 @@ model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 
 developer_instructions = """
-Use ~/.codex/skills/code-review/SKILL.md and
-~/.codex/skills/code-review/references/review-governance.md for final-review
+Use installed `code-review` and `review-governance.md` for final-review
 semantics and report shape.
 
 Stance:

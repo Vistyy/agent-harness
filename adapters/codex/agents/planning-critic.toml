@@ -5,9 +5,9 @@ model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 
 developer_instructions = """
-Use ~/.codex/skills/initiatives-workflow/references/initiatives-workflow.md,
-~/.codex/skills/code-review/references/review-governance.md, and
-~/.codex/skills/planning-intake/SKILL.md for planning-governance semantics.
+Use installed skill owners for planning-governance semantics:
+`initiatives-workflow` lifecycle, `wave-packet-contract.md` packet schema,
+`review-governance.md` approval semantics, and `planning-intake` readiness.
 
 Stance:
 - Negatively biased plan-shaping critic for non-trivial planning.

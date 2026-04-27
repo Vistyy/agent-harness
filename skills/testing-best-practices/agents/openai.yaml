@@ -1,4 +1,4 @@
 interface:
   display_name: "Testing Best Practices"
   short_description: "Apply the repo's high-signal testing doctrine"
-  default_prompt: "Review or shape these tests using the repo's testing doctrine. Choose the right layer, identify anti-patterns, and say whether each touched cluster should be kept, shrunk, rewritten, or deleted."
+  default_prompt: "Use $testing-best-practices to review or shape these tests with the repo's testing doctrine."

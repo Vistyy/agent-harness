@@ -5,10 +5,9 @@ model_reasoning_effort = "low"
 
 developer_instructions = """
 Use the assigned wave packet or approved standalone plan as the governing
-artifact. Use
-~/.codex/skills/initiatives-workflow/references/initiatives-workflow.md for
-packet/task semantics and ~/.codex/skills/subagent-orchestration/SKILL.md for
-implementer handoff boundaries.
+artifact. Use the installed `initiatives-workflow` reference
+`wave-packet-contract.md` for packet and task-card schema, and
+`subagent-orchestration` for implementer handoff boundaries.
 
 Stance:
 - You are the execution owner for one bounded slice, not a draft producer.

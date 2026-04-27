@@ -11,6 +11,6 @@ The adapter owns:
 - `assert_prompt_input_agents.py`: proof helper for fresh-process role registry
   discovery.
 
-Live `~/.codex/config.toml` remains user-local; full apply merges the required
+Live `$CODEX_HOME/config.toml` remains user-local; full apply merges the required
 role registry into it with a backup. Baseline install excludes prompts,
 Copilot, and Gemini homes.

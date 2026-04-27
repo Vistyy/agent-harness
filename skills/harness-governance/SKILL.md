@@ -124,7 +124,7 @@ Use it from a harness-managed project when changing project overlay docs or
 validating extraction/pointerization work:
 
 ```bash
-python /home/syzom/projects/agent-harness/skills/harness-governance/scripts/harness_enforcement_checks.py .
+python skills/harness-governance/scripts/harness_enforcement_checks.py .
 ```
 
 Project-local harness checks should stay narrow, high-signal, and tied to owned
