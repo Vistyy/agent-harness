@@ -311,13 +311,13 @@ Severity: medium.
 Files:
 
 - `skills/mobile-design/SKILL.md`
-- `skills/mobile-design/mobile-design-thinking.md`
-- `skills/mobile-design/touch-psychology.md`
-- `skills/mobile-design/mobile-performance.md`
-- `skills/mobile-design/mobile-testing.md`
-- `skills/mobile-design/mobile-backend.md`
-- `skills/mobile-design/platform-ios.md`
-- `skills/mobile-design/platform-android.md`
+- `skills/mobile-design/references/mobile-design-thinking.md`
+- `skills/mobile-design/references/touch-psychology.md`
+- `skills/mobile-design/references/mobile-performance.md`
+- `skills/mobile-design/references/mobile-testing.md`
+- `skills/mobile-design/references/mobile-backend.md`
+- `skills/mobile-design/references/platform-ios.md`
+- `skills/mobile-design/references/platform-android.md`
 
 Problem:
 
@@ -363,12 +363,12 @@ Severity: medium.
 
 Files:
 
-- `skills/systematic-debugging/test-academic.md`
-- `skills/systematic-debugging/test-pressure-1.md`
-- `skills/systematic-debugging/test-pressure-2.md`
-- `skills/systematic-debugging/test-pressure-3.md`
-- `skills/systematic-debugging/condition-based-waiting-example.ts`
-- `skills/systematic-debugging/find-polluter.sh`
+- `skills/systematic-debugging/evaluations/test-academic.md`
+- `skills/systematic-debugging/evaluations/test-pressure-1.md`
+- `skills/systematic-debugging/evaluations/test-pressure-2.md`
+- `skills/systematic-debugging/evaluations/test-pressure-3.md`
+- `skills/systematic-debugging/examples/condition-based-waiting-example.ts`
+- `skills/systematic-debugging/examples/find-polluter.sh`
 
 Problem:
 
@@ -592,13 +592,13 @@ Closed decisions:
 - `webapp-testing/examples/*.py`: retain as last-resort examples only, with
   explicit warning that durable specs, Playwright CLI, and project runtime
   recipes take precedence.
-- `systematic-debugging/test-pressure-*` and `test-academic.md`: retain in Wave
+- `systematic-debugging/evaluations/test-pressure-*` and `test-academic.md`: retain in Wave
   1 as evaluation-only assets and index from `SKILL.md`; Wave 4 may move or
   remove them.
-- `systematic-debugging/condition-based-waiting-example.ts`: retain as an
+- `systematic-debugging/examples/condition-based-waiting-example.ts`: retain as an
   illustrative example, not a copy-paste utility, because it contains
   project-shaped imports.
-- `systematic-debugging/find-polluter.sh`: retain as an npm-specific example
+- `systematic-debugging/examples/find-polluter.sh`: retain as an npm-specific example
   helper and index with that limitation.
 - Durable duplicate/orphan helper checker: not added in Wave 1. Wave 1 uses
   explicit proof commands below; a durable checker should be added only after

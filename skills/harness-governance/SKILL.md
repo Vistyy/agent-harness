@@ -66,6 +66,9 @@ contain:
 It should not become a second copy of reusable harness doctrine after the
 global harness is installed and proven.
 
+If an entrypoint is a skill, route by the skill frontmatter `description`
+first. Read the skill body only for workflow mechanics and deeper owner links.
+
 ## Repository Structure
 
 Harness-managed projects use this documentation layout:

@@ -72,6 +72,20 @@ Live delegation defaults stay owned by `../SKILL.md`.
 This doc owns vocabulary and boundaries only. Exact model names and adapter
 instruction details belong in adapter config, not durable role vocabulary.
 
+## Adapter Role Files
+
+Adapter role files are provider-facing runtime instructions. They may repeat
+compact role-critical guardrails when the role must stand alone.
+
+Hybrid rule:
+- non-trivial governance roles should name the global owner skill or reference
+  they consume,
+- tiny mechanical roles may stay self-contained when they only state role
+  boundary, allowed work, and output shape,
+- durable role vocabulary and boundaries stay in this reference,
+- provider-specific model, tool, sandbox, and formatting details stay in the
+  adapter file.
+
 ## Active Worker Preservation
 
 - Never close, interrupt, replace, supersede, or reclaim the write scope of an

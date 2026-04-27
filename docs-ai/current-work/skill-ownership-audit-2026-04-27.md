@@ -21,7 +21,7 @@ Coverage:
 | Live skill docs used repo-root-looking `skills/...` paths from inside skill directories. | Replaced live guidance links with skill-relative paths where the target is a bundled skill/reference. Kept repo-root paths in copied templates/examples where that is the intended project-facing form. |
 | `mobile-design` stored reference docs in the skill root. | Moved mobile reference docs under `skills/mobile-design/references/` and updated `SKILL.md`. |
 | `systematic-debugging` stored reference docs in the skill root. | Moved root-cause, condition-waiting, and defense-in-depth docs under `references/` and updated links. |
-| `test-driven-development/testing-anti-patterns.md` was not directly discoverable from `SKILL.md`. | Moved it under `references/` and linked it from the TDD entrypoint. |
+| `test-driven-development/references/testing-anti-patterns.md` was not directly discoverable from `SKILL.md`. | Linked it from the TDD entrypoint. |
 | Several frontmatter descriptions were clear but wordier than needed. | Compacted high-token descriptions while preserving trigger terms and exclusions. |
 
 ## Skill Matrix

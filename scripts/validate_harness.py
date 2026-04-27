@@ -235,6 +235,20 @@ def _iter_skill_dirs(root: Path) -> list[Path]:
     return sorted(path for path in skills_dir.iterdir() if path.is_dir())
 
 
+def _validate_skill_markdown_layout(skill_dir: Path, root: Path) -> list[str]:
+    allowed_roots = {"references", "assets", "examples", "evaluations", "agents"}
+    errors: list[str] = []
+    for markdown_file in sorted(skill_dir.rglob("*.md")):
+        rel = markdown_file.relative_to(skill_dir)
+        if rel.name == "SKILL.md" and len(rel.parts) == 1:
+            continue
+        if rel.parts[0] not in allowed_roots:
+            errors.append(
+                f"{markdown_file.relative_to(root)} should live under references/, assets/, examples/, or evaluations/"
+            )
+    return errors
+
+
 def _openai_metadata_rows(root: Path) -> tuple[list[dict[str, str]], list[str]]:
     rows: list[dict[str, str]] = []
     errors: list[str] = []
@@ -314,6 +328,7 @@ def validate(root: Path) -> list[str]:
                 errors.append(f"{skill_dir.relative_to(root)} missing SKILL.md")
                 continue
             errors.extend(_validate_skill_frontmatter(skill_dir, skill_file, root))
+            errors.extend(_validate_skill_markdown_layout(skill_dir, root))
             text = skill_file.read_text(encoding="utf-8")
             for folder in ("references", "assets", "scripts"):
                 if folder in text and not (skill_dir / folder).exists():
@@ -452,6 +467,12 @@ def run_self_test() -> list[str]:
             'interface:\n  display_name: "uv"\n  short_description: "Manage Python workflows with uv"\n  default_prompt: "Use $uvicorn to do metadata work."\n',
             encoding="utf-8",
         )
+        (root / "skills" / "loose-md").mkdir(parents=True)
+        (root / "skills" / "loose-md" / "SKILL.md").write_text(
+            "---\nname: loose-md\ndescription: Loose markdown.\n---\n",
+            encoding="utf-8",
+        )
+        (root / "skills" / "loose-md" / "extra.md").write_text("loose markdown\n", encoding="utf-8")
         (root / "README.md").write_text("Budgeat product fact\n", encoding="utf-8")
         (root / "SOURCE.md").write_text("source: Budgeat product fact without path\n", encoding="utf-8")
         (root / "CITATION.md").write_text("source: `docs-ai/docs/example.md` Budgeat source path\n", encoding="utf-8")
@@ -475,6 +496,7 @@ def run_self_test() -> list[str]:
             "interface.default_prompt must mention $metadata-skill",
             "interface.short_description must be 25-64 characters",
             "interface.default_prompt must mention $uv",
+            "loose-md/extra.md should live under references/",
             "README.md:1 forbidden project term",
             "SOURCE.md:1 forbidden project term",
             "OWNER.md:1 forbidden project owner path",

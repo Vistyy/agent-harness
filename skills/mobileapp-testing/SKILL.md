@@ -1,6 +1,6 @@
 ---
 name: mobileapp-testing
-description: Use when validating mobile app runtime behavior; start deterministic agent runtime targets, prefer Dart MCP interaction, and use adb fallback with serial-scoped commands.
+description: Use when validating mobile app runtime behavior; start deterministic runtime targets, prefer Dart MCP, and use serial-scoped adb fallback.
 ---
 
 # Mobile Application Testing

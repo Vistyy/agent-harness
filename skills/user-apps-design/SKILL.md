@@ -1,16 +1,15 @@
 ---
 name: user-apps-design
-description: Use for end-user web/mobile UI design direction, parity decisions, composition quality, and copy posture; route platform mechanics and runtime proof to owner skills.
+description: "Use for end-user web/mobile UI direction: parity, composition, hierarchy, density, UX state, and copy posture; route mechanics and runtime proof to owners."
 ---
 
 # User Apps Design
 
-Use for end-user visible UI changes in web or mobile applications.
+Use for end-user visible UI changes in web or mobile apps.
 
-Project-specific product strategy, language policy, app paths, and delivery timing stay in the project overlay.
-
-Owns product-facing UI direction, parity decisions, composition bar, and
-copy/contract posture.
+Owns product-facing UI direction, parity decisions, composition quality, and
+copy posture. Project strategy, language policy, app paths, and delivery timing
+stay in the project overlay.
 
 ## Routing
 
@@ -21,11 +20,12 @@ Start here, then add only what matches:
   validation
 - `flutter-expert` for Flutter implementation mechanics
 
-Do not create parallel design decision tracks in downstream skills.
+Do not create parallel design decision tracks downstream.
 
 ## Read First
 
-- project overlay docs for surface discovery, product language, delivery timing, design archetypes, and design-fidelity governance when the project provides them
+- project overlay docs for surface discovery, product language, delivery
+  timing, design archetypes, and design-fidelity governance when present
 - `references/parity-dimensions.md`
 - `references/atomic-design.md`
 - `references/text-constraints.md`
@@ -51,24 +51,16 @@ Out:
 
 ## Quality Bar
 
-Reject:
-
-- any surface matching fixed anti-pattern families from
-  `the project design-fidelity governance reference`
-- monolithic single-scroll editing surfaces when stateful sectioning is needed
-- inconsistent nav semantics between web and mobile
-- browser-native confirm or prompt patterns in end-user web flows when in-app
-  patterns exist
-- hardcoded UX placeholders like fixed recent-search tags
-
-Accept only when:
-
-- hierarchy is intentional and scannable
-- component density matches desktop, tablet, or mobile target
-- parity matrix is explicit
-- reusable atoms, molecules, patterns beat route-local one-offs
-- relevant IA patterns were evaluated with explicit `adopt` or `reject`
-  rationale
+- Reject any surface matching project design-fidelity anti-patterns.
+- Reject monolithic single-scroll editing surfaces when stateful sectioning is
+  needed.
+- Reject inconsistent nav semantics between web and mobile.
+- Reject browser-native confirm/prompt patterns in end-user web flows when
+  in-app patterns exist.
+- Reject hardcoded UX placeholders like fixed recent-search tags.
+- Accept only when hierarchy is intentional, density fits the target, parity is
+  explicit, reusable composition beats route-local one-offs, and relevant IA
+  patterns have `adopt` or `reject` rationale.
 
 ## Taste-Pressure Lens
 
@@ -85,27 +77,6 @@ scorecard.
   composition variance open, require those dials to be named before editing.
 - Use the project design-fidelity governance reference for scoring and anti-pattern names.
 
-## Non-Negotiable Rules
-
-1. No ad hoc styling values.
-2. Use existing project tokens, components, and patterns from the project UI entrypoint.
-3. End-user copy follows the project-owned language policy.
-4. Preserve declared UX invariants unless spec changes them.
-5. Choose one approved archetype from
-   the project design-fidelity archetype reference or record a justified exception
-   before design-shaping execution.
-6. Consume the scorecard and anti-pattern taxonomy from
-   the project design-fidelity governance reference; do not restate them as local source of
-   truth.
-7. Follow `references/parity-dimensions.md` for parity semantics. Do not restate it here.
-8. Follow `references/atomic-design.md` for composition semantics. Do not
-   restate it here.
-9. Follow `references/text-constraints.md` for length, overflow, truncation,
-   and inline-highlight posture. Do not restate it here.
-10. Follow
-   the project end-user copy governance reference
-   for explanatory-text posture. Do not restate it here.
-
 ## Required Loop
 
 1. Satisfy the project-owned discovery gate when UI quality or product direction is in scope. If required context is missing, stop.
@@ -113,21 +84,19 @@ scorecard.
    implementation loop or handoff posture.
 3. Choose one approved archetype or record a justified exception before
    editing.
-4. Write parity matrix before editing:
-   - must-match: behavior, state, copy, component semantics
-   - allowed divergence: layout and navigation structure
-   - for staged cross-client delivery, note what the follower surface must later match
-5. Map route-level work to atomic layers:
-   - what is reused
-   - what new reusable blocks are needed
-6. Run density and layout pass before polish:
-   - remove oversized shell chrome
-   - improve scanability and spacing rhythm
-7. For IA-affecting change, evaluate relevant established patterns and record
+4. Write parity matrix before editing: must-match behavior, state, copy, and
+   component semantics; allowed divergence is layout/navigation structure. For
+   staged cross-client delivery, record follower-surface match points and avoid
+   browser-only assumptions.
+5. Map route-level work to atomic layers and identify reuse/new reusable blocks.
+6. Run density/layout pass before polish: remove oversized shell chrome and
+   improve scanability/spacing rhythm.
+7. For IA-affecting changes, evaluate relevant established patterns and record
    `adopt` or `reject` in planning artifacts.
 8. When claiming hierarchy, density, shell, or UI quality, define `3-7`
    design-intent anchors per the project surface-discovery contract.
-9. Apply styling only through existing design-system contracts.
+9. Use existing project tokens, components, patterns, and design-system
+   contracts. No ad hoc styling values.
 10. For runtime UI proof, route to `webapp-testing` or `mobileapp-testing` and
     use the project design-fidelity governance terms for verdicts.
 11. For web route ownership changes, route to `system-boundary-architecture`;
@@ -142,25 +111,6 @@ scorecard.
 - `webapp-testing` or `mobileapp-testing`: runtime UI behavior claims
 - `system-boundary-architecture`: route/state authority, shared frontend
   boundaries, and ownership changes
-
-## Pre-Change Checklist
-
-- [ ] required docs read
-- [ ] discovery gate satisfied
-- [ ] implementation posture read when implementation evidence is in scope
-- [ ] approved archetype chosen or exception justified
-- [ ] parity matrix written or confirmed
-- [ ] staged cross-client obligations are explicit and not built on browser-only
-      assumptions
-- [ ] route-level composition is not monolithic box stack
-- [ ] fixed anti-pattern families are not present
-- [ ] IA pattern evaluation recorded when IA scope changes
-- [ ] design-intent anchors exist for UI-quality claims
-- [ ] no ad hoc style values
-- [ ] user-facing strings follow the project language policy
-- [ ] parity requirements satisfied
-- [ ] atomic composition requirements satisfied
-- [ ] runtime proof owner selected when UI-quality claim needs evidence
 
 ## If Source Of Truth Is Missing
 

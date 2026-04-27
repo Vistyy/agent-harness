@@ -17,6 +17,15 @@ Precedence:
   in the target project.
 - Do not put project-specific facts in this file.
 
+## Map First
+
+- Treat project-local `AGENTS.md` as a compact first-hop map, not a doctrine
+  dump.
+- Start from the matching owner skill or project owner doc.
+- If the entrypoint is a skill, route by its frontmatter `description` first;
+  use the skill body only for mechanics and deeper owner links.
+- Read only what the current task needs.
+
 ## Routing
 
 - Planning and wave shaping: use `planning-intake`.
@@ -36,3 +45,13 @@ Precedence:
 - Do not replace project-local `AGENTS.md` with this global file.
 - Project-local files should stay as concise overlays that point to the owning
   skills and project docs.
+- No silent reverts/deletions of unknown files
+- No compatibility shims without explicit written approval
+
+## Reply Mode
+
+- Default: compact caveman. Terse fragments, no filler. Technical terms exact.
+- Drop compact mode only for safety clarity, irreversible confirmation, explicit
+  user request, or clear user confusion; resume after.
+- Task-specific output contracts still apply; keep them compact.
+- Code, commits, PR text, and durable docs stay normal.

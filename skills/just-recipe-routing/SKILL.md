@@ -1,6 +1,6 @@
 ---
 name: just-recipe-routing
-description: "Use when choosing `just` commands in a harness-managed repo: namespace discovery, quality tier selection, and avoiding raw tools when a project recipe owns the command."
+description: "Use when choosing `just` commands in a harness-managed repo: namespace discovery, quality tier selection, and avoiding raw tools."
 ---
 
 # Just Recipe Routing

@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "Use for separate isolated review of implemented changes after local verification, or when closeout requires final separate review; not for in-thread `quality_guard`."
+description: "Use for separate isolated review of implemented changes after local verification, or when closeout requires final separate review."
 ---
 
 # Code Review
