@@ -125,7 +125,7 @@ helpers.
 ## Proof Notes
 
 Apply `runtime-proof-escalation.md` for runtime proof bar and
-`testing-strategy.md` only for persistent-test strategy.
+`testing-strategy.md` as the persistent-test doctrine router.
 
 For `runtime-risk-ui`, prove:
 - visible surface is hit-testable,

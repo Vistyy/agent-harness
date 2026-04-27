@@ -18,8 +18,11 @@ Owner for approval boundaries, disposition, and completion claims.
   schema, proof-row fields, and task state semantics.
 - `../../writing-plans/references/standalone-plans.md`: standalone-plan
   approval record placement and schema.
-- `../../testing-best-practices/references/testing-strategy.md`:
-  touched-test remediation and persistent-test validity.
+- `../../testing-best-practices/references/touched-test-gate.md`:
+  touched-test rows, invalid reason code gate, `required-proof`, and
+  `durable-gain`.
+- `../../testing-best-practices/references/proof-strength.md`:
+  persistent-test proof validity and source/exact-string limits.
 - `../../verification-before-completion/references/runtime-proof-escalation.md`:
   runtime proof escalation.
 - `system-boundary-architecture`: boundary and ownership doctrine.
@@ -46,8 +49,8 @@ Owner for approval boundaries, disposition, and completion claims.
   the local fix alone; require the broader fix or a durable backlog link.
 - For structural, hotspot, or state-authority slices, a declared owner map must cover every public write path and read-repair path in scope. Any surviving bypass is merge-blocking.
 - No approval while any changed persistent test file fails
-  `testing-strategy.md`, including the required disposition row, invalid reason
-  code gate, `required-proof`, and `durable-gain` checks.
+  `touched-test-gate.md`, including the required disposition row, invalid
+  reason code gate, `required-proof`, and `durable-gain` checks.
 - No approval based on `better than before`, `moved to the right owner`, or
   `good enough for now`.
 - Boundary, typing, and code-shape approval must satisfy the applicable
