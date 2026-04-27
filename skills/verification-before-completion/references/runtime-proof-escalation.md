@@ -5,7 +5,7 @@ boundary between reusable proof taxonomy and project-specific runtime mechanics.
 
 Does not own:
 - general test strategy, touched-test gates, proof-strength anti-patterns, or
-  exact-string/source-text policy:
+  exact-string/source/implementation-shape policy:
   `../../testing-best-practices/references/testing-strategy.md`
 - browser proof mechanics:
   `../../webapp-testing/SKILL.md`

@@ -17,7 +17,7 @@ Related:
 3. Reject low-value tests even if they satisfy ceremony.
 4. Prefer public-boundary outcomes over internals.
 5. Pick layer first and justify it in one line.
-6. For workflow/infra/runtime wiring, prefer executable integration or smoke proof over source-text assertions.
+6. For workflow/infra/runtime wiring, prefer executable integration or smoke proof over source/implementation-shape assertions.
 7. ABI-only unit tests are acceptable when workflow/script unit tests are unavoidable.
 
 ## Valid RED Evidence
@@ -52,7 +52,8 @@ Weak answer = do not add test.
 - trivial getter/default/no-crash tests
 - snapshots without contract meaning
 - slow tests with tiny risk reduction
-- source-text assertions unless text itself is contract
+- source/implementation-shape assertions; use the testing-strategy owner for
+  exception rules
 
 ## Workflow
 

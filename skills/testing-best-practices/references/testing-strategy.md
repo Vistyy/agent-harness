@@ -3,7 +3,8 @@
 Goal: protect real behavior with cheapest high-signal proof.
 
 This is the canonical owner for touched-test remediation, layer selection,
-exact-string and source-text limits, and persistent-test proof strength.
+exact-string and source/implementation-shape limits, and persistent-test proof
+strength.
 Planning-intake should only carry shaping and promotion pressure.
 
 Runtime proof escalation, runtime evidence reports, visual verdict vocabulary,
@@ -79,6 +80,10 @@ persistent-test leg is valid, strong, and at the cheapest honest layer.
   identity
 - provenance/ownership claims prove real owner path, not monkeypatched
   surrogate
+- persistent tests must not inspect production implementation source, parsed
+  source structure, private symbol names, token presence or absence, private
+  dependency wiring, or private call/body shape to prove behavior, ownership,
+  typing, performance, or architecture
 - do not use isinstance, hasattr, getattr, vars/__dict__, or type(x) is ...
   to recover weak contracts, repeated narrowing, or private wiring; use them
   only for real dynamic-boundary validation or explicit dispatch
@@ -128,8 +133,12 @@ persistent-test leg is valid, strong, and at the cheapest honest layer.
 Any one of these makes `keep` invalid:
 
 - `wrong-layer`: a lower owner can prove the same regression
-- `implementation-coupled`: proves internals or refactor shape
-- `file-text-assertion`: proves source or file text instead of contract output
+- `implementation-coupled`: proves internals, private symbol names, private
+  dependency wiring, private call/body shape, parsed production source
+  structure, or refactor shape instead of behavior or durable public boundary
+- `file-text-assertion`: proves source/file text, token presence or absence, or
+  text mirrors instead of contract output, shipped artifact text, or a named
+  architecture boundary surface
 - `policy-mirroring`: duplicates another owner's inventory, metadata, or
   denylist instead of generated, loaded, or runtime behavior
 - `mock-choreography`: proves call wiring more than behavior
@@ -321,17 +330,39 @@ Forbidden:
 
 If production does not depend on the literal wording, do not assert wording.
 
-## Source-Text Assertions
+## Source And Implementation-Shape Assertions
 
 Default: forbidden.
 
-Allowed only when the file text itself is the shipped contract:
+Persistent tests must not inspect production implementation source, parsed
+source structure, private symbol names, token presence or absence, private
+dependency wiring, or private call/body shape to prove behavior, ownership,
+typing, performance, or architecture.
 
-- protocol or schema literal registries
-- stable CLI/help fixture text
-- governed end-user copy sources
+Use behavior proof, public contract proof, typecheck/lint/static architecture
+checks, or review instead.
 
-Everything else is forbidden.
+Allowed only when one of these is true:
+
+- the inspected text or structure is itself the shipped contract or artifact
+  under test
+- a dedicated static architecture check enforces a named durable boundary that
+  is not honestly provable by lower behavior or public contract proof
+
+The static-architecture exception is limited to the boundary surface it owns,
+such as import graph, module boundary, public API/export surface, generated
+artifact, schema, manifest, or declared contract. It must not inspect arbitrary
+private implementation body shape.
+
+Every exception must name:
+
+- the contract or durable boundary
+- the exact inspected surface
+- the counterfactual regression it rejects
+
+Token deny-lists and private-symbol allow-lists are invalid persistent tests
+unless the tokens are part of the public contract, shipped artifact, or named
+architecture boundary surface.
 
 ## Workflow And Infra Changes
 

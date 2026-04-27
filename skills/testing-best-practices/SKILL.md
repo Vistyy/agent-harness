@@ -57,7 +57,7 @@ Helper:
 
 - wrong-layer coverage
 - mock choreography
-- source-text assertions
+- source/implementation-shape assertions
 - non-contract exact strings
 - broad snapshots/goldens
 - overscoped fixtures

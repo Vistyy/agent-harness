@@ -89,6 +89,6 @@ Fix:
 - mock setup longer than test logic
 - test breaks when mock changes, not when behavior changes
 - test needs production-only helper added for convenience
-- broad source-text assertions replace executable proof
+- broad source/implementation-shape assertions replace executable proof
 
 When signs appear, shrink, rewrite, or delete test.

@@ -19,7 +19,7 @@ Before any split, close the owner map for:
 - `durable-gain`
 - proof strength
 - layer selection
-- exact-string/source-text rules
+- exact-string/source/implementation-shape rules
 - corpus audit
 - performance posture
 

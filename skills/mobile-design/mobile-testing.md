@@ -80,7 +80,7 @@ Before release:
 
 ## Anti-Patterns
 
-- over-reliance on snapshots or source-text assertions
+- over-reliance on snapshots or source/implementation-shape assertions
 - claiming mobile behavior from desktop-only execution
 - skipping interruption and network-failure scenarios
 - treating one platform result as proof for both

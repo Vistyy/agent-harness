@@ -152,7 +152,7 @@ Problem:
 Disposition:
 
 - Keep durable test-layer selection, touched-test remediation, invalid reason
-  codes, exact-string/source-text rules here.
+  codes, exact-string/source/implementation-shape rules here.
 - Move runtime proof escalation and runtime evidence branch coverage to
   `verification-before-completion/references/runtime-proof-escalation.md`.
 - Keep UI/browser/device mechanics in web/mobile testing skills.
@@ -661,7 +661,7 @@ Goal:
 Source-of-truth map:
 
 - Persistent test validity, touched-test remediation, layer selection,
-  exact-string/source-text rules: `testing-strategy.md`.
+  exact-string/source/implementation-shape rules: `testing-strategy.md`.
 - Runtime proof escalation, runtime evidence minimum, branch coverage, and
   artifact/evidence placement: `verification-before-completion` references.
 - Browser proof mechanics: `webapp-testing`.
