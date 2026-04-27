@@ -2,15 +2,20 @@
 
 Goal: protect real behavior with cheapest high-signal proof.
 
-This is the canonical owner for touched-test remediation, exact-string and
-source-text limits, and proof-depth decisions. Planning-intake should only
-carry shaping and promotion pressure.
+This is the canonical owner for touched-test remediation, layer selection,
+exact-string and source-text limits, and persistent-test proof strength.
+Planning-intake should only carry shaping and promotion pressure.
+
+Runtime proof escalation, runtime evidence reports, visual verdict vocabulary,
+and artifact promotion are owned by
+`../../verification-before-completion/references/runtime-proof-escalation.md`,
+`../../verification-before-completion/references/runtime-evidence-contract.md`,
+and `../../verification-before-completion/references/verification-evidence.md`.
 
 Coverage count is not goal. Bad tests are debt. Delete, shrink, rewrite, or
 move them when touched.
 
-Examples and references live in
-`../testing-best-practices/SKILL.md`.
+Examples and references live in `../SKILL.md`.
 
 ## Hard Gate
 
@@ -58,21 +63,15 @@ For a new persistent test:
   named regression
 - otherwise do not add it
 
-## Proof Classes
+## Persistent Proof Posture
 
-- `automated-suite-provable`: correct persistent automated proof is enough
-- `runtime-provable`: claim depends on composed runtime, UI, wiring, env, or
-  process boundary
-- `multi-proof-required`: persistent and runtime proof both required
-- `not-reliably-provable-with-current-harness`: harness cannot honestly prove
-  full claim
+Persistent automated proof is enough only when the claim does not depend on a
+composed runtime, UI, environment, service process, or cross-process boundary.
 
-Rules:
-
-- choose smallest honest class
-- do not downgrade runtime or multi-proof claims for convenience
-- multi-proof claims must name both legs
-- weakly provable claims must narrow guarantee or schedule follow-up
+Runtime and multi-proof class selection is owned by
+`../../verification-before-completion/references/runtime-proof-escalation.md`.
+When that owner requires `multi-proof-required`, this file owns whether the
+persistent-test leg is valid, strong, and at the cheapest honest layer.
 
 ## Proof Strength Rules
 
@@ -343,124 +342,23 @@ For `.github/**`, `infra/**`, deployment scripts, runtime wiring:
 - use unit tests only for narrow ABI contracts
 - do not snapshot command ordering, step names, or big shell fragments
 
-## Runtime Artifact Discipline
+## Runtime Proof Routing
 
-- persistent tests should not emit screenshot/video/trace archives by default
-- runtime screenshots are durable only when screenshot review is part of claim
-- failure artifacts are diagnostics unless explicitly reviewed and promoted
-- durable runtime artifacts live under `.artifacts/runtime/**`
-- disposable bundles stay diagnostic-only
+Runtime-bound claims route to
+`../../verification-before-completion/references/runtime-proof-escalation.md`.
 
-## Runtime Proof Depth
+This file still owns the persistent-test leg of `multi-proof-required` claims:
+the test must protect a named durable boundary or regression target at the
+cheapest honest layer.
 
-For runtime-bound `works`, `verified`, or `done` claims, evidence must include:
-
-1. runtime readiness proof
-2. candidate discovery for data-dependent flows before main proof
-3. real user action or real request for each changed critical path
-4. outcome proof tied to action
-5. screenshot review when UI quality is part of claim
-6. request/response and logs when cross-layer behavior matters
-
-Data-dependent flow rule:
-
-- inspect active runtime data with the supported repo path; do not guess probe
-  inputs
-- exact runtime recipe belongs in the owning runtime-testing skill or surface
-  doc, not here
-- treat flow as candidate discovery, then proof
-- if runtime lacks suitable data, report `Runtime evidence: blocked` with the
-  failed probe and next repo-supported action
-
-Runtime proof overlay:
-
-- interactive UI needs interaction completeness, not only action fired
-- failure/edge-state claims need actual failure/edge probes
-- shared controls/filter/handoff flows need one-source-of-truth checks across
-  UI, request shape, query, and downstream handoff
-- if branch behavior differs by auth posture, capability, or state authority,
-  runtime proof must state exact branch exercised and why remaining branches are
-  either covered separately or out of claim
-- `multi-proof-required` still needs persistent-test leg
-- weakly provable claims must be narrowed or deferred honestly
-
-Artifact-only, startup-only, or navigation-only evidence is invalid for
-flow-completion claims.
-
-## Runtime UI Evidence
-
-For browser/device-visible UI changes:
-
-- execute changed flow live
-- execute every material claimed branch live, not only easiest branch
-- capture required viewports
-- open and inspect screenshots
-- review each touched screen/state that matters
-- name screenshots reviewed, states covered, viewport used, checks performed
-- name user posture and authority posture used for each reviewed flow
-
-Merge-blocking UI evidence failures:
-
-- overlapping controls
-- clipped or unreadable primary labels
-- broken responsive layout
-- broken hierarchy or action placement
-- missing/broken media on visual surfaces
-- screenshot quality not acceptable as product evidence
-
-Element/text presence alone is not enough for overlay/floating interactions.
-
-UI risk-class owner:
-
-- this reference owns proof taxonomy and escalation requirements only
-- concrete browser/device proof mechanics are supplied by the active project
-  overlay or by a separately installed runtime-testing skill
-- project overlays own exact runtime recipes, product-specific acceptance, and
-  any local UI verification strategy
-
-## Shared Flow Functional Parity
-
-When end-user flow exists on both web and mobile:
-
-- verify edited client
-- verify counterpart still matches same functional contract
-- or schedule owning follow-up in same change
-
-If a feature intentionally ships on one client first, record that rollout policy
-or follow-up in the project overlay. The global harness does not decide product
-delivery order.
-
-## Backend Runtime Claims
-
-Backend-only changes still need live runtime proof when claim depends on
-process boundary:
-
-- HTTP/API behavior
-- auth/session/RLS
-- env/config/runtime wiring
-- background worker or cross-service behavior
-- observability/diagnostic claims
-
-Minimum live evidence:
-
-1. start affected service with repo runtime recipe
-2. execute real request/flow for each changed critical path
-3. capture request/response, relevant logs, required side-effect evidence
-
-For observability/diagnostic claims, evidence must also cite selected
-`correlation_id` or `trace_id` values plus the linked log/trace artifact, or
-explicit `none observed` when the packet has already narrowed the claim to
-allow that outcome.
-
-Mutating flows need at least one real runtime mutation plus verified outcome.
-Offline/retry claims need degraded-condition evidence plus recovery evidence.
-
-If delegated runtime worker is interrupted or closed before final verdict, that
-proof leg is incomplete and must be rerun.
+Concrete browser and mobile mechanics are owned by `webapp-testing` and
+`mobileapp-testing`. Project overlays own exact runtime recipes,
+product-specific acceptance, and local UI verification strategy.
 
 ## CI Posture
 
-`quality-gate-selection.md` owns lane semantics; project overlays own stack-specific commands.
+`../../verification-before-completion/references/quality-gate-selection.md`
+owns lane semantics; project overlays own stack-specific commands.
 
 Rule here:
 

@@ -1,6 +1,6 @@
 ---
 name: executing-plans
-description: "Use when executing an already-approved standalone implementation plan (typically from docs/plans), and do not use for wave-task execution which should route to wave-autopilot."
+description: "Use to execute an already-approved standalone implementation plan under docs/plans; do not use for wave execution, which routes to wave-autopilot."
 ---
 
 # Executing Plans
@@ -8,7 +8,7 @@ description: "Use when executing an already-approved standalone implementation p
 Execute approved standalone plan from `docs/plans/**`. Not for waves.
 
 Owners:
-- standalone-plan policy: `references/standalone-plans.md`
+- standalone-plan policy: `../writing-plans/references/standalone-plans.md`
 - completion/evidence gate: `skills/verification-before-completion/SKILL.md`
 - approval and review semantics: `skills/code-review/references/review-governance.md`
 - minor local assumptions: `skills/implementation-decision-ledger/SKILL.md`
@@ -18,7 +18,7 @@ Owners:
 Check plan only for readiness:
 - `Decision Closure Check` closes material decisions
 - `Scope Coverage Plan` covers all in-scope surfaces
-- `## Approval Record` satisfies `standalone-plans.md`; approval and
+- `## Approval Record` satisfies the standalone-plan policy; approval and
   disposition semantics come from `review-governance.md`
 - requested work still matches approved scope
 

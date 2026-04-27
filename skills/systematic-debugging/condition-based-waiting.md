@@ -67,7 +67,8 @@ async function waitFor<T>(
 }
 ```
 
-Full implementation and helper variants live in `condition-based-waiting-example.ts`.
+Illustrative implementation variants live in
+`examples/condition-based-waiting-example.ts`.
 
 ## When Timeout Is Correct
 

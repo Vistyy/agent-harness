@@ -48,6 +48,11 @@ For corpus-wide audit work:
 3. Exhaust that tranche before moving on.
 4. Refresh the inventory after each tranche.
 
+Helper:
+- `scripts/test_suite_audit.py`: inventory and score suspicious test files and
+  clusters before a corpus-wide cleanup tranche. It is an audit aid, not proof
+  that a test should be kept or deleted.
+
 ## Common Failure Modes
 
 - wrong-layer coverage

@@ -1,6 +1,6 @@
 ---
 name: initiatives-workflow
-description: "Use when the task is workflow maintenance (delivery-map structure, wave execution packet conventions, or wave/backlog workflow policy), not when actively shaping scope or executing a wave."
+description: "Use for wave/backlog workflow maintenance, delivery-map structure, packet schema upkeep, and closeout state cleanup; not for scope shaping or executing a wave."
 ---
 
 # Initiatives Workflow
@@ -9,6 +9,9 @@ Thin maintenance wrapper for wave/backlog state.
 
 Owner doc:
 - `references/initiatives-workflow.md`
+
+Packet contract:
+- `references/wave-packet-contract.md`
 
 Use this skill for:
 - backlog -> wave promotion,
@@ -44,8 +47,12 @@ Examples:
 - `assets/wave-brief.example.md`
 - `assets/wave-execution.example.md`
 
-Bootstrap helper:
-- `scripts/bootstrap_wave_docs.py`
+Helpers:
+- `scripts/bootstrap_wave_docs.py`: scaffold a `discovery-required` wave brief.
+- `scripts/wave_brief_references.py`: list exact references to one wave brief
+  path during closeout.
+- `scripts/current_wave_cleanup.py`: dry-run or delete a closed current-work
+  wave directory after closeout prerequisites are satisfied.
 
 ## Guardrails
 

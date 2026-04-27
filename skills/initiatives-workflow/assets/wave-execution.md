@@ -13,6 +13,9 @@ Linked durable brief:
 
 - `docs-ai/docs/initiatives/waves/<wave-id>.md`
 
+Field semantics are owned by
+`skills/initiatives-workflow/references/wave-packet-contract.md`.
+
 One packet layout only. Vary depth, not shape.
 
 ## Scope And Execution Posture

@@ -37,8 +37,8 @@ Out of scope:
 
 Review governance stays owned by `skills/code-review/references/review-governance.md`.
 Delegation mechanics stay owned by `skills/subagent-orchestration/SKILL.md`.
-Standalone-plan execution policy stays owned by
-`skills/executing-plans/references/standalone-plans.md`.
+Standalone-plan policy stays owned by
+`skills/writing-plans/references/standalone-plans.md`.
 
 This reference keeps only role boundaries:
 - parent thread is not a worker role
@@ -79,8 +79,52 @@ instruction details belong in adapter config, not durable role vocabulary.
 - Active or timed-out workers stay alive by default.
 - Only exceptions: explicit user instruction, plainly mistaken dispatch, or
   the worker itself reporting done, blocked, or irrelevant.
+- A timed-out wait is not evidence of cancellation or safe-to-close state.
 - Parent-local edits in an active worker's write scope require explicit user
   approval to take the packet back.
+
+## Role Outputs
+
+- `explorer`: files, symbols, relationships, open questions, next probes.
+- `check_runner`: commands, pass/fail, top failures, failure-class summary,
+  artifact paths, focused next checks.
+- `planning_critic`: `APPROVE` or `REJECT`, planning gaps, ambiguous owner or
+  proof paths, surviving legacy paths, and exact fields needed before handoff.
+- `implementer`: changed files, verification run, green-or-blocked handback
+  against assigned proof rows, explicit blockers, and no self-approval.
+- `quality_guard`: `APPROVE` or `REJECT`, findings, reviewed scope, proof used.
+- `final_reviewer`: final closeout `APPROVE`, `BLOCK`, or `NON-BLOCKING`
+  verdict for the whole changed slice.
+- `runtime_evidence`: recipe, flow, artifacts, behavioral verdict, blocking
+  defects, advisory notes, and trace/correlation identifiers or explicit
+  `none observed` when observability mattered.
+
+## Role-Specific Handoffs
+
+`planning_critic` handoff:
+- pass the governing brief, packet, or plan path
+- name claimed owner boundary or contract-tightening outcome
+- ask for materially equivalent legacy paths that still survive
+- ask whether two competent implementers could still choose materially
+  different owner, proof, state-authority, runtime, compatibility, migration,
+  or public-behavior paths
+- require explicit `APPROVE` or `REJECT`
+
+`implementer` handoff:
+- pass exact governing artifact path and exact proof rows
+- state that material owner, proof, state-authority, runtime, compatibility,
+  migration, and public-behavior decisions are closed
+- include owned files/surfaces, locked invariants, allowed local decisions,
+  stop-and-handback triggers, and proof rows
+- keep helper names, decomposition, idiom, and framework mechanics local only
+  when owner skills/docs already close the approach
+- require one testing-strategy row per changed persistent test file
+
+`runtime_evidence` handoff:
+- pass exact runtime recipe or active runtime target
+- name material branches or states to exercise
+- include must-check constraints and surface brief when UI quality is in scope
+- do not pre-identify design defects for the worker to echo back
 
 ## Enforcement Destinations
 
@@ -95,5 +139,5 @@ instruction details belong in adapter config, not durable role vocabulary.
 
 - review topology owner: `skills/code-review/references/review-governance.md`
 - policy ownership owner: `skills/documentation-stewardship/references/policy-single-source-of-truth.md`
-- standalone-plan owner: `skills/executing-plans/references/standalone-plans.md`
+- standalone-plan owner: `skills/writing-plans/references/standalone-plans.md`
 - wave workflow owner: `skills/initiatives-workflow/references/initiatives-workflow.md`

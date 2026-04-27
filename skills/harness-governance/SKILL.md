@@ -1,6 +1,6 @@
 ---
 name: harness-governance
-description: Use when creating, installing, validating, or reviewing the reusable agent-harness repository itself, Codex adapter install behavior, global AGENTS.md/project-overlay contracts, skill architecture, harness repo posture, or reusable harness enforcement checks.
+description: "Use for reusable agent-harness governance: skill architecture, global AGENTS/project-overlay contracts, Codex adapter install behavior, repo posture, and harness enforcement checks."
 ---
 
 # Harness Governance
@@ -109,6 +109,9 @@ route by description. Move reusable supporting material with the owning skill in
 leaving it in a project documentation tree. Do not duplicate the same durable
 rule in multiple skills; link to the owner. Keep examples generic unless the
 skill is explicitly project-local.
+
+Detailed skill-authoring quality rules live in
+`references/skill-architecture.md`.
 
 ## Enforcement Checks
 

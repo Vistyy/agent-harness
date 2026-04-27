@@ -1,6 +1,6 @@
 ---
 name: user-apps-design
-description: Primary design-implementation skill for end-user web/mobile UI work; use to turn references/contracts into a high-quality, non-amateur UI outcome with explicit parity decisions.
+description: Use for end-user web/mobile UI design direction, parity decisions, composition quality, and copy posture; route platform mechanics and runtime proof to owner skills.
 ---
 
 # User Apps Design
@@ -29,12 +29,6 @@ Do not create parallel design decision tracks in downstream skills.
 - `references/parity-dimensions.md`
 - `references/atomic-design.md`
 - `references/text-constraints.md`
-- `../system-boundary-architecture/references/web-frontend-boundaries.md`
-  when shared web layer ownership, import direction, or public-surface hygiene
-  changes in web app code
-- `../system-boundary-architecture/references/web-route-and-state-boundary-doctrine.md`
-  when route shells, screen-facing state authority, or facade/screen-model
-  boundaries change in web app code
 
 Do not continue until you can restate the relevant invariants.
 
@@ -116,7 +110,7 @@ scorecard.
 
 1. Satisfy the project-owned discovery gate when UI quality or product direction is in scope. If required context is missing, stop.
 2. Read the project design-implementation posture when the change needs an
-   implementation loop, reviewed runtime screenshot set, or handoff posture.
+   implementation loop or handoff posture.
 3. Choose one approved archetype or record a justified exception before
    editing.
 4. Write parity matrix before editing:
@@ -134,13 +128,10 @@ scorecard.
 8. When claiming hierarchy, density, shell, or UI quality, define `3-7`
    design-intent anchors per the project surface-discovery contract.
 9. Apply styling only through existing design-system contracts.
-10. Validate in runtime before claiming UI quality. When claims need reviewed
-    proof, use the targeted runtime screenshot set from
-    the project design-implementation posture. If evidence fails, use the remediation
-    handback fields from the owner doc and the dimension/anti-pattern names
-    from the project design-fidelity governance reference.
-11. For web route work, keep route a thin shell. If route becomes workflow
-    owner, stop and apply web route/state doctrine.
+10. For runtime UI proof, route to `webapp-testing` or `mobileapp-testing` and
+    use the project design-fidelity governance terms for verdicts.
+11. For web route ownership changes, route to `system-boundary-architecture`;
+    this skill does not own route/state authority doctrine.
 
 ## Cross-Skill Routing
 
@@ -149,6 +140,8 @@ scorecard.
   validation
 - `flutter-expert`: Flutter/Dart implementation mechanics
 - `webapp-testing` or `mobileapp-testing`: runtime UI behavior claims
+- `system-boundary-architecture`: route/state authority, shared frontend
+  boundaries, and ownership changes
 
 ## Pre-Change Checklist
 
@@ -167,8 +160,7 @@ scorecard.
 - [ ] user-facing strings follow the project language policy
 - [ ] parity requirements satisfied
 - [ ] atomic composition requirements satisfied
-- [ ] remediation handback response path understood for failed evidence
-- [ ] verification path exists
+- [ ] runtime proof owner selected when UI-quality claim needs evidence
 
 ## If Source Of Truth Is Missing
 

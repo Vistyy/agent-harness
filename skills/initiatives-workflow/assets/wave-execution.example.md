@@ -18,6 +18,8 @@ One packet layout only. Vary depth, not shape.
   - `engineering-harness/testing-posture/expanded-testing-skill`
 - Non-obvious constraints:
   - `Keep one packet layout; do not introduce compact/standard/proof-heavy variants.`
+- System-boundary trigger:
+  - `not-triggered`
 - Implementer delegation posture:
   - `implementer-eligible`
 - Parent-only rationale:
@@ -64,7 +66,7 @@ Rules:
   - `skills/initiatives-workflow/assets/wave-brief.example.md`
 - Locked invariants:
   - `execution-ready packets remain implementation-only`
-  - `System-Boundary Architecture Disposition stays present in standard packet shape`
+  - `System-Boundary Architecture Disposition stays absent when not triggered`
 - Allowed local implementer decisions:
   - `section wording and local example density`
   - `small template factoring choices that do not change packet shape`
@@ -168,33 +170,6 @@ Rules:
   ]
 }
 ```
-
-## System-Boundary Architecture Disposition
-
-- Trigger status:
-  - `not-triggered`
-- Why triggered:
-  - `This slice changes workflow/doc contracts, not runtime ownership boundaries.`
-- Planning disposition:
-  - `Structural boundary doctrine not needed for this wave.`
-- Execution rule:
-  - `If work expands into new worker roles or new long-lived contract owners, stop and return to planning.`
-- Changed authorities or contracts:
-  - `none`
-- Single owner after change:
-  - `none`
-- Public write paths:
-  - `none`
-- Read-repair paths:
-  - `none`
-- Forbidden bypass paths:
-  - `none`
-- Rejected alternatives:
-  - `none`
-- Why not artificially narrowed:
-  - `not-triggered`
-- Stable-to-extend expectation:
-  - `none`
 
 ## Execution State
 

@@ -8,10 +8,10 @@ description: Use when validating mobile app runtime behavior; start deterministi
 Goal: prove mobile runtime behavior with deterministic device evidence.
 
 Owners:
-- proof depth: `../testing-best-practices/references/testing-strategy.md`
+- runtime proof escalation: `../verification-before-completion/references/runtime-proof-escalation.md`
 - UI risk classes: `the project UI verification strategy, when present`
 - design anchors: `the project surface-discovery contract, when present`
-- delegated screenshot verdicts: `../webapp-testing/references/runtime-evidence-visual-verdict-contract.md`
+- runtime evidence contract: `../verification-before-completion/references/runtime-evidence-contract.md`
 - artifact placement: `../verification-before-completion/references/verification-evidence.md`
 - delegation policy: `../subagent-orchestration/SKILL.md`
 
@@ -62,7 +62,8 @@ Do not encode project service names, ports, device IDs, or host-specific recover
 
 ## Proof Notes
 
-Apply `testing-strategy.md` for actual proof bar.
+Apply `runtime-proof-escalation.md` for runtime proof bar and
+`testing-strategy.md` only for persistent-test strategy.
 
 For `runtime-risk-ui`, prove both:
 - screen/widget/integration test for composed hit-testable surface,
@@ -82,21 +83,12 @@ Recovery steps are project and host specific. Keep durable guidance limited to e
 
 ## Reporting
 
-Runtime evidence reports should include:
-- runtime recipe,
-- whether observability profile was enabled,
-- UI risk class when applicable,
+Runtime evidence reports should follow
+`../verification-before-completion/references/runtime-evidence-contract.md` and
+add mobile-specific details when material:
+- selected device or emulator posture,
+- UI risk class,
 - flow verified,
-- edge/failure states reviewed when applicable,
-- artifacts reviewed,
-- selected trace/correlation IDs plus trace/log artifact or query paths, or
-  explicit `none observed` when observability was enabled but yielded no usable
-  IDs, or explicit note that observability was intentionally not used,
-- proof class,
-- behavioral verdict,
-- design-fidelity verdict when applicable,
-- threshold result when end-user design scoring applies,
-- `blocking` defects and `advisory` notes,
-- pass/fail and residual risk.
+- widget tree, log, screenshot, or adb artifacts reviewed.
 
 Completion claim fields belong to `../code-review/references/review-governance.md`.

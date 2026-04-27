@@ -22,14 +22,14 @@ Excluded:
   initiative
 - repo-wide global test strategy, owned by `testing-strategy.md`
 - runtime proof taxonomy and escalation, owned by
-  `../verification-before-completion/references/runtime-proof-escalation.md`
+  `../../verification-before-completion/references/runtime-proof-escalation.md`
 - concrete runtime diagnostics and artifact mechanics, owned by the active
   project overlay or separately installed surface-specific runtime-testing skill
 
 ## Follow-Up Contract
 
-- repo-wide touched-test remediation, proof-depth decisions, and cleanup
-  doctrine stay owned by `testing-strategy.md`
+- repo-wide touched-test remediation, persistent-test proof strength, and
+  cleanup doctrine stay owned by `testing-strategy.md`
 - when a test family spans multiple product areas but the real problem is test
   cleanup, follow-up ownership should stay here rather than being scattered
   across product queues

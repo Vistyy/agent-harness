@@ -1,6 +1,6 @@
 ---
 name: code-simplicity
-description: "Use as the default simplicity lens for non-trivial planning, implementation, and review. Start from the simplest shape that honestly solves the problem, justify every meaningful surviving complexity, and treat deletion/collapse/demotion as first-class solutions."
+description: "Use as the default simplicity lens for non-trivial planning, implementation, and review; prefer deletion, collapse, demotion, and the smallest honest solution."
 ---
 
 Simplicity lens under:

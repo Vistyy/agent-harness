@@ -2,6 +2,11 @@
 
 Wave-first workflow. Minimal ceremony. One owner per truth class.
 
+This reference owns wave/backlog lifecycle and source-of-truth placement.
+Packet schema is owned by `wave-packet-contract.md`. Planning readiness is
+owned by `../../planning-intake/SKILL.md`. Delegation policy is owned by
+`../../subagent-orchestration/SKILL.md`.
+
 ## Source Of Truth
 
 - durable intent: `docs-ai/docs/**`
@@ -139,7 +144,8 @@ Rules:
 
 ## Execution-Ready Gate
 
-Do not promote while:
+Use `../../planning-intake/SKILL.md` for planning readiness. Lifecycle rule:
+do not promote while:
 
 - material implementation-shaping decision is unresolved
 - discovery/audit/disposition still leaks into execution
@@ -157,159 +163,19 @@ Treat local helper names, component/function decomposition, exact idiom, and
 framework mechanics as implementer-local when owner skills/docs already close
 the correct approach and those choices do not change a material path.
 
-Execution-ready planning must:
-- name proof class and expected evidence path for important claims
-- name observability/external-dependency ownership when those are real blockers
-- shape around common cause instead of keeping a wave artificially small
-- close one explicit authority map for structural, hotspot, or state-authority
-  work
-- route non-trivial planning through `planning_critic` before planning-gate
-  `quality_guard`
-- record planning-gate `quality_guard` approval
-- for packet-backed execution-ready planning, record `planning_critic`
-  provenance inside `planning_gate.planning_critic` before planning-gate
-  `quality_guard`; a packet-backed wave must not promote without both records
-- keep `planning_critic` as critic pressure only; planning-gate
-  `quality_guard` remains the promotion gate
-- declare one packet delegation posture: `implementer-eligible` or
-  `parent-only`
-
-Non-trivial planning includes structural, hotspot, state-authority,
-delegation-policy, UI / taste doctrine, proof-gap, and non-trivial wave-shaping
-work. Tiny local fixes do not become heavyweight planning only because this
-critic rule exists.
-
-`implementer-eligible` is the default. `parent-only` needs one explicit reason
-code in the packet:
-- `packet-declared-parent-only`
-- `repeated-implementer-handback`
-- `tool-or-runtime-limit`
-- `shared-file-churn`
-- `tiny-local-followup`
-
-Delegable task cards still need one bounded autonomy envelope with owned
-surfaces, locked invariants, allowed local decisions, stop-and-handback
-triggers, and proof rows.
+Promotion requires:
+- planning-intake gate satisfied
+- planning-gate `quality_guard` approval recorded
+- packet-backed waves record `planning_critic` provenance inside
+  `planning_gate.planning_critic`
+- packet delegation posture recorded according to `wave-packet-contract.md`
 
 ## Packet Contract
 
-Canonical packet:
+Packet schema, task-card fields, proof rows, and task state semantics are owned
+by `wave-packet-contract.md`.
 
-- `docs-ai/current-work/<wave-id>/wave-execution.md`
-
-Draft packet during planning gate:
-
-- `docs-ai/current-work/<wave-id>/wave-execution.draft.md`
-
-### Task State Semantics
-
-Task state stays coarse.
-
-Allowed packet task states:
-- blank
-- `done`
-- `blocked`
-
-Meaning:
-- blank: task is not yet closed
-- `done`: all scoped implementation obligations, cleanup/removal obligations,
-  review gates, and proof rows are satisfied
-- `blocked`: next required move depends on an external dependency or explicit
-  user action
-
-Rules:
-- do not invent extra task states to carry nuance that belongs in proof rows,
-  blocker entries, or task evidence
-- do not mark task `done` while any scoped cleanup/removal/demotion item is
-  still intentionally deferred
-- do not mark task `done` while any required hosted/runtime proof row remains
-  unsatisfied
-- use `blocked` only when the next required action is truly external; otherwise
-  leave the state blank and keep working
-- `Execution outcome` text in task sections must match the task-row state
-
-Draft rules:
-
-- same layout as canonical packet
-- no map links
-- not active execution state
-- promote to canonical only in same change that records planning approval
-
-Use one elastic packet layout. No alternate packet shapes.
-
-Required sections:
-
-1. `Scope And Execution Posture`
-2. `Task Plan`
-3. `Proof Plan`
-4. `Execution State`
-
-Packet rules:
-
-- keep wave-specific evidence expectations only
-- raw runtime artifacts live under `.artifacts/runtime/**`
-- include `System-boundary trigger` with value `triggered` or `not-triggered`
-- include `Implementer delegation posture`
-- include `Parent-only rationale`; use `none` unless posture is `parent-only`
-- include `Planning Exceptions`; prefer `none`
-- `implementer-eligible` is the preferred default; `parent-only` must record a
-  concrete reason it is safer or lower-risk than delegation
-- structural work must set `System-boundary trigger: triggered` and include
-  `## System-Boundary Architecture Disposition`
-- non-structural work sets `System-boundary trigger: not-triggered` and may
-  omit the section entirely
-- the canonical packet template keeps one conditional
-  `System-Boundary Architecture Disposition` appendix slot for that triggered
-  case
-- structural, hotspot, or state-authority work must include the authority map
-  fields: changed authorities/contracts, single owner after change, public
-  write paths, read-repair paths, forbidden bypass paths, rejected
-  alternatives, why scope is not artificially narrowed, and stable-to-extend
-  expectation
-- `implementer-eligible` packets must keep allowed implementer decisions minor
-  and local to one task card envelope
-- allowed local decisions must not include state-authority shape, owner
-  boundary, public behavior, proof path, migration/compatibility stance,
-  runtime posture, forbidden legacy path, or material technology/provider
-  choice
-- implementer-eligible task cards require the material handoff boundary:
-  outcome, scope, owned files/surfaces, locked invariants, allowed local
-  implementer decisions, stop-and-handback triggers, proof rows, and deferred
-  follow-up disposition
-- starting files/symbols, existing patterns, and implementation notes are
-  optional execution hints; include them when they reduce ambiguity, but do not
-  require them as ceremony
-- task cards are outcome-and-proof shaped, not command lists: state the success
-  condition, the proof that rejects a weaker implementation, and then expected
-  commands or artifacts
-- multi-task execution must chunk task cards so `quality_guard` can review each
-  meaningful boundary or public-surface change separately; do not hide several
-  materially different task clusters inside one first review pass
-- proof rows assigned to a task define the implementer's task-local verification
-  obligations; handback should leave those checks green or return an explicit
-  blocker
-- structural, hotspot, or state-authority task plans must migrate every listed
-  write/read-repair path to the declared owner before follow-on cleanup or
-  proof-polish tasks
-- task plans must not intentionally leave already-visible owned-scope hygiene,
-  decomposition, awkward-wiring, or type-rigor debt for a later pass unless
-  packet records explicit user-approved durable exception
-- `proof_plan` records only important claims materially advanced by wave
-- each proof row includes:
-  - `proof_id`
-  - `task_slug`
-  - `anchor_ids`
-  - `claim`
-  - `material_variants`
-  - `proof_classification`
-  - `owner_layer`
-  - `exact_proof`
-  - `expected_evidence`
-  - `counterfactual_regression_probe`
-  - `status`
-
-Packet gating:
-
+Lifecycle gates here:
 - `discovery-required`: no canonical packet
 - `execution-ready`: packet required
 - `done` and `retired`: no packet

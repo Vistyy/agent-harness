@@ -1,6 +1,6 @@
 ---
 name: webapp-testing
-description: Use when modifying or validating browser-visible UI or web behavior, including internal/admin surfaces; follow the browser-proof layering contract and capture browser/runtime evidence with an existing durable spec first, then an added/extended spec, then Playwright CLI, then raw scripts only as a last resort.
+description: Use for browser-visible UI or web runtime proof, including internal/admin surfaces; choose browser evidence via durable spec, added spec, Playwright CLI, then raw scripts only as last resort.
 ---
 
 # Browser UI Testing
@@ -9,11 +9,11 @@ Goal: prove browser-visible behavior with live runtime evidence.
 
 Owners:
 - route/state doctrine: `../system-boundary-architecture/references/web-route-and-state-boundary-doctrine.md`
-- proof depth: `../testing-best-practices/references/testing-strategy.md`
+- runtime proof escalation: `../verification-before-completion/references/runtime-proof-escalation.md`
 - browser-proof layering: `references/browser-proof-layering-contract.md`
 - UI risk classes: `the project UI verification strategy, when present`
 - design anchors: `the project surface-discovery contract, when present`
-- delegated screenshot verdicts: `references/runtime-evidence-visual-verdict-contract.md`
+- runtime evidence contract: `../verification-before-completion/references/runtime-evidence-contract.md`
 - artifact placement: `../verification-before-completion/references/verification-evidence.md`
 - delegation policy: `../subagent-orchestration/SKILL.md`
 
@@ -110,9 +110,22 @@ gather required evidence:
 - targeted DOM probing
 - performance analysis
 
+## Last-Resort Helpers
+
+Prefer project runtime recipes, durable specs, and Playwright CLI before these
+helpers.
+
+- `scripts/with_server.py`: starts trusted local server commands around one
+  proof command when no project runtime recipe exists. Do not use it for
+  untrusted command strings or when project topology is already documented.
+- `examples/console_logging.py`: example for bounded console capture.
+- `examples/element_discovery.py`: example for exploratory element inventory.
+- `examples/static_html_automation.py`: example for local static HTML probing.
+
 ## Proof Notes
 
-Apply `testing-strategy.md` for actual proof bar.
+Apply `runtime-proof-escalation.md` for runtime proof bar and
+`testing-strategy.md` only for persistent-test strategy.
 
 For `runtime-risk-ui`, prove:
 - visible surface is hit-testable,
@@ -131,26 +144,13 @@ Write flows need one real mutating action plus request/response evidence.
 
 ## Reporting
 
-Runtime evidence reports should include:
-- startup recipe,
-- whether observability profile was enabled,
-- data inspection path when data-dependent,
-- material variants considered and exact ones exercised,
-- chosen result-bearing query/record when applicable,
-- candidate discovery status,
+Runtime evidence reports should follow
+`../verification-before-completion/references/runtime-evidence-contract.md` and
+add browser-specific details when material:
+- selected browser proof channel,
 - UI risk class,
 - pages/flows verified,
-- edge/failure states reviewed when applicable,
-- evidence gathered,
-- selected trace/correlation IDs plus trace/log artifact or query paths, or
-  explicit `none observed` when observability was enabled but yielded no usable
-  IDs, or explicit note that observability was intentionally not used,
-- behavioral verdict,
-- design-fidelity verdict when applicable,
-- threshold result when end-user design scoring applies,
-- `blocking` defects and `advisory` notes,
-- representative screenshot paths actually inspected,
-- proof class,
-- pass/fail and residual risk.
+- reviewed viewport screenshots,
+- bounded console/network evidence.
 
 Completion claim fields belong to `../code-review/references/review-governance.md`.

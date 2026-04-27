@@ -10,10 +10,19 @@ Owner for approval boundaries, disposition, and completion claims.
 - `review-address`: pre-edit review-feedback triage.
 - `code-simplicity`: simplicity lens.
 - `adversarial-review`: failure-mode lens.
-- `ci.md`: quality-tier semantics.
-- `initiatives-workflow.md`: packet proof structure and closeout state.
-- `standalone-plans.md`: standalone-plan approval record placement and schema.
-- `testing-strategy.md`: proof depth and runtime evidence depth.
+- `../../verification-before-completion/references/quality-gate-selection.md`:
+  quality-tier semantics.
+- `../../initiatives-workflow/references/initiatives-workflow.md`:
+  wave lifecycle and closeout state.
+- `../../initiatives-workflow/references/wave-packet-contract.md`: packet
+  schema, proof-row fields, and task state semantics.
+- `../../writing-plans/references/standalone-plans.md`: standalone-plan
+  approval record placement and schema.
+- `../../testing-best-practices/references/testing-strategy.md`:
+  touched-test remediation and persistent-test validity.
+- `../../verification-before-completion/references/runtime-proof-escalation.md`:
+  runtime proof escalation.
+- `system-boundary-architecture`: boundary and ownership doctrine.
 
 ## Core Rules
 
@@ -36,72 +45,16 @@ Owner for approval boundaries, disposition, and completion claims.
 - If a local fix exposes a shared-cause or wrong-owner problem, do not approve
   the local fix alone; require the broader fix or a durable backlog link.
 - For structural, hotspot, or state-authority slices, a declared owner map must cover every public write path and read-repair path in scope. Any surviving bypass is merge-blocking.
-- No approval while any changed persistent test file lacks the required
-  testing-strategy row or carries any testing-strategy invalid reason code.
-- No approval while any changed persistent test file fails the additional
-  testing-strategy gate:
-  - `required-proof`: it is required to prove a changed durable boundary or
-    changed regression target with no existing same-layer or lower-layer proof
-    already covering that change
-  - `durable-gain`: it produces an allowed durable gain for the same
-    originally owned durable regression target
-- Reject changed persistent tests whose strongest proof is a mutable
-  fake-call kwargs bag or cast-heavy JSON spelunking; classify them as
-  `mock-choreography`, `low-signal-assertion`, or
-  `implementation-coupled`, and do not approve until the assertion reaches a
-  public boundary or the file is deleted.
+- No approval while any changed persistent test file fails
+  `testing-strategy.md`, including the required disposition row, invalid reason
+  code gate, `required-proof`, and `durable-gain` checks.
 - No approval based on `better than before`, `moved to the right owner`, or
   `good enough for now`.
-- Touched-test review must report each changed persistent test file as:
-  `<path>: <keep|shrink|rewrite|delete> [reason-codes|none]`.
-- Reject helper-extract-only, parameter-reshape-only, file-move-only,
-  fixture-churn-only, or reorganize-only persistent-test changes that are not
-  required by a changed durable boundary or changed regression target and do
-  not produce an allowed durable gain.
-- Reject changed persistent test cleanup whose regression target, strongest
-  surviving proof, proof layer, persistent-test surface, and invalid
-  reason-code state are unchanged.
-- Invalid approval patterns: split-only cleanup, weaker replacement of a
-  removed strongest assertion, or a parameter matrix that collapses materially
-  different contracts or assertion shapes.
-- Invalid approval patterns for Python typing: placeholder object casts, broad
-  containers or repeated casts where the shape is known, helper widening
-  followed by downstream re-narrowing, framework-seam casts bleeding into
-  business logic, local duplicate shapes where an imported contract exists,
-  local proxy `TypedDict` or `Protocol` types or wrapper casts invented only to
-  reach members or retype imported values, raw dict or list casting where a
-  real adapter or model exists, `cast(object, ...)` used only to feed a
-  validator or parser, sibling tests importing underscore helpers or stubs as
-  public support API, or approval based only on green typecheck while the
-  runtime contract stays implicit or the typed-boundary proof fails the
-  testing-strategy owner rule.
-- Invalid approval patterns for boundary and code-shape review: importing
-  private helpers or underscore members outside their defining module,
-  behavioral `dict`/`list`/`object` bags used as cross-module contracts, the
-  same vendor/framework/storage payload shape parsed in more than one owner, or
-  a route/service that both parses request/form input and assembles nested
-  transport/domain payload dicts without being the declared contract owner,
-  duplicate canonicalization for one shared external contract, production
-  boundary code branching to test-only or missing-framework fallbacks,
-  public helpers exposing parameters or option fields that cannot change any
-  valid output,
-  dependency modules defining request-scoped transactional workflow wrappers
-  or execution policy,
-  CLI, factory, or compose entrypoints redefining shared-home or
-  runtime-local-state layout/registry policy owned by another module,
-  adapters serializing one typed transport contract into raw dict/list payloads
-  only for the next owner to accept or re-parse the same contract,
-  a change that only relocates a broad contract or parsing problem to another
-  owner while preserving the same effective behavior,
-  store/runtime/adapter files importing orchestration owners for shared types,
-  coordinators/controllers/services hiding cross-instance mutable cache state
-  in static or module-level storage, or adapters hiding optional third-party
-  dependency availability in import-time module globals.
-- For boundary-changing review, reject unless the review can name one owner,
-  with file evidence, for each touched role among contract,
-  parsing/normalization, lifecycle/bootstrap/recovery, persistence/cache
-  state, and failure policy. If a touched role has no clear owner, or the diff
-  leaves two places co-owning it, reject.
+- Boundary, typing, and code-shape approval must satisfy the applicable
+  `system-boundary-architecture` owner docs. For boundary-changing review,
+  reject unless the review can name one owner, with file evidence, for each
+  touched role among contract, parsing/normalization,
+  lifecycle/bootstrap/recovery, persistence/cache state, and failure policy.
 
 ## Review Modes
 

@@ -5,11 +5,11 @@ posture, and browser-proof session conventions.
 
 Does not own:
 - proof classes or proof-depth selection:
-  `../../testing-best-practices/references/testing-strategy.md`
+  `../../verification-before-completion/references/runtime-proof-escalation.md`
 - screenshot anti-abuse policy:
-  `../../testing-best-practices/references/testing-strategy.md`
+  `../../verification-before-completion/references/runtime-evidence-contract.md`
 - delegated screenshot verdict schema, severity language, or report shape:
-  `runtime-evidence-visual-verdict-contract.md`
+  `../../verification-before-completion/references/runtime-evidence-contract.md`
 - project smoke catalog selection
 - flow-specific wrapper commands
 
@@ -75,10 +75,10 @@ Rules:
 
 ## Related Owners
 
-- proof-depth and anti-abuse policy:
-  `../../testing-best-practices/references/testing-strategy.md`
+- runtime proof-depth policy:
+  `../../verification-before-completion/references/runtime-proof-escalation.md`
 - runtime UI verdict schema:
-  `runtime-evidence-visual-verdict-contract.md`
+  `../../verification-before-completion/references/runtime-evidence-contract.md`
 - runtime artifact placement:
   `../../verification-before-completion/references/verification-evidence.md`
 - browser proof entrypoint guidance:

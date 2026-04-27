@@ -1,6 +1,6 @@
 ---
 name: verification-before-completion
-description: Use before any completion/fix claim to gather fresh evidence, run required `just` quality gates, and perform runtime verification when acceptance criteria require it.
+description: Use before any completion or fix claim to gather fresh proof, run required just quality gates, and route runtime evidence when the claim needs it.
 ---
 
 # Verification Before Completion
@@ -17,7 +17,9 @@ If proving command or artifact is not from this execution window, claim is not p
 
 Load owner docs as needed:
 - gate semantics: `references/quality-gate-selection.md`
-- proof depth: `../testing-best-practices/references/testing-strategy.md`
+- runtime proof escalation: `references/runtime-proof-escalation.md`
+- runtime evidence reports and visual verdicts: `references/runtime-evidence-contract.md`
+- persistent-test strategy: `../testing-best-practices/references/testing-strategy.md`
 - review approval, disposition, and completion fields:
   `../code-review/references/review-governance.md`
 - wave closeout: `../initiatives-workflow/references/initiatives-workflow.md`
@@ -43,7 +45,7 @@ Report when relevant:
 
 ## Quality Gate Map
 
-`ci.md` owns semantics. Use matching repo gate:
+`references/quality-gate-selection.md` owns semantics. Use matching repo gate:
 
 | Scope | Before completion | Higher bar when explicitly needed |
 |---|---|---|

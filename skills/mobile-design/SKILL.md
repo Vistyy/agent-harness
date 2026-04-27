@@ -1,6 +1,6 @@
 ---
 name: mobile-design
-description: Companion skill for mobile platform constraints after `user-apps-design`; use for touch ergonomics, platform behavior, performance, and accessibility validation.
+description: "Use after user-apps-design for mobile-specific constraints: touch ergonomics, platform behavior, performance risk, accessibility, and mobile validation posture."
 ---
 
 # Mobile Design
@@ -32,12 +32,21 @@ Capture first:
 - offline expectations and sync behavior
 - target device classes and accessibility constraints
 
-## Required Reading
+## Reference Map
 
 Read only what matters:
-- always: `mobile-design-thinking.md`, `touch-psychology.md`, `mobile-performance.md`, `mobile-testing.md`
-- if networking or offline is in scope: `mobile-backend.md`
-- if platform-specific behavior matters: `platform-ios.md`, `platform-android.md`
+- product/mobile posture or unclear interaction model:
+  `mobile-design-thinking.md`
+- touch ergonomics, gestures, reach, or accessibility:
+  `touch-psychology.md`
+- list density, animation, startup, memory, or low-end device risk:
+  `mobile-performance.md`
+- mobile runtime verification strategy:
+  `mobile-testing.md` and `../mobileapp-testing/SKILL.md`
+- networking, offline, sync, or backend handoff:
+  `mobile-backend.md`
+- platform-specific behavior:
+  `platform-ios.md` and/or `platform-android.md`
 
 ## Risk Gate
 
@@ -109,7 +118,7 @@ Allow UI divergence only when platform norms differ and divergence is explicit.
 ## Delivery Checklist
 
 - [ ] required context captured
-- [ ] relevant reading reviewed
+- [ ] risk-triggered mobile docs reviewed
 - [ ] risk gate completed
 - [ ] divergence decisions documented
 - [ ] accessibility and performance checks defined
