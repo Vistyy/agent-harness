@@ -1,0 +1,4 @@
+interface:
+  display_name: "Just Recipe Routing"
+  short_description: "Choose harness-managed just recipes"
+  default_prompt: "Use $just-recipe-routing to choose the narrowest honest `just` recipe, namespace, and quality gate for this work."
