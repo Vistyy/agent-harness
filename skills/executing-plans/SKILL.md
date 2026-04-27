@@ -9,9 +9,9 @@ Execute approved standalone plan from `docs/plans/**`. Not for waves.
 
 Owners:
 - standalone-plan policy: `../writing-plans/references/standalone-plans.md`
-- completion/evidence gate: `skills/verification-before-completion/SKILL.md`
-- approval and review semantics: `skills/code-review/references/review-governance.md`
-- minor local assumptions: `skills/implementation-decision-ledger/SKILL.md`
+- completion/evidence gate: `../verification-before-completion/SKILL.md`
+- approval and review semantics: `../code-review/references/review-governance.md`
+- minor local assumptions: `../implementation-decision-ledger/SKILL.md`
 
 ## Preflight
 

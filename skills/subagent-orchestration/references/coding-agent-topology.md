@@ -35,10 +35,10 @@ Out of scope:
 
 ## Review Topology
 
-Review governance stays owned by `skills/code-review/references/review-governance.md`.
-Delegation mechanics stay owned by `skills/subagent-orchestration/SKILL.md`.
+Review governance stays owned by `../../code-review/references/review-governance.md`.
+Delegation mechanics stay owned by `../SKILL.md`.
 Standalone-plan policy stays owned by
-`skills/writing-plans/references/standalone-plans.md`.
+`../../writing-plans/references/standalone-plans.md`.
 
 This reference keeps only role boundaries:
 - parent thread is not a worker role
@@ -68,7 +68,7 @@ This reference keeps only role boundaries:
 - `runtime_evidence`: bounded live runtime and strict screenshot/runtime
   verdicts under the applicable proof contract
 
-Live delegation defaults stay owned by `skills/subagent-orchestration/SKILL.md`.
+Live delegation defaults stay owned by `../SKILL.md`.
 This doc owns vocabulary and boundaries only. Exact model names and adapter
 instruction details belong in adapter config, not durable role vocabulary.
 
@@ -129,15 +129,15 @@ instruction details belong in adapter config, not durable role vocabulary.
 ## Enforcement Destinations
 
 - `AGENTS.md` or equivalent project entrypoint for parent-thread policy
-- `skills/subagent-orchestration/SKILL.md` for delegation defaults and handoff policy
+- `../SKILL.md` for delegation defaults and handoff policy
 - adapter role files for provider-specific role identity and instructions
 - wrapper files for tool parity where an adapter supports them
-- `skills/**` for workflow-specific role references
+- consuming workflow skills for workflow-specific role references
 - harness validation scripts and tests for mechanical enforcement
 
 ## Related Contracts
 
-- review topology owner: `skills/code-review/references/review-governance.md`
-- policy ownership owner: `skills/documentation-stewardship/references/policy-single-source-of-truth.md`
-- standalone-plan owner: `skills/writing-plans/references/standalone-plans.md`
-- wave workflow owner: `skills/initiatives-workflow/references/initiatives-workflow.md`
+- review topology owner: `../../code-review/references/review-governance.md`
+- policy ownership owner: `../../documentation-stewardship/references/policy-single-source-of-truth.md`
+- standalone-plan owner: `../../writing-plans/references/standalone-plans.md`
+- wave workflow owner: `../../initiatives-workflow/references/initiatives-workflow.md`

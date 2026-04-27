@@ -1,6 +1,6 @@
 ---
 name: subagent-orchestration
-description: Use for Codex/Copilot subagent delegation decisions, handoff inputs, active-worker handling, and the narrow implementer routes for one closed wave task card or approved standalone plan.
+description: "Use for Codex/Copilot subagent delegation decisions, handoff inputs, active-worker handling, and implementer routes for one closed wave task card or approved plan."
 ---
 
 # Subagent Orchestration

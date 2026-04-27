@@ -33,17 +33,17 @@ Capture first:
 
 Read only what matters:
 - product/mobile posture or unclear interaction model:
-  `mobile-design-thinking.md`
+  `references/mobile-design-thinking.md`
 - touch ergonomics, gestures, reach, or accessibility:
-  `touch-psychology.md`
+  `references/touch-psychology.md`
 - list density, animation, startup, memory, or low-end device risk:
-  `mobile-performance.md`
+  `references/mobile-performance.md`
 - mobile runtime verification strategy:
-  `mobile-testing.md` and `../mobileapp-testing/SKILL.md`
+  `references/mobile-testing.md` and `../mobileapp-testing/SKILL.md`
 - networking, offline, sync, or backend handoff:
-  `mobile-backend.md`
+  `references/mobile-backend.md`
 - platform-specific behavior:
-  `platform-ios.md` and/or `platform-android.md`
+  `references/platform-ios.md` and/or `references/platform-android.md`
 
 ## Risk Gate
 

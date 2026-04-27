@@ -26,6 +26,9 @@ Do not switch tools inside Poetry or PDM projects.
 
 ## Main Paths
 
+Read `references/python-package-setup.md` when shaping Python package,
+workspace, or dependency layout.
+
 ### Project
 
 Use when repo has `pyproject.toml` or `uv.lock`.

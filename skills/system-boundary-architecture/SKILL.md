@@ -1,6 +1,6 @@
 ---
 name: system-boundary-architecture
-description: Use when work changes abstractions, ownership boundaries, cross-surface contracts, composition roots, state authority, or storage/runtime/interface boundaries; stop if structural decisions are unresolved.
+description: "Use when work changes abstractions, ownership boundaries, cross-surface contracts, composition roots, state authority, or storage/runtime/interface boundaries."
 ---
 
 # System-Boundary Architecture

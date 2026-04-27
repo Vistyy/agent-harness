@@ -1,6 +1,6 @@
 ---
 name: testing-best-practices
-description: Use when writing, reviewing, refactoring, or deleting tests to enforce the repo's high-signal testing doctrine, choose the right layer, and identify bad tests that should be shrunk, rewritten, or deleted.
+description: "Use when writing, reviewing, refactoring, or deleting tests: choose the right layer, enforce high-signal doctrine, and shrink, rewrite, or delete bad tests."
 ---
 
 # Testing Best Practices

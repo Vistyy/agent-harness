@@ -13,7 +13,7 @@ Browse map for reusable engineering doctrine owned by this skill.
 
 Load through:
 
-- `skills/system-boundary-architecture/SKILL.md`
+- `../SKILL.md`
 
 ## Stack-Specific Boundary Doctrine
 

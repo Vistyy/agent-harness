@@ -9,6 +9,8 @@ Use TDD as proof workflow, not test-count ritual.
 
 Related:
 - testing doctrine: `../testing-best-practices/SKILL.md`
+- test anti-pattern details:
+  `references/testing-anti-patterns.md`
 
 ## Non-Negotiables
 

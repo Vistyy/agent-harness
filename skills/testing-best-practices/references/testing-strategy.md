@@ -35,6 +35,7 @@ Examples and helper scripts are indexed in `../SKILL.md`.
 | persistent-test validity/strength for `multi-proof-required` | `proof-strength.md` |
 | CI posture | `layer-selection.md` |
 | practical add/keep checks | `layer-selection.md` |
+| test-suite cleanup posture and follow-up ownership | `testing-posture.md` |
 | corpus-wide cleanup tranches | `corpus-audit.md` |
 | performance and cost posture | `corpus-audit.md` |
 
@@ -50,4 +51,4 @@ Examples and helper scripts are indexed in `../SKILL.md`.
 - Choosing layer, persistence lane, runtime handoff, CI lane, or workflow/infra
   proof: load `layer-selection.md`.
 - Running a suite cleanup tranche, suspicious-cluster audit, or test cost
-  cleanup: load `corpus-audit.md`.
+  cleanup: load `testing-posture.md` and `corpus-audit.md`.

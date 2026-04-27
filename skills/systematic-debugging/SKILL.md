@@ -81,13 +81,13 @@ If 2+ valid findings share same controller/store/service:
 
 ## Optional References
 
-- `root-cause-tracing.md`: use when the symptom appears deep in a call stack or
-  the original trigger is unclear.
-- `condition-based-waiting.md`: use when tests rely on arbitrary sleeps.
+- `references/root-cause-tracing.md`: use when the symptom appears deep in a
+  call stack or the original trigger is unclear.
+- `references/condition-based-waiting.md`: use when tests rely on arbitrary sleeps.
 - `examples/condition-based-waiting-example.ts`: illustrative example only; do
   not copy project-shaped imports directly.
-- `defense-in-depth.md`: use after root cause is known and supported paths need
-  layered validation.
+- `references/defense-in-depth.md`: use after root cause is known and
+  supported paths need layered validation.
 - `references/diagnostics.md`: use when structured logs, correlation IDs, or
   runtime diagnostic fields matter.
 - `examples/find-polluter.sh`: npm-specific example helper for finding a test

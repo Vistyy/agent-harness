@@ -127,9 +127,10 @@ provenance before requesting `quality_guard`.
 
 ## Doctrine Routing
 
-- apply `skills/code-simplicity/SKILL.md` as the default shaping lens for
+- apply `../code-simplicity/SKILL.md` as the default shaping lens for
   non-trivial planning
-- if work changes boundaries or ownership, load `skills/system-boundary-architecture/SKILL.md`
+- if work changes boundaries or ownership, load
+  `../system-boundary-architecture/SKILL.md`
 - structural slices need explicit `System-Boundary Architecture Disposition`
 - workflow lifecycle is owned by
   `../initiatives-workflow/references/initiatives-workflow.md`

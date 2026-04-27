@@ -1,6 +1,6 @@
 ---
 name: webapp-testing
-description: Use for browser-visible UI or web runtime proof, including internal/admin surfaces; choose browser evidence via durable spec, added spec, Playwright CLI, then raw scripts only as last resort.
+description: "Use for browser-visible UI or web runtime proof, including internal/admin surfaces; choose durable spec, added spec, Playwright CLI, then raw script."
 ---
 
 # Browser UI Testing

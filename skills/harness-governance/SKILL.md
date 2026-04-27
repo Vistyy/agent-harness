@@ -1,6 +1,6 @@
 ---
 name: harness-governance
-description: "Use for reusable agent-harness governance: skill architecture, global AGENTS/project-overlay contracts, Codex adapter install behavior, repo posture, and harness enforcement checks."
+description: "Use for reusable agent-harness governance: skill architecture, global AGENTS/project overlays, adapter install behavior, repo posture, and checks."
 ---
 
 # Harness Governance

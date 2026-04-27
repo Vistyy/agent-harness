@@ -4,9 +4,9 @@ description: "Use as the default simplicity lens for non-trivial planning, imple
 ---
 
 Simplicity lens under:
-- `skills/code-review/references/review-governance.md`
-- `skills/planning-intake/SKILL.md`
-- `skills/code-review/SKILL.md` for shared review formatting and baseline rules
+- `../code-review/references/review-governance.md`
+- `../planning-intake/SKILL.md`
+- `../code-review/SKILL.md` for shared review formatting and baseline rules
 
 Use when:
 - shaping any non-trivial solution

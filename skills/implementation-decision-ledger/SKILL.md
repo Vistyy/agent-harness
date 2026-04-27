@@ -1,6 +1,6 @@
 ---
 name: implementation-decision-ledger
-description: Use during implementation for minor pre-authorized local decisions and traceability; keep a run-scoped, ephemeral decision ledger for post-run human review without using it as a substitute for unresolved planning.
+description: "Use during implementation to log minor pre-authorized local decisions in a run-scoped ledger; not for unresolved planning or material scope decisions."
 ---
 
 # Implementation Decision Ledger

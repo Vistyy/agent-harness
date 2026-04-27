@@ -19,6 +19,7 @@ Load owner docs as needed:
 - gate semantics: `references/quality-gate-selection.md`
 - runtime proof escalation: `references/runtime-proof-escalation.md`
 - runtime evidence reports and visual verdicts: `references/runtime-evidence-contract.md`
+- artifact and evidence placement: `references/verification-evidence.md`
 - persistent-test strategy router:
   `../testing-best-practices/references/testing-strategy.md`
 - review approval, disposition, and completion fields:

@@ -1,6 +1,6 @@
 ---
 name: svelte-code-writer
-description: Tooling-entry skill for Svelte documentation lookup and autofixer workflow. MUST be used whenever creating, editing, or analyzing any Svelte component (.svelte) or Svelte module (.svelte.ts/.svelte.js).
+description: "Use whenever creating, editing, or analyzing Svelte `.svelte`, `.svelte.ts`, or `.svelte.js`; owns official docs lookup and autofixer workflow."
 ---
 
 # Svelte Code Writer

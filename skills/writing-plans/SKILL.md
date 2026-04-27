@@ -11,8 +11,9 @@ If work belongs to an active/proposed wave, stop and use `planning-intake` or `w
 
 Owners:
 - standalone-plan policy: `references/standalone-plans.md`
-- completion gate: `skills/verification-before-completion/SKILL.md`
-- approval and review semantics: `skills/code-review/references/review-governance.md`
+- completion gate: `../verification-before-completion/SKILL.md`
+- approval and review semantics:
+  `../code-review/references/review-governance.md`
 
 ## Preconditions
 

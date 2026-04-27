@@ -1,6 +1,6 @@
 ---
 name: adversarial-review
-description: "Use for adversarial review of implemented changes when you need to pressure-test assumptions, failure modes, misuse paths, edge conditions, and hidden coupling. Apply as a reusable review lens inside either the in-thread quality-guard loop or the full isolated review."
+description: "Use as a review lens for implemented changes when failure modes, hidden assumptions, edge cases, misuse paths, degraded states, or proof gaps need pressure-testing; not an approval mode."
 ---
 
 Use this skill as a review lens, not as a separate approval mode.

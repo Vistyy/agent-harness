@@ -40,7 +40,7 @@ In tests, prefer `console.error()` over app logger if logger may be suppressed.
 ## Polluter Hunting
 
 If tests pollute filesystem or shared state and culprit is unknown, use
-the npm-specific example helper `examples/find-polluter.sh` to bisect first
+the npm-specific example helper `../examples/find-polluter.sh` to bisect first
 polluting test.
 
 ## Real Example Pattern
