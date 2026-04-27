@@ -55,25 +55,19 @@ Durable worker role vocabulary and role boundaries are owned by:
 
 ## Reuse Vs Fresh Spawn
 
-- Reuse or resume an existing worker when the next ask is the same role on the
-  same topic, slice, task card, review, or verdict, and the worker remains
-  available, relevant, and uncontaminated by unrelated write scope. A completed
-  response or verdict is not by itself a reason to spawn a fresh worker.
-- Spawn a fresh worker only when the role changes, the topic, slice, task card,
-  review, verdict, or write scope materially changes, the previous worker is
-  unavailable or no longer relevant, or the reusable thread has unrelated
-  context pollution that could distort the next verdict or edits.
-- Role-specific fresh-context rules override the reuse default. `final_reviewer`
-  closeout review requires fresh isolated context by default, including after a
-  blocked final review and changed diff. Reuse a prior final reviewer only when
-  the review owner explicitly permits reuse for the same unchanged final-review
-  context.
-- Same `quality_guard` revised review on the same unchanged slice should return
-  to the same reviewer thread when available.
-- Same `implementer` fixes for `quality_guard` findings on the assigned slice
-  should return to the original implementer when available and still relevant.
-- Different task card, different standalone-plan slice, or different write
-  surface gets a fresh worker.
+- Reuse or resume an existing worker by default for the same role on the same
+  domain, topic, slice, task card, review loop, or verdict sequence.
+- A completed response, rejection, approval, or timeout is not by itself a
+  reason to spawn fresh.
+- Spawn fresh only when role, domain, slice, task card, write scope, or verdict
+  target materially changes; the old context is no longer useful; the worker is
+  unavailable; or unrelated context would distort the result.
+- For iterative planning, review, or implementation-fix loops, return to the
+  same worker when available and still relevant. Ask for a fresh pass over the
+  updated artifact or diff.
+- Role-owner fresh-context requirements override this reuse default. This
+  section decides worker reuse vs fresh spawn only where the role owner leaves
+  that choice open.
 
 ## Anti-Patterns
 

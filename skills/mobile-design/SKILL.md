@@ -9,12 +9,9 @@ Use after `user-apps-design`. This skill owns mobile-specific constraints and va
 
 ## Boundary
 
-`user-apps-design` owns:
-- visual direction
-- parity decisions
-- copy semantics
+`user-apps-design` owns cross-platform UI direction, parity, and copy.
 
-`mobile-design` owns:
+This skill owns:
 - touch ergonomics and gesture fallback
 - platform navigation and back behavior
 - mobile performance constraints

@@ -31,6 +31,23 @@ It should be:
 Prefer trigger language over marketing language. Do not claim ownership the
 skill body no longer has.
 
+## Ownership Isolation
+
+Each skill should own one coherent concept, workflow, or role surface.
+
+Rules:
+
+- explain only the doctrine the skill owns,
+- reference neighboring skills for routing, handoff, or owner lookup,
+- do not restate another skill's procedure, approval rule, or policy,
+- do not mix unrelated lifecycle phases just because the same agent may touch
+  them in one run,
+- split only when the parts have different triggers, inputs, outputs, or
+  proof/review owners.
+
+When a skill consumes another owner's doctrine, name the owner and the reason
+to load it. Keep the meaning in the owner.
+
 ## References
 
 Use references for detail that is too large or conditional for `SKILL.md`.

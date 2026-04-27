@@ -9,10 +9,9 @@ description: Use alongside svelte-code-writer for durable Svelte posture, reacti
 
 - `svelte-code-writer` owns doc lookup, autofixer use, tooling-entry workflow
 - this skill owns durable Svelte posture and anti-pattern avoidance
-- `user-apps-design` owns product-facing UI direction, parity, copy rules
-- `system-boundary-architecture` owns frontend layer ownership, import
-  direction, public-surface hygiene, route-shell boundaries, state authority,
-  and facade/screen-model boundaries
+- `user-apps-design` owns product-facing UI direction
+- `system-boundary-architecture` owns frontend boundary and state-authority
+  decisions
 
 ## Durable Posture
 
