@@ -45,18 +45,14 @@ gaps, or when a skill explicitly requires a lower-level tool.
 - `quality-full` is the explicit expanded-confidence gate when the user, owner
   doc, reviewer, or risk profile calls for it.
 
-Standard harness-managed projects expose these root recipes:
+Harness-managed projects standardize the quality gate names:
 
 - `just quality-fast`
 - `just quality`
 - `just quality-full`
-- `just test`
-- `just fmt`
-- `just agent profile .`
-- `just agent up <target> .`
-- `just agent verify .`
-- `just agent down <target>`
-- `just agent logs <service>`
+
+Other root helpers, including repo-wide tests, formatting, runtime, and agent
+commands, are project-owned. Discover them with `just help` before use.
 
 ## Navigation Rule
 
