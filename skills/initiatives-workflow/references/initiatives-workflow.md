@@ -25,6 +25,12 @@ Apply `policy-single-source-of-truth.md` when overlaps appear.
 
 `delivery-map.md` is queue and delegation surface.
 
+- title it `Delivery Map (Waves + Backlog)`
+- open with a short statement that the wave brief `**Status:**` is the execution gate
+- keep a `## Wave Plan` section organized by serialized-by-default lanes
+- put waves in the lane that owns the immediate program target and near-term
+  dependency chain
+- list backlog queues after the wave plan
 - order by recommended execution order
 - lanes are serialized by default
 - same-lane parallel work needs explicit `Parallel-safe after: ...`

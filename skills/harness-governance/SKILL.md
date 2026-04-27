@@ -1,6 +1,6 @@
 ---
 name: harness-governance
-description: Use for global agent harness operating rules, project overlay contracts, AGENTS.md split, command-router expectations, and harness git status discipline.
+description: Use when creating, updating, or reviewing the agent-harness repository or global agent harness operating rules, including project overlay contracts, AGENTS.md split, command-router expectations, and harness git status discipline.
 ---
 
 # Harness Governance

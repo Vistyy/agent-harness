@@ -22,3 +22,13 @@ Codex is one adapter. The harness identity is generic.
 Harness changes are reviewed and committed in the harness repository.
 Project-overlay changes are reviewed in the project repository.
 Closeout reports must state both repository statuses when a task touches both.
+
+## Review Discipline
+
+Any task that touches the agent-harness repository must route the proposed
+harness change through `planning_critic` before further harness edits or
+closeout.
+
+Closeout for harness-touching tasks must mention the `planning_critic` review
+record. This critic review does not replace required `quality_guard` or final
+review gates.

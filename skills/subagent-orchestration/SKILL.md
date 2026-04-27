@@ -53,13 +53,19 @@ Durable worker role vocabulary and role boundaries are owned by:
 
 ## Reuse Vs Fresh Spawn
 
-- Reuse an existing or resumable worker when the next ask is the same role on
-  the same slice and the worker remains available, relevant, and uncontaminated
-  by unrelated write scope.
-- Spawn a fresh worker when the role changes, the task/write scope materially
-  changes, the previous worker reported done/blocked/irrelevant, or the
-  reusable thread has unrelated context pollution that could distort the next
-  verdict or edits.
+- Reuse or resume an existing worker when the next ask is the same role on the
+  same topic, slice, task card, review, or verdict, and the worker remains
+  available, relevant, and uncontaminated by unrelated write scope. A completed
+  response or verdict is not by itself a reason to spawn a fresh worker.
+- Spawn a fresh worker only when the role changes, the topic, slice, task card,
+  review, verdict, or write scope materially changes, the previous worker is
+  unavailable or no longer relevant, or the reusable thread has unrelated
+  context pollution that could distort the next verdict or edits.
+- Role-specific fresh-context rules override the reuse default. `final_reviewer`
+  closeout review requires fresh isolated context by default, including after a
+  blocked final review and changed diff. Reuse a prior final reviewer only when
+  the review owner explicitly permits reuse for the same unchanged final-review
+  context.
 - Same `quality_guard` revised review on the same unchanged slice should return
   to the same reviewer thread when available.
 - Same `implementer` fixes for `quality_guard` findings on the assigned slice
