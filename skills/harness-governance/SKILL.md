@@ -92,7 +92,9 @@ Default posture when no user instruction or project owner doc overrides it:
   rollback ceremony, and approval choreography unless a real owner contract
   requires them.
 - For released or externalized surfaces, assess compatibility, migration,
-  rollout, and user impact explicitly.
+  rollout, and user impact explicitly. Shims or bridges still need an explicit
+  durable owner requirement and removal condition; otherwise replace the old
+  path and delete obsolete code in the same change.
 
 Prefer the simplest operational path that honestly serves the current posture.
 

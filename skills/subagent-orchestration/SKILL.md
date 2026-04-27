@@ -57,6 +57,9 @@ Durable worker role vocabulary and role boundaries are owned by:
 
 - Reuse or resume an existing worker by default for the same role on the same
   domain, topic, slice, task card, review loop, or verdict sequence.
+- Do not reuse a worker across roles. If the next step needs a different role,
+  spawn or resume a worker with that role instead of asking an existing worker
+  to switch hats.
 - A completed response, rejection, approval, or timeout is not by itself a
   reason to spawn fresh.
 - Spawn fresh only when role, domain, slice, task card, write scope, or verdict

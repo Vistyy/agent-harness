@@ -44,6 +44,9 @@ Out of scope:
 - default to delete, collapse, demote, or reuse before net-new structure
 - complexity needs explicit justification; simplicity does not
 - reorganization without material reduction is not simplification
+- old and new paths must not coexist unless a real compatibility owner requires
+  it; otherwise replace the old path and delete the obsolete one in the same
+  change
 - if a simpler honest shape exists, keeping extra helpers, layers, workflow
   steps, proof machinery, or tests is a bug, not taste
 - survivors must justify survival when simpler honest shapes exist
@@ -79,6 +82,8 @@ Out of scope:
 
 Common failure modes:
 - preserving awkward owner split and calling it reuse
+- preserving old code behind compatibility shims, feature flags, obsolete
+  fallback branches, or migration bridges after the new path is ready
 - extracting thin helpers that exist only to soften ugly flow
 - adding proof or workflow machinery instead of reducing system shape
 - keeping optional automation that could honestly stay manual
