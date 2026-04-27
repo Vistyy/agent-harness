@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 import tempfile
+import tomllib
 from pathlib import Path
 
 
@@ -35,6 +37,26 @@ OPENAI_ALLOWED_INTERFACE_KEYS = {
     "brand_color",
     "default_prompt",
 }
+PACKET_REQUIRED_SECTIONS = (
+    "Scope And Execution Posture",
+    "Task Plan",
+    "Proof Plan",
+    "Execution State",
+)
+PROOF_ROW_REQUIRED_KEYS = (
+    "proof_id",
+    "task_slug",
+    "anchor_ids",
+    "claim",
+    "material_variants",
+    "proof_classification",
+    "owner_layer",
+    "exact_proof",
+    "expected_evidence",
+    "counterfactual_regression_probe",
+    "status",
+)
+WAVE_STATUSES = {"discovery-required", "execution-ready", "done", "retired"}
 
 
 class FrontmatterError(ValueError):
@@ -300,6 +322,205 @@ def _openai_metadata_rows(root: Path) -> tuple[list[dict[str, str]], list[str]]:
     return rows, errors
 
 
+def _skill_name(skill_dir: Path) -> str:
+    return skill_dir.name
+
+
+def _validate_openai_metadata_coverage(root: Path) -> list[str]:
+    errors: list[str] = []
+    for skill_dir in _iter_skill_dirs(root):
+        metadata_file = skill_dir / "agents" / "openai.yaml"
+        if not metadata_file.is_file():
+            errors.append(f"{skill_dir.relative_to(root)} missing agents/openai.yaml")
+    return errors
+
+
+def _parse_roles_markdown(root: Path) -> tuple[set[str], list[str]]:
+    roles_path = root / "agents" / "roles.md"
+    if not roles_path.is_file():
+        return set(), ["agents/roles.md missing"]
+    roles: set[str] = set()
+    for line in roles_path.read_text(encoding="utf-8").splitlines():
+        match = re.match(r"- `([a-z0-9_]+)`:", line)
+        if match:
+            roles.add(match.group(1))
+    if not roles:
+        return roles, ["agents/roles.md defines no roles"]
+    return roles, []
+
+
+def _load_toml(path: Path, root: Path) -> tuple[dict[str, object], list[str]]:
+    try:
+        return tomllib.loads(path.read_text(encoding="utf-8")), []
+    except tomllib.TOMLDecodeError as exc:
+        return {}, [f"{path.relative_to(root)} invalid TOML: {exc}"]
+
+
+def _validate_role_parity(root: Path) -> list[str]:
+    errors: list[str] = []
+    roles, role_errors = _parse_roles_markdown(root)
+    errors.extend(role_errors)
+    if not roles:
+        return errors
+
+    config_path = root / "adapters" / "codex" / "config.toml"
+    config, config_errors = _load_toml(config_path, root) if config_path.is_file() else ({}, ["adapters/codex/config.toml missing"])
+    errors.extend(config_errors)
+    config_agents = config.get("agents", {})
+    if not isinstance(config_agents, dict):
+        errors.append("adapters/codex/config.toml missing [agents] table")
+        config_agents = {}
+
+    codex_agent_dir = root / "adapters" / "codex" / "agents"
+    copilot_agent_dir = root / "adapters" / "github-copilot" / "agents"
+    for role in sorted(roles):
+        codex_filename = f"{role.replace('_', '-')}.toml"
+        copilot_filename = f"{role}.agent.md"
+        codex_agent_path = codex_agent_dir / codex_filename
+        copilot_agent_path = copilot_agent_dir / copilot_filename
+        if role not in config_agents:
+            errors.append(f"adapters/codex/config.toml missing agents.{role}")
+        else:
+            block = config_agents[role]
+            if not isinstance(block, dict):
+                errors.append(f"adapters/codex/config.toml agents.{role} must be a table")
+            else:
+                expected_config_file = f"agents/{codex_filename}"
+                if block.get("config_file") != expected_config_file:
+                    errors.append(
+                        f"adapters/codex/config.toml agents.{role}.config_file must be {expected_config_file!r}"
+                    )
+        if not codex_agent_path.is_file():
+            errors.append(f"missing Codex agent file {codex_agent_path.relative_to(root)}")
+        else:
+            agent_toml, agent_errors = _load_toml(codex_agent_path, root)
+            errors.extend(agent_errors)
+            if agent_toml and agent_toml.get("name") != role:
+                errors.append(f"{codex_agent_path.relative_to(root)} name must be {role!r}")
+        if not copilot_agent_path.is_file():
+            errors.append(f"missing Copilot agent file {copilot_agent_path.relative_to(root)}")
+        else:
+            text = copilot_agent_path.read_text(encoding="utf-8")
+            if not re.search(rf"^name:\s*{re.escape(role)}\s*$", text, re.MULTILINE):
+                errors.append(f"{copilot_agent_path.relative_to(root)} frontmatter name must be {role!r}")
+
+    for role in sorted(set(config_agents) - roles):
+        errors.append(f"adapters/codex/config.toml has unknown agents.{role}")
+    for path in sorted(codex_agent_dir.glob("*.toml")):
+        role = path.stem.replace("-", "_")
+        if role not in roles:
+            errors.append(f"{path.relative_to(root)} has no matching agents/roles.md role")
+    for path in sorted(copilot_agent_dir.glob("*.agent.md")):
+        role = path.name.removesuffix(".agent.md")
+        if role not in roles:
+            errors.append(f"{path.relative_to(root)} has no matching agents/roles.md role")
+    return errors
+
+
+def _heading_names(text: str, level: int) -> set[str]:
+    prefix = "#" * level
+    return {
+        match.group(1).strip()
+        for match in re.finditer(rf"^{re.escape(prefix)}\s+(.+?)\s*$", text, re.MULTILINE)
+    }
+
+
+def _iter_json_fences(text: str) -> list[object]:
+    values: list[object] = []
+    for match in re.finditer(r"```json\s*\n(.*?)\n```", text, re.DOTALL):
+        values.append(json.loads(match.group(1)))
+    return values
+
+
+def _validate_wave_packet(path: Path, root: Path) -> list[str]:
+    errors: list[str] = []
+    text = path.read_text(encoding="utf-8")
+    headings = _heading_names(text, 2)
+    for section in PACKET_REQUIRED_SECTIONS:
+        if section not in headings:
+            errors.append(f"{path.relative_to(root)} missing section {section!r}")
+
+    proof_plans: list[object] = []
+    try:
+        proof_plans = _iter_json_fences(text)
+    except json.JSONDecodeError as exc:
+        errors.append(f"{path.relative_to(root)} invalid JSON proof fence: {exc}")
+        return errors
+
+    proof_rows: list[object] = []
+    for value in proof_plans:
+        if isinstance(value, dict) and isinstance(value.get("proof_plan"), list):
+            proof_rows.extend(value["proof_plan"])
+    if not proof_rows:
+        errors.append(f"{path.relative_to(root)} missing proof_plan JSON rows")
+        return errors
+    for index, row in enumerate(proof_rows, start=1):
+        if not isinstance(row, dict):
+            errors.append(f"{path.relative_to(root)} proof_plan row {index} must be an object")
+            continue
+        for key in PROOF_ROW_REQUIRED_KEYS:
+            if key not in row:
+                errors.append(f"{path.relative_to(root)} proof_plan row {index} missing {key}")
+    return errors
+
+
+def _wave_status(brief_path: Path, root: Path) -> tuple[str | None, str | None]:
+    text = brief_path.read_text(encoding="utf-8")
+    match = re.search(r"^\*\*Status:\*\*\s*([a-z-]+)\s*$", text, re.MULTILINE)
+    if not match:
+        return None, f"{brief_path.relative_to(root)} missing **Status:**"
+    status = match.group(1)
+    if status not in WAVE_STATUSES:
+        return status, f"{brief_path.relative_to(root)} invalid status {status!r}"
+    return status, None
+
+
+def _validate_wave_lifecycle(root: Path) -> list[str]:
+    errors: list[str] = []
+    docs_ai = root / "docs-ai"
+    if not docs_ai.exists():
+        return errors
+    for packet_path in sorted((root / "docs-ai" / "current-work").glob("*/wave-execution*.md")):
+        if packet_path.name not in {"wave-execution.md", "wave-execution.draft.md"}:
+            continue
+        errors.extend(_validate_wave_packet(packet_path, root))
+
+    wave_ids: set[str] = set()
+    brief_dir = root / "docs-ai" / "docs" / "initiatives" / "waves"
+    if brief_dir.is_dir():
+        wave_ids.update(path.stem for path in brief_dir.glob("*.md"))
+    current_work = root / "docs-ai" / "current-work"
+    if current_work.is_dir():
+        for child in current_work.iterdir():
+            if child.is_dir() and ((child / "wave-execution.md").exists() or (child / "wave-execution.draft.md").exists()):
+                wave_ids.add(child.name)
+    delivery_map = current_work / "delivery-map.md"
+    if delivery_map.is_file():
+        map_text = delivery_map.read_text(encoding="utf-8")
+        wave_ids.update(re.findall(r"docs-ai/docs/initiatives/waves/([A-Za-z0-9_-]+)\.md", map_text))
+        wave_ids.update(re.findall(r"docs-ai/current-work/([A-Za-z0-9_-]+)/wave-execution(?:\.draft)?\.md", map_text))
+
+    for wave_id in sorted(wave_ids):
+        brief_path = brief_dir / f"{wave_id}.md"
+        canonical_packet = current_work / wave_id / "wave-execution.md"
+        draft_packet = current_work / wave_id / "wave-execution.draft.md"
+        if not brief_path.is_file():
+            if canonical_packet.exists() or draft_packet.exists():
+                errors.append(f"docs-ai/current-work/{wave_id} has packet but missing durable wave brief")
+            continue
+        status, status_error = _wave_status(brief_path, root)
+        if status_error:
+            errors.append(status_error)
+            continue
+        if status == "discovery-required" and canonical_packet.exists():
+            errors.append(f"{brief_path.relative_to(root)} is discovery-required but canonical packet exists")
+        if status == "execution-ready" and not canonical_packet.exists():
+            errors.append(f"{brief_path.relative_to(root)} is execution-ready but canonical packet is missing")
+        if status in {"done", "retired"} and (canonical_packet.exists() or draft_packet.exists()):
+            errors.append(f"{brief_path.relative_to(root)} is {status} but current-work packet exists")
+    return errors
+
+
 def write_openai_metadata_report(root: Path, report_path: Path) -> list[str]:
     rows, errors = _openai_metadata_rows(root)
     lines = ["skill\tpath\tdisplay_name\tshort_description\tdefault_prompt"]
@@ -333,9 +554,12 @@ def validate(root: Path) -> list[str]:
             for folder in ("references", "assets", "scripts"):
                 if folder in text and not (skill_dir / folder).exists():
                     errors.append(f"{skill_file.relative_to(root)} references missing {folder}/")
+        errors.extend(_validate_openai_metadata_coverage(root))
 
     _rows, openai_errors = _openai_metadata_rows(root)
     errors.extend(openai_errors)
+    errors.extend(_validate_role_parity(root))
+    errors.extend(_validate_wave_lifecycle(root))
 
     for markdown_file in _iter_markdown(root):
         text = markdown_file.read_text(encoding="utf-8")
@@ -477,9 +701,77 @@ def run_self_test() -> list[str]:
         (root / "SOURCE.md").write_text("source: Budgeat product fact without path\n", encoding="utf-8")
         (root / "CITATION.md").write_text("source: `docs-ai/docs/example.md` Budgeat source path\n", encoding="utf-8")
         (root / "OWNER.md").write_text("See `docs-ai/docs/conventions/review-governance.md`.\n", encoding="utf-8")
+        (root / "agents").mkdir()
+        (root / "agents" / "roles.md").write_text(
+            "# Agent Roles\n\n- `explorer`: read-only discovery.\n- `quality_guard`: quality review.\n",
+            encoding="utf-8",
+        )
+        (root / "adapters" / "codex" / "agents").mkdir(parents=True)
+        (root / "adapters" / "codex" / "config.toml").write_text(
+            '[features]\nmulti_agent = true\n\n[agents.explorer]\nconfig_file = "agents/explorer.toml"\n',
+            encoding="utf-8",
+        )
+        (root / "adapters" / "codex" / "agents" / "explorer.toml").write_text(
+            'name = "wrong_name"\n',
+            encoding="utf-8",
+        )
+        (root / "adapters" / "github-copilot" / "agents").mkdir(parents=True)
+        (root / "adapters" / "github-copilot" / "agents" / "explorer.agent.md").write_text(
+            "---\nname: explorer\n---\n",
+            encoding="utf-8",
+        )
+        invalid_packet = """# Wave invalid Execution Packet
+
+## Scope And Execution Posture
+
+## Task Plan
+
+## Proof Plan
+
+```json
+{"proof_plan": [{"proof_id": "P1"}]}
+```
+"""
+        (root / "docs-ai" / "docs" / "initiatives" / "waves").mkdir(parents=True)
+        (root / "docs-ai" / "current-work" / "invalid").mkdir(parents=True)
+        (root / "docs-ai" / "current-work" / "invalid" / "wave-execution.md").write_text(
+            invalid_packet,
+            encoding="utf-8",
+        )
+        (root / "docs-ai" / "docs" / "initiatives" / "waves" / "invalid.md").write_text(
+            "# Wave invalid\n\n**Status:** discovery-required\n",
+            encoding="utf-8",
+        )
+        (root / "docs-ai" / "docs" / "initiatives" / "waves" / "ready.md").write_text(
+            "# Wave ready\n\n**Status:** execution-ready\n",
+            encoding="utf-8",
+        )
+        (root / "docs-ai" / "docs" / "initiatives" / "waves" / "done.md").write_text(
+            "# Wave done\n\n**Status:** done\n",
+            encoding="utf-8",
+        )
+        (root / "docs-ai" / "current-work" / "done").mkdir(parents=True)
+        (root / "docs-ai" / "current-work" / "done" / "wave-execution.draft.md").write_text(
+            invalid_packet,
+            encoding="utf-8",
+        )
+        (root / "docs-ai" / "current-work" / "delivery-map.md").write_text(
+            "\n".join(
+                [
+                    "# Delivery Map (Waves + Backlog)",
+                    "",
+                    "- [invalid](../docs/initiatives/waves/invalid.md)",
+                    "- [ready](../docs/initiatives/waves/ready.md)",
+                    "- [done](../docs/initiatives/waves/done.md)",
+                    "",
+                ]
+            ),
+            encoding="utf-8",
+        )
         fixture_errors = validate(root)
         expected = (
             "frontmatter must start at byte zero",
+            "missing agents/openai.yaml",
             "broken reference references/foo.md",
             "bad-colon/SKILL.md invalid frontmatter",
             "missing 'name' in frontmatter",
@@ -500,6 +792,15 @@ def run_self_test() -> list[str]:
             "README.md:1 forbidden project term",
             "SOURCE.md:1 forbidden project term",
             "OWNER.md:1 forbidden project owner path",
+            "adapters/codex/config.toml missing agents.quality_guard",
+            "explorer.toml name must be 'explorer'",
+            "missing Codex agent file adapters/codex/agents/quality-guard.toml",
+            "missing Copilot agent file adapters/github-copilot/agents/quality_guard.agent.md",
+            "wave-execution.md missing section 'Execution State'",
+            "proof_plan row 1 missing task_slug",
+            "invalid.md is discovery-required but canonical packet exists",
+            "ready.md is execution-ready but canonical packet is missing",
+            "done.md is done but current-work packet exists",
         )
         for marker in expected:
             if not any(marker in error for error in fixture_errors):

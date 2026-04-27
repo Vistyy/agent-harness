@@ -98,6 +98,25 @@ Default posture when no user instruction or project owner doc overrides it:
 
 Prefer the simplest operational path that honestly serves the current posture.
 
+## Task Size Routing
+
+Choose the lightest route that preserves the outcome, owner boundary, and proof
+bar.
+
+- `tiny/local`: direct execution with fresh proof; no plan artifact.
+- `small bounded`: in-thread objective, expected touched files or surfaces, and
+  proof command or artifact; promote only if risk appears.
+- `medium`: standalone plan under `docs/plans/**` when requirements and
+  decisions are closed but ordered implementation needs a durable artifact.
+- `large/multi-step/cross-boundary`: wave packet through `planning-intake` and
+  `wave-autopilot`.
+- `ambiguous/material-decision-open`: `planning-intake`; do not execute from
+  memory-only planning.
+
+Escalate to the next heavier route when two competent implementers could choose
+materially different owners, proof paths, state authority, runtime posture,
+compatibility/migration behavior, or public behavior.
+
 ## Skill Architecture
 
 Reusable skill guidance belongs in focused skill directories.

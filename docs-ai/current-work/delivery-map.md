@@ -8,4 +8,4 @@ No active execution-ready waves.
 
 ## Deferred Backlog
 
-No active backlog items.
+- [harness-governance__prompting__objective-first-contracts](backlog/harness-governance__prompting__objective-first-contracts.md)

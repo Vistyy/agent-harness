@@ -1,9 +1,11 @@
 quality:
+    uv run pytest
     uv run python scripts/validate_harness.py --self-test
     uv run python scripts/validate_harness.py
     uv run python scripts/codex_install_smoke.py
 
 quality-fast:
+    uv run pytest
     uv run python scripts/validate_harness.py --self-test
     uv run python scripts/validate_harness.py
     uv run python scripts/codex_install_smoke.py

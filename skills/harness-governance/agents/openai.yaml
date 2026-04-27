@@ -1,0 +1,4 @@
+interface:
+  display_name: "Harness Governance"
+  short_description: "Govern reusable harness policy and adapters"
+  default_prompt: "Use $harness-governance to review reusable harness policy, skill architecture, project overlays, adapter install behavior, or harness checks."

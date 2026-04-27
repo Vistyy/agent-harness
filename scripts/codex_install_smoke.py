@@ -18,11 +18,11 @@ def fail(message: str) -> None:
     raise AssertionError(message)
 
 
-def run_install(codex_home: Path) -> None:
+def run_install(codex_home: Path, *args: str) -> None:
     env = os.environ.copy()
     env["CODEX_HOME"] = str(codex_home)
     result = subprocess.run(
-        ["bash", str(INSTALLER), "--apply"],
+        ["bash", str(INSTALLER), "--apply", *args],
         cwd=ROOT,
         env=env,
         text=True,
@@ -58,6 +58,44 @@ def assert_config(codex_home: Path) -> None:
         target_block = target_agents.get(agent_name)
         if target_block != source_block:
             fail(f"config.toml missing or changed agents.{agent_name} block")
+        config_file = source_block.get("config_file")
+        if not isinstance(config_file, str):
+            fail(f"source config agents.{agent_name}.config_file must be a string")
+        if not (codex_home / config_file).is_file():
+            fail(f"config.toml agents.{agent_name}.config_file points to missing {config_file}")
+
+
+def role_names() -> set[str]:
+    roles_path = ROOT / "agents" / "roles.md"
+    roles: set[str] = set()
+    for line in roles_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line.startswith("- `") and "`:" in line:
+            roles.add(line.split("`", 2)[1])
+    if not roles:
+        fail("agents/roles.md defines no roles")
+    return roles
+
+
+def assert_all_skills(codex_home: Path) -> None:
+    for skill_dir in sorted((ROOT / "skills").iterdir()):
+        if skill_dir.is_dir():
+            assert_symlink(codex_home / "skills" / skill_dir.name, skill_dir)
+
+
+def assert_all_agents(codex_home: Path) -> None:
+    for agent_file in sorted((ROOT / "adapters" / "codex" / "agents").glob("*.toml")):
+        assert_symlink(codex_home / "agents" / agent_file.name, agent_file)
+
+
+def assert_config_roles(codex_home: Path) -> None:
+    target = tomllib.loads((codex_home / "config.toml").read_text(encoding="utf-8"))
+    target_agents = target.get("agents", {})
+    if not isinstance(target_agents, dict):
+        fail("config.toml missing [agents] table")
+    for role in sorted(role_names()):
+        if role not in target_agents:
+            fail(f"config.toml missing role from agents/roles.md: {role}")
 
 
 def assert_repo_codex_not_regular_file() -> None:
@@ -68,13 +106,24 @@ def assert_repo_codex_not_regular_file() -> None:
 
 def assert_install(codex_home: Path) -> None:
     assert_symlink(codex_home / "AGENTS.md", ROOT / "AGENTS.md")
-    assert_symlink(codex_home / "skills" / "webapp-testing", ROOT / "skills" / "webapp-testing")
-    assert_symlink(
-        codex_home / "agents" / "runtime-evidence.toml",
-        ROOT / "adapters" / "codex" / "agents" / "runtime-evidence.toml",
-    )
+    assert_all_skills(codex_home)
+    assert_all_agents(codex_home)
     assert_config(codex_home)
+    assert_config_roles(codex_home)
     assert_repo_codex_not_regular_file()
+
+
+def assert_stage_only(codex_home: Path) -> None:
+    assert_symlink(codex_home / "skills" / "harness-governance", ROOT / "skills" / "harness-governance")
+    excluded = (
+        codex_home / "AGENTS.md",
+        codex_home / "config.toml",
+        codex_home / "agents",
+        codex_home / "skills" / "webapp-testing",
+    )
+    for path in excluded:
+        if path.exists() or path.is_symlink():
+            fail(f"stage-only install unexpectedly created {path}")
 
 
 def main() -> int:
@@ -85,6 +134,9 @@ def main() -> int:
         run_install(codex_home)
         assert_install(codex_home)
         shutil.rmtree(codex_home)
+        stage_codex_home = Path(temp_dir) / "stage-codex-home"
+        run_install(stage_codex_home, "--stage-harness-governance")
+        assert_stage_only(stage_codex_home)
     print("codex install smoke passed")
     return 0
 

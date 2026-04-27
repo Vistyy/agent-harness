@@ -1,0 +1,4 @@
+interface:
+  display_name: "System Boundary Architecture"
+  short_description: "Review ownership boundaries and contracts"
+  default_prompt: "Use $system-boundary-architecture to review architecture boundaries, ownership contracts, state authority, migration posture, or stable extension shape."
