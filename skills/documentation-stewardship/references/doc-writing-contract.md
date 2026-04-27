@@ -7,6 +7,10 @@ rule. Do not compress away the required outcome, forbidden workaround, owner,
 exception boundary, or proof obligation when they matter. A durable rule should
 leave a reviewer with one reasonable classification of the covered case.
 
+Use canonical domain language from `domain-language.md`. Do not introduce a
+new synonym for an owned workflow, proof, review, role, or state concept unless
+the owner doc records it as an alias.
+
 Use:
 
 - short sections

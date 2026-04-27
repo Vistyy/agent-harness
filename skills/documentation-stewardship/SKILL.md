@@ -15,3 +15,4 @@ Read as needed:
 - `references/policy-single-source-of-truth.md`
 - `references/durable-doc-placement.md`
 - `references/doc-writing-contract.md`
+- `references/domain-language.md`
