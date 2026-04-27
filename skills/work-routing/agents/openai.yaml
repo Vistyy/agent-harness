@@ -1,0 +1,4 @@
+interface:
+  display_name: "Work Routing"
+  short_description: "Choose the lightest safe execution route"
+  default_prompt: "Use $work-routing to choose whether this work should be direct, small bounded, standalone-plan, planning-intake, or wave execution."

@@ -22,7 +22,8 @@ Precedence:
 
 ## Routing
 
-- Task-size routing and project-overlay contracts: use `harness-governance`.
+- Work route selection: use `work-routing`.
+- Project-overlay contracts and reusable harness posture: use `harness-governance`.
 - Planning and wave shaping: use `planning-intake`.
 - Full wave execution: use `wave-autopilot`.
 - Durable documentation ownership: use `documentation-stewardship`.
