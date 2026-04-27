@@ -60,17 +60,13 @@ Report when relevant:
 
 ## Quality Gate Map
 
-`references/quality-gate-selection.md` owns semantics. Use matching repo gate:
+Use the repo's matching standard completion gate. Load
+`references/quality-gate-selection.md` only when choosing between `quality`,
+`quality-fast`, `quality-full`, stack-specific gates, CI lockstep, or branch
+protection semantics.
 
-| Scope | Before completion | Higher bar when explicitly needed |
-|---|---|---|
-| Cross-stack / unclear impact | `just quality` | `just quality-full` |
-| Python | `just python quality` or `just pt quality` | `just python quality-full` |
-| Web | `just web quality` | `just web quality-full` |
-| Mobile | `just mobile quality` or `just mob quality` | `just mobile quality-full` |
-| Infra | `just infra quality` | `just infra quality-full` |
-
-Use `quality-fast` during implementation. Do not replace completion gate with it.
+Rule: `quality-fast` is for iteration and CI baseline. Do not replace the
+completion gate with it.
 
 ## Continue Until
 

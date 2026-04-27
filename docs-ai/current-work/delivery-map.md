@@ -7,5 +7,3 @@ The wave brief `**Status:**` is the execution gate.
 No active execution-ready waves.
 
 ## Deferred Backlog
-
-- [harness-governance__skills__invocation-cost-audit](backlog/harness-governance__skills__invocation-cost-audit.md)
