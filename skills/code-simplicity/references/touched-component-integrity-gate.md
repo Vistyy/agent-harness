@@ -43,6 +43,18 @@ owner shows one or more of:
 If a local defect is a symptom of one of these signals, scope moves to the
 touched owner/component.
 
+## Successor Owner
+
+When work moves, collapses, splits, centralizes, deletes wrappers around, or
+transfers behavior, assess the successor owner/component as touched.
+
+The successor must be acceptable on its own. Do not approve because old
+complexity was removed, owners became fewer, tests pass, or the implementation
+matches the packet. If the successor has responsibility-overload, unclear
+internal boundaries, private-test choreography, duplicate authority, or another
+must-block signal, reshape before approval or record accepted debt with a
+backlog link.
+
 ## Required Action
 
 - Planner: reshape before approval.

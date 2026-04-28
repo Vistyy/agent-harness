@@ -20,6 +20,10 @@ accepts the debt and a backlog item records it before approval or closeout.
 Passing behavior, passing tests, narrow scope, and "already existing" code do
 not make unacceptable integrity acceptable.
 
+Deleted files, fewer owners, passing tests, matching the packet, or moving
+behavior into one place are not proof of simplicity by themselves. The final
+touched owner/component must be acceptable directly.
+
 ## Required References
 
 Read `references/default-simplicity-posture.md` when planning or shaping any

@@ -54,6 +54,10 @@ parity item in the same change. Never leave it only in prose.
 Rules:
 - future work or debt explicitly discussed during planning/review must end as
   fixed now, active wave, new wave, mobile parity item, or backlog item
+- scope may narrow execution volume, but not silently lower the user's quality
+  objective; if a wave closes only a phase, persist the remaining objective gap
+  as active wave, new wave, backlog item, mobile parity item, or accepted debt
+  with the required backlog link
 - backlog entries are short descriptions, not executable plans
 - each backlog item needs one slug in a queue bucket or mobile parity queue and
   one matching detail file under `docs-ai/current-work/backlog/`
@@ -199,6 +203,8 @@ When wave closes:
 - rehome any still-live user objective, acceptance-anchor outcomes, durable
   audit rationale, and follow-up state into the real owner doc or backlog item
   before slimming or deleting the closed brief
+- if the completed wave satisfied only a phase of the user objective, persist
+  the remaining objective gap before closeout
 - run a repo-wide exact-path scan for
   `docs-ai/docs/initiatives/waves/<wave-id>.md`
   - preferred helper: `just wave-brief-refs <wave-id>`

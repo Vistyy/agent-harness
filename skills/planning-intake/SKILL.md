@@ -18,6 +18,8 @@ material design choices.
 ## Success Criteria
 
 - user objective coverage is explicit
+- scope may narrow volume, but not silently lower the user's requested quality
+  bar
 - material decisions are closed or routed to the user with a recommendation
 - proof is allocated by owner layer, exact evidence, and counterfactual
 - deferrals are persisted in repo state, not chat
@@ -70,6 +72,8 @@ Do not promote to `execution-ready` while:
 - unacceptable touched-component integrity lacks explicit accepted debt and a
   backlog link
 - a substantive user ask was omitted, narrowed, or deferred without record
+- a plan completes only a phase of the user objective but leaves the remaining
+  objective gap unnamed or unpersisted
 - the packet still contains discovery instead of implementation work
 - two competent implementers could still choose materially different owner,
   proof, state-authority, runtime, compatibility, migration, or public behavior

@@ -53,6 +53,10 @@ Owner for approval boundaries, disposition, and completion claims.
   reason code gate, `required-proof`, and `durable-gain` checks.
 - No approval based on `better than before`, `moved to the right owner`, or
   `good enough for now`.
+- Invalid approval: the implementation matches the packet but the packet
+  narrowed or weakened the binding user objective.
+- Invalid approval: old complexity was removed without assessing whether the
+  resulting owner/component is itself acceptable.
 - Diff-myopic review is invalid for non-trivial work. Review the touched
   owner/component, not only changed lines.
 - Touched owner/component means the smallest owner whose contract, state,
