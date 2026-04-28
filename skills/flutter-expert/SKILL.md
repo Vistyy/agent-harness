@@ -7,9 +7,6 @@ description: "Use when implementing or debugging Flutter/Dart mobile code: repo-
 
 Use for Flutter/Dart implementation and debugging mechanics.
 
-For end-user visual direction, use `user-apps-design`.
-For mobile UX constraints, use `mobile-design`.
-
 ## Scope
 
 In:
@@ -18,11 +15,6 @@ In:
 - navigation and route behavior
 - widget composition and rebuild behavior
 - performance/platform debugging
-
-Out:
-- end-user copy and UX policy
-- mobile design policy
-- web Tailwind styling
 
 ## Workflow
 

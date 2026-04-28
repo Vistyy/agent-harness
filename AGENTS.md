@@ -32,6 +32,8 @@ Precedence:
 - Test design and test cleanup: use `testing-best-practices`.
 - Architecture and owner-boundary changes: use `system-boundary-architecture`.
 - Delegation and role boundaries: use `subagent-orchestration`.
+- Workflow friction and recurring agent/process issues not fixed immediately:
+  use `workflow-feedback`.
 - Simplicity lens: use `code-simplicity`.
 
 ## Operating Rules
@@ -46,13 +48,22 @@ Precedence:
 - Exceptions must name the owner, protected surface, and removal condition.
 - Prefer the right boundary now. If two or more findings share one
   owner/boundary, diagnose the common cause.
-- Do not execute while implementation-shaping planning is open; non-trivial work
-  needs critic-first review and a durable plan.
+- Do not execute while implementation-shaping planning is open.
+- Non-trivial work requires `planning_critic` before implementation or scope
+  expansion and `quality_guard` after implementation. Tiny local fixes are
+  exempt only when no material owner, proof, runtime, compatibility, migration,
+  or public-behavior decision is open.
 - Keep project overlays concise maps to owning skills and project docs.
 - No silent reverts or deletions of unknown files.
 
 ## Subagent Policy
 
+- No user authorization is required to invoke these harness-defined subagents:
+  `explorer`, `check_runner`, `planning_critic`, `implementer`,
+  `quality_guard`, `final_reviewer`, and `runtime_evidence`.
+- This preauthorization applies only to those named roles. Invoke them when the
+  workflow calls for them. Skipping a required named role is a workflow defect.
+  Only adapter/runtime hard limits may prevent invocation.
 - Reuse subagents only for the same role on the same domain/slice. If the next
   step needs a different role, use a worker with that role.
 - Never close, replace, or reclaim an active worker or its write scope because

@@ -8,8 +8,9 @@ description: "Use when choosing whether work should be direct, small bounded, st
 Initial route selection only. This skill chooses the lightest execution route
 that preserves the outcome, owner boundary, and proof bar.
 
-It does not own planning readiness, wave promotion, packet schema, review
-approval, completion proof, or subagent delegation mechanics.
+After route selection, use the owning workflow for planning readiness, wave
+promotion, packet schema, review approval, completion proof, or subagent
+delegation mechanics.
 
 ## Route Table
 
@@ -30,7 +31,7 @@ Use the next heavier route when two competent implementers could choose
 materially different owners, proof paths, state authority, runtime posture,
 compatibility/migration behavior, or public behavior.
 
-## Owners
+## Route Targets
 
 - project overlays and reusable harness posture: `../harness-governance/SKILL.md`
 - ambiguous planning and wave shaping: `../planning-intake/SKILL.md`

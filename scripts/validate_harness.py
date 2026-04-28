@@ -26,6 +26,15 @@ FORBIDDEN_TERMS = (
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 INLINE_PATH_RE = re.compile(r"`((?:(?:references|assets|scripts)/|\.\./)[^`\s]+)`")
 FORBIDDEN_PROJECT_OWNER_PATH_RE = re.compile(r"`(docs-ai/docs/conventions/[^`]+)`")
+SKILL_TOKEN_RE = re.compile(r"(?<![A-Za-z0-9_-])\$([a-z][a-z0-9]*(?:-[a-z0-9]+)*)(?![A-Za-z0-9_-])")
+BACKTICK_SKILL_REF_RE = re.compile(
+    r"\b(?:use|load|apply|invoke|route(?:s|d)?|delegate(?:s|d)?)"
+    r"(?:\s+[a-z]+){0,4}\s+`([a-z0-9]+(?:-[a-z0-9]+)+)`",
+    re.IGNORECASE,
+)
+SKILL_PATH_RE = re.compile(
+    r"(?<![A-Za-z0-9_-])((?:(?:\.\./)+)?(?:skills/)?([a-z0-9]+(?:-[a-z0-9]+)*)/SKILL\.md)(?![A-Za-z0-9_-])"
+)
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FRONTMATTER_DELIMITER = "---"
 OPENAI_ALLOWED_TOP_LEVEL_KEYS = {"interface", "dependencies", "policy"}
@@ -335,6 +344,41 @@ def _validate_openai_metadata_coverage(root: Path) -> list[str]:
     return errors
 
 
+def _validate_skill_references(root: Path) -> list[str]:
+    errors: list[str] = []
+    skill_names = {_skill_name(skill_dir) for skill_dir in _iter_skill_dirs(root)}
+    text_files: list[Path] = []
+    for path in root.rglob("*"):
+        if (
+            path.is_file()
+            and path.suffix in {".md", ".yaml", ".yml", ".toml", ".txt"}
+            and ".git" not in path.parts
+        ):
+            text_files.append(path)
+    for path in sorted(set(text_files)):
+        text = path.read_text(encoding="utf-8")
+        rel = path.relative_to(root)
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            for match in SKILL_TOKEN_RE.finditer(line):
+                skill_name = match.group(1)
+                if "-" not in skill_name and not re.search(rf"\bUse\s+`?\${re.escape(skill_name)}\b", line):
+                    continue
+                if skill_name not in skill_names:
+                    errors.append(f"{rel}:{line_number} references missing skill ${skill_name}")
+            for match in BACKTICK_SKILL_REF_RE.finditer(line):
+                skill_name = match.group(1)
+                if re.search(rf"\bdo not\s+use\s+`{re.escape(skill_name)}`", line, re.IGNORECASE):
+                    continue
+                if skill_name not in skill_names:
+                    errors.append(f"{rel}:{line_number} references missing skill `{skill_name}`")
+            for match in SKILL_PATH_RE.finditer(line):
+                raw_path = match.group(1)
+                skill_name = match.group(2)
+                if skill_name not in skill_names:
+                    errors.append(f"{rel}:{line_number} references missing skill path {raw_path}")
+    return errors
+
+
 def _parse_roles_markdown(root: Path) -> tuple[set[str], list[str]]:
     roles_path = root / "agents" / "roles.md"
     if not roles_path.is_file():
@@ -558,6 +602,7 @@ def validate(root: Path) -> list[str]:
 
     _rows, openai_errors = _openai_metadata_rows(root)
     errors.extend(openai_errors)
+    errors.extend(_validate_skill_references(root))
     errors.extend(_validate_role_parity(root))
     errors.extend(_validate_wave_lifecycle(root))
 

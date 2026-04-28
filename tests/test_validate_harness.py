@@ -119,6 +119,54 @@ def test_validate_requires_openai_metadata_for_every_skill(tmp_path: Path) -> No
     assert "skills/missing-metadata missing agents/openai.yaml" in errors
 
 
+def test_validate_rejects_missing_skill_token_reference(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(tmp_path / "AGENTS.md", "Use $missing-skill for missing work.\n")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "AGENTS.md:1 references missing skill $missing-skill" in errors
+
+
+def test_validate_rejects_missing_single_token_skill_reference(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(tmp_path / "AGENTS.md", "Use $missing for missing work.\n")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "AGENTS.md:1 references missing skill $missing" in errors
+
+
+def test_validate_rejects_missing_backticked_skill_reference(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(tmp_path / "AGENTS.md", "Missing work: use `missing-skill`.\n")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "AGENTS.md:1 references missing skill `missing-skill`" in errors
+
+
+def test_validate_rejects_missing_skill_path_reference(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(tmp_path / "README.md", "See ../../skills/missing-skill/SKILL.md.\n")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "README.md:1 references missing skill path ../../skills/missing-skill/SKILL.md" in errors
+
+
+def test_validate_rejects_missing_relative_skill_path_reference(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(tmp_path / "skills" / "test-skill" / "references" / "owner.md", "See ../missing-skill/SKILL.md.\n")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/test-skill/references/owner.md:1 references missing skill path ../missing-skill/SKILL.md"
+        in errors
+    )
+
+
 def test_validate_rejects_role_parity_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     (tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml").unlink()

@@ -5,19 +5,17 @@ description: "Use when work changes abstractions, ownership boundaries, cross-su
 
 # System-Boundary Architecture
 
-Lean routing skill for structural and boundary-shaping work.
+Structural decision skill for boundary-shaping work.
 
-It owns:
+Capability:
 
 - detecting structural triggers,
 - loading the relevant doctrine references,
 - enforcing the hard stop when ownership, authority, or boundary decisions are
   unresolved.
 
-It does not own runtime proof mechanics. Runtime proof depth and completion
-evidence stay with `verification-before-completion`; browser and mobile runtime
-mechanics stay with their testing skills; project runtime recipes stay in the
-project overlay.
+Keep runtime proof depth, completion evidence, browser/mobile runtime mechanics,
+and project runtime recipes out of structural doctrine.
 
 ## Load
 
@@ -82,8 +80,8 @@ Stop execution and return to planning when:
 ## Anti-Patterns
 
 - loading this skill for every medium-sized edit just to be safe,
-- treating it as owner for all engineering principles instead of a structural
-  routing lens,
+- treating it as a general engineering-principles skill instead of a structural
+  decision skill,
 - using implementation judgment to settle unresolved ownership after the
   structural trigger fired,
 - moving runtime proof taxonomy or project runtime recipes into structural

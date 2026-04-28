@@ -1,4 +1,4 @@
 interface:
   display_name: "Subagent Orchestration"
   short_description: "Delegate bounded work cleanly"
-  default_prompt: "Use $subagent-orchestration to route bounded exploration, verification, runtime evidence, and review work to the right subagent."
+  default_prompt: "Use $subagent-orchestration to invoke named preauthorized harness subagents without user authorization: explorer, check_runner, planning_critic, implementer, quality_guard, final_reviewer, and runtime_evidence."

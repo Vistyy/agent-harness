@@ -1,17 +1,14 @@
 ---
 name: executing-plans
-description: "Use to execute an already-approved standalone implementation plan under docs/plans; do not use for wave execution, which routes to wave-autopilot."
+description: "Use to execute an already-approved standalone implementation plan under docs/plans; route wave execution to wave-autopilot."
 ---
 
 # Executing Plans
 
-Execute approved standalone plan from `docs/plans/**`. Not for waves.
+Execute approved standalone plans from `docs/plans/**`.
 
-Owners:
-- standalone-plan policy: `../writing-plans/references/standalone-plans.md`
-- completion/evidence gate: `../verification-before-completion/SKILL.md`
-- approval and review semantics: `../code-review/references/review-governance.md`
-- minor local assumptions: `../implementation-decision-ledger/SKILL.md`
+Use `../writing-plans/references/standalone-plans.md` for standalone-plan
+approval record requirements.
 
 ## Outcome
 
@@ -22,7 +19,7 @@ claim completion only after plan-scoped proof is fresh.
 
 - plan readiness is confirmed before edits
 - each task follows approved scope and preserves decision closure
-- minor local assumptions are logged only when pre-authorized
+- minor implementation choices remain within pre-authorized scope
 - verification evidence and quality gate outcomes are captured
 - unresolved material gaps return to planning
 
@@ -42,13 +39,13 @@ If material gap appears, stop and return to planning.
 For each task:
 1. mark in progress
 2. follow approved steps; do not reopen design
-3. log only minor pre-authorized decisions when needed
+3. keep minor implementation choices inside the approved scope
 4. run plan-specified verification and required quality gate
 5. capture required evidence paths
 6. stop if missing required surface or unresolved decision appears
 7. mark complete only after fresh proof exists
 
-Use `verification-before-completion` for gate selection and completion claim rules.
+Use the fresh verification gate before claiming task or plan completion.
 
 Memory-only planning is not executable for non-trivial work. If the approval
 record is missing critic provenance, stop and return to planning.
@@ -60,7 +57,8 @@ After each batch, report:
 - verification commands and outcomes
 - quality-gate command and outcome
 - evidence paths
-- unresolved ledger entries
+- unresolved material gaps
+- workflow observations captured separately, if any
 
 If user asked for checkpointed execution, stop after batch. Else continue.
 

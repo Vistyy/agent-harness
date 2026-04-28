@@ -8,6 +8,9 @@ The baseline Codex adapter installs only individual symlinks:
 
 It never replaces whole directories.
 
+`AGENTS.md` is the installed adapter prompt source for reusable harness policy.
+Do not move global policy only into a project-local overlay or role file.
+
 Full apply also merges the required Codex role config into
 `$CODEX_HOME/config.toml` after backing up the live file. It does not symlink or
 wholesale replace live config.

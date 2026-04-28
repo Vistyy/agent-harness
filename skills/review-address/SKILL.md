@@ -7,10 +7,9 @@ description: Use when receiving code review feedback (user or external) and you 
 
 Triage first. No reflex agreement. No edits before user confirms triage.
 
-Related:
-- full finished-diff review: `../code-review/SKILL.md`
-- simplicity lens: `../code-simplicity/SKILL.md`
-- disposition policy: `../code-review/references/review-governance.md`
+Use `../code-review/references/review-governance.md` for disposition terms.
+Apply `../code-simplicity/SKILL.md` when feedback would add helpers, layers,
+fallbacks, or tactical patches around a shared ownership flaw.
 
 ## Workflow
 

@@ -13,7 +13,7 @@ Fresh verification gate owner. No completion claim without fresh proof.
 
 If proving command or artifact is not from this execution window, claim is not proved.
 
-## Owner Map
+## Reference Loading
 
 Load owner docs as needed:
 - gate semantics: `references/quality-gate-selection.md`
@@ -25,8 +25,6 @@ Load owner docs as needed:
 - review approval, disposition, and completion fields:
   `../code-review/references/review-governance.md`
 - wave closeout: `../initiatives-workflow/references/initiatives-workflow.md`
-- structural doctrine: `../system-boundary-architecture/SKILL.md`
-- delegation policy: `../subagent-orchestration/SKILL.md`
 
 ## Outcome
 
@@ -49,14 +47,18 @@ reported as done.
 
 ## Required Reporting
 
-Use `review-governance.md` for required completion fields. This skill owns the
-fresh verification posture and the verification/runtimes fields below.
+Use `review-governance.md` for required completion fields. This skill adds the
+fresh verification posture and the verification/runtime fields below.
 
 Report when relevant:
 - `Runtime evidence: satisfied | blocked | skipped | incomplete`
 - `Diagnostics evidence: trace/log-linked | none-observed | limited-no-observability | not-needed`
 - `Doc hygiene: updated | deferred (<reason>, <path>)`
 - `System-boundary doctrine: satisfied | blocked | routed back to planning`
+
+For non-trivial work, report changed surfaces, verification commands, and
+residual verification risks. Include review verdict fields from
+`review-governance.md`.
 
 ## Quality Gate Map
 

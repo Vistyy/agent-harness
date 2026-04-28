@@ -11,16 +11,7 @@ Owns product-facing UI direction, parity decisions, composition quality, and
 copy posture. Project strategy, language policy, app paths, and delivery timing
 stay in the project overlay.
 
-## Routing
-
-Start here, then add only what matches:
-
-- `tailwind-design-system` for web implementation mechanics
-- `mobile-design` for mobile platform constraints, accessibility, touch, runtime
-  validation
-- `flutter-expert` for Flutter implementation mechanics
-
-Do not create parallel design decision tracks downstream.
+Keep design decisions in this skill and project-owned design sources.
 
 ## Read First
 
@@ -30,7 +21,7 @@ Do not create parallel design decision tracks downstream.
 - `references/atomic-design.md`
 - `references/text-constraints.md`
 
-Do not continue until you can restate the relevant invariants.
+Continue after you can restate the relevant invariants.
 
 ## Scope
 
@@ -43,11 +34,12 @@ In:
 - cross-client parity decisions for UX behavior and interaction posture
 - web-first handoff readiness and mobile follow-up assumptions
 
-Out:
+Boundary:
 
-- API contracts, backend semantics, auth/session internals
-- framework mechanics once direction is set
-- mobile platform mechanics after direction is set
+- API contracts, backend semantics, and auth/session internals stay with their
+  project owners.
+- Framework mechanics start after UI direction is set.
+- Mobile platform mechanics start after cross-platform UI direction is set.
 
 ## Quality Bar
 
@@ -97,24 +89,12 @@ scorecard.
    design-intent anchors per the project surface-discovery contract.
 9. Use existing project tokens, components, patterns, and design-system
    contracts. No ad hoc styling values.
-10. For runtime UI proof, route to `webapp-testing` or `mobileapp-testing` and
-    use the project design-fidelity governance terms for verdicts.
-11. For web route ownership changes, route to `system-boundary-architecture`;
-    this skill does not own route/state authority doctrine.
-
-## Cross-Skill Routing
-
-- `tailwind-design-system`: shared web Tailwind components and tokens
-- `mobile-design`: iOS/Android constraints, accessibility, touch, mobile
-  validation
-- `flutter-expert`: Flutter/Dart implementation mechanics
-- `webapp-testing` or `mobileapp-testing`: runtime UI behavior claims
-- `system-boundary-architecture`: route/state authority, shared frontend
-  boundaries, and ownership changes
+10. Runtime UI proof must use the project design-fidelity governance terms for
+    verdicts.
+11. Web route ownership changes must close route/state authority before
+    editing.
 
 ## If Source Of Truth Is Missing
-
-Do not invent local workaround.
 
 If missing truth is app main draw, shell ownership, or core loop, stop bounded
 surface work and route into foundation-reset discovery per

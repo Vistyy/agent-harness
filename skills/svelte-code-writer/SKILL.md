@@ -1,18 +1,18 @@
 ---
 name: svelte-code-writer
-description: "Use whenever creating, editing, or analyzing Svelte `.svelte`, `.svelte.ts`, or `.svelte.js`; owns official docs lookup and autofixer workflow."
+description: "Use whenever creating, editing, or analyzing Svelte `.svelte`, `.svelte.ts`, or `.svelte.js`; includes official docs lookup and autofixer workflow."
 ---
 
 # Svelte Code Writer
 
-## Ownership Boundary
+## Capability
 
-This skill owns:
 - Svelte/SvelteKit documentation lookup
 - `svelte_autofixer` usage before finalizing Svelte code
 - choosing the right tool inputs for file-based Svelte work
 
-This skill does not own the repo's broad Svelte framework guidance. Load `svelte-core-bestpractices` alongside this skill when reactivity, event handling, styling, state sharing, or other non-obvious framework choices matter.
+Load `svelte-core-bestpractices` alongside this skill when reactivity, event
+handling, styling, state sharing, or other non-obvious framework choices matter.
 
 ## Tooling Contract
 
@@ -32,15 +32,8 @@ If you are operating outside the MCP-integrated flow, the equivalent CLI entrypo
 4. When the change involves non-obvious framework choices, load `svelte-core-bestpractices` in the same turn instead of improvising local Svelte doctrine.
 5. Ask about a playground link only when you are returning Svelte code directly rather than editing files in the repo.
 
-## Guardrails
+## Required Use
 
-- Do not treat this skill as the owner of broad Svelte best-practice doctrine.
-- Do not skip `svelte_autofixer` because the change looks small.
-- Do not fetch documentation blindly; choose the sections that match the requested feature or bug.
-- Do not generate playground links for code that was already written into repo files.
-
-## Related Skills
-
-- `svelte-core-bestpractices` for the broad Svelte guidance this skill deliberately does not duplicate
-- `user-apps-design` for end-user UI direction and copy rules when the Svelte work is user-facing
-- `webapp-testing` for browser runtime evidence
+- Run `svelte_autofixer` even for small changes.
+- Fetch only documentation sections that match the requested feature or bug.
+- Generate playground links only for returned snippets, not repo-file edits.

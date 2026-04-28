@@ -1,13 +1,13 @@
 ---
 name: webapp-testing
-description: "Use for browser-visible UI or web runtime proof, including internal/admin surfaces; choose durable spec, added spec, Playwright CLI, then raw script."
+description: "Use for browser-visible UI or web runtime proof, including internal/admin surfaces; choose the strongest supported browser proof channel."
 ---
 
 # Browser UI Testing
 
 Goal: prove browser-visible behavior with live runtime evidence.
 
-Owners:
+Reference loading:
 - route/state doctrine: `../system-boundary-architecture/references/web-route-and-state-boundary-doctrine.md`
 - runtime proof escalation: `../verification-before-completion/references/runtime-proof-escalation.md`
 - browser-proof layering: `references/browser-proof-layering-contract.md`
@@ -15,16 +15,15 @@ Owners:
 - design anchors: `the project surface-discovery contract, when present`
 - runtime evidence contract: `../verification-before-completion/references/runtime-evidence-contract.md`
 - artifact placement: `../verification-before-completion/references/verification-evidence.md`
-- delegation policy: `../subagent-orchestration/SKILL.md`
 
-Use `check_runner` for targeted automated checks, log/trace sweeps, and large
-output triage. Use `runtime_evidence` only for live browser/runtime proof. If
+Use `runtime_evidence` for live browser/runtime proof. Use `check_runner` for
+targeted automated checks, log/trace sweeps, and large output triage. If
 runtime proof produces a large response, HTML dump, trace bundle, or console
 blob, keep only the selected proof artifact in `runtime_evidence` and hand bulk
 reading to `check_runner`.
 For diagnostics or runtime-proof-heavy browser work, start from the
-observability-enabled agent runtime by default. Use `OBSERVABILITY=false` only
-when the task is explicitly narrow enough not to need trace/log queryability.
+observability-enabled agent runtime by default. Keep observability enabled unless
+the task is explicitly narrow enough not to need trace/log queryability.
 Project-specific runtime recipes, upload-provider proof helpers, ports, and service topology stay in the project overlay.
 
 ## Preflight
@@ -59,16 +58,16 @@ When delegating to `runtime_evidence`, pass:
 - chosen approved archetype or justified exception when end-user design
   scoring applies,
 - constraints or must-check states,
-- no pre-identified design defects for the worker to parrot back
+- actual states to inspect rather than prewritten conclusions
 - Use the browser-proof layering contract to decide the proof channel before
-  delegating. Do not improvise a raw Node/Playwright script when an existing
-  durable spec or Playwright CLI path can prove the claim honestly.
+  delegating.
 
 ## Runtime Loop
 
 Use the project-owned runtime recipe for the target web surface. It must state how to start dependencies, serve the browser app, verify readiness, run durable browser specs or Playwright CLI against the live base URL, and shut down cleanly.
 
-Do not encode project ports, service names, upload-provider recipes, or topology details in this global skill.
+Project overlays own ports, service names, upload-provider recipes, and topology
+details.
 
 ## Browser Proof Layers
 
@@ -76,7 +75,7 @@ Select the proof channel in this order:
 1. reuse an existing durable spec
 2. extend or add a durable spec
 3. use Playwright CLI for one-shot or weakly reusable proof
-4. fall back to a raw script only when the first three cannot express the
+4. use a raw script only when durable specs and Playwright CLI cannot express the
    flow cleanly
 
 ## Playwright CLI Loop
@@ -102,18 +101,17 @@ Clean orphaned session when needed:
 pkill -f 'run-cli-server --daemon-session='
 ```
 
-## Chrome DevTools MCP Fallback
+## Chrome DevTools MCP
 
-Use only when the selected proof channel is Playwright CLI and it cannot
-gather required evidence:
+Use with Playwright CLI when the flow needs:
 - deep request inspection
 - targeted DOM probing
 - performance analysis
 
-## Last-Resort Helpers
+## Helper Paths
 
-Prefer project runtime recipes, durable specs, and Playwright CLI before these
-helpers.
+Use these helpers when project runtime recipes, durable specs, and Playwright CLI
+do not cover the proof need.
 
 - `scripts/with_server.py`: starts trusted local server commands around one
   proof command when no project runtime recipe exists. Do not use it for
@@ -153,4 +151,5 @@ add browser-specific details when material:
 - reviewed viewport screenshots,
 - bounded console/network evidence.
 
-Completion claim fields belong to `../code-review/references/review-governance.md`.
+Include completion claim fields required by
+`../code-review/references/review-governance.md`.

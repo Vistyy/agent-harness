@@ -5,14 +5,6 @@ description: "Use alongside svelte-code-writer for durable Svelte posture: react
 
 # Svelte Core Best Practices
 
-## Ownership
-
-- `svelte-code-writer` owns doc lookup, autofixer use, tooling-entry workflow
-- this skill owns durable Svelte posture and anti-pattern avoidance
-- `user-apps-design` owns product-facing UI direction
-- `system-boundary-architecture` owns frontend boundary and state-authority
-  decisions
-
 ## Durable Posture
 
 - Use modern Svelte/runes patterns for new code.
@@ -28,7 +20,7 @@ description: "Use alongside svelte-code-writer for durable Svelte posture: react
 - Avoid legacy syntax in new code unless the surrounding file is intentionally
   legacy and migration is out of scope.
 
-Use `svelte-code-writer` and official docs for version-sensitive API details.
+Use official Svelte docs for version-sensitive API details.
 
 ## Reference Map
 
@@ -41,8 +33,8 @@ Load only the reference needed for the current choice:
 - keyed list behavior: `references/each.md`
 - debugging reactive dependencies: `references/$inspect.md`
 
-If a local reference conflicts with official docs, follow `svelte-code-writer`
-lookup and update or ignore the stale local reference.
+If a local reference conflicts with official docs, follow official docs and
+update or ignore the stale local reference.
 
 ## Anti-Patterns
 
@@ -54,4 +46,4 @@ lookup and update or ignore the stale local reference.
 - `:global` styling when CSS custom properties or component API can express
   the contract
 - local framework docs copied into this skill instead of looked up through
-  `svelte-code-writer`
+  official docs

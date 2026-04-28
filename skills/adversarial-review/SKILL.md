@@ -3,7 +3,7 @@ name: adversarial-review
 description: "Use as a review lens for implemented changes when failure modes, hidden assumptions, edge cases, misuse paths, degraded states, or proof gaps need pressure-testing."
 ---
 
-Use this skill as a review lens, not as a separate approval mode.
+Use this skill as a review lens for pressure-testing concrete claims.
 
 Review for:
 - hidden assumptions that only hold on happy paths,
@@ -13,7 +13,7 @@ Review for:
 - boundary misuse, unexpected caller behavior, and unsafe defaults,
 - cases where proofs or tests cover the nominal path but not the actual risk.
 
-Do not edit code in this run. Produce findings only.
+Produce findings only; code edits stay with the active implementation workflow.
 
 ## Process
 

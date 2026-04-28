@@ -8,6 +8,7 @@ run log.
 
 - Prefer a short skill hot path plus explicit `load when` gates for detailed
   references.
+- Broad-trigger authoring rules live in `skill-architecture.md`.
 - Add a router only when observed flows repeatedly load the wrong broad skill or
   require an expensive owner only for a narrow decision.
 - Do not add a routing hop for possible prompt-size savings alone.

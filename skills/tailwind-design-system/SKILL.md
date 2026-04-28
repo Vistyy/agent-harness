@@ -5,12 +5,8 @@ description: "Use when implementing or refactoring Tailwind CSS v4 styles: CSS-f
 
 # Tailwind Design System
 
-Use for Tailwind v4 implementation mechanics after design direction is already decided.
-
-Prerequisite for end-user surfaces:
-- apply `user-apps-design` first
-
-Do not use this skill to re-decide product design direction.
+Use for Tailwind v4 implementation mechanics after design direction is already
+decided.
 
 ## Scope
 
@@ -19,10 +15,6 @@ In scope:
 - tokens and theming conventions
 - component and variant authoring patterns
 - utility/custom CSS integration
-
-Out of scope:
-- app UX policy and language constraints
-- browser runtime behavior claims
 
 ## Tailwind v4 Invariants
 
@@ -70,8 +62,3 @@ Out of scope:
 - https://tailwindcss.com/docs/detecting-classes-in-source-files
 - https://tailwindcss.com/docs/upgrade-guide
 - https://tailwindcss.com/docs/compatibility
-
-## Related Skills
-
-- `user-apps-design`
-- `webapp-testing`

@@ -14,3 +14,9 @@ The adapter owns:
 Live `$CODEX_HOME/config.toml` remains user-local; full apply merges the required
 role registry into it with a backup. Baseline install excludes prompts,
 Copilot, and Gemini homes.
+
+## Prompt Contract
+
+Global `AGENTS.md` is the installed Codex adapter prompt source for reusable
+harness policy. Adapter install must preserve that source instead of relocating
+global policy into project overlays or role files.

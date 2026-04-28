@@ -10,11 +10,12 @@ Execute one `execution-ready` wave from:
 - `docs-ai/docs/initiatives/waves/<wave-id>.md`
 - `docs-ai/current-work/<wave-id>/wave-execution.md`
 
-Workflow lifecycle stays in
-`../initiatives-workflow/references/initiatives-workflow.md`.
-Packet schema stays in
-`../initiatives-workflow/references/wave-packet-contract.md`.
-Delegation policy stays in `../subagent-orchestration/SKILL.md`.
+Use `../initiatives-workflow/references/initiatives-workflow.md` for workflow
+lifecycle state.
+Use `../initiatives-workflow/references/wave-packet-contract.md` for packet
+schema.
+Use `../subagent-orchestration/SKILL.md` for delegation policy during wave
+execution.
 
 ## Outcome
 

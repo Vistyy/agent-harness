@@ -7,10 +7,8 @@ description: Use before implementing any behavior change to establish failing ex
 
 Use TDD as proof workflow, not test-count ritual.
 
-Related:
-- testing doctrine: `../testing-best-practices/SKILL.md`
-- test anti-pattern details:
-  `references/testing-anti-patterns.md`
+Use `../testing-best-practices/SKILL.md` for test layer and value doctrine.
+Use `references/testing-anti-patterns.md` for test anti-pattern details.
 
 ## Non-Negotiables
 

@@ -1,23 +1,22 @@
 ---
 name: code-review
-description: "Use for separate isolated review of implemented changes after local verification, or when closeout requires final separate review."
+description: "Use when the user asks for code review, after verified implementation, or when closeout requires a final isolated review."
 ---
 
 # Code Review
 
-Separate full review. Not in-thread `quality_guard`.
+Separate full review with fresh context and breadth-first skepticism.
 
 Use when:
 - user asks for review,
 - final separate breadth-first review is required before closeout.
 
-Use `final_reviewer` by default for subagent-backed closeout review. Do not use
-`quality_guard` for this gate.
+Use `final_reviewer` by default for subagent-backed closeout review.
 
 Write terse. This skill keeps the isolated-review posture and report shape only.
 Owner docs and review lenses carry the doctrine.
 
-## Owner Routing
+## Review Inputs
 
 - Shared review doctrine: `references/review-governance.md`
 - Simplicity lens: `../code-simplicity/SKILL.md`
@@ -27,8 +26,7 @@ Owner docs and review lenses carry the doctrine.
 ## Rules
 
 - Use fresh isolated context. Do not inherit old clean impressions.
-- Treat `quality_guard` approvals as implementation-loop history, not final
-  approval.
+- Treat `quality_guard` approvals as implementation-loop history.
 - Cite exact `file/path:line` for every finding.
 - Keep severity explicit and ordered.
 - Load the owner docs and review lenses that the slice actually needs.

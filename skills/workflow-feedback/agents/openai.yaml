@@ -1,0 +1,4 @@
+interface:
+  display_name: "Workflow Feedback"
+  short_description: "Track workflow issues and improvement ideas"
+  default_prompt: "Use $workflow-feedback to record workflow friction, recurring agent or process issues, or review patterns that are not fixed immediately."

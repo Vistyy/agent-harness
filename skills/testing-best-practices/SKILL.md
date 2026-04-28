@@ -8,9 +8,6 @@ description: "Use when writing, reviewing, refactoring, or deleting tests: choos
 Apply testing doctrine in real work. Start with `references/testing-strategy.md`
 for the owner map.
 
-Related:
-- red-to-green workflow: `../test-driven-development/SKILL.md`
-
 ## Non-Negotiables
 
 1. Pick layer first.

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Implementation Decision Ledger"
-  short_description: "Track implementation assumptions and decisions"
-  default_prompt: "Use $implementation-decision-ledger to record implementation-time assumptions and decisions for this run."

@@ -138,5 +138,7 @@ Any message claiming done, complete, ready, or approved must include:
 - `In-thread quality_guard:` actual verdict plus reviewed scope
 - `Verification:` fresh proving command or artifact
 - `Final review:` `APPROVED | BLOCKED | PENDING SEPARATE REVIEW`
+- For non-trivial work, changed surfaces, required `planning_critic` verdict,
+  and residual risks.
 
 Missing field = claim fails.

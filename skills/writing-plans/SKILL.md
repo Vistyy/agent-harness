@@ -5,15 +5,10 @@ description: Use after requirements are clear to produce an executable implement
 
 # Writing Plans
 
-Use for standalone implementation plans under `docs/plans/**`. Not for waves.
+Use for standalone implementation plans under `docs/plans/**`.
 
-If work belongs to an active/proposed wave, stop and use `planning-intake` or `wave-autopilot`.
-
-Owners:
-- standalone-plan policy: `references/standalone-plans.md`
-- completion gate: `../verification-before-completion/SKILL.md`
-- approval and review semantics:
-  `../code-review/references/review-governance.md`
+Use `references/standalone-plans.md` for standalone-plan approval record
+requirements.
 
 ## Outcome
 
@@ -32,7 +27,7 @@ requirements are clear, and material decisions are already closed.
 
 - requirements are closed,
 - material behavior/migration/runtime/verification decisions are closed,
-- work is not better represented as a wave.
+- standalone-plan shape fits better than a wave.
 
 If any material decision is still open, send work back to planning.
 
@@ -72,7 +67,6 @@ Template/example:
 - no vague verbs like "handle" or "clean up"
 - use exact file paths
 - every claimed surface needs proof
-- do not infer approval from prose; use the `standalone-plans.md` approval record
-- non-trivial work does not move to implementation from memory-only planning
+- approval comes from the `standalone-plans.md` approval record
+- non-trivial work moves to implementation from durable approved planning
 - `docs/plans/**` is for concrete approved plans only
-- route execution to `executing-plans`

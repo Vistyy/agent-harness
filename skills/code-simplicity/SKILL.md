@@ -3,19 +3,13 @@ name: code-simplicity
 description: "Use as the default simplicity lens for non-trivial planning, implementation, and review; prefer deletion, collapse, demotion, and the smallest honest solution."
 ---
 
-Simplicity lens under:
-- `../code-review/references/review-governance.md`
-- `../planning-intake/SKILL.md`
-- `../code-review/SKILL.md` for shared review formatting and baseline rules
-
 Use when:
 - shaping any non-trivial solution
 - implementation starts adding helpers, layers, branches, workflow steps, or heavy proof
 - user explicitly asks for simplification or cutdown
 - review governance requires stable-to-extend check
 
-This is not a separate mode. It is the default pressure toward minimum
-sufficient shape.
+Use this as the default pressure toward minimum sufficient shape.
 
 ## Scope
 
@@ -34,7 +28,7 @@ Primary question:
 - would next implementer likely want to refactor this slice before extending it?
 - is this the minimum sufficient design for current requirement size?
 
-Out of scope:
+Boundary:
 - changing requirements
 - deleting required behavior
 - correctness issues unrelated to complexity

@@ -1,19 +1,18 @@
 ---
 name: mobileapp-testing
-description: Use when validating mobile app runtime behavior; start deterministic runtime targets, prefer Dart MCP, and use serial-scoped adb fallback.
+description: Use when validating mobile app runtime behavior; start deterministic runtime targets, prefer Dart MCP, and use serial-scoped adb for device lifecycle and recovery.
 ---
 
 # Mobile Application Testing
 
 Goal: prove mobile runtime behavior with deterministic device evidence.
 
-Owners:
+Reference loading:
 - runtime proof escalation: `../verification-before-completion/references/runtime-proof-escalation.md`
 - UI risk classes: `the project UI verification strategy, when present`
 - design anchors: `the project surface-discovery contract, when present`
 - runtime evidence contract: `../verification-before-completion/references/runtime-evidence-contract.md`
 - artifact placement: `../verification-before-completion/references/verification-evidence.md`
-- delegation policy: `../subagent-orchestration/SKILL.md`
 
 ## Default Stack
 
@@ -23,8 +22,8 @@ Owners:
 4. Use adb only for install/launch/screenshot/recovery.
 
 For diagnostics or runtime-proof-heavy mobile work, keep the default agent loop
-on the observability-enabled repo runtime. Use `OBSERVABILITY=false` only when
-the task is explicitly narrow enough not to need trace/log queryability.
+on the observability-enabled repo runtime. Keep observability enabled unless the
+task is explicitly narrow enough not to need trace/log queryability.
 
 ## Preflight
 
@@ -44,14 +43,15 @@ When delegating to `runtime_evidence`, pass:
 - relevant surface brief and anchors,
 - chosen approved archetype or justified exception when end-user design
   scoring applies,
-- must-check constraints,
-- not a prewritten list of design defects.
+- constraints or states to inspect.
 
 ## Runtime Loop
 
 Use the project-owned mobile runtime recipe for the target app. It must state how to start dependencies, select exactly one device or emulator, verify readiness, install or launch the app, collect screenshots or logs, and shut down cleanly.
 
-Do not encode project service names, ports, device IDs, or host-specific recovery recipes in this global skill. Keep parallel-emulator exception guidance in `references/mobile-emulator-proof-contract.md`.
+Project overlays own service names, ports, device IDs, and host-specific recovery
+recipes. Keep parallel-emulator exception guidance in
+`references/mobile-emulator-proof-contract.md`.
 
 ## Interaction Rules
 
@@ -91,4 +91,5 @@ add mobile-specific details when material:
 - flow verified,
 - widget tree, log, screenshot, or adb artifacts reviewed.
 
-Completion claim fields belong to `../code-review/references/review-governance.md`.
+Include completion claim fields required by
+`../code-review/references/review-governance.md`.

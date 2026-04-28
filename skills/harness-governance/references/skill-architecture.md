@@ -31,22 +31,31 @@ It should be:
 Prefer trigger language over marketing language. Do not claim ownership the
 skill body no longer has.
 
+Broad descriptions are allowed only for ambient events with lean hot paths,
+explicit exclusions, and owner handoff. They must not become backlog, bug,
+diagnostics, decision, planning, or durable-policy catchalls.
+
 ## Ownership Isolation
 
 Each skill should own one coherent concept, workflow, or role surface.
 
 Rules:
 
-- explain only the doctrine the skill owns,
-- reference neighboring skills for routing, handoff, or owner lookup,
+- describe the skill's own capability, operating workflow, required inputs, and
+  handback shape,
+- do not use the skill body as a routing index or ownership map for neighboring
+  skills,
+- rely on frontmatter descriptions and `AGENTS.md` for ordinary routing,
+- reference another skill only for direct coupling, complex routing, or owner
+  lookup that cannot be made clear in frontmatter,
 - do not restate another skill's procedure, approval rule, or policy,
 - do not mix unrelated lifecycle phases just because the same agent may touch
   them in one run,
 - split only when the parts have different triggers, inputs, outputs, or
   proof/review owners.
 
-When a skill consumes another owner's doctrine, name the owner and the reason
-to load it. Keep the meaning in the owner.
+When a skill directly consumes another skill's doctrine or output, name the
+reason to load it. Keep the meaning in the consumed skill.
 
 ## References
 

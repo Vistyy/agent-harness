@@ -5,13 +5,10 @@ description: "Use after user-apps-design for mobile-specific constraints: touch 
 
 # Mobile Design
 
-Use after `user-apps-design`. This skill owns mobile-specific constraints and validation, not cross-platform visual direction.
+Use after `user-apps-design`.
 
-## Boundary
+## Capability
 
-`user-apps-design` owns cross-platform UI direction, parity, and copy.
-
-This skill owns:
 - touch ergonomics and gesture fallback
 - platform navigation and back behavior
 - mobile performance constraints
@@ -120,8 +117,3 @@ Allow UI divergence only when platform norms differ and divergence is explicit.
 - [ ] divergence decisions documented
 - [ ] accessibility and performance checks defined
 - [ ] verification plan includes real-device or equivalent runtime validation
-
-## Related Skills
-
-- `user-apps-design` for design direction, parity matrix, end-user policy
-- `flutter-expert` for Flutter implementation after mobile constraints are settled

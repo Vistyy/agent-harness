@@ -73,18 +73,15 @@ Non-trivial planning needs `planning_critic` before planning-gate
 `quality_guard`. The critic is pressure, not approval. Record critic
 provenance before requesting `quality_guard`.
 
-## Doctrine Routing
+## Direct Inputs
 
-- apply `../code-simplicity/SKILL.md` as the default shaping lens for
-  non-trivial planning
-- if work changes boundaries or ownership, load
-  `../system-boundary-architecture/SKILL.md`
+- apply the simplicity lens while shaping non-trivial planning
+- close structural ownership and boundary choices before promotion
 - structural slices need explicit `System-Boundary Architecture Disposition`
-- workflow lifecycle is owned by
-  `../initiatives-workflow/references/initiatives-workflow.md`
-- packet schema is owned by
-  `../initiatives-workflow/references/wave-packet-contract.md`
-- delegation policy is owned by `../subagent-orchestration/SKILL.md`
+- use `../initiatives-workflow/references/initiatives-workflow.md` for wave
+  lifecycle states
+- use `../initiatives-workflow/references/wave-packet-contract.md` for packet
+  schema
 
 ## Output Shape
 

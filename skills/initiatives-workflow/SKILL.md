@@ -1,6 +1,6 @@
 ---
 name: initiatives-workflow
-description: "Use for wave/backlog workflow maintenance, delivery-map structure, packet schema upkeep, and closeout state cleanup; not for scope shaping or executing a wave."
+description: "Use for wave/backlog workflow maintenance, delivery-map structure, packet schema upkeep, and closeout state cleanup."
 ---
 
 # Initiatives Workflow
@@ -19,8 +19,6 @@ Use this skill for:
 - packet maintenance,
 - backlog/mobile-parity entry maintenance,
 - wave closeout state cleanup.
-
-Do not use it for scope shaping or wave execution.
 
 ## Working Rules
 
@@ -56,6 +54,6 @@ Helpers:
 
 ## Guardrails
 
-- keep policy changes in owner doc, not here
-- do not restate owner policy
+- keep policy changes in owner docs
+- keep this skill thin; link owner policy rather than restating it
 - when queue, packet, and backlog all move, update all in same change

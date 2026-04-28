@@ -34,9 +34,7 @@ Coverage:
 | `documentation-stewardship` | durable doc placement and single source of truth | Clean. |
 | `executing-plans` | execution of approved standalone plans | Clean after relative owner links. |
 | `flutter-expert` | Flutter/Dart implementation mechanics | Clean after description compaction; routes design/mobile UX to owner skills. |
-| `github-diagnostics` | read-only GitHub diagnostics | Clean. |
 | `harness-governance` | harness architecture, skill architecture, adapter/install posture | Clean. Broad because it owns the harness repo boundary. |
-| `implementation-decision-ledger` | minor execution-local decision trace | Clean after description compaction. |
 | `initiatives-workflow` | wave/backlog lifecycle and packet maintenance | Clean. It references planning/review/delegation owners without restating their full doctrine. |
 | `just-recipe-routing` | choosing `just` recipes and quality tiers | Clean after description compaction. |
 | `mobile-design` | mobile-specific UX constraints and validation posture | Cleaned reference placement. Watch item: `mobile-backend` and `mobile-testing` references are broad but conditional; split only if they become independently triggered skills. |
@@ -56,6 +54,7 @@ Coverage:
 | `verification-before-completion` | fresh proof before completion claims and quality gate selection | Clean. It routes runtime mechanics, testing doctrine, and review fields to owners. |
 | `wave-autopilot` | executing one execution-ready wave packet | Clean after relative owner links. Its implementer/check_runner mentions are execution workflow, not role doctrine. |
 | `webapp-testing` | browser-visible runtime proof mechanics | Clean. It consumes runtime-proof/evidence contracts and project runtime recipes. |
+| `workflow-feedback` | project workflow issue and improvement ledger capture | Clean. Broad trigger is intentional; body stays lean and routes durable harness promotion to `harness-governance`. |
 | `writing-plans` | standalone implementation plan authoring | Clean after relative owner links. |
 
 ## Reference And Adapter Disposition
@@ -65,7 +64,6 @@ Coverage:
 | `code-review/references/review-governance.md` | Clean. It owns review modes/approval semantics; role names are part of that topology. |
 | `documentation-stewardship/references/**` | Clean. Owns single-source and domain-language doctrine. |
 | `flutter-expert/references/**` | Clean. Flutter-specific mechanics only. |
-| `github-diagnostics/references/**` | Clean. Read-only GitHub recipes only. |
 | `harness-governance/references/skill-architecture.md` | Clean. Owns skill-authoring policy. |
 | `initiatives-workflow/references/**` and assets | Clean but naturally template-heavy. Assets intentionally use project-facing repo-root examples. |
 | `mobile-design/references/**` | Cleaned placement. Content is conditional; no immediate split unless backend/testing/performance use independently. |
