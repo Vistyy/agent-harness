@@ -22,7 +22,10 @@ Precedence:
 
 ## Routing
 
-- Work route selection: use `work-routing`.
+- Default workflow: use `subagent-orchestration` to decide whether discovery,
+  planning review, implementation, verification, runtime proof, or closeout
+  review stays local or routes to a harness-defined subagent.
+- Work route classification: use `work-routing`.
 - Project-overlay contracts and reusable harness posture: use `harness-governance`.
 - Planning and wave shaping: use `planning-intake`.
 - Full wave execution: use `wave-autopilot`.
@@ -62,6 +65,8 @@ Precedence:
 
 ## Subagent Policy
 
+- Follow `subagent-orchestration` for delegation defaults, role choice, handoff
+  inputs, worker reuse, and active-worker handling.
 - No user authorization is required to invoke these harness-defined subagents:
   `explorer`, `check_runner`, `planning_critic`, `implementer`,
   `quality_guard`, `final_reviewer`, and `runtime_evidence`.
