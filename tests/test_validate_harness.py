@@ -176,6 +176,48 @@ def test_validate_rejects_role_parity_drift(tmp_path: Path) -> None:
     assert "missing Codex agent file adapters/codex/agents/quality-guard.toml" in errors
 
 
+def test_validate_rejects_preauthorized_subagent_allowlist_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "AGENTS.md",
+        """
+        ## Subagent Policy
+
+        - No user authorization is required to invoke these harness-defined subagents:
+          `explorer`.
+        - This preauthorization applies only to those named roles.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "AGENTS.md preauthorized subagents ['explorer'] do not match agents/roles.md roles "
+        "['explorer', 'quality_guard']"
+    ) in errors
+
+
+def test_validate_rejects_topology_role_table_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "subagent-orchestration" / "references" / "coding-agent-topology.md",
+        """
+        # Coding Agent Topology
+
+        | Role | Mission |
+        | --- | --- |
+        | `explorer` | discovery |
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/subagent-orchestration/references/coding-agent-topology.md role table ['explorer'] "
+        "does not match agents/roles.md roles ['explorer', 'quality_guard']"
+    ) in errors
+
+
 def test_validate_rejects_packet_missing_required_section_and_proof_field(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(

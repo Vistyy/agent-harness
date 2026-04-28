@@ -66,6 +66,10 @@ PROOF_ROW_REQUIRED_KEYS = (
     "status",
 )
 WAVE_STATUSES = {"discovery-required", "execution-ready", "done", "retired"}
+PREAUTHORIZED_SUBAGENT_SENTINEL = (
+    "No user authorization is required to invoke these harness-defined subagents:"
+)
+PREAUTHORIZED_SUBAGENT_END = "This preauthorization applies only to those named roles."
 
 
 class FrontmatterError(ValueError):
@@ -393,6 +397,60 @@ def _parse_roles_markdown(root: Path) -> tuple[set[str], list[str]]:
     return roles, []
 
 
+def _extract_preauthorized_roles(path: Path, root: Path) -> tuple[set[str], list[str]]:
+    text = path.read_text(encoding="utf-8")
+    if PREAUTHORIZED_SUBAGENT_SENTINEL not in text:
+        return set(), [f"{path.relative_to(root)} missing named preauthorized subagent allowlist"]
+    start = text.index(PREAUTHORIZED_SUBAGENT_SENTINEL)
+    end = text.find(PREAUTHORIZED_SUBAGENT_END, start)
+    if end == -1:
+        return set(), [f"{path.relative_to(root)} missing preauthorized subagent boundary text"]
+    block = text[start:end]
+    roles = set(re.findall(r"`([a-z0-9_]+)`", block))
+    if not roles:
+        return roles, [f"{path.relative_to(root)} preauthorized subagent allowlist is empty"]
+    return roles, []
+
+
+def _extract_topology_roles(path: Path, root: Path) -> tuple[set[str], list[str]]:
+    text = path.read_text(encoding="utf-8")
+    roles = set(re.findall(r"^\| `([a-z0-9_]+)` \|", text, re.MULTILINE))
+    if not roles:
+        return roles, [f"{path.relative_to(root)} role table defines no roles"]
+    return roles, []
+
+
+def _validate_subagent_allowlist(root: Path, roles: set[str]) -> list[str]:
+    errors: list[str] = []
+    if not roles:
+        return errors
+    sources = [
+        root / "AGENTS.md",
+        root / "skills" / "subagent-orchestration" / "SKILL.md",
+    ]
+    for path in sources:
+        if not path.is_file():
+            continue
+        preauthorized, source_errors = _extract_preauthorized_roles(path, root)
+        errors.extend(source_errors)
+        if preauthorized and preauthorized != roles:
+            errors.append(
+                f"{path.relative_to(root)} preauthorized subagents {sorted(preauthorized)} "
+                f"do not match agents/roles.md roles {sorted(roles)}"
+            )
+
+    topology = root / "skills" / "subagent-orchestration" / "references" / "coding-agent-topology.md"
+    if topology.is_file():
+        topology_roles, topology_errors = _extract_topology_roles(topology, root)
+        errors.extend(topology_errors)
+        if topology_roles and topology_roles != roles:
+            errors.append(
+                f"{topology.relative_to(root)} role table {sorted(topology_roles)} "
+                f"does not match agents/roles.md roles {sorted(roles)}"
+            )
+    return errors
+
+
 def _load_toml(path: Path, root: Path) -> tuple[dict[str, object], list[str]]:
     try:
         return tomllib.loads(path.read_text(encoding="utf-8")), []
@@ -406,6 +464,7 @@ def _validate_role_parity(root: Path) -> list[str]:
     errors.extend(role_errors)
     if not roles:
         return errors
+    errors.extend(_validate_subagent_allowlist(root, roles))
 
     config_path = root / "adapters" / "codex" / "config.toml"
     config, config_errors = _load_toml(config_path, root) if config_path.is_file() else ({}, ["adapters/codex/config.toml missing"])

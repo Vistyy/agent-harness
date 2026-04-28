@@ -65,3 +65,17 @@ There is no active execution plan in this file.
 ## Active Queue Status
 
 Active work remains owned by `docs-ai/current-work/delivery-map.md`.
+
+## Follow-On Audit - Skill Routing Policy Shift
+
+Reviewed durable docs after the policy change that skill bodies should describe
+their own capability/workflow rather than acting as routing indexes.
+
+Disposition:
+
+- Ordinary skill entrypoints no longer contain `Related Skills`, `Owner Map`,
+  `Owner Routing`, or `Cross-Skill Routing` sections.
+- Remaining owner maps live in reference docs or the dedicated `work-routing`
+  skill, where the map is the artifact's direct purpose.
+- Added `harness-governance/references/skill-evaluation.md` as a lightweight
+  starting point for future skill behavioral evals.

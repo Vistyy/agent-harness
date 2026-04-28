@@ -22,6 +22,10 @@ If the ledger is missing, create it from:
 
 - `assets/workflow-feedback-ledger.md`
 
+For example entries, use:
+
+- `references/ledger-entry-examples.md`
+
 Keep entries compact:
 
 - date

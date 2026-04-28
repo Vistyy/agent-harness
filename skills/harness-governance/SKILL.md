@@ -54,6 +54,9 @@ or validating reusable skills.
 Load `references/skill-invocation-cost.md` when auditing broad entrypoints or
 proposing a new routing skill.
 
+Load `references/skill-evaluation.md` when proposing or implementing
+behavioral evals for skill trigger, workflow, or output regressions.
+
 ## Boundary
 
 Keep this skill focused on reusable harness governance, project overlays,
