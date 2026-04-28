@@ -134,6 +134,23 @@ Hybrid rule:
   when owner skills/docs already close the approach
 - require one testing-strategy row per changed persistent test file
 
+`quality_guard` handoff:
+- pass the binding user objective, active plan/packet anchor when any, changed
+  slice, touched owner/component, proof claim, and artifacts
+- name known risks, suspected weak outcomes, or successor-owner concerns
+- ask for `APPROVE` or `REJECT` against the objective, not only packet
+  completion, and to reject proxy completion, objective narrowing, or
+  unacceptable touched/successor-owner integrity
+
+`final_reviewer` handoff:
+- pass the binding user objective, active plan/packet anchor when any, full
+  changed slice, touched owner/component, proof claim, and artifacts
+- name known risks, prior review dispositions, suspected weak outcomes, and any
+  successor-owner concerns
+- ask for closeout verdict against the objective and review governance,
+  treating planning and `quality_guard` approvals as history, not final
+  approval
+
 `runtime_evidence` handoff:
 - pass exact runtime recipe or active runtime target
 - name material branches or states to exercise
