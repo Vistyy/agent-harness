@@ -90,6 +90,7 @@ Task cards must include:
 - outcome
 - in scope / out of scope
 - owned files and surfaces
+- touched owner/component integrity for non-trivial work
 - locked invariants
 - allowed local implementer decisions
 - stop-and-handback triggers
@@ -150,3 +151,9 @@ Track only:
 
 Do not invent extra task states to carry nuance that belongs in proof rows,
 blocker entries, or evidence notes.
+
+Accepted touched-component debt must live under `technical debt and deferred
+follow-up` and link a backlog detail file. The entry must include owner,
+affected files/surfaces, accepted `code-simplicity` must-block signals, risk,
+removal condition, and the explicit user-acceptance note. Approval or closeout
+is invalid if accepted debt has no backlog link.

@@ -23,6 +23,14 @@ owner doc plus one directly consuming skill surface.
 | `skills/code-review/references/review-governance.md` | review-governance | policy wording owner |
 | `skills/code-review/SKILL.md` | code-review skill | consumer wording must align to owner |
 
+## Touched Owner Integrity
+
+- touched owner/component: `skills/code-review/references/review-governance.md`
+- highest expected scope: `file`
+- touched-component integrity: `acceptable`
+- must-block signals: `none`
+- accepted-debt backlog link: `none`
+
 ## Implementation Tasks
 
 ### 1. `tighten-owner-wording`

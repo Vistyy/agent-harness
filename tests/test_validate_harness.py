@@ -52,11 +52,11 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
         )
         write(
             root / "adapters" / "codex" / "agents" / f"{role.replace('_', '-')}.toml",
-            f'name = "{role}"\n',
+            f'name = "{role}"\n# touched-component integrity gate\n',
         )
         write(
             root / "adapters" / "github-copilot" / "agents" / f"{role}.agent.md",
-            f"---\nname: {role}\n---\n",
+            f"---\nname: {role}\n---\n\nTouched-component integrity gate.\n",
         )
     write(root / "adapters" / "codex" / "config.toml", "\n".join(config_blocks))
 
@@ -68,6 +68,33 @@ def valid_packet() -> str:
     ## Scope And Execution Posture
 
     ## Task Plan
+
+    | Task slug | State | Dependencies | Outcome summary | Proof rows |
+    | --- | --- | --- | --- | --- |
+    | `example/task` |  | `none` | `Example outcome.` | `P1` |
+
+    ### `example/task`
+
+    - Outcome:
+      - `Example outcome.`
+    - In scope:
+      - `Example scope.`
+    - Out of scope:
+      - `none`
+    - Owned files and surfaces:
+      - `example.md`
+    - Touched owner/component integrity:
+      - `acceptable`
+    - Locked invariants:
+      - `none`
+    - Allowed local implementer decisions:
+      - `parent-only`
+    - Stop-and-handback triggers:
+      - `parent-only`
+    - Proof rows:
+      - `P1`
+    - Deferred follow-up:
+      - `none`
 
     ## Proof Plan
 
@@ -218,6 +245,39 @@ def test_validate_rejects_topology_role_table_drift(tmp_path: Path) -> None:
     ) in errors
 
 
+def test_validate_rejects_binding_simplicity_lens_language(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(tmp_path / "AGENTS.md", "Simplicity lens: use `code-simplicity`.\n")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "AGENTS.md must call code-simplicity a gate, not a lens" in errors
+
+
+def test_validate_rejects_agent_missing_touched_component_gate(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml",
+        'name = "quality_guard"\n',
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "adapters/codex/agents/quality-guard.toml missing touched-component integrity gate" in errors
+
+
+def test_validate_rejects_incomplete_touched_owner_definition(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(tmp_path / "skills" / "planning-intake" / "references" / "intake-contract.md", "Touched owner uses contract, state, lifecycle, or proof.\n")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/planning-intake/references/intake-contract.md has incomplete touched-owner definition; include design and workflow"
+        in errors
+    )
+
+
 def test_validate_rejects_packet_missing_required_section_and_proof_field(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
@@ -245,6 +305,136 @@ def test_validate_rejects_packet_missing_required_section_and_proof_field(tmp_pa
 
     assert "docs-ai/current-work/bad-wave/wave-execution.md missing section 'Execution State'" in errors
     assert "docs-ai/current-work/bad-wave/wave-execution.md proof_plan row 1 missing task_slug" in errors
+
+
+def test_validate_rejects_wave_task_card_missing_touched_integrity(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md",
+        """
+        # Wave bad-wave Execution Packet
+
+        ## Scope And Execution Posture
+
+        ## Task Plan
+
+        ### `example/task`
+
+        - Outcome:
+          - `Example outcome.`
+        - In scope:
+          - `Example scope.`
+        - Out of scope:
+          - `none`
+        - Owned files and surfaces:
+          - `example.md`
+        - Locked invariants:
+          - `none`
+        - Allowed local implementer decisions:
+          - `parent-only`
+        - Stop-and-handback triggers:
+          - `parent-only`
+        - Proof rows:
+          - `P1`
+        - Deferred follow-up:
+          - `none`
+
+        ## Proof Plan
+
+        ```json
+        {
+          "proof_plan": [
+            {
+              "proof_id": "P1",
+              "task_slug": "example/task",
+              "anchor_ids": ["A1"],
+              "claim": "Example claim.",
+              "material_variants": ["none"],
+              "proof_classification": "automated-suite-provable",
+              "owner_layer": "static-check",
+              "exact_proof": ["uv run python scripts/validate_harness.py"],
+              "expected_evidence": ["harness validation passed"],
+              "counterfactual_regression_probe": {
+                "weaker_implementation": "Missing validation.",
+                "failing_assertion_or_artifact": "validate_harness fails"
+              },
+              "status": "planned"
+            }
+          ]
+        }
+        ```
+
+        ## Execution State
+        """,
+    )
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' missing touched owner/component integrity"
+        in errors
+    )
+
+
+def test_validate_rejects_wave_packet_with_proof_rows_but_no_task_cards(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md",
+        """
+        # Wave bad-wave Execution Packet
+
+        ## Scope And Execution Posture
+
+        ## Task Plan
+
+        | Task slug | State | Dependencies | Outcome summary | Proof rows |
+        | --- | --- | --- | --- | --- |
+        | `example/task` |  | `none` | `Example outcome.` | `P1` |
+
+        ## Proof Plan
+
+        ```json
+        {
+          "proof_plan": [
+            {
+              "proof_id": "P1",
+              "task_slug": "example/task",
+              "anchor_ids": ["A1"],
+              "claim": "Example claim.",
+              "material_variants": ["none"],
+              "proof_classification": "automated-suite-provable",
+              "owner_layer": "static-check",
+              "exact_proof": ["uv run python scripts/validate_harness.py"],
+              "expected_evidence": ["harness validation passed"],
+              "counterfactual_regression_probe": {
+                "weaker_implementation": "Missing validation.",
+                "failing_assertion_or_artifact": "validate_harness fails"
+              },
+              "status": "planned"
+            }
+          ]
+        }
+        ```
+
+        ## Execution State
+        """,
+    )
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/bad-wave/wave-execution.md missing task cards" in errors
+    assert (
+        "docs-ai/current-work/bad-wave/wave-execution.md proof_plan row 1 task_slug 'example/task' has no matching task card"
+        in errors
+    )
 
 
 def test_validate_enforces_wave_lifecycle_from_status_and_packet_existence(tmp_path: Path) -> None:

@@ -11,96 +11,22 @@ Owns product-facing UI direction, parity decisions, composition quality, and
 copy posture. Project strategy, language policy, app paths, and delivery timing
 stay in the project overlay.
 
-Keep design decisions in this skill and project-owned design sources.
+## Required References
 
-## Read First
+Read project overlay docs first for surface discovery, product language,
+delivery timing, design archetypes, and design-fidelity governance when present.
 
-- project overlay docs for surface discovery, product language, delivery
-  timing, design archetypes, and design-fidelity governance when present
-- `references/parity-dimensions.md`
-- `references/atomic-design.md`
-- `references/text-constraints.md`
+Read `references/ui-direction-workflow.md` before planning or editing
+end-user UI. It owns scope, quality bar, taste pressure, required loop, and
+missing-source-of-truth handling.
 
-Continue after you can restate the relevant invariants.
+Read `references/parity-dimensions.md` when cross-client parity, staged
+delivery, or UX divergence matters.
 
-## Scope
+Read `references/atomic-design.md` when mapping route work to reusable
+composition layers.
 
-In:
+Read `references/text-constraints.md` when copy, labels, truncation, or text
+fit matters.
 
-- screen, layout, component styling and composition
-- shell or nav hierarchy and density
-- empty, loading, error state UX
-- end-user copy and microcopy
-- cross-client parity decisions for UX behavior and interaction posture
-- web-first handoff readiness and mobile follow-up assumptions
-
-Boundary:
-
-- API contracts, backend semantics, and auth/session internals stay with their
-  project owners.
-- Framework mechanics start after UI direction is set.
-- Mobile platform mechanics start after cross-platform UI direction is set.
-
-## Quality Bar
-
-- Reject any surface matching project design-fidelity anti-patterns.
-- Reject monolithic single-scroll editing surfaces when stateful sectioning is
-  needed.
-- Reject inconsistent nav semantics between web and mobile.
-- Reject browser-native confirm/prompt patterns in end-user web flows when
-  in-app patterns exist.
-- Reject hardcoded UX placeholders like fixed recent-search tags.
-- Accept only when hierarchy is intentional, density fits the target, parity is
-  explicit, reusable composition beats route-local one-offs, and relevant IA
-  patterns have `adopt` or `reject` rationale.
-
-## Taste-Pressure Lens
-
-Use taste pressure as a bounded design-quality lens, not a second skill or
-scorecard.
-
-- Route visual ambition through the approved archetype, surface brief,
-  accessibility, parity, product scope, performance, and runtime proof.
-- Prefer clarity, density, accessibility, and consistency on transactional
-  app surfaces when cinematic novelty would weaken the task.
-- Use aggressive or high-variance composition only when the approved archetype
-  and surface brief explicitly call for it.
-- When archetype and brief leave visual density, motion intensity, or
-  composition variance open, require those dials to be named before editing.
-- Use the project design-fidelity governance reference for scoring and anti-pattern names.
-
-## Required Loop
-
-1. Satisfy the project-owned discovery gate when UI quality or product direction is in scope. If required context is missing, stop.
-2. Read the project design-implementation posture when the change needs an
-   implementation loop or handoff posture.
-3. Choose one approved archetype or record a justified exception before
-   editing.
-4. Write parity matrix before editing: must-match behavior, state, copy, and
-   component semantics; allowed divergence is layout/navigation structure. For
-   staged cross-client delivery, record follower-surface match points and avoid
-   browser-only assumptions.
-5. Map route-level work to atomic layers and identify reuse/new reusable blocks.
-6. Run density/layout pass before polish: remove oversized shell chrome and
-   improve scanability/spacing rhythm.
-7. For IA-affecting changes, evaluate relevant established patterns and record
-   `adopt` or `reject` in planning artifacts.
-8. When claiming hierarchy, density, shell, or UI quality, define `3-7`
-   design-intent anchors per the project surface-discovery contract.
-9. Use existing project tokens, components, patterns, and design-system
-   contracts. No ad hoc styling values.
-10. Runtime UI proof must use the project design-fidelity governance terms for
-    verdicts.
-11. Web route ownership changes must close route/state authority before
-    editing.
-
-## If Source Of Truth Is Missing
-
-If missing truth is app main draw, shell ownership, or core loop, stop bounded
-surface work and route into foundation-reset discovery per
-the project surface-discovery contract.
-
-1. Record exact missing or contradictory rule.
-2. Point to closest doc that should own it.
-3. Propose smallest source-of-truth update.
-4. Wait for confirmation before changing UI behavior.
+Do not stop at this file for UI direction work.

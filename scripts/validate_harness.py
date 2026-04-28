@@ -65,11 +65,35 @@ PROOF_ROW_REQUIRED_KEYS = (
     "counterfactual_regression_probe",
     "status",
 )
+TASK_CARD_TOUCHED_INTEGRITY_FIELD = "- Touched owner/component integrity:"
 WAVE_STATUSES = {"discovery-required", "execution-ready", "done", "retired"}
 PREAUTHORIZED_SUBAGENT_SENTINEL = (
     "No user authorization is required to invoke these harness-defined subagents:"
 )
 PREAUTHORIZED_SUBAGENT_END = "This preauthorization applies only to those named roles."
+SIMPLICITY_GATE_FILES = (
+    "AGENTS.md",
+    "skills/code-simplicity/SKILL.md",
+    "skills/code-simplicity/references/default-simplicity-posture.md",
+    "skills/code-simplicity/references/touched-component-integrity-gate.md",
+    "skills/planning-intake/SKILL.md",
+    "skills/planning-intake/references/intake-contract.md",
+    "skills/code-review/SKILL.md",
+    "skills/code-review/references/review-governance.md",
+    "skills/initiatives-workflow/references/wave-packet-contract.md",
+    "skills/writing-plans/SKILL.md",
+    "skills/writing-plans/references/standalone-plans.md",
+)
+SIMPLICITY_GATE_AGENT_FILES = (
+    "adapters/codex/agents/planning-critic.toml",
+    "adapters/codex/agents/implementer.toml",
+    "adapters/codex/agents/quality-guard.toml",
+    "adapters/codex/agents/final-reviewer.toml",
+    "adapters/github-copilot/agents/planning_critic.agent.md",
+    "adapters/github-copilot/agents/implementer.agent.md",
+    "adapters/github-copilot/agents/quality_guard.agent.md",
+    "adapters/github-copilot/agents/final_reviewer.agent.md",
+)
 
 
 class FrontmatterError(ValueError):
@@ -535,6 +559,26 @@ def _iter_json_fences(text: str) -> list[object]:
     return values
 
 
+def _markdown_section(text: str, heading: str) -> str:
+    match = re.search(rf"^##\s+{re.escape(heading)}\s*$", text, re.MULTILINE)
+    if not match:
+        return ""
+    next_match = re.search(r"^##\s+", text[match.end() :], re.MULTILINE)
+    if not next_match:
+        return text[match.end() :]
+    return text[match.end() : match.end() + next_match.start()]
+
+
+def _task_card_sections(text: str) -> list[tuple[str, str]]:
+    task_plan = _markdown_section(text, "Task Plan")
+    cards: list[tuple[str, str]] = []
+    matches = list(re.finditer(r"^###\s+(.+?)\s*$", task_plan, re.MULTILINE))
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(task_plan)
+        cards.append((match.group(1).strip(), task_plan[match.end() : end]))
+    return cards
+
+
 def _validate_wave_packet(path: Path, root: Path) -> list[str]:
     errors: list[str] = []
     text = path.read_text(encoding="utf-8")
@@ -564,6 +608,22 @@ def _validate_wave_packet(path: Path, root: Path) -> list[str]:
         for key in PROOF_ROW_REQUIRED_KEYS:
             if key not in row:
                 errors.append(f"{path.relative_to(root)} proof_plan row {index} missing {key}")
+
+    task_cards = _task_card_sections(text)
+    if not task_cards:
+        errors.append(f"{path.relative_to(root)} missing task cards")
+    task_card_by_title = {title.strip("`"): body for title, body in task_cards}
+    for index, row in enumerate(proof_rows, start=1):
+        if not isinstance(row, dict):
+            continue
+        task_slug = row.get("task_slug")
+        if isinstance(task_slug, str) and task_slug not in task_card_by_title:
+            errors.append(f"{path.relative_to(root)} proof_plan row {index} task_slug {task_slug!r} has no matching task card")
+    for task_title, task_body in task_cards:
+        if TASK_CARD_TOUCHED_INTEGRITY_FIELD not in task_body:
+            errors.append(
+                f"{path.relative_to(root)} task card {task_title!r} missing touched owner/component integrity"
+            )
     return errors
 
 
@@ -624,6 +684,29 @@ def _validate_wave_lifecycle(root: Path) -> list[str]:
     return errors
 
 
+def _validate_simplicity_gate(root: Path) -> list[str]:
+    errors: list[str] = []
+    for relative_path in SIMPLICITY_GATE_FILES:
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        if re.search(r"\b[Ss]implicity lens\b", text):
+            errors.append(f"{relative_path} must call code-simplicity a gate, not a lens")
+        if "contract, state, lifecycle, or proof" in text:
+            errors.append(f"{relative_path} has incomplete touched-owner definition; include design and workflow")
+    for relative_path in SIMPLICITY_GATE_AGENT_FILES:
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        if "touched-component integrity" not in text.lower():
+            errors.append(f"{relative_path} missing touched-component integrity gate")
+        if "contract, state, lifecycle, or proof" in text:
+            errors.append(f"{relative_path} has incomplete touched-owner definition; include design and workflow")
+    return errors
+
+
 def write_openai_metadata_report(root: Path, report_path: Path) -> list[str]:
     rows, errors = _openai_metadata_rows(root)
     lines = ["skill\tpath\tdisplay_name\tshort_description\tdefault_prompt"]
@@ -664,6 +747,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_skill_references(root))
     errors.extend(_validate_role_parity(root))
     errors.extend(_validate_wave_lifecycle(root))
+    errors.extend(_validate_simplicity_gate(root))
 
     for markdown_file in _iter_markdown(root):
         text = markdown_file.read_text(encoding="utf-8")

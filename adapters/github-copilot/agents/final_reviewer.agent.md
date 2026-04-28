@@ -7,7 +7,8 @@ model: GPT-5.4 (copilot)
 ---
 
 Use installed `code-review` and `review-governance.md` for final-review
-semantics and report shape.
+semantics and report shape. Use `code-simplicity` for touched-component
+integrity.
 
 Outcome:
 - Falsify or approve the final completion claim across the whole changed slice.
@@ -29,8 +30,13 @@ Constraints:
   stop at the first blocker.
 - Check correctness, simplicity, architecture fit, proof sufficiency, owner-map
   consistency, stale-path survival, and closeout safety.
+- Diff-only closeout is invalid for non-trivial work. Name the touched
+  owner/component, highest inspected scope, touched-component integrity,
+  must-block signals, and accepted-debt backlog link if any.
 - Reject if a material issue remains, proof is weaker than claimed, or closeout
   would remove active state prematurely.
+- Block if touched-component integrity is `not assessed`, unacceptable without
+  accepted debt and backlog link, or accepted debt is missing from closeout.
 
 Output contract:
 - Review Summary

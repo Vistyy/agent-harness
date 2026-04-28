@@ -8,6 +8,7 @@ This file owns:
 - when work should use a standalone plan instead of a wave
 - what makes a standalone plan execution-ready
 - required approval record for plan execution
+- touched owner/component integrity requirements for standalone planning
 - how `executing-plans` and `implementer` may trust an approved standalone plan
 
 This file does not own:
@@ -46,6 +47,7 @@ Do not store examples, templates, scratch planning, or policy docs there.
 
 A standalone plan is execution-ready only when it closes:
 - scope and owned surfaces
+- touched owner/component integrity for non-trivial work
 - material behavior, migration, runtime, and verification decisions
 - exact files or paths to change
 - ordered implementation tasks
@@ -64,6 +66,7 @@ Each standalone plan must include:
 - short architecture summary
 - `Decision Closure Check`
 - `Scope Coverage Plan`
+- `Touched Owner Integrity`
 - ordered implementation tasks with exact paths
 - verification commands and expected evidence per task
 - required doc/backlog follow-up
@@ -71,6 +74,23 @@ Each standalone plan must include:
 
 Templates and examples for this contract live under
 `../assets/`.
+
+## Touched Owner Integrity
+
+Non-trivial standalone plans must name:
+- touched owner/component
+- highest expected scope to inspect
+- touched-component integrity: `acceptable`, `unacceptable`, or `not assessed`
+- must-block `code-simplicity` signals, or `none`
+- accepted-debt backlog link, or `none`
+
+Select the smallest owner/component whose contract, state, lifecycle, design,
+workflow, or proof the change touches. Expand only to shared authority required
+by the change.
+
+`not assessed` means the plan is unapproved. Unacceptable integrity requires
+explicit user acceptance after the blocker presentation plus a backlog item with
+owner, risk, and removal condition before approval.
 
 ## Approval Record
 
@@ -98,6 +118,8 @@ Rules:
 - missing `## Approval Record` means the plan is unapproved
 - any disposition other than `APPROVE` means execution must stop and return to
   planning
+- an approval record is invalid when touched-component integrity is
+  `not assessed` or when accepted touched-component debt lacks a backlog link
 - `executing-plans` may trust only `plan_approval`; the same `## Approval Record`
   block must also carry `planning_critic` provenance at top level
 - approval must not be inferred from surrounding prose or from a separate

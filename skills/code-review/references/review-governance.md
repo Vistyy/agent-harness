@@ -8,7 +8,7 @@ Owner for approval boundaries, disposition, and completion claims.
 - `code-review`: isolated review wrapper and report shape.
 - `final_reviewer`: final isolated closeout reviewer role.
 - `review-address`: pre-edit review-feedback triage.
-- `code-simplicity`: simplicity lens.
+- `code-simplicity`: canonical simplicity gate and bad-shape signal owner.
 - `adversarial-review`: failure-mode lens.
 - `../../verification-before-completion/references/quality-gate-selection.md`:
   quality-tier semantics.
@@ -53,6 +53,24 @@ Owner for approval boundaries, disposition, and completion claims.
   reason code gate, `required-proof`, and `durable-gain` checks.
 - No approval based on `better than before`, `moved to the right owner`, or
   `good enough for now`.
+- Diff-myopic review is invalid for non-trivial work. Review the touched
+  owner/component, not only changed lines.
+- Touched owner/component means the smallest owner whose contract, state,
+  lifecycle, design, workflow, or proof the change touches; expand only to
+  shared authority required by the change.
+- Pre-existing code is not a defense when the change touches, depends on,
+  preserves, extends, or proves that owner/component.
+- `unacceptable touched-component integrity` means `code-simplicity` found one
+  or more must-block bad-shape signals with anchored evidence inside the
+  touched owner/component and no accepted-debt backlog link covers it.
+- A reviewer must ask whether the observed defect is only a symptom of
+  touched-component shape. If yes, the owner/component problem is in scope.
+- `not assessed` touched-component integrity is allowed only on `REJECT` or
+  `BLOCKED` reports. It is never valid on approval or closeout for
+  non-trivial work.
+- Accepted touched-component debt requires explicit user acceptance after the
+  blocker, risk, recommended reshape, and proposed backlog path were presented.
+  The approval or closeout record must link the backlog item.
 - Boundary, typing, and code-shape approval must satisfy the applicable
   `system-boundary-architecture` owner docs. For boundary-changing review,
   reject unless the review can name one owner, with file evidence, for each
@@ -78,6 +96,7 @@ Required inputs:
 - packet draft or equivalent execution breakdown,
 - explicit starting points and frozen decisions,
 - `Proof Plan`,
+- touched owner/component integrity assessment for non-trivial work,
 - authority map when structural, hotspot, or state-authority trigger applies.
 
 Promotion rule:
@@ -100,6 +119,8 @@ Required inputs:
 - chunk or task-card boundary being reviewed,
 - changed public surfaces,
 - proof artifacts reviewed,
+- touched owner/component, highest inspected scope, integrity verdict,
+  must-block signals, and accepted-debt backlog link if any,
 - authority map when structural, hotspot, or state-authority trigger applies,
 - explicit approve or reject ask.
 
@@ -119,6 +140,7 @@ Rules:
 - review the whole slice as one change,
 - focus on breadth, cross-surface interaction, architecture coherence, and plan alignment,
 - enumerate all meaningful findings,
+- include touched owner/component integrity in the closeout verdict,
 - if the diff changed after an earlier blocked review, restart from fresh context,
 - treat planning-gate and in-thread `quality_guard` approvals as history, not
   final approval,
@@ -136,6 +158,9 @@ Wave closeout rule:
 
 Any message claiming done, complete, ready, or approved must include:
 - `In-thread quality_guard:` actual verdict plus reviewed scope
+- `Touched component integrity:` `acceptable | unacceptable | not assessed`,
+  with touched owner/component, highest inspected scope, must-block signals, and
+  accepted-debt backlog link when present
 - `Verification:` fresh proving command or artifact
 - `Final review:` `APPROVED | BLOCKED | PENDING SEPARATE REVIEW`
 - For non-trivial work, changed surfaces, required `planning_critic` verdict,

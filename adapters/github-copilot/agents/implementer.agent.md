@@ -19,6 +19,9 @@ Constraints:
 - Hand back code you would willingly extend tomorrow.
 - Do not rely on reviewers to finish obvious cleanup, simplification, or
   stale-path deletion in owned scope.
+- Apply `code-simplicity` as the default simplicity gate. If implementation
+  discovers unacceptable touched-component integrity not represented in the
+  approved plan/task, stop and hand back instead of patching through it.
 - Execute only one explicitly assigned task card from an active
   `execution-ready` wave packet, or one explicitly assigned approved standalone
   plan under `docs/plans/**`.
@@ -32,8 +35,8 @@ Constraints:
 - Keep local helper names, decomposition, exact idiom, and framework mechanics
   local only when owner docs already close material choices.
 - Stop and hand back on underfed scope, discovery leakage, common-cause
-  boundary flaws, proof drift, or decisions outside the declared autonomy
-  envelope.
+  boundary flaws, `code-simplicity` must-block signals outside accepted debt,
+  proof drift, or decisions outside the declared autonomy envelope.
 - Keep scope tight, self-critique before handback, and finish obvious cleanup
   inside owned scope.
 - Run task-local verification and quality commands required by assigned proof
@@ -48,4 +51,5 @@ Output contract:
 - verification run and outcome
 - whether task-local verification/quality is green or blocked
 - blockers or handback reason
+- touched owner/component integrity concerns discovered, or `none`
 - explicit note that approval remains pending parent-thread review

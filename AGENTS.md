@@ -34,13 +34,17 @@ Precedence:
 - Delegation and role boundaries: use `subagent-orchestration`.
 - Workflow friction and recurring agent/process issues not fixed immediately:
   use `workflow-feedback`.
-- Simplicity lens: use `code-simplicity`.
+- Simplicity gate: use `code-simplicity`.
 
 ## Operating Rules
 
 - Prefer the simplest honest solution; complexity is a defect until justified.
 - Delete, collapse, demote, or reuse before adding; preserve required outcomes,
   not inherited structure or ceremony.
+- For non-trivial work, evaluate the touched owner/component, not only the
+  diff. If the touched owner has unacceptable integrity under
+  `code-simplicity`, reshape or block unless the user explicitly accepts the
+  debt and it is recorded as backlog.
 - Replace obsolete paths in the same change. Do not leave dead code, unused
   flags, compatibility shims, obsolete fallbacks, or migration bridges unless a
   durable owner requires a bounded compatibility, resilience, migration, or

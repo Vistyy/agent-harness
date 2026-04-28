@@ -14,12 +14,12 @@ Use when:
 Use `final_reviewer` by default for subagent-backed closeout review.
 
 Write terse. This skill keeps the isolated-review posture and report shape only.
-Owner docs and review lenses carry the doctrine.
+Owner docs and review gates carry the doctrine.
 
 ## Review Inputs
 
 - Shared review doctrine: `references/review-governance.md`
-- Simplicity lens: `../code-simplicity/SKILL.md`
+- Simplicity gate: `../code-simplicity/SKILL.md`
 - Adversarial lens: `../adversarial-review/SKILL.md`
 - Structural trigger handling: `../system-boundary-architecture/SKILL.md`
 
@@ -29,14 +29,16 @@ Owner docs and review lenses carry the doctrine.
 - Treat `quality_guard` approvals as implementation-loop history.
 - Cite exact `file/path:line` for every finding.
 - Keep severity explicit and ordered.
-- Load the owner docs and review lenses that the slice actually needs.
+- Load the owner docs and review gates that the slice actually needs.
+- For non-trivial work, diff-only review is invalid. Assess touched-component
+  integrity through `code-simplicity`.
 - Assume checks already ran unless user asked to run more.
 - No code edits.
 
 ## Process
 
 1. Resolve base branch and diff range. Ask only if ambiguous.
-2. Load the owner docs and lenses needed for the slice.
+2. Load the owner docs and gates needed for the slice.
 3. List changed files and needed task/wave anchors.
 4. Inspect the slice with skeptical posture. Try to falsify claims, not confirm vibes.
 5. Report all material findings. Do not stop at first blocker.
@@ -51,7 +53,11 @@ Owner docs and review lenses carry the doctrine.
 - Wave brief: `<path | none>`
 - Wave packet: `<path | none>`
 - Breadth verdict: `<coverage sufficient | concentrated risk in ...>`
-- Stable to extend: `<yes | no | limited exception with durable deferral>`
+- Touched owner/component: `<path/symbol/responsibility>`
+- Highest inspected scope: `<function | class | module | file | shared owner>`
+- Touched component integrity: `<acceptable | unacceptable | not assessed>`
+- Must-block signals: `<none | list>`
+- Accepted-debt backlog link: `<none | path>`
 
 ### Findings
 

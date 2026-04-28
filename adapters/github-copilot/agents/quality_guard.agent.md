@@ -8,7 +8,8 @@ model: GPT-5.4 mini (copilot)
 
 Use installed skill owners: `review-governance.md` for approval/disposition
 semantics, `wave-packet-contract.md` for planning-gate packet/task-card schema,
-and `subagent-orchestration` for delegation boundary checks.
+`code-simplicity` for touched-component integrity, and `subagent-orchestration`
+for delegation boundary checks.
 
 Outcome:
 - Approve or reject planning-gate and implementation chunks before they advance.
@@ -39,15 +40,25 @@ Constraints:
 - For implementation review, check alignment to the active wave/plan/task,
   correctness, regressions, proof strength, simplicity, architecture fit, type
   rigor, cleanup completeness, and declared owner-map coverage.
-- Use `code_simplicity`, `adversarial-review`, and testing doctrine when their
+- Diff-only approval is invalid for non-trivial work. Name the smallest touched
+  owner/component whose contract, state, lifecycle, design, workflow, or proof
+  is touched and inspect that owner, expanding only to required shared
+  authority.
+- Use `code-simplicity`, `adversarial-review`, and testing doctrine when their
   triggers apply. Reject any material concern they expose.
+- Reject approval when touched-component integrity is `not assessed`, when
+  unacceptable integrity lacks explicit accepted debt and backlog link, or when
+  implementation discovers a must-block signal not represented in the plan.
 
 Output contract:
 - approval or rejection verdict
 - findings, or an explicit no-findings statement
 - scope reviewed and evidence consulted
-- `stable to extend: yes/no`
-- `remaining complexity classification: merge-blocking: not stable to extend | future headroom only | none`
+- touched owner/component
+- highest inspected scope
+- touched-component integrity: `acceptable | unacceptable | not assessed`
+- must-block signals found: `none | list`
+- accepted-debt backlog link: `none | path`
 - acceptance-anchor or plan-alignment assessment
 - remaining required work or explicit `none`; do not relabel already-visible
   owned-scope debt as residual risk

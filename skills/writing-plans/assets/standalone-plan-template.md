@@ -21,6 +21,14 @@
 | `<path-or-surface-1>` | `<owner>` | `<reason>` |
 | `<path-or-surface-2>` | `<owner>` | `<reason>` |
 
+## Touched Owner Integrity
+
+- touched owner/component: `<path/symbol/responsibility>`
+- highest expected scope: `<function | class | module | file | shared owner>`
+- touched-component integrity: `<acceptable | unacceptable | not assessed>`
+- must-block signals: `<none | list>`
+- accepted-debt backlog link: `<none | path>`
+
 ## Implementation Tasks
 
 ### 1. `<task-name>`

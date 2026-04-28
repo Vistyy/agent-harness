@@ -33,9 +33,11 @@ Before promotion, check:
 - operational, observability, and idempotency posture
 - proof ownership/allocation
 - simplicity and necessity
+- touched owner/component integrity
 
 Record how substantive user asks are handled, what can be deleted or collapsed,
-and why any remaining complexity is necessary.
+the smallest owner/component whose contract, state, lifecycle, design,
+workflow, or proof is touched, and why any remaining complexity is necessary.
 
 ## Proof Allocation
 
@@ -87,3 +89,20 @@ reshape.
 
 For each substantive user ask, record whether planning keeps it, shrinks it,
 rewrites the approach, or defers it.
+
+## Touched Owner Integrity
+
+For non-trivial work, planning must record:
+- touched owner/component
+- highest expected scope to inspect
+- touched-component integrity: `acceptable`, `unacceptable`, or `not assessed`
+- must-block `code-simplicity` signals, or `none`
+- accepted-debt backlog link, or `none`
+
+Select the smallest owner/component whose contract, state, lifecycle, design,
+workflow, or proof the change touches. Expand only to shared authority required
+by the change.
+
+`not assessed` cannot promote to execution-ready. Unacceptable integrity cannot
+promote unless the user explicitly accepted the presented blocker and a backlog
+item with owner, risk, and removal condition is linked.

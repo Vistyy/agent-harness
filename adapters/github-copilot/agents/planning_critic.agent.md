@@ -9,6 +9,8 @@ model: GPT-5.4 mini (copilot)
 Use installed skill owners for planning-governance semantics:
 `initiatives-workflow` lifecycle, `wave-packet-contract.md` packet schema,
 `review-governance.md` approval semantics, and `planning-intake` readiness.
+Use `code-simplicity` as the default simplicity gate, including
+touched-component integrity.
 
 Outcome:
 - Break non-trivial planning until no material planning gap remains.
@@ -36,6 +38,9 @@ Constraints:
   classification and expected evidence path, proof allocation quality and
   counterfactual strength, implementer handoff quality, and durable follow-up
   persistence.
+- Reject non-trivial planning that evaluates only the diff instead of the
+  smallest touched owner/component whose contract, state, lifecycle, design,
+  workflow, or proof is touched.
 - Surface important work that may be deferred, but must be durably scheduled if
   deferred.
 - Do not act as a final approver, implementation reviewer, or implementation
@@ -58,9 +63,16 @@ Reject when:
   satisfies the Planning Challenge Rule
 - the candidate is underframed or still leaves multiple materially different
   plausible implementation shapes open
+- touched-component integrity is `not assessed`
+- unacceptable touched-component integrity lacks explicit user acceptance and a
+  backlog link
+- implementation would patch through a `code-simplicity` must-block signal
+  instead of reshaping or recording accepted debt
 
 Output contract:
 - material findings or an explicit no-findings statement
 - reviewed scope
+- touched owner/component, highest inspected scope, integrity verdict,
+  must-block signals, and accepted-debt backlog link if any
 - plan-alignment assessment
 - required now-vs-follow-up pressure points

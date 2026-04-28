@@ -59,6 +59,8 @@ Rules:
 - Owned files and surfaces:
   - `skills/initiatives-workflow/references/initiatives-workflow.md`
   - `skills/initiatives-workflow/assets/wave-execution.md`
+- Touched owner/component integrity:
+  - `acceptable; task touches one workflow owner and aligns owner doc, packet template, and proof rows.`
 - Starting files and symbols (optional):
   - `skills/initiatives-workflow/references/initiatives-workflow.md`
   - `skills/initiatives-workflow/assets/wave-execution.md`
@@ -94,6 +96,8 @@ Rules:
   - `skills/planning-intake/SKILL.md`
   - `skills/code-review/references/review-governance.md`
   - `adapters/codex/agents/planning-critic.toml`
+- Touched owner/component integrity:
+  - `acceptable; task touches planning/review governance surfaces and keeps proof allocation owned by the packet contract.`
 - Starting files and symbols (optional):
   - `skills/planning-intake/SKILL.md`
   - `skills/code-review/references/review-governance.md`

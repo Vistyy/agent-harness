@@ -2,6 +2,10 @@
 
 Use to choose test layer and avoid weak mobile validation.
 
+For live device or emulator runtime proof, use
+`../../mobileapp-testing/SKILL.md`. This reference owns design-facing mobile
+test posture; mobileapp-testing owns runtime execution mechanics.
+
 ## Strategy
 
 Primary rule:

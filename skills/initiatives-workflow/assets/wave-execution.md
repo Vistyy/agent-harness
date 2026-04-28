@@ -93,6 +93,8 @@ Allowed states:
   - `<what this task explicitly does not include>`
 - Owned files and surfaces:
   - `<files/components/routes this task may change>`
+- Touched owner/component integrity:
+  - `<acceptable | unacceptable with accepted-debt backlog link | tiny local fix exempt>`
 - Starting files and symbols (optional):
   - `<path + symbol or entrypoint>`
 - Existing patterns to follow (optional):
@@ -126,6 +128,8 @@ Allowed states:
   - `<...>`
 - Owned files and surfaces:
   - `<...>`
+- Touched owner/component integrity:
+  - `<acceptable | unacceptable with accepted-debt backlog link | tiny local fix exempt>`
 - Locked invariants:
   - `<...>`
   - or `none`
