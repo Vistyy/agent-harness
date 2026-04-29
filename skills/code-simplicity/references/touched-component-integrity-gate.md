@@ -39,6 +39,9 @@ owner shows one or more of:
 - `ownerless-compatibility`: fallback, shim, alternate path, migration bridge,
   or old/new coexistence survives without owner, protected surface, and removal
   condition.
+  When a successor owner or factory replaces an older entrypoint, remaining
+  production use of the old path is ownerless compatibility unless it has the
+  same explicit justification.
 
 If a local defect is a symptom of one of these signals, scope moves to the
 touched owner/component.
