@@ -210,9 +210,11 @@ def test_validate_rejects_preauthorized_subagent_allowlist_drift(tmp_path: Path)
         """
         ## Subagent Policy
 
-        - No user authorization is required to invoke these harness-defined subagents:
+        - The user explicitly authorizes use of the spawn/subagent tool for these
+          harness-defined roles when this `AGENTS.md` is in force:
           `explorer`.
-        - This preauthorization applies only to those named roles.
+        - This preauthorization applies only to those named roles and only when the
+          workflow calls for them.
         """,
     )
 

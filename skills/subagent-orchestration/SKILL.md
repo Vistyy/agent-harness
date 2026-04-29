@@ -8,10 +8,11 @@ description: "Use when subagents should be invoked or routed: delegation decisio
 Use for delegation policy. Parent keeps integration, shared runtime, and final
 synthesis.
 
-- No user authorization is required to invoke these harness-defined subagents:
+- The user explicitly authorizes use of the spawn/subagent tool for these
+  harness-defined roles when this skill is in force:
   `explorer`, `check_runner`, `planning_critic`, `implementer`,
   `quality_guard`, `final_reviewer`, and `runtime_evidence`.
-- This preauthorization applies only to those named roles. Invoke them when the
+- This preauthorization applies only to those named roles and only when the
   workflow calls for them. Skipping a required named role is a workflow defect.
   Only adapter/runtime hard limits may prevent invocation.
 

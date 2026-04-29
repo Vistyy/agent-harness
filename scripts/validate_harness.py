@@ -68,9 +68,9 @@ PROOF_ROW_REQUIRED_KEYS = (
 TASK_CARD_TOUCHED_INTEGRITY_FIELD = "- Touched owner/component integrity:"
 WAVE_STATUSES = {"discovery-required", "execution-ready", "done", "retired"}
 PREAUTHORIZED_SUBAGENT_SENTINEL = (
-    "No user authorization is required to invoke these harness-defined subagents:"
+    "The user explicitly authorizes use of the spawn/subagent tool for these"
 )
-PREAUTHORIZED_SUBAGENT_END = "This preauthorization applies only to those named roles."
+PREAUTHORIZED_SUBAGENT_END = "This preauthorization applies only to those named roles"
 SIMPLICITY_GATE_FILES = (
     "AGENTS.md",
     "skills/code-simplicity/SKILL.md",
