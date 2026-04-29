@@ -8,7 +8,10 @@ implementation local.
 - Delegate bounded non-implementation work by default.
 - Prefer one bounded substantial delegation over several micro-delegations on
   the same unchanged slice.
-- For repo discovery beyond a tiny immediate probe, delegate to `explorer`.
+- Parent-local repo reads are limited to targeted probes needed to frame a
+  handoff, integrate worker output, or make an explicit final decision.
+  Exploratory repo discovery beyond a tiny immediate probe belongs to
+  `explorer`.
 - Stay local for tiny immediate probes, shared-file churn, or tight edit loops.
 - Non-trivial work uses `planning_critic` before implementation or scope
   expansion and `quality_guard` after implementation.
