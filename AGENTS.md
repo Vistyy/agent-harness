@@ -41,6 +41,12 @@ Precedence:
 
 ## Operating Rules
 
+- Push back when a user request materially conflicts with these operating rules, the
+  active owner skill, or the simplicity gate. Name the conflict, recommend the
+  harness-compliant path, and pause before execution unless the harness permits
+  an exception and the user explicitly accepts it. Do not treat user direction
+  as overriding reusable safety, simplicity, boundary, proof, or review rules by
+  implication.
 - Prefer the simplest honest solution; complexity is a defect until justified.
 - Delete, collapse, demote, or reuse before adding; preserve required outcomes,
   not inherited structure or ceremony.

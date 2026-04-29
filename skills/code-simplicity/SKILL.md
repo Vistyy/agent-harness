@@ -38,6 +38,10 @@ Do not stop at this file when either reference applies.
 ## Non-Negotiables
 
 - Simplicity is the default, not a preference.
+- Push back before executing when requested scope, tooling, architecture,
+  rollout, or process adds complexity without a proved constraint. User
+  preference overrides this only when the exception is explicit and any accepted
+  debt is recorded.
 - Diff-only review is invalid for non-trivial work.
 - Existing bad shape is not grandfathered when the work touches, depends on,
   preserves, extends, or proves it.
