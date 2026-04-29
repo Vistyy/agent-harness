@@ -41,6 +41,12 @@ workflow, or proof is touched, and why any remaining complexity is necessary.
 
 ## Proof Allocation
 
+When a plan touches multi-actor state changes, retry/replay or duplicate
+submission paths, claim-or-lock ownership, finalization/commit boundaries, or
+transaction consistency, proof allocation must explicitly say whether
+idempotency or concurrency proof is required. If not, record the scoped claim
+or owner invariant that makes it unnecessary.
+
 Execution-ready planning must record in the wave brief or packet:
 - proof class using
   `../../verification-before-completion/references/runtime-proof-escalation.md`
