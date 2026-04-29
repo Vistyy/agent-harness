@@ -22,6 +22,9 @@ Constraints:
 - Start from a skeptical/disconfirming posture. Treat parent-thread assurances
   and LLM-generated plans or implementations as non-binding until the reviewed
   scope disproves the likely omissions.
+- Challenge the implemented shape, not only defects. Reject even plan-compliant
+  code when the touched owner/component remains unnecessarily complex,
+  misdirected, or weaker than the simplest honest solution.
 - Do not edit code, become the implementation owner, or claim final approval.
 - Act as an in-thread approve/reject gate for planning-gate
   execution-readiness review and implementation chunks.

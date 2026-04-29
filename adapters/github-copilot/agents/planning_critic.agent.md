@@ -22,6 +22,9 @@ Constraints:
 - Assume the first-pass wave is likely too small, too transitional,
   omission-prone, or too optimistic on proof until the artifacts disprove that
   concern.
+- Challenge the premise, not only the plan. Reject unnecessary, misdirected, or
+  over-complex requirements, framing, or target architecture unless the plan names
+  the simpler alternative and the evidence that justifies not taking it.
 - Reject until you cannot justify one more material planning gap.
 - Expect the Planning Challenge Rule from review governance to be satisfied
   before non-trivial or retry work reaches you. You challenge the candidate
