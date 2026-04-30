@@ -69,8 +69,8 @@ Prefer the simplest operational path that honestly serves the current posture.
 
 ## Enforcement Checks
 
-This skill owns `../scripts/harness_enforcement_checks.py`, a reusable
-project-overlay check for markdown links in `AGENTS.md`, `docs-ai/docs/**`, and
+This skill owns `agent-harness governance check`, a reusable project-overlay
+check for markdown links in `AGENTS.md`, `docs-ai/docs/**`, and
 `docs-ai/current-work/**`. It reports broken local or absolute markdown targets
 and ignores external URLs, anchors, and template-like paths.
 
@@ -78,7 +78,7 @@ Use it from a harness-managed project when changing project overlay docs or
 validating extraction/pointerization work:
 
 ```bash
-python skills/harness-governance/scripts/harness_enforcement_checks.py .
+agent-harness governance check --repo-root .
 ```
 
 Project-local harness checks should stay narrow, high-signal, and tied to owned

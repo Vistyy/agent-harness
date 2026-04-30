@@ -40,7 +40,7 @@ owner doc plus one directly consuming skill surface.
 - Changes:
   - replace stale completion wording with owner-approved stricter phrasing
 - Verification:
-  - `uv run python scripts/harness_enforcement_checks.py`
+  - `agent-harness governance check --repo-root .`
 - Expected evidence:
   - passing harness check output
 

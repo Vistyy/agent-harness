@@ -19,6 +19,9 @@ Precedence:
   dump.
 - Start from the matching owner skill or project owner doc.
 - Read only what the current task needs.
+- Use the installed agent-harness CLI for reusable harness automation when a
+  command exists; do not call removed skill-local helper scripts or recreate
+  project-local wrappers.
 
 ## Routing
 
@@ -84,8 +87,15 @@ Precedence:
 - This preauthorization applies only to those named roles and only when the
   workflow calls for them. Skipping a required named role is a workflow defect.
   Only adapter/runtime hard limits may prevent invocation.
-- Reuse subagents only for the same role on the same domain/slice. If the next
-  step needs a different role, use a worker with that role.
+- Reuse the existing subagent for any continuation, revision, or follow-up in
+  the same role and same domain/slice, even if its last verdict was completed,
+  rejected, or approved; continue with `send_input` or `resume_agent`. Spawn a
+  replacement only when the role changes, the reviewed domain/slice materially
+  changes, the prior subagent was explicitly closed with a recorded reason
+  because the loop was finished, or the next review is intentionally
+  independent from prior context. Do not close and respawn same-role reviewers
+  merely to submit an updated draft after rejection; that remains the same
+  review loop.
 - Never close, replace, or reclaim an active worker or its write scope because
   it is slow, silent, timed out, or blocking local work.
 

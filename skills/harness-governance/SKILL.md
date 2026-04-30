@@ -31,7 +31,7 @@ A harness change is non-trivial when it touches any of:
 - `AGENTS.md`
 - skills or skill metadata
 - adapter prompts, role policy, or adapter config
-- validation scripts or checks
+- validation checks
 - planning, review, verification, delegation, or workflow policy
 - removal, replacement, or split of a workflow owner
 
@@ -73,7 +73,8 @@ Reusable skill guidance belongs in focused skill directories.
 - Reference material should be split out only when the content is too large or
   specialized to keep in the skill body.
 - Asset folders own templates copied or consumed by the skill.
-- Script folders own helper scripts used by the skill.
+- Reusable helper commands should be exposed through the installed
+  agent-harness CLI when they are project-facing.
 - Agent-adapter folders own platform-specific hints.
 
 Keep project facts out of reusable skills. Keep skill frontmatter concise and
@@ -91,7 +92,7 @@ Detailed skill-authoring quality rules live in
 Reusable project-overlay link validation is owned here:
 
 ```bash
-python skills/harness-governance/scripts/harness_enforcement_checks.py .
+agent-harness governance check --repo-root .
 ```
 
 Load `references/harness-contracts.md` before changing check semantics or

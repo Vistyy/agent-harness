@@ -13,6 +13,8 @@ Installs Codex skills/agents and global AGENTS.md with individual symlinks.
 Full apply also merges the required Codex agent-role config into
 $CODEX_HOME/config.toml after writing a backup.
 Baseline excludes prompts, Copilot, and Gemini homes.
+Full apply also links the `agent-harness` CLI into
+${AGENT_HARNESS_BIN_DIR:-$HOME/.local/bin} when not using staged install.
 EOF
 }
 
@@ -51,6 +53,9 @@ AGENTS_HOME="$CODEX_HOME/agents"
 GLOBAL_AGENTS_PATH="$CODEX_HOME/AGENTS.md"
 CONFIG_PATH="$CODEX_HOME/config.toml"
 CONFIG_SOURCE="$SCRIPT_DIR/config.toml"
+CLI_BIN_DIR="${AGENT_HARNESS_BIN_DIR:-$HOME/.local/bin}"
+CLI_TARGET="$CLI_BIN_DIR/agent-harness"
+CLI_SOURCE="$SCRIPT_DIR/bin/agent-harness"
 
 BACKUP_ROOT="$CODEX_HOME/backups"
 RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -82,6 +87,13 @@ planned_global_agents_md() {
     return
   fi
   printf '%s\t%s\n' "$GLOBAL_AGENTS_PATH" "$ROOT/AGENTS.md"
+}
+
+planned_cli() {
+  if [[ "$STAGE_ONLY" == "true" ]]; then
+    return
+  fi
+  printf '%s\t%s\n' "$CLI_TARGET" "$CLI_SOURCE"
 }
 
 target_matches() {
@@ -127,7 +139,7 @@ collect_conflicts() {
 write_inventory() {
   local path="$1"
   {
-    for item in "$CODEX_HOME/config.toml" "$CODEX_HOME/AGENTS.md" "$CODEX_HOME/prompts" "$HOME/.copilot" "$HOME/.gemini" "$AGENTS_HOME"; do
+    for item in "$CODEX_HOME/config.toml" "$CODEX_HOME/AGENTS.md" "$CODEX_HOME/prompts" "$HOME/.copilot" "$HOME/.gemini" "$AGENTS_HOME" "$CLI_TARGET"; do
       if [[ -e "$item" || -L "$item" ]]; then
         printf '%s\t%s\t%s\n' "$item" "$(stat -c '%F:%s' "$item")" "$(readlink "$item" || true)"
       else
@@ -267,7 +279,7 @@ write_manifests() {
     echo
     echo "  ]"
     echo "}"
-  } < <({ planned_global_agents_md; planned_skills; planned_agents; }) > "$RUN_DIR/symlink-manifest.json"
+  } < <({ planned_global_agents_md; planned_skills; planned_agents; planned_cli; }) > "$RUN_DIR/symlink-manifest.json"
 }
 
 apply_symlinks() {
@@ -306,6 +318,9 @@ fi
 echo "excluded: $CODEX_HOME/prompts"
 echo "excluded: $HOME/.copilot"
 echo "excluded: $HOME/.gemini"
+if [[ "$STAGE_ONLY" != "true" && ":$PATH:" != *":$CLI_BIN_DIR:"* ]]; then
+  echo "warning: $CLI_BIN_DIR is not on PATH; agent-harness CLI link will be installed there but may not be directly invokable" >&2
+fi
 
 echo "planned global AGENTS.md:"
 if [[ "$STAGE_ONLY" == "true" ]]; then
@@ -333,15 +348,25 @@ else
   done < <(planned_agents)
 fi
 
+echo "planned CLI:"
+if [[ "$STAGE_ONLY" == "true" ]]; then
+  echo "none"
+else
+  while IFS=$'\t' read -r target source; do
+    [[ -z "$target" ]] && continue
+    echo "$target -> $source"
+  done < <(planned_cli)
+fi
+
 echo "conflict policy: stop before replacing non-matching live targets"
 
-if ! collect_conflicts < <({ planned_global_agents_md; planned_skills; planned_agents; }); then
+if ! collect_conflicts < <({ planned_global_agents_md; planned_skills; planned_agents; planned_cli; }); then
   exit 1
 fi
 
 if [[ "$MODE" == "apply" ]]; then
   write_manifests
-  { planned_global_agents_md; planned_skills; planned_agents; } | apply_symlinks
+  { planned_global_agents_md; planned_skills; planned_agents; planned_cli; } | apply_symlinks
   merge_config
   write_inventory "$RUN_DIR/post-inventory.tsv"
   echo "manifest_dir: $RUN_DIR"

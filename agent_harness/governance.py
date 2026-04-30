@@ -1,16 +1,19 @@
-#!/usr/bin/env python3
 from __future__ import annotations
 
-import argparse
 import re
+import sys
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TextIO
 from urllib.parse import unquote
-
 
 MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 MARKDOWN_LINK_SCAN_ROOTS = ("AGENTS.md", "docs-ai/docs", "docs-ai/current-work")
 MARKDOWN_LINK_TEMPLATE_CHARS = ("<", ">", "{", "}", "*")
+
+
+class GovernanceCommandError(ValueError):
+    pass
 
 
 @dataclass(frozen=True, slots=True)
@@ -43,6 +46,11 @@ def _link_target_exists(markdown_file: Path, target: str) -> bool:
 
 
 def run_harness_checks(*, repo_root: Path) -> list[CheckFailure]:
+    if not repo_root.exists():
+        raise GovernanceCommandError(f"Repo root not found: {repo_root}")
+    if not repo_root.is_dir():
+        raise GovernanceCommandError(f"Repo root is not a directory: {repo_root}")
+
     failures: list[CheckFailure] = []
     for markdown_file in _iter_markdown_files(repo_root):
         text = markdown_file.read_text(encoding="utf-8")
@@ -62,15 +70,19 @@ def run_harness_checks(*, repo_root: Path) -> list[CheckFailure]:
     return failures
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("repo_root", nargs="?", default=".")
-    args = parser.parse_args()
-    failures = run_harness_checks(repo_root=Path(args.repo_root).resolve())
+def command_governance_check(
+    *,
+    repo_root: Path,
+    stdout: TextIO | None = None,
+    stderr: TextIO | None = None,
+) -> int:
+    stdout = sys.stdout if stdout is None else stdout
+    stderr = sys.stderr if stderr is None else stderr
+    try:
+        failures = run_harness_checks(repo_root=repo_root.resolve())
+    except GovernanceCommandError as exc:
+        print(str(exc), file=stderr)
+        return 1
     for failure in failures:
-        print(f"{failure.check_id}: {failure.message}")
+        print(f"{failure.check_id}: {failure.message}", file=stdout)
     return 1 if failures else 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

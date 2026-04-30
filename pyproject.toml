@@ -4,10 +4,20 @@ version = "0.1.0"
 requires-python = ">=3.11"
 dependencies = []
 
+[project.scripts]
+agent-harness = "agent_harness.cli:main"
+
 [dependency-groups]
 dev = [
   "pytest>=8.0",
 ]
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["agent_harness*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

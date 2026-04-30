@@ -207,7 +207,8 @@ When wave closes:
   the remaining objective gap before closeout
 - run a repo-wide exact-path scan for
   `docs-ai/docs/initiatives/waves/<wave-id>.md`
-  - preferred helper: `just wave-brief-refs <wave-id>`
+  - preferred helper:
+    `agent-harness wave refs --repo-root <project-root> --wave <wave-id>`
 - if non-wave references still remain after rehoming, replace the full closed
   brief with a slim closed brief at the same path
 - otherwise delete the closed brief

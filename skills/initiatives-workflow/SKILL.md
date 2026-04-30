@@ -46,11 +46,16 @@ Examples:
 - `assets/wave-execution.example.md`
 
 Helpers:
-- `scripts/bootstrap_wave_docs.py`: scaffold a `discovery-required` wave brief.
-- `scripts/wave_brief_references.py`: list exact references to one wave brief
-  path during closeout.
-- `scripts/current_wave_cleanup.py`: dry-run or delete a closed current-work
-  wave directory after closeout prerequisites are satisfied.
+- Preferred installed CLI:
+  `agent-harness wave bootstrap --repo-root <project-root> --wave <wave-id> --title "<title>"`
+  scaffolds a `discovery-required` wave brief.
+- Preferred installed CLI:
+  `agent-harness wave refs --repo-root <project-root> --wave <wave-id>`
+  lists exact references to one wave brief path during closeout.
+- Preferred installed CLI:
+  `agent-harness wave cleanup --repo-root <project-root> --wave <wave-id>`
+  dry-runs closed current-work wave directory cleanup; add `--execute` after
+  closeout prerequisites are satisfied.
 
 ## Guardrails
 

@@ -18,9 +18,10 @@ def fail(message: str) -> None:
     raise AssertionError(message)
 
 
-def run_install(codex_home: Path, *args: str) -> None:
+def run_install(codex_home: Path, bin_dir: Path, *args: str) -> None:
     env = os.environ.copy()
     env["CODEX_HOME"] = str(codex_home)
+    env["AGENT_HARNESS_BIN_DIR"] = str(bin_dir)
     result = subprocess.run(
         ["bash", str(INSTALLER), "--apply", *args],
         cwd=ROOT,
@@ -104,22 +105,24 @@ def assert_repo_codex_not_regular_file() -> None:
         fail("repo root contains a regular-file .codex stub")
 
 
-def assert_install(codex_home: Path) -> None:
+def assert_install(codex_home: Path, bin_dir: Path) -> None:
     assert_symlink(codex_home / "AGENTS.md", ROOT / "AGENTS.md")
     assert_all_skills(codex_home)
     assert_all_agents(codex_home)
+    assert_symlink(bin_dir / "agent-harness", ROOT / "adapters" / "codex" / "bin" / "agent-harness")
     assert_config(codex_home)
     assert_config_roles(codex_home)
     assert_repo_codex_not_regular_file()
 
 
-def assert_stage_only(codex_home: Path) -> None:
+def assert_stage_only(codex_home: Path, bin_dir: Path) -> None:
     assert_symlink(codex_home / "skills" / "harness-governance", ROOT / "skills" / "harness-governance")
     excluded = (
         codex_home / "AGENTS.md",
         codex_home / "config.toml",
         codex_home / "agents",
         codex_home / "skills" / "webapp-testing",
+        bin_dir / "agent-harness",
     )
     for path in excluded:
         if path.exists() or path.is_symlink():
@@ -129,14 +132,16 @@ def assert_stage_only(codex_home: Path) -> None:
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="codex-install-smoke-") as temp_dir:
         codex_home = Path(temp_dir) / "codex-home"
-        run_install(codex_home)
-        assert_install(codex_home)
-        run_install(codex_home)
-        assert_install(codex_home)
+        bin_dir = Path(temp_dir) / "bin"
+        run_install(codex_home, bin_dir)
+        assert_install(codex_home, bin_dir)
+        run_install(codex_home, bin_dir)
+        assert_install(codex_home, bin_dir)
         shutil.rmtree(codex_home)
         stage_codex_home = Path(temp_dir) / "stage-codex-home"
-        run_install(stage_codex_home, "--stage-harness-governance")
-        assert_stage_only(stage_codex_home)
+        stage_bin_dir = Path(temp_dir) / "stage-bin"
+        run_install(stage_codex_home, stage_bin_dir, "--stage-harness-governance")
+        assert_stage_only(stage_codex_home, stage_bin_dir)
     print("codex install smoke passed")
     return 0
 
