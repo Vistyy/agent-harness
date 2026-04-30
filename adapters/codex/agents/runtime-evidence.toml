@@ -1,7 +1,7 @@
 name = "runtime_evidence"
 description = "Live runtime, UI, or API proof."
 model = "gpt-5.5"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 
 developer_instructions = """
 Use these contracts directly when needed:
