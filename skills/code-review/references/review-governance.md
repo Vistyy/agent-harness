@@ -7,7 +7,7 @@ Owner for approval boundaries, disposition, and completion claims.
 - This file: approval/disposition rules, review-mode deltas, completion claim contract.
 - `code-review`: isolated review wrapper and report shape.
 - `final_reviewer`: final isolated closeout reviewer role.
-- `review-address`: pre-edit review-feedback triage.
+- `feedback-address`: pre-edit feedback assessment and address flow.
 - `code-simplicity`: canonical simplicity gate and bad-shape signal owner.
 - `adversarial-review`: failure-mode lens.
 - `../../verification-before-completion/references/quality-gate-selection.md`:
@@ -44,7 +44,12 @@ Owner for approval boundaries, disposition, and completion claims.
 - Review the touched slice as a whole: a real issue counts even if it
   predates the diff or sits outside new lines, if it is still relevant to
   approval.
-- If 2+ valid findings share the same controller, store, or service authority, name the shared cause and assess whether tactical fixes would preserve wrong ownership.
+- A single valid finding can expose wrong owner/component shape. If the
+  observed defect is a symptom of bad design, do not approve a symptom-only fix
+  without the broader fix or accepted-debt backlog link.
+- If 2+ valid findings share the same controller, store, or service authority,
+  name the shared cause and assess whether tactical fixes would preserve wrong
+  ownership.
 - If a local fix exposes a shared-cause or wrong-owner problem, do not approve
   the local fix alone; require the broader fix or a durable backlog link.
 - For structural, hotspot, or state-authority slices, a declared owner map must cover every public write path and read-repair path in scope. Any surviving bypass is merge-blocking.

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Review Address"
-  short_description: "Triage and address review feedback rigorously"
-  default_prompt: "Use $review-address to triage and address this review feedback rigorously before editing."
