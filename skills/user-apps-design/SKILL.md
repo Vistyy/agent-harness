@@ -1,6 +1,6 @@
 ---
 name: user-apps-design
-description: "Use for end-user web/mobile UI direction: parity, composition, hierarchy, density, UX state, and copy posture; route mechanics and runtime proof to owners."
+description: "Use for end-user web/mobile UI direction before implementation: IA, parity, composition, hierarchy, density, copy posture, and design anchors."
 ---
 
 # User Apps Design
@@ -11,10 +11,14 @@ Owns product-facing UI direction, parity decisions, composition quality, and
 copy posture. Project strategy, language policy, app paths, and delivery timing
 stay in the project overlay.
 
+Does not own browser/mobile runtime proof mechanics or completion-gate
+verdicts.
+
 ## Required References
 
 Read project overlay docs first for surface discovery, product language,
-delivery timing, design archetypes, and design-fidelity governance when present.
+delivery timing, `DESIGN.md` or equivalent design contract, design archetypes,
+and design-fidelity governance when present.
 
 Read `references/ui-direction-workflow.md` before planning or editing
 end-user UI. It owns scope, quality bar, taste pressure, required loop, and

@@ -30,15 +30,18 @@ Do not invent a surface-specific wrapper to avoid the matrix.
 | Channel | Use when | Reviewed artifact posture | Diagnostic posture |
 | --- | --- | --- | --- |
 | `reuse spec` | A durable existing spec already proves the claim honestly. | Review the existing spec artifacts or promoted screenshots that prove the claim. | Keep normal runner output diagnostic unless explicitly promoted. |
-| `extend/add spec` | The flow is regression-worthy, reasonably deterministic, and expected to recur. | Review the new or updated spec artifacts as the durable proof path. | Keep runner traces, videos, and transient logs diagnostic unless the claim needs them. |
-| `playwright-cli` | The proof is one-shot, exploratory, weakly reusable, or not worth a durable spec yet. | Review the selected CLI screenshots or promoted CLI outputs only. | Keep default CLI output, console/network dumps, and other transient outputs diagnostic unless promoted. |
+| `extend/add spec` | The flow is regression-worthy, reasonably deterministic, and expected to recur. Use the project's durable browser spec stack, commonly Playwright Test. | Review the new or updated spec artifacts as the durable proof path. | Keep runner traces, videos, and transient logs diagnostic unless the claim needs them. |
+| `playwright-cli` | The proof is one-shot, exploratory, weakly reusable, or not worth a durable spec yet. Use Microsoft playwright-cli (`microsoft/playwright-cli`, `@playwright/cli`). | Review the selected CLI screenshots or promoted CLI outputs only. | Keep default CLI output, console/network dumps, and other transient outputs diagnostic unless promoted. |
 | `raw script` | Spec and CLI both cannot express the needed flow cleanly. | Review only the smallest stable artifacts worth promoting from the script run. | Treat script logs and ad hoc outputs as diagnostic by default. |
 
 Selection rules:
 - the channel follows claim shape and reuse value, not surface name
 - if an existing durable spec is honest, use it before adding anything new
 - if the flow is likely to recur, prefer extending or adding a durable spec
-- if the proof is exploratory or triage-only, prefer `playwright-cli`
+- if the proof is exploratory or triage-only, prefer Microsoft
+  `playwright-cli`
+- do not label generic adapter browser tools as `playwright-cli` unless they
+  explicitly expose Microsoft `playwright-cli`
 - raw script is the last resort only
 
 ## Reviewed Versus Diagnostic Artifacts

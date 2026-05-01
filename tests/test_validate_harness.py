@@ -280,6 +280,58 @@ def test_validate_rejects_incomplete_touched_owner_definition(tmp_path: Path) ->
     )
 
 
+def test_validate_rejects_runtime_evidence_project_doc_leakage(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "runtime-evidence.toml",
+        'name = "runtime_evidence"\nSee docs-ai/docs/project.md.\n',
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/runtime-evidence.toml must not hard-code project-local docs-ai/docs/ paths"
+        in errors
+    )
+
+
+def test_validate_requires_microsoft_playwright_cli_anchor(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "webapp-testing" / "references" / "browser-runtime-proof-workflow.md",
+        "Use a browser CLI.\n",
+    )
+    write(
+        tmp_path / "skills" / "webapp-testing" / "references" / "browser-proof-layering-contract.md",
+        "One-shot browser proof.\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/webapp-testing browser proof docs must identify Microsoft playwright-cli "
+        "(`microsoft/playwright-cli`, `@playwright/cli`) as the one-shot channel"
+    ) in errors
+
+
+def test_validate_rejects_stale_runtime_optional_helper_wording(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "subagent-orchestration" / "references" / "delegation-policy.md",
+        """
+        Delegate isolated runtime proof only when startup/teardown is
+        deterministic and ownership is unambiguous.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/subagent-orchestration/references/delegation-policy.md contains stale optional-helper runtime proof wording"
+        in errors
+    )
+
+
 def test_validate_rejects_packet_missing_required_section_and_proof_field(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(

@@ -1,7 +1,8 @@
 # Browser Runtime Proof Workflow
 
-Use before browser proof. This reference owns preflight, runtime-loop,
-delegation, helper-path, proof-note, and reporting rules.
+Use before browser proof. This reference owns browser preflight,
+runtime-loop mechanics, browser channel operation, helper paths, and
+browser-specific reporting details.
 
 ## Direct Owner Handoffs
 
@@ -42,6 +43,21 @@ Variant rule:
 If runtime data is missing, report `Runtime evidence: blocked` and the next
 repo-supported step.
 
+## Channel Selection
+
+Use the first channel that honestly proves the claim:
+
+1. existing durable browser spec, when it already covers the claim
+2. new or updated durable spec, usually Playwright Test when that is the
+   project browser spec stack, when the flow is regression-worthy and stable
+3. Microsoft `playwright-cli` for one-shot, exploratory, weakly reusable, or
+   review-only browser proof
+4. raw script only when spec and CLI cannot express the flow cleanly
+
+Generic adapter browser tools may support diagnostics, but they are not the
+Microsoft `playwright-cli` channel unless they explicitly expose
+`microsoft/playwright-cli` / `@playwright/cli`.
+
 ## Delegation
 
 Pass `runtime_evidence`:
@@ -64,12 +80,17 @@ Use the project-owned runtime recipe. It must say how to:
 - start dependencies
 - serve the browser app
 - verify readiness
-- run durable specs or Playwright CLI against the live base URL
+- run durable specs or Microsoft `playwright-cli` against the live base URL
 - shut down cleanly
 
 ## Browser Proof Loop
 
-Default Playwright CLI loop:
+Default one-shot channel: Microsoft `playwright-cli`
+(`microsoft/playwright-cli`, `@playwright/cli`).
+Do not call generic adapter browser tools the Playwright CLI channel unless
+they explicitly expose this tool.
+
+Default `playwright-cli` loop:
 1. open target page
 2. capture baseline snapshot
 3. execute real flow
@@ -83,9 +104,11 @@ Rules:
 - prefer snapshots over screenshots for state checks
 - preserve only selected evidence under `.artifacts/runtime/**`
 - use stable overwriteable screenshot filenames for reviewed states
+- promote only artifacts that the verdict actually relies on
+- include the viewport for every screenshot used in a visual verdict
 
-Use Chrome DevTools MCP with Playwright CLI only for deep request inspection,
-targeted DOM probing, or performance analysis.
+Use Chrome DevTools MCP or adapter browser diagnostics only as sidecars for
+deep request inspection, targeted DOM probing, or performance analysis.
 
 Clean orphaned sessions only when needed:
 
@@ -95,8 +118,8 @@ pkill -f 'run-cli-server --daemon-session='
 
 ## Helper Paths
 
-Use helpers only when project runtime recipes, durable specs, and Playwright CLI
-do not cover the proof need.
+Use helpers only when project runtime recipes, durable specs, and Microsoft
+`playwright-cli` do not cover the proof need.
 
 - `../scripts/with_server.py`: trusted local server wrapper. Do not use it for
   untrusted command strings or documented project topology.
@@ -111,6 +134,7 @@ For `runtime-risk-ui`, prove:
 - underlying content does not steal interaction
 - expected transition occurs
 - reviewed screenshots are acceptable product evidence
+- responsive state is checked for every viewport the claim covers
 
 For interactive browser surfaces, also prove when relevant:
 - interaction completeness

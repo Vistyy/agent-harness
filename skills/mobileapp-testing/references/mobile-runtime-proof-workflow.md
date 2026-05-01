@@ -1,7 +1,8 @@
 # Mobile Runtime Proof Workflow
 
 Use before mobile runtime proof. This reference owns default stack, preflight,
-runtime-loop, interaction, recovery, proof-note, and reporting rules.
+runtime-loop mechanics, interaction, recovery, and mobile-specific reporting
+details.
 
 ## Direct Owner Handoffs
 
@@ -26,6 +27,9 @@ Load only when the condition applies:
 
 For diagnostics-heavy mobile work, keep the default agent loop on the
 observability-enabled repo runtime unless the task is explicitly narrow.
+
+Do not infer mobile runtime behavior from a desktop web proof, a widget test
+alone, or an unlaunched build artifact.
 
 ## Preflight
 
@@ -55,6 +59,9 @@ Use the project-owned mobile runtime recipe. It must state how to:
 - collect screenshots or logs
 - shut down cleanly
 
+If the recipe cannot establish a deterministic device target, report blocked
+or narrow the claim; do not continue with ambiguous emulator targeting.
+
 ## Interaction Rules
 
 - Prefer Dart MCP for logs, runtime errors, widget tree, and controlled
@@ -63,6 +70,8 @@ Use the project-owned mobile runtime recipe. It must state how to:
 - Keep adb serial-scoped.
 - For text-heavy flows, prefer Dart MCP or deterministic app automation over raw
   adb typing.
+- For camera, picker, permission, or OS-mediated flows, record the device
+  posture and permission state that was actually exercised.
 
 ## Proof Notes
 
@@ -77,6 +86,10 @@ For interactive surfaces, check when relevant:
 - runtime leg of any `multi-proof-required` claim
 
 Write flows need one real mutation plus outcome proof.
+
+Mobile UI quality claims need screenshots or device-captured visual artifacts
+for the states under review. Widget-tree presence alone is not enough for
+layout, safe-area, keyboard, permission, or touch-target claims.
 
 ## Recovery
 

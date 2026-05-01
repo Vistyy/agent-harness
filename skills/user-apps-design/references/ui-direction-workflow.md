@@ -10,6 +10,7 @@ In:
 - shell or nav hierarchy and density
 - empty, loading, error state UX
 - end-user copy and microcopy
+- `DESIGN.md` or equivalent project design-contract use when present
 - cross-client parity decisions for UX behavior and interaction posture
 - web-first handoff readiness and mobile follow-up assumptions
 
@@ -17,6 +18,7 @@ Out:
 - API contracts, backend semantics, and auth/session internals
 - framework mechanics before UI direction is set
 - mobile platform mechanics before cross-platform UI direction is set
+- browser/mobile runtime proof mechanics and evidence reports
 
 ## Quality Bar
 
@@ -50,7 +52,8 @@ dials before editing.
 
 1. Satisfy project-owned discovery gate when UI quality or product direction is
    in scope. Stop if required context is missing.
-2. Read project design-implementation posture when the change needs an
+2. Read project `DESIGN.md` or equivalent design contract when present, then
+   project design-implementation posture when the change needs an
    implementation loop or handoff posture.
 3. Choose one approved archetype or record a justified exception before editing.
 4. Write parity matrix before editing: must-match behavior, state, copy, and

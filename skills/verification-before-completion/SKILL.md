@@ -37,7 +37,8 @@ reported as done.
 - proof class, owner, material branches, and counterfactual are explicit
 - proving command or artifact is fresh for this execution window
 - required quality gate and review status are reported
-- runtime or diagnostic evidence is named when the claim needs it
+- required `runtime_evidence` verdict is reported when the claim needs live
+  runtime proof
 
 ## Constraints
 
@@ -83,10 +84,13 @@ Before any completion claim:
 7. Confirm owner-doc proof obligations for slice.
 8. Confirm edge/failure probes when claim class needs them.
 9. Confirm applicable review approvals/dispositions per `review-governance.md`.
-10. For runtime/debug/observability-heavy claims, cite selected trace/log
+10. For non-trivial runtime-visible claims, route or cite `runtime_evidence`.
+    Tiny parent-local runtime proof is allowed only when the claim is local and
+    has no public-behavior or cross-boundary runtime risk.
+11. For runtime/debug/observability-heavy claims, cite selected trace/log
     artifact/query pointers and selected trace/correlation IDs, or explicit
     `none observed`, or why observability was intentionally not used.
-11. State final-review status using `review-governance.md` terms.
+12. State final-review status using `review-governance.md` terms.
 
 If any step is missing, do not claim done.
 
@@ -96,6 +100,8 @@ If any step is missing, do not claim done.
 - Passing tests do not prove unrelated claims.
 - Small diff does not waive quality gate.
 - Interrupted delegated runtime proof means `Runtime evidence: incomplete`, not "pending enough."
+- A `reject`, `blocked`, or incomplete runtime verdict blocks or narrows the
+  affected runtime-visible claim.
 - For UI/runtime claims, proof must review actual surface quality, not only happy-path success.
 - For runtime/debug/observability-heavy claims, start from the
   observability-enabled repo runtime unless the claim is explicitly narrow

@@ -1,17 +1,20 @@
 ---
 name: mobileapp-testing
-description: Use when validating mobile app runtime behavior; start deterministic runtime targets, prefer Dart MCP, and use serial-scoped adb for device lifecycle and recovery.
+description: Use for live mobile runtime proof on emulator/device; prefer Dart MCP, keep adb serial-scoped for install, launch, screenshots, recovery, and device lifecycle.
 ---
 
 # Mobile Application Testing
 
-Goal: prove mobile runtime behavior with deterministic device evidence.
+Goal: operate live mobile runtime proof mechanics with deterministic device
+evidence.
 
 Use `runtime_evidence` for live mobile/runtime proof. Use Dart MCP first. Use
 adb only for install, launch, screenshot, recovery, or device lifecycle work.
 
 Project overlays own service names, ports, device IDs, and host-specific
 recovery recipes.
+
+Does not own mobile design constraints or completion-gate verdict semantics.
 
 ## Required References
 

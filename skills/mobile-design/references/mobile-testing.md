@@ -1,6 +1,6 @@
-# Mobile Testing Patterns
+# Mobile Design Validation Posture
 
-Use to choose test layer and avoid weak mobile validation.
+Use to define the mobile design checks that tests or runtime proof must cover.
 
 For live device or emulator runtime proof, use
 `../../mobileapp-testing/SKILL.md`. This reference owns design-facing mobile
@@ -17,7 +17,7 @@ Layer targets:
 - integration: multi-component flows and boundary contracts
 - end-to-end: critical journeys and platform/runtime integration
 
-## Tool Choice
+## Layer Choice
 
 Use unit/component tests when:
 - behavior is isolated and deterministic

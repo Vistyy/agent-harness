@@ -23,8 +23,12 @@ implementation local.
 - Keep implementation local only for a concrete reason: packet-declared
   `parent-only`, repeated implementer handback, tool/runtime limits, or tiny
   follow-up churn.
-- Delegate isolated runtime proof only when startup/teardown is deterministic
-  and ownership is unambiguous.
+- Delegate `runtime_evidence` for non-trivial runtime-visible completion
+  claims. Tiny parent-local runtime proof is allowed only when the claim stays
+  local and has no public-behavior or cross-boundary runtime risk. If in doubt,
+  delegate.
+- Ambiguous startup, teardown, or shared runtime ownership blocks or narrows the
+  claim; it does not waive required runtime evidence.
 
 ## Implementer Eligibility
 
@@ -98,6 +102,7 @@ Role-owner fresh-context requirements override this reuse default.
 - `planning_critic` as implementation reviewer or final approver
 - `check_runner` as final approver or interactive runtime validator
 - `runtime_evidence` for routine bulk log/trace archaeology
+- tests or review roles used as substitutes for required `runtime_evidence`
 - `quality_guard` as final approval
 - `final_reviewer` as planning-gate or in-thread chunk review
 - screenshot dump without runtime verdict

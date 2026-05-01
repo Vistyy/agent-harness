@@ -69,6 +69,10 @@ Precedence:
   expansion and `quality_guard` after implementation. Tiny local fixes are
   exempt only when no material owner, proof, runtime, compatibility, migration,
   or public-behavior decision is open.
+- Runtime-visible completion claims require `runtime_evidence` unless the
+  claim is tiny, local, and has no public-behavior or cross-boundary runtime
+  risk. A `reject`, `blocked`, or incomplete runtime verdict blocks or narrows
+  the affected claim.
 - Keep project overlays concise maps to owning skills and project docs.
 - No silent reverts or deletions of unknown files.
 

@@ -94,6 +94,17 @@ SIMPLICITY_GATE_AGENT_FILES = (
     "adapters/github-copilot/agents/quality_guard.agent.md",
     "adapters/github-copilot/agents/final_reviewer.agent.md",
 )
+RUNTIME_EVIDENCE_ADAPTER_FILES = (
+    "adapters/codex/agents/runtime-evidence.toml",
+    "adapters/github-copilot/agents/runtime_evidence.agent.md",
+)
+WEB_BROWSER_PROOF_FILES = (
+    "skills/webapp-testing/references/browser-runtime-proof-workflow.md",
+    "skills/webapp-testing/references/browser-proof-layering-contract.md",
+)
+LIVE_VALIDATION_STALE_PHRASES = (
+    "Delegate isolated runtime proof only when startup/teardown is deterministic and ownership is unambiguous.",
+)
 
 
 class FrontmatterError(ValueError):
@@ -707,6 +718,51 @@ def _validate_simplicity_gate(root: Path) -> list[str]:
     return errors
 
 
+def _validate_live_validation_contracts(root: Path) -> list[str]:
+    errors: list[str] = []
+
+    for relative_path in RUNTIME_EVIDENCE_ADAPTER_FILES:
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        if "docs-ai/docs/" in text:
+            errors.append(f"{relative_path} must not hard-code project-local docs-ai/docs/ paths")
+
+    web_texts: list[str] = []
+    for relative_path in WEB_BROWSER_PROOF_FILES:
+        path = root / relative_path
+        if path.is_file():
+            web_texts.append(path.read_text(encoding="utf-8"))
+    if web_texts:
+        combined = "\n".join(web_texts)
+        if "microsoft/playwright-cli" not in combined or "@playwright/cli" not in combined:
+            errors.append(
+                "skills/webapp-testing browser proof docs must identify Microsoft playwright-cli "
+                "(`microsoft/playwright-cli`, `@playwright/cli`) as the one-shot channel"
+            )
+
+    scan_files = [
+        root / "AGENTS.md",
+        root / "agents" / "roles.md",
+        root / "skills" / "subagent-orchestration" / "references" / "coding-agent-topology.md",
+        root / "skills" / "subagent-orchestration" / "references" / "delegation-policy.md",
+        root / "skills" / "verification-before-completion" / "SKILL.md",
+        root / "skills" / "verification-before-completion" / "references" / "runtime-proof-escalation.md",
+        root / "skills" / "verification-before-completion" / "references" / "runtime-evidence-contract.md",
+    ]
+    for path in scan_files:
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        normalized_text = " ".join(text.split())
+        for phrase in LIVE_VALIDATION_STALE_PHRASES:
+            if " ".join(phrase.split()) in normalized_text:
+                errors.append(f"{path.relative_to(root)} contains stale optional-helper runtime proof wording")
+
+    return errors
+
+
 def write_openai_metadata_report(root: Path, report_path: Path) -> list[str]:
     rows, errors = _openai_metadata_rows(root)
     lines = ["skill\tpath\tdisplay_name\tshort_description\tdefault_prompt"]
@@ -748,6 +804,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_role_parity(root))
     errors.extend(_validate_wave_lifecycle(root))
     errors.extend(_validate_simplicity_gate(root))
+    errors.extend(_validate_live_validation_contracts(root))
 
     for markdown_file in _iter_markdown(root):
         text = markdown_file.read_text(encoding="utf-8")

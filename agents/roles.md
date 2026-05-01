@@ -13,7 +13,8 @@ Codex adapter role sources live under `adapters/codex/agents/`.
 - `implementer`: one bounded approved task-card or standalone-plan slice.
 - `quality_guard`: planning-gate and in-thread implementation gate.
 - `final_reviewer`: final isolated closeout review after verification.
-- `runtime_evidence`: live runtime/UI/API proof.
+- `runtime_evidence`: live validation guard for handed-off runtime-visible
+  UI/API/service claims.
 
 Adapter configs must preserve these role names unless a reviewed migration
 updates every consumer and proof row together.

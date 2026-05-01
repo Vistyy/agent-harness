@@ -1,14 +1,17 @@
 ---
 name: webapp-testing
-description: "Use for browser-visible UI or web runtime proof, including internal/admin surfaces; choose the strongest supported browser proof channel."
+description: "Use for browser runtime proof and browser-visible UI validation; choose durable specs versus Microsoft playwright-cli one-shot proof, artifacts, screenshots, and diagnostics."
 ---
 
 # Browser UI Testing
 
-Goal: prove browser-visible behavior with live runtime evidence.
+Goal: operate browser proof mechanics for browser-visible behavior.
 
 Use `runtime_evidence` for live browser/runtime proof. Use `check_runner` for
 targeted automated checks, log/trace sweeps, and large output triage.
+
+Does not own completion-gate triggers, runtime verdict schema, or product
+design anchors.
 
 Project overlays own ports, services, upload-provider recipes, and runtime
 topology.

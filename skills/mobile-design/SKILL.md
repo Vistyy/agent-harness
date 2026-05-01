@@ -1,6 +1,6 @@
 ---
 name: mobile-design
-description: "Use after user-apps-design for mobile-specific constraints: touch ergonomics, platform behavior, performance risk, accessibility, and mobile validation posture."
+description: "Use with or after user-apps-design for mobile-specific UI decisions: touch ergonomics, platform conventions, safe areas, gestures, performance risk, accessibility, and mobile design validation posture."
 ---
 
 # Mobile Design
@@ -9,6 +9,8 @@ Use after `user-apps-design` for mobile-specific direction.
 
 Owns touch ergonomics, platform navigation, mobile performance constraints,
 mobile accessibility behavior, and mobile validation posture.
+
+Does not own emulator/device runtime execution.
 
 If missing context changes behavior, block and ask.
 

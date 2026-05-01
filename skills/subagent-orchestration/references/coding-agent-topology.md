@@ -31,7 +31,7 @@ Out of scope:
 | `implementer` | plan-gated execution worker for one tightly scoped wave task card or one approved standalone-plan slice, with bounded local autonomy inside the declared slice | decide strategic design/proof/runtime/boundary shape outside its declared autonomy envelope; widen scope; own shared runtime; self-approve | adapter role plus wrapper where available |
 | `quality_guard` | iterative in-thread correctness, simplicity, architecture-fit, and spec-alignment scrutiny after each meaningful chunk/task, not only at closeout | own final approval; edit code | adapter role plus wrapper where available |
 | `final_reviewer` | final isolated breadth-first closeout review after implementation and local verification | perform planning-gate review, in-thread chunk review, implementation, diagnostics triage, or runtime validation | adapter role plus wrapper where available |
-| `runtime_evidence` | bounded live runtime and screenshot-reviewed verdict collection after target question is known | become general debugger, planner, reviewer, implementation agent, or routine bulk log archaeologist | adapter role plus wrapper where available |
+| `runtime_evidence` | live validation guard for a handed-off runtime-visible UI/API/service claim | become general debugger, planner, reviewer, implementation agent, code-quality approver, or routine bulk log archaeologist | adapter role plus wrapper where available |
 
 ## Review Topology
 
@@ -50,8 +50,8 @@ This reference keeps only role boundaries:
 - `final_reviewer` performs isolated closeout review and does not implement
 - `check_runner` handles targeted commands, gates, diagnostics, logs, and
   large-output summaries, but does not approve
-- `runtime_evidence` handles live runtime/UI/API proof only after parent gives
-  a bounded target and expected verdict shape
+- `runtime_evidence` handles bounded live runtime/UI/API validation only after
+  parent gives the claim, target, and expected verdict shape
 - generic word `reviewer` is not a worker identity
 
 ## Posture
@@ -65,8 +65,8 @@ This reference keeps only role boundaries:
   back early against plan drift, sloppy ownership, and overbuilt code
 - `final_reviewer`: high-reasoning isolated closeout review for the whole
   changed slice
-- `runtime_evidence`: bounded live runtime and strict screenshot/runtime
-  verdicts under the applicable proof contract
+- `runtime_evidence`: strict live runtime verdicts under the applicable proof
+  contract
 
 Live delegation defaults stay owned by `../SKILL.md`.
 This doc owns vocabulary and boundaries only. Exact model names and adapter
@@ -109,9 +109,9 @@ Hybrid rule:
 - `quality_guard`: `APPROVE` or `REJECT`, findings, reviewed scope, proof used.
 - `final_reviewer`: final closeout `APPROVE`, `BLOCK`, or `NON-BLOCKING`
   verdict for the whole changed slice.
-- `runtime_evidence`: recipe, flow, artifacts, behavioral verdict, blocking
-  defects, advisory notes, and trace/correlation identifiers or explicit
-  `none observed` when observability mattered.
+- `runtime_evidence`: claim boundary, recipe, flow, artifacts, verdict,
+  block impact, findings, and trace/correlation identifiers or explicit
+  `none observed` when relevant.
 
 ## Role-Specific Handoffs
 
@@ -153,6 +153,7 @@ Hybrid rule:
 
 `runtime_evidence` handoff:
 - pass exact runtime recipe or active runtime target
+- name the runtime-visible claim and what a failed or blocked verdict affects
 - name material branches or states to exercise
 - include must-check constraints and surface brief when UI quality is in scope
 - do not pre-identify design defects for the worker to echo back

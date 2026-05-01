@@ -36,9 +36,28 @@ Rules:
 - when runtime evidence is blocked, say `Runtime evidence: blocked` and explain
   the missing prerequisite
 
+## Escalation Decision
+
+Ask one question first: would the completion claim still be meaningful if no
+live app, service, browser, device, generated config, or process boundary were
+exercised?
+
+- If yes, persistent static or test proof may be enough.
+- If no, classify the claim as `runtime-provable` or
+  `multi-proof-required`.
+- If the harness cannot execute the needed runtime, classify it as
+  `not-reliably-provable-with-current-harness` and narrow or defer the claim.
+
+Do not use small diff size, passing unit tests, or reviewer confidence to
+downgrade a runtime claim.
+
 ## Runtime Evidence Minimum
 
-For runtime-bound `works`, `verified`, or `done` claims, evidence must include:
+For non-trivial runtime-bound `works`, `verified`, or `done` claims, route
+`runtime_evidence` unless the claim is tiny, local, and has no public-behavior
+or cross-boundary runtime risk. If in doubt, route it.
+
+Evidence must include:
 
 1. runtime readiness proof
 2. candidate discovery for data-dependent flows before main proof
@@ -52,12 +71,16 @@ For runtime-bound `works`, `verified`, or `done` claims, evidence must include:
 Artifact-only, startup-only, or navigation-only evidence is invalid for
 flow-completion claims.
 
+`reject`, `blocked`, or incomplete runtime evidence blocks or narrows the
+affected claim.
+
 Data-dependent flows:
 - inspect active runtime data with the supported repo path before choosing
   probes
 - treat flow setup as candidate discovery, then proof
 - if runtime lacks suitable data, report `Runtime evidence: blocked` with the
   failed probe and next repo-supported action
+- do not fabricate fixture expectations after seeing convenient data
 
 Branch coverage:
 - interactive UI needs interaction completeness, not only action fired
@@ -89,6 +112,9 @@ Visual verdict vocabulary and reject floor live in
 
 Element/text presence alone is not enough for overlay, floating, hit-test, or
 transition interactions.
+
+UI quality claims also need design anchors or an explicit underspecified
+posture. A runtime pass for behavior does not prove visual quality by itself.
 
 ## Shared Flow Functional Parity
 
@@ -123,13 +149,6 @@ when the claim allows that outcome.
 Mutating flows need at least one real runtime mutation plus verified outcome.
 Offline/retry claims need degraded-condition evidence plus recovery evidence.
 Interrupted delegated runtime proof is incomplete and must be rerun.
-
-## Owner Routing
-
-- Browser-visible proof mechanics route to `../../webapp-testing/SKILL.md`.
-- Mobile/device proof mechanics route to `../../mobileapp-testing/SKILL.md`.
-- Artifact naming and promotion discipline route to `verification-evidence.md`.
-- Project overlays provide concrete commands and runtime topology.
 
 ## Escalation Triggers
 
