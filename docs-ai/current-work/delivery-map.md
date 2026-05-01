@@ -6,6 +6,16 @@ The wave brief `**Status:**` is the execution gate.
 
 No active execution-ready waves.
 
+### Candidate Wave runtime-evidence-guard-policy-1 — Agent harness: runtime evidence as first-class live validation guard
+
+Planning artifact: `docs-ai/current-work/runtime-evidence-guard-policy-plan.md`
+
+- `agent-harness/workflow/runtime-evidence-global-guard-authority`
+- `agent-harness/workflow/runtime-evidence-delegation-policy`
+- `agent-harness/workflow/runtime-proof-completion-gate`
+- `agent-harness/adapters/runtime-evidence-prompt-parity`
+- `agent-harness/validation/runtime-evidence-policy-static-checks`
+
 ## Deferred Backlog
 
 - `skill-evals-report-only`: Consider a lightweight, report-only skill eval
