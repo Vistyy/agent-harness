@@ -1,6 +1,6 @@
-# Continuous Integration
+# Quality Gate Selection
 
-Owner for CI gate naming and local/CI lockstep.
+Owner for reusable quality-tier semantics and local completion-gate selection.
 
 Migration guardrails follow
 project overlay migration guardrails.
@@ -28,26 +28,6 @@ Rule: some stacks may omit `quality-full` when there is no honest extra local
 proof to expose. If a stack does expose `quality-full`, it must represent a real
 follow-up tier rather than a renamed `quality` or `quality-fast`.
 
-## Current CI Posture
-
-Persistent CI baseline: three path-scoped `quality-fast` workflows.
-
-- `.github/workflows/ci-fast-general.yml`
-- `.github/workflows/ci-fast-python.yml`
-- `.github/workflows/ci-fast-mobile.yml`
-
-Workflow ownership:
-
-- General (`YAML/Web/Infra/Admin`): path-scoped trigger + in-job filtering,
-  `uvx yamllint .`, `just web quality-fast`, `just admin quality-fast`,
-  `just infra quality-fast`
-- Python: `just python quality-fast` plus PR OpenAPI breaking-diff warning
-  check
-- Mobile: `just mobile quality-fast`
-  - mobile `quality-fast` intentionally excludes `codegen-check`; generated-code
-    validation stays in default mobile `quality` because cold `build_runner`
-    compile cost violates the `quality-fast` cheapest-baseline contract
-
 ## Local Gates
 
 Use `just` wrappers:
@@ -73,10 +53,5 @@ run that gate on purpose for changes on the owned performance path and for any
 baseline recalibration. When the proof is runtime-bound and explicit instead,
 run the owner command directly instead of relying on memory of ad hoc scripts.
 
-## Branch Protection
-
-If hosted rulesets are available for this repo plan, require these job checks:
-
-- `General quality-fast (YAML/Web/Infra/Admin)`
-- `Python quality-fast`
-- `Mobile quality-fast`
+CI workflow names, hosted branch-protection checks, and stack-specific command
+bodies belong to the active project overlay or repo-local workflow docs.

@@ -51,8 +51,8 @@ Load `references/harness-contracts.md` when changing project overlays,
 Load `references/skill-architecture.md` when authoring, splitting, installing,
 or validating reusable skills.
 
-Load `references/skill-invocation-cost.md` when auditing broad entrypoints or
-proposing a new routing skill.
+Load `references/skill-invocation-cost.md` when auditing broad entrypoints,
+reference reading cost, or proposed routing, extraction, or splitting changes.
 
 Load `references/skill-evaluation.md` when proposing or implementing
 behavioral evals for skill trigger, workflow, or output regressions.
@@ -67,11 +67,12 @@ policy, skill guidance, adapter posture, or validation.
 
 ## Skill Architecture
 
-Reusable skill guidance belongs in focused skill directories.
+Reusable skill architecture policy lives in `references/skill-architecture.md`.
+This entrypoint keeps only the hot-path owner summary.
 
 - `SKILL.md` contains trigger description and workflow mechanics.
-- Reference material should be split out only when the content is too large or
-  specialized to keep in the skill body.
+- Reference extraction and splitting require the separability gates in the
+  skill architecture reference; length alone is not a split reason.
 - Asset folders own templates copied or consumed by the skill.
 - Reusable helper commands should be exposed through the installed
   agent-harness CLI when they are project-facing.

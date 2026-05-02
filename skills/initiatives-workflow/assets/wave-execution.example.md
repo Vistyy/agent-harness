@@ -15,7 +15,7 @@ One packet layout only. Vary depth, not shape.
   - `engineering-harness/internal-harness-baseline/packet-shape-alignment`
   - `engineering-harness/internal-harness-baseline/proof-plan-adoption`
 - Out-of-scope:
-  - `engineering-harness/testing-posture/expanded-testing-skill`
+  - `engineering-harness/testing-cleanup/expanded-testing-skill`
 - Non-obvious constraints:
   - `Keep one packet layout; do not introduce compact/standard/proof-heavy variants.`
 - System-boundary trigger:
@@ -117,7 +117,7 @@ Rules:
 - Proof rows:
   - `P2`
 - Deferred follow-up:
-  - `engineering-harness/testing-posture/expanded-testing-skill`
+  - `engineering-harness/testing-cleanup/expanded-testing-skill`
 
 ## Proof Plan
 
@@ -185,7 +185,7 @@ Rules:
 
 ### Technical Debt And Deferred Follow-Up
 
-- `engineering-harness/testing-posture/expanded-testing-skill` after packet/proof-plan changes are exercised in real planning work
+- `engineering-harness/testing-cleanup/expanded-testing-skill` after packet/proof-plan changes are exercised in real planning work
 
 ### Contradiction Sweep
 

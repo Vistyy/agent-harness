@@ -17,7 +17,7 @@ owned by `../../planning-intake/SKILL.md`. Delegation policy is owned by
 - backlog detail:
   `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md`
 
-Apply `policy-single-source-of-truth.md` when overlaps appear.
+Apply `../../documentation-stewardship/SKILL.md` when overlaps appear.
 
 ## Wave ID
 

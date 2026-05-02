@@ -24,7 +24,6 @@ Read only the references needed for the current task:
 - `references/system-and-boundary-architecture.md`
 - `references/engineering-principles.md`
 - `references/code-shape-and-local-design.md`
-- `references/engineering-doctrine.md`
 - `references/migration-guardrails.md`
 - `references/python-service-and-boundary-doctrine.md`
 - `references/web-frontend-boundaries.md`

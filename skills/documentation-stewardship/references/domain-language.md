@@ -39,7 +39,7 @@ Use these existing owners rather than redefining terms:
 | Domain | Canonical owner |
 |---|---|
 | skill structure, `SKILL.md`, frontmatter `description`, references, assets, scripts | `../../harness-governance/references/skill-architecture.md` |
-| durable rule ownership and doc placement | `policy-single-source-of-truth.md`, `durable-doc-placement.md` |
+| durable rule ownership and doc placement | `../SKILL.md` |
 | wave lifecycle, delivery map, backlog item | `../../initiatives-workflow/references/initiatives-workflow.md` |
 | execution packet, task card, proof row | `../../initiatives-workflow/references/wave-packet-contract.md` |
 | role names and subagent boundaries | `../../subagent-orchestration/references/coding-agent-topology.md` |

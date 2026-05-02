@@ -170,6 +170,6 @@ Hybrid rule:
 ## Related Contracts
 
 - review topology owner: `../../code-review/references/review-governance.md`
-- policy ownership owner: `../../documentation-stewardship/references/policy-single-source-of-truth.md`
+- policy ownership owner: `../../documentation-stewardship/SKILL.md`
 - standalone-plan owner: `../../writing-plans/references/standalone-plans.md`
 - wave workflow owner: `../../initiatives-workflow/references/initiatives-workflow.md`

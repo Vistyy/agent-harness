@@ -35,9 +35,9 @@ Examples and helper scripts are indexed in `../SKILL.md`.
 | persistent-test validity/strength for `multi-proof-required` | `proof-strength.md` |
 | CI posture | `layer-selection.md` |
 | practical add/keep checks | `layer-selection.md` |
-| test-suite cleanup posture and follow-up ownership | `testing-posture.md` |
 | corpus-wide cleanup tranches | `corpus-audit.md` |
 | performance and cost posture | `corpus-audit.md` |
+| test-suite cleanup posture and follow-up ownership | `corpus-audit.md` |
 
 ## Fast Route
 
@@ -50,5 +50,5 @@ Examples and helper scripts are indexed in `../SKILL.md`.
   concerns: load `proof-strength.md`.
 - Choosing layer, persistence lane, runtime handoff, CI lane, or workflow/infra
   proof: load `layer-selection.md`.
-- Running a suite cleanup tranche, suspicious-cluster audit, or test cost
-  cleanup: load `testing-posture.md` and `corpus-audit.md`.
+- Running a suite cleanup tranche, suspicious-cluster audit, test cost cleanup,
+  or harness-level testing follow-up: load `corpus-audit.md`.

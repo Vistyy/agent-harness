@@ -45,17 +45,11 @@ repo-supported step.
 
 ## Channel Selection
 
-Use the first channel that honestly proves the claim:
+Use `browser-proof-layering-contract.md` for the channel matrix and
+reviewed-vs-diagnostic artifact posture.
 
-1. existing durable browser spec, when it already covers the claim
-2. new or updated durable spec, usually Playwright Test when that is the
-   project browser spec stack, when the flow is regression-worthy and stable
-3. Microsoft `playwright-cli` for one-shot, exploratory, weakly reusable, or
-   review-only browser proof
-4. raw script only when spec and CLI cannot express the flow cleanly
-
-Generic adapter browser tools may support diagnostics, but they are not the
-Microsoft `playwright-cli` channel unless they explicitly expose
+Workflow note: generic adapter browser tools may support diagnostics, but they
+are not the Microsoft `playwright-cli` channel unless they explicitly expose
 `microsoft/playwright-cli` / `@playwright/cli`.
 
 ## Delegation

@@ -14,8 +14,9 @@ It should include:
 - expected outputs or handback shape,
 - gotchas that affect routing or correctness.
 
-Keep long doctrine, examples, templates, scripts, and assets out of the entry
-body unless the agent needs them on every invocation.
+Keep doctrine, examples, templates, scripts, and assets out of the entry body
+unless the agent needs them on every invocation. Length is reading-cost
+evidence, not a standalone extraction reason.
 
 ## Frontmatter
 
@@ -51,15 +52,21 @@ Rules:
 - do not restate another skill's procedure, approval rule, or policy,
 - do not mix unrelated lifecycle phases just because the same agent may touch
   them in one run,
-- split only when the parts have different triggers, inputs, outputs, or
-  proof/review owners.
+- split a skill only when the parts have different triggers, inputs, outputs,
+  or proof/review owners.
 
 When a skill directly consumes another skill's doctrine or output, name the
 reason to load it. Keep the meaning in the consumed skill.
 
 ## References
 
-Use references for detail that is too large or conditional for `SKILL.md`.
+Use references for detail that is conditional or not needed on every
+invocation. Keep hot-path invariants in `SKILL.md`: owner boundary, stop
+conditions, proof requirements, and review requirements.
+
+Needed together means sections are required in the same invocation to preserve
+one workflow contract, stop condition, proof/review obligation, or owner
+boundary.
 
 Rules:
 
@@ -68,9 +75,19 @@ Rules:
 - keep references one topic each,
 - add a table of contents or heading map when a reference grows past about
   `100` lines,
+- use a heading map as the default response to length when sections are needed
+  together,
+- split one reference into multiple references only when the new files have a
+  distinct load gate, distinct inputs or outputs, distinct proof/review owner,
+  or an independent consumer,
 - avoid nested reference chains.
 
 References should point to owner docs instead of copying shared doctrine.
+
+Before extracting or splitting, name the separability proof: observed or
+expected distinct trigger, load gate, input/output, proof/review owner, or
+independent consumer. If separability is not proved, tighten wording, add a
+heading map, link the owner, or delete stale material instead.
 
 ## Scripts
 
@@ -104,14 +121,18 @@ Rules:
 ## Simplicity Bar
 
 A skill is too broad when it owns unrelated procedures, repeats another
-owner's durable rule, or requires broad reading for a narrow task.
+owner's durable rule, or requires broad reading for a narrow task whose needed
+sections are separable.
 
 Default correction order:
 
 1. delete stale or unused material,
 2. link to the existing owner,
-3. move conditional detail to a directly linked reference,
-4. split only when two procedures have different triggers or outputs.
+3. add a heading map or tighten wording when one contract must stay together,
+4. move conditional detail to a directly linked reference while preserving
+   hot-path invariants,
+5. split only when separability proof shows different triggers, load gates,
+   inputs, outputs, proof/review owners, or independent consumers.
 
 Concise is not enough. The skill must still preserve the trigger terms and
 workflow constraints an agent needs to choose and use it correctly.

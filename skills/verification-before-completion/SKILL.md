@@ -65,8 +65,9 @@ residual verification risks. Include review verdict fields from
 
 Use the repo's matching standard completion gate. Load
 `references/quality-gate-selection.md` only when choosing between `quality`,
-`quality-fast`, `quality-full`, stack-specific gates, CI lockstep, or branch
-protection semantics.
+`quality-fast`, `quality-full`, or reusable local completion-gate semantics.
+Hosted CI workflow names, branch-protection checks, and stack-specific command
+bodies belong to the project overlay or repo-local workflow docs.
 
 Rule: `quality-fast` is for iteration and CI baseline. Do not replace the
 completion gate with it.
