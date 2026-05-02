@@ -165,12 +165,22 @@ Wave closeout rule:
 - Do not mark the wave done, delete the packet, or clear the delivery-map entry while final review is pending.
 - Closeout needs final separate review `APPROVED`.
 
+Runtime-visible closeout rule:
+- `done`, `ready`, `works`, and `end-to-end` wording fails when it is broader
+  than covered runtime proof, entrypoint fidelity, action, variants,
+  observable result, or named unproved boundaries.
+- Proxy runtime proof and objective narrowing are invalid unless the residual
+  unproved user/operator path is named and the final claim is narrowed.
+
 Any message claiming done, complete, ready, or approved must include:
 - `In-thread quality_guard:` actual verdict plus reviewed scope
 - `Touched component integrity:` `acceptable | unacceptable | not assessed`,
   with touched owner/component, highest inspected scope, must-block signals, and
   accepted-debt backlog link when present
 - `Verification:` fresh proving command or artifact
+- `Runtime claim map:` when the claim is non-trivial and runtime-visible
+- `Entrypoint fidelity:` when the claim is non-trivial and runtime-visible
+- `Unproved runtime boundaries:` when the claim is non-trivial and runtime-visible
 - `Final review:` `APPROVED | BLOCKED | PENDING SEPARATE REVIEW`
 - For non-trivial work, changed surfaces, required `planning_critic` verdict,
   and residual risks.

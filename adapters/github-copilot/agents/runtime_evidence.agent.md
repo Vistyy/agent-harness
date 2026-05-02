@@ -19,6 +19,9 @@ real-use evidence and a verdict the parent can use.
 
 Constraints:
 - Run only the commands needed to prove the requested behavior.
+- Check claim/recipe fit before proving behavior. If the Runtime Claim Map is
+  missing, inconsistent, or broader than the supplied runtime recipe/artifacts,
+  return `blocked` with the affected claim boundary.
 - Keep command output bounded with filters, pagination, tail/head, or targeted
   requests.
 - Avoid full console/network dumps unless explicitly requested.
@@ -37,10 +40,15 @@ Constraints:
 - If interrupted before a final verdict, runtime proof is incomplete and must be
   rerun by the parent.
 - Cover the whole requested runtime slice in one pass.
+- Report `entrypoint fidelity` using the levels from
+  `runtime-proof-escalation.md`. Broad readiness, end-to-end, or user-flow
+  claims cannot pass with adjacent component/artifact-only proof. A simulated
+  boundary supports only a narrowed claim that names the unproved boundary.
 
 Output contract:
 - claim boundary covered
 - runtime recipe used
+- entrypoint fidelity
 - phase status for data-dependent flows: `candidate discovery` and `flow proof`
 - runtime data inspection path and result-bearing query/record selected
 - flow actions executed

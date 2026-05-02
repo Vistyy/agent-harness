@@ -36,6 +36,47 @@ Rules:
 - when runtime evidence is blocked, say `Runtime evidence: blocked` and explain
   the missing prerequisite
 
+## Runtime Claim Map
+
+For non-trivial runtime-visible claims, keep one compact claim map before
+handoff or closeout. Tiny local claims may mark the map `not-needed` only when
+there is no public-behavior or cross-boundary runtime risk.
+
+The map names:
+- final claim boundary
+- user, operator, or API entrypoint
+- active runtime target or recipe
+- real action, request, screen, state, or flow exercised
+- observable result and owning surface
+- material variants, branches, auth/capability posture, and data state
+- simulated, stubbed, or replaced boundaries and their claim impact
+- one weaker implementation the proof rejects
+
+Final runtime-visible wording must not exceed this map. Any unproved
+user/operator entrypoint or replaced boundary must narrow the claim or become a
+durable follow-up.
+
+## Entrypoint Fidelity
+
+Use one of these levels when reporting runtime proof coverage:
+
+- `exact`: same command, API, UI, or operator path; same runtime topology; same
+  config/env loading; same artifact or side-effect visibility path.
+- `faithful-wrapper`: invokes the exact entrypoint without replacing lifecycle,
+  config, topology, or visibility boundaries. Any replaced boundary is named and
+  excluded from the claim.
+- `simulated-boundary`: explicitly replaces a boundary. It can prove the
+  downstream or upstream behavior exercised, but not the replaced boundary.
+- `adjacent-only`: proves a component, artifact, helper, or neighboring path
+  without exercising the claimed entrypoint. It cannot support
+  readiness/end-to-end/user-flow claims.
+- `not-needed`: runtime proof is not needed for the scoped claim.
+
+Readiness, end-to-end, user-flow, or broad `works` claims cannot pass with
+`adjacent-only` proof. `simulated-boundary` proof can pass only a narrowed
+claim that names the unproved boundary. Artifact-only, startup-only, or
+navigation-only evidence is invalid for flow-completion claims.
+
 ## Escalation Decision
 
 Ask one question first: would the completion claim still be meaningful if no
@@ -69,7 +110,8 @@ Evidence must include:
 8. one weaker implementation the proof would reject
 
 Artifact-only, startup-only, or navigation-only evidence is invalid for
-flow-completion claims.
+flow-completion claims; classify those cases as `adjacent-only` unless they
+exercise the mapped entrypoint and observable result.
 
 `reject`, `blocked`, or incomplete runtime evidence blocks or narrows the
 affected claim.

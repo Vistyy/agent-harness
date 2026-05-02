@@ -128,6 +128,22 @@ Rules:
 Proof rows assigned to a task define task-local verification obligations.
 Handback should leave those checks green or return an explicit blocker.
 
+For runtime proof rows, existing fields must carry the Runtime Claim Map
+requirements from
+`../../verification-before-completion/references/runtime-proof-escalation.md`
+without adding packet columns:
+
+- `exact_proof` is invalid unless it names the entrypoint, runtime target,
+  action/request/flow, observable result, and simulation boundary or `none`.
+- `expected_evidence` is invalid unless the evidence is tied to the same or
+  downstream owner/user-visible surface.
+- `counterfactual_regression_probe` must include an adjacent artifact,
+  component-only, or helper-only implementation when that is a realistic weaker
+  path.
+
+Runtime rows should classify simulated boundaries honestly instead of hiding
+them in command text.
+
 ## System-Boundary Appendix
 
 When `System-boundary trigger: triggered`, include:

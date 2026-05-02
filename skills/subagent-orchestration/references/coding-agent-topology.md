@@ -154,6 +154,10 @@ Hybrid rule:
 `runtime_evidence` handoff:
 - pass exact runtime recipe or active runtime target
 - name the runtime-visible claim and what a failed or blocked verdict affects
+- pass the Runtime Claim Map essentials from
+  `verification-before-completion/references/runtime-proof-escalation.md`:
+  user/operator/API entrypoint, action/request/screen/state, observable result,
+  material variants, and any simulated or replaced boundary
 - name material branches or states to exercise
 - include must-check constraints and surface brief when UI quality is in scope
 - do not pre-identify design defects for the worker to echo back

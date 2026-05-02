@@ -22,8 +22,23 @@ Out:
 
 ## Quality Bar
 
+For user-facing products, functional correctness is not enough. End-user UI must
+feel intentionally designed for the project's domain, audience, and product
+posture: visually composed, interaction-coherent, and rewarding to return to in
+repeated use. Treat visual quality, interaction feel, and repeated-use delight as
+product quality, not optional polish.
+
+The global harness owns that requirement only. Each project owns the observable
+meaning through design anchors, archetypes, scorecards, runtime proof
+expectations, and anti-patterns. If a user-facing UI change lacks those anchors,
+stop and request the smallest project-owned source-of-truth update instead of
+accepting generic functional UI.
+
 Reject:
 - project design-fidelity anti-patterns
+- user-facing UI that is only technically correct or generic, with no
+  project-owned design anchors proving intentional hierarchy, interaction feel,
+  visual character, and repeated-use quality
 - monolithic single-scroll editing surfaces when stateful sectioning is needed
 - inconsistent nav semantics between web and mobile
 - browser-native confirm/prompt patterns in end-user web flows when in-app

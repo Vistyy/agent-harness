@@ -17,6 +17,8 @@ Runtime evidence validates the handed-off live claim. It must:
 - use the supplied runtime target or recipe
 - exercise real behavior, not only inspect source or static output
 - inspect the artifacts it cites
+- check that the supplied recipe fits the Runtime Claim Map from
+  `runtime-proof-escalation.md`
 - return one behavioral verdict: `pass | reject | blocked`
 - name the claim boundary covered by the verdict
 - name block impact for `reject`, `blocked`, or incomplete proof
@@ -50,7 +52,18 @@ asked to validate.
 - `reject`: the observed runtime behavior contradicts the claim or hits the
   automatic visual reject floor.
 - `blocked`: the harness cannot honestly complete the live validation because
-  a required runtime, data state, credential, device, or recipe is missing.
+  a required runtime, data state, credential, device, recipe, or claim-map
+  field is missing.
+
+If the claim map is missing, inconsistent, or broader than the supplied
+runtime recipe or artifacts, return `blocked` with a message such as
+`claim too broad for supplied runtime recipe`. Runtime evidence may suggest a
+narrowed claim, but must not choose new entrypoints, expand branches, debug,
+plan, review code quality, or approve readiness.
+
+`adjacent-only` proof cannot pass readiness, end-to-end, or user-flow claims.
+`simulated-boundary` proof must name the unproved boundary and supports only a
+narrowed claim.
 
 `reject`, `blocked`, or incomplete runtime evidence blocks or narrows the
 affected claim even when automated tests or review agents pass.
@@ -60,6 +73,8 @@ affected claim even when automated tests or review agents pass.
 Runtime evidence reports must include:
 - claim boundary covered
 - runtime recipe or command path used
+- entrypoint fidelity:
+  `exact | faithful-wrapper | simulated-boundary | adjacent-only | not-needed`
 - whether observability was enabled
 - flow, request, screen, state, or branch exercised
 - material variants considered and exact variants covered

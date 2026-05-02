@@ -102,6 +102,9 @@ Role-owner fresh-context requirements override this reuse default.
 - `planning_critic` as implementation reviewer or final approver
 - `check_runner` as final approver or interactive runtime validator
 - `runtime_evidence` for routine bulk log/trace archaeology
+- handing `runtime_evidence` a narrowed artifact/component claim and then
+  synthesizing a broader readiness, works, end-to-end, or user-flow claim in
+  parent closeout
 - tests or review roles used as substitutes for required `runtime_evidence`
 - `quality_guard` as final approval
 - `final_reviewer` as planning-gate or in-thread chunk review

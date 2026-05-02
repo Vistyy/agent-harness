@@ -52,7 +52,10 @@ Use `review-governance.md` for required completion fields. This skill adds the
 fresh verification posture and the verification/runtime fields below.
 
 Report when relevant:
+- `Runtime claim map: cited in <artifact/path> | not-needed`
+- `Entrypoint fidelity: exact | faithful-wrapper | simulated-boundary | adjacent-only | not-needed`
 - `Runtime evidence: satisfied | blocked | skipped | incomplete`
+- `Unproved runtime boundaries: none | <boundary + claim narrowing/follow-up>`
 - `Diagnostics evidence: trace/log-linked | none-observed | limited-no-observability | not-needed`
 - `Doc hygiene: updated | deferred (<reason>, <path>)`
 - `System-boundary doctrine: satisfied | blocked | routed back to planning`
@@ -88,10 +91,15 @@ Before any completion claim:
 10. For non-trivial runtime-visible claims, route or cite `runtime_evidence`.
     Tiny parent-local runtime proof is allowed only when the claim is local and
     has no public-behavior or cross-boundary runtime risk.
-11. For runtime/debug/observability-heavy claims, cite selected trace/log
+11. For non-trivial runtime-visible claims, cite the Runtime Claim Map from
+    `references/runtime-proof-escalation.md`. Use `not-needed` only for
+    non-runtime claims or tiny local runtime claims with no public-behavior or
+    cross-boundary runtime risk. Final wording cannot exceed covered entrypoint
+    fidelity, action, variants, observable result, and unproved boundaries.
+12. For runtime/debug/observability-heavy claims, cite selected trace/log
     artifact/query pointers and selected trace/correlation IDs, or explicit
     `none observed`, or why observability was intentionally not used.
-12. State final-review status using `review-governance.md` terms.
+13. State final-review status using `review-governance.md` terms.
 
 If any step is missing, do not claim done.
 
@@ -103,6 +111,11 @@ If any step is missing, do not claim done.
 - Interrupted delegated runtime proof means `Runtime evidence: incomplete`, not "pending enough."
 - A `reject`, `blocked`, or incomplete runtime verdict blocks or narrows the
   affected runtime-visible claim.
+- If runtime evidence covers only an adjacent component, helper, or artifact
+  while the final claim says `works`, `ready`, `end-to-end`, or user flow,
+  narrow the claim or run exact/faithful-entrypoint proof first.
+- Final runtime-visible claims fail when they exceed the cited Runtime Claim
+  Map or runtime evidence verdict.
 - For UI/runtime claims, proof must review actual surface quality, not only happy-path success.
 - For runtime/debug/observability-heavy claims, start from the
   observability-enabled repo runtime unless the claim is explicitly narrow
