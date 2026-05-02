@@ -54,6 +54,11 @@ Apply when work:
 Boundary-tightening slices use review and testing doctrine for legacy-path
 rejection. This reference owns the single-owner architecture rule.
 
+Static architecture checks enforce only stabilized named boundaries. A check
+needs a durable owner and one forbidden dependency, import, state-authority, or
+data-flow shape. Aspirational target shapes stay planning/backlog debt until
+the owner and forbidden shape are explicit.
+
 ## Stop Conditions
 
 Stop execution and return to planning if:

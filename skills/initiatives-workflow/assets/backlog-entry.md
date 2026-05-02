@@ -4,6 +4,9 @@
 
 - Impact: `high` | `medium` | `low`
 - Effort: `S` | `M` | `L`
+- Queue bucket:
+  `Next Backlog Candidates` | `Deferred Backlog` | `Release / Post-Release Backlog` |
+  `Trigger-Based Backlog` | `Mobile-Only Backlog` | `Mobile Parity Queue`
 
 ## Problem
 
@@ -21,9 +24,12 @@ Why this item belongs in its current delivery-map bucket (`Next Backlog Candidat
 - Dependencies/prerequisites:
 - Trigger (only if this belongs in `Trigger-Based Backlog` and the trigger is a hard, durably trackable condition):
 - Smallest next slice:
+- Promotion/removal condition:
 
 ## References
 
+- Owning durable doc:
+- Queue/backlog source:
 - Source wave/task:
 - Files/evidence:
 - Related PR/commit/log links:

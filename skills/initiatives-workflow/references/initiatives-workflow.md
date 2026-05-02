@@ -61,9 +61,15 @@ Rules:
 - backlog entries are short descriptions, not executable plans
 - each backlog item needs one slug in a queue bucket or mobile parity queue and
   one matching detail file under `docs-ai/current-work/backlog/`
+- each backlog detail file records impact, effort, queue bucket, owning durable
+  doc or explicit missing-owner reason, queue/backlog source, source/evidence,
+  smallest next slice, and promotion/removal condition
 - use bucket placement for timing posture instead of extra fields
 - if unclear, default to `Deferred Backlog`
 - trigger bucket needs one crisp durable trigger
+- tightened backlog validation is backward-looking only for projects that opt
+  into that contract; once enabled, weak old items must be migrated, merged,
+  promoted, or deleted instead of grandfathered
 - `Mobile-Only Backlog` owns durable mobile-only detail; `Mobile Parity Queue`
   stays queue-only follower work
 - ask the user only when the decision changes user-visible behavior, release
