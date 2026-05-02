@@ -24,6 +24,7 @@ FORBIDDEN_TERMS = (
     "Lidl",
 )
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+MARKDOWN_LEVEL_TWO_HEADING_PATTERN = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
 INLINE_PATH_RE = re.compile(r"`((?:(?:references|assets|scripts)/|\.\./)[^`\s]+)`")
 FORBIDDEN_PROJECT_OWNER_PATH_RE = re.compile(r"`(docs-ai/docs/conventions/[^`]+)`")
 SKILL_TOKEN_RE = re.compile(r"(?<![A-Za-z0-9_-])\$([a-z][a-z0-9]*(?:-[a-z0-9]+)*)(?![A-Za-z0-9_-])")
@@ -105,6 +106,21 @@ WEB_BROWSER_PROOF_FILES = (
 LIVE_VALIDATION_STALE_PHRASES = (
     "Delegate isolated runtime proof only when startup/teardown is deterministic and ownership is unambiguous.",
 )
+BACKLOG_REQUIRED_HEADINGS = ("metadata", "problem", "why this bucket", "suggested next step", "references")
+BACKLOG_REQUIRED_FIELDS = (
+    "impact",
+    "effort",
+    "queue bucket",
+    "suggested target wave",
+    "dependencies/prerequisites",
+    "smallest next slice",
+    "promotion/removal condition",
+    "owning durable doc",
+    "queue/backlog source",
+    "source wave/task",
+    "files/evidence",
+)
+BACKLOG_ENTRY_TITLE_PREFIX = "# Backlog Entry:"
 
 
 class FrontmatterError(ValueError):
@@ -763,6 +779,44 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
     return errors
 
 
+def _normalize_heading(raw: str) -> str:
+    return raw.strip().rstrip("#").strip().lower()
+
+
+def _has_backlog_field_value(text: str, field: str) -> bool:
+    match = re.search(
+        rf"^\s*-\s+{re.escape(field)}(?:\s+\([^)]+\))?\s*:(?P<inline>.*)$",
+        text,
+        re.IGNORECASE | re.MULTILINE,
+    )
+    if match is None:
+        return False
+    if match.group("inline").strip():
+        return True
+    following = [line for line in text[match.end() :].splitlines() if line.strip()]
+    return bool(following and following[0].startswith("  "))
+
+
+def _validate_backlog_detail_contract(root: Path) -> list[str]:
+    errors: list[str] = []
+    backlog_root = root / "docs-ai/current-work/backlog"
+    if not backlog_root.is_dir():
+        return errors
+    for path in sorted(backlog_root.glob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        lines = text.splitlines()
+        if not lines or not lines[0].startswith(BACKLOG_ENTRY_TITLE_PREFIX):
+            errors.append(f"{path.relative_to(root)} missing {BACKLOG_ENTRY_TITLE_PREFIX!r} title")
+        headings = {_normalize_heading(match.group(1)) for match in MARKDOWN_LEVEL_TWO_HEADING_PATTERN.finditer(text)}
+        for heading in BACKLOG_REQUIRED_HEADINGS:
+            if heading not in headings:
+                errors.append(f"{path.relative_to(root)} missing backlog heading ## {heading.title()}")
+        for field in BACKLOG_REQUIRED_FIELDS:
+            if not _has_backlog_field_value(text, field):
+                errors.append(f"{path.relative_to(root)} missing backlog field {field!r}")
+    return errors
+
+
 def write_openai_metadata_report(root: Path, report_path: Path) -> list[str]:
     rows, errors = _openai_metadata_rows(root)
     lines = ["skill\tpath\tdisplay_name\tshort_description\tdefault_prompt"]
@@ -803,6 +857,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_skill_references(root))
     errors.extend(_validate_role_parity(root))
     errors.extend(_validate_wave_lifecycle(root))
+    errors.extend(_validate_backlog_detail_contract(root))
     errors.extend(_validate_simplicity_gate(root))
     errors.extend(_validate_live_validation_contracts(root))
 

@@ -4,6 +4,7 @@
 
 - Impact: `medium`
 - Effort: `M`
+- Queue bucket: `Deferred Backlog`
 
 ## Problem
 
@@ -26,10 +27,17 @@ clear value.
 - Smallest next slice: create a report-only eval harness for one high-risk
   routing question, likely `verification-before-completion` or
   `subagent-orchestration`.
+- Promotion/removal condition: promote when recurring workflow regressions
+  justify model-running eval cost, or delete if static checks and review roles
+  cover the observed failure class.
 
 ## References
 
+- Owning durable doc:
+  `skills/harness-governance/references/skill-evaluation.md`
+- Queue/backlog source:
+  `docs-ai/current-work/delivery-map.md` (`skill-evals-report-only`)
 - Source wave/task:
   `docs-ai/current-work/runtime-evidence-guard-policy-1/wave-execution.md`
 - Files/evidence:
-  scripts/validate_harness.py and tests/test_validate_harness.py
+  `../../../scripts/validate_harness.py`, `../../../tests/test_validate_harness.py`

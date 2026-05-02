@@ -137,6 +137,69 @@ def test_validate_accepts_minimal_valid_root(tmp_path: Path) -> None:
     assert validate_harness.validate(tmp_path) == []
 
 
+def test_validate_accepts_valid_backlog_detail(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "docs-ai" / "current-work" / "backlog" / "harness__example__item.md",
+        """
+        # Backlog Entry: harness/example/item
+
+        ## Metadata
+
+        - Impact: `medium`
+        - Effort: `M`
+        - Queue bucket: `Deferred Backlog`
+
+        ## Problem
+
+        Example problem.
+
+        ## Why This Bucket
+
+        Example bucket reason.
+
+        ## Suggested Next Step
+
+        - Suggested target wave (if known): none
+        - Dependencies/prerequisites: none
+        - Smallest next slice: define one narrow slice.
+        - Promotion/removal condition: promote or delete when no longer valid.
+
+        ## References
+
+        - Owning durable doc: `README.md`
+        - Queue/backlog source: `docs-ai/current-work/delivery-map.md`
+        - Source wave/task: none
+        - Files/evidence: `README.md`
+        """,
+    )
+
+    assert validate_harness.validate(tmp_path) == []
+
+
+def test_validate_rejects_incomplete_backlog_detail(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "docs-ai" / "current-work" / "backlog" / "harness__example__item.md",
+        """
+        # Backlog Entry: harness/example/item
+
+        ## Metadata
+
+        - Impact: `medium`
+
+        ## Problem
+
+        Example problem.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog field 'queue bucket'" in errors
+    assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog heading ## References" in errors
+
+
 def test_validate_requires_openai_metadata_for_every_skill(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     add_skill(tmp_path, "missing-metadata", metadata=False)
