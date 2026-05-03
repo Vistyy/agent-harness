@@ -14,7 +14,8 @@ Owner docs and review gates carry the doctrine.
 
 ## Review Inputs
 
-- Shared review doctrine: `references/review-governance.md`
+- Read `references/review-governance.md` when review governance, report shape,
+  verdict semantics, or closeout approval rules matter.
 - Simplicity gate: `../code-simplicity/SKILL.md`
 - Structural trigger handling: `../system-boundary-architecture/SKILL.md`
 

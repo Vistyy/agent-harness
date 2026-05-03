@@ -38,6 +38,15 @@ Do not store durable truth in active-work state.
 Durable owner docs may link durable owner docs or exact validation surfaces.
 Current-work items may link the durable owner they are cleaning up.
 
+## Successor Review
+
+Deleting or merging durable docs requires successor readback. Prove every
+retained invariant exists in the successor owner before claiming the old doc can
+go.
+
+Stale-reference scans and line-count reduction are not enough. If an invariant
+has no successor owner, stop or get explicit accepted deletion.
+
 ## Writing Contract
 
 Durable docs are terse and contractual.

@@ -31,7 +31,7 @@ the failing layer is known.
 
 - After root cause is known, apply `../code-simplicity/SKILL.md` for
   owner-correct repair.
-- Use `../testing-best-practices/references/condition-based-waiting.md` when
+- Read `../testing-best-practices/references/condition-based-waiting.md` when
   tests rely on arbitrary sleeps or fixed waits.
 - If the root cause is unresolved ownership, authority, contract, state,
   storage, or interface boundary, use

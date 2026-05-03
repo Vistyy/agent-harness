@@ -245,6 +245,107 @@ def test_validate_rejects_missing_skill_path_reference(tmp_path: Path) -> None:
     assert "README.md:1 references missing skill path ../../skills/missing-skill/SKILL.md" in errors
 
 
+def test_validate_rejects_skill_body_trigger_text(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "test-skill" / "SKILL.md",
+        """
+        ---
+        name: test-skill
+        description: Test skill trigger belongs here.
+        ---
+
+        # Test Skill
+
+        ## Use When
+
+        - bad body trigger
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/test-skill/SKILL.md contains body-level trigger heading; ordinary trigger text belongs in frontmatter description"
+        in errors
+    )
+
+
+def test_validate_rejects_optional_reference_wording(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "test-skill" / "SKILL.md",
+        """
+        ---
+        name: test-skill
+        description: Test skill trigger belongs here.
+        ---
+
+        # Test Skill
+
+        ## Optional Reference
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "skills/test-skill/SKILL.md contains Optional Reference wording; references are mandatory purpose gates" in errors
+
+
+def test_validate_rejects_non_gated_reference_row_in_governance_skill(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_skill(tmp_path, "code-review")
+    write(tmp_path / "skills" / "code-review" / "references" / "review-governance.md", "# Review Governance\n")
+    write(
+        tmp_path / "skills" / "code-review" / "SKILL.md",
+        """
+        ---
+        name: code-review
+        description: Use when reviewing code.
+        ---
+
+        # Code Review
+
+        - Shared review doctrine: `references/review-governance.md`
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/code-review/SKILL.md:8 has non-gated reference row in governance-critical skill; "
+        "use `Read <reference> when/before/for ...`"
+    ) in errors
+
+
+def test_validate_rejects_removed_harness_path_outside_archive(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(tmp_path / "README.md", "See skills/adversarial-review/SKILL.md.\n")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "README.md references removed harness path skills/adversarial-review/SKILL.md" in errors
+
+
+def test_validate_allows_removed_harness_path_in_closed_archive(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "docs-ai" / "current-work" / "closed-harness-audits-2026-04.md",
+        "Archived deletion: skills/adversarial-review/SKILL.md.\n",
+    )
+
+    assert validate_harness.validate(tmp_path) == []
+
+
+def test_validate_rejects_removed_harness_path_in_other_tests(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(tmp_path / "tests" / "test_stale_path.md", "See skills/adversarial-review/SKILL.md.\n")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "tests/test_stale_path.md references removed harness path skills/adversarial-review/SKILL.md" in errors
+
+
 def test_validate_rejects_missing_relative_skill_path_reference(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(tmp_path / "skills" / "test-skill" / "references" / "owner.md", "See ../missing-skill/SKILL.md.\n")

@@ -1,6 +1,6 @@
 ---
 name: work-routing
-description: "Use when choosing whether work should be direct, small bounded, planning-intake, or wave execution."
+description: "Use when choosing whether work should be direct, planning-intake, or wave execution."
 ---
 
 # Work Routing
@@ -14,17 +14,27 @@ Route to the lightest shape that can complete the binding objective and fix the
 touched owner surface required to make it true. Do not route a broad objective
 into a smaller invented task.
 
-`small bounded` is valid only when the full objective is small. If full
-correction is blocked, stop and name the blocker instead of patching around it.
+If full correction is blocked, stop and name the blocker instead of patching
+around it.
+
+## Objective Continuity
+
+After interruption, resume, or a new user message, re-check the binding
+objective before continuing.
+
+The newest user instruction can update the objective. Before execution,
+handoff, review, or closeout, check prior plan, delegation, review, and proof
+scope against the updated objective.
 
 ## Routes
 
-- `direct`: tiny/local work; no material owner, proof, runtime, compatibility,
-  migration, or public-behavior decision is open.
-- `small bounded`: the full objective is bounded in-thread, with named surfaces
-  and proof.
-- `planning-intake`: scope, decisions, proof, owner boundary, or wave shape is
-  still open.
+- `direct`: tiny/local work, or parent-local continuation after required gates
+  already approved. It must complete the full objective in-thread and cannot
+  bypass non-trivial planning, review, proof, runtime, compatibility,
+  migration, or public-behavior gates.
+- `planning-intake`: non-trivial work without execution-ready durable wave
+  state, or any open scope, decision, proof, owner boundary, runtime,
+  migration, compatibility, public-behavior, or wave-shape decision.
 - `wave execution`: execute one `execution-ready` wave from durable wave state.
   A wave may be one task; it is the only durable path for non-trivial work.
 

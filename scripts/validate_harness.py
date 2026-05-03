@@ -117,6 +117,66 @@ BACKLOG_REQUIRED_FIELDS = (
     "files/evidence",
 )
 BACKLOG_ENTRY_TITLE_PREFIX = "# Backlog Entry:"
+GOVERNANCE_CRITICAL_REFERENCE_GATE_SKILLS = {
+    "code-review",
+    "code-simplicity",
+    "documentation-stewardship",
+    "feedback-address",
+    "harness-governance",
+    "initiatives-workflow",
+    "planning-intake",
+    "subagent-orchestration",
+    "system-boundary-architecture",
+    "systematic-debugging",
+    "verification-before-completion",
+    "work-routing",
+}
+DEFERRED_REFERENCE_GATE_SKILL_GROUPS = {
+    "deeper testing pass": {"testing-best-practices", "test-driven-development"},
+    "deeper runtime proof pass": {"webapp-testing", "mobileapp-testing"},
+    "deeper mobile design pass": {"mobile-design"},
+    "deeper Svelte docs pass": {"svelte-core-bestpractices"},
+}
+SKILL_BODY_TRIGGER_PATTERNS = (
+    (re.compile(r"^##\s+Use\s+(?:When|For)\b", re.IGNORECASE | re.MULTILINE), "body-level trigger heading"),
+    (re.compile(r"\bUse this skill when\b", re.IGNORECASE), "body-level trigger phrase"),
+)
+SKILL_REFERENCE_PATH_RE = re.compile(r"`(?:\.\./[^`]*?/)?references/[^`\s]+\.md`")
+REQUIRED_REFERENCE_GATE_RE = re.compile(
+    r"^\s*-?\s*Read\s+`(?:\.\./[^`]*?/)?references/[^`\s]+\.md`.*\b(?:when|before|for)\b",
+    re.IGNORECASE,
+)
+REMOVED_HARNESS_PATHS = (
+    "skills/adversarial-review/SKILL.md",
+    "skills/adversarial-review/agents/openai.yaml",
+    "skills/code-simplicity/references/default-simplicity-posture.md",
+    "skills/documentation-stewardship/references/domain-language.md",
+    "skills/initiatives-workflow/references/initiatives-workflow.md",
+    "skills/planning-intake/references/intake-contract.md",
+    "skills/subagent-orchestration/references/delegation-policy.md",
+    "skills/system-boundary-architecture/references/code-shape-and-local-design.md",
+    "skills/system-boundary-architecture/references/engineering-principles.md",
+    "skills/system-boundary-architecture/references/migration-guardrails.md",
+    "skills/system-boundary-architecture/references/python-service-and-boundary-doctrine.md",
+    "skills/system-boundary-architecture/references/system-and-boundary-architecture.md",
+    "skills/system-boundary-architecture/references/web-frontend-boundaries.md",
+    "skills/system-boundary-architecture/references/web-route-and-state-boundary-doctrine.md",
+    "skills/systematic-debugging/evaluations/test-academic.md",
+    "skills/systematic-debugging/evaluations/test-pressure-1.md",
+    "skills/systematic-debugging/evaluations/test-pressure-2.md",
+    "skills/systematic-debugging/evaluations/test-pressure-3.md",
+    "skills/systematic-debugging/examples/condition-based-waiting-example.ts",
+    "skills/systematic-debugging/examples/find-polluter.sh",
+    "skills/systematic-debugging/references/condition-based-waiting.md",
+    "skills/systematic-debugging/references/defense-in-depth.md",
+    "skills/systematic-debugging/references/root-cause-tracing.md",
+    "skills/verification-before-completion/references/quality-gate-selection.md",
+)
+REMOVED_HARNESS_PATH_EXEMPTIONS = {
+    "docs-ai/current-work/closed-harness-audits-2026-04.md",
+    "scripts/validate_harness.py",
+    "tests/test_validate_harness.py",
+}
 
 
 class FrontmatterError(ValueError):
@@ -425,8 +485,81 @@ def _validate_skill_references(root: Path) -> list[str]:
             for match in SKILL_PATH_RE.finditer(line):
                 raw_path = match.group(1)
                 skill_name = match.group(2)
+                if _is_removed_path_scan_exempt(path, root) and raw_path in REMOVED_HARNESS_PATHS:
+                    continue
                 if skill_name not in skill_names:
                     errors.append(f"{rel}:{line_number} references missing skill path {raw_path}")
+    return errors
+
+
+def _iter_non_fenced_lines(text: str, start_line: int = 1) -> list[tuple[int, str]]:
+    lines: list[tuple[int, str]] = []
+    in_fence = False
+    for line_number, line in enumerate(text.splitlines(), start=start_line):
+        if line.strip().startswith("```"):
+            in_fence = not in_fence
+            continue
+        if not in_fence:
+            lines.append((line_number, line))
+    return lines
+
+
+def _validate_skill_body_contracts(root: Path) -> list[str]:
+    errors: list[str] = []
+    deferred_skills = set().union(*DEFERRED_REFERENCE_GATE_SKILL_GROUPS.values())
+    for skill_dir in _iter_skill_dirs(root):
+        skill_file = skill_dir / "SKILL.md"
+        if not skill_file.is_file():
+            continue
+        rel = skill_file.relative_to(root)
+        text = skill_file.read_text(encoding="utf-8")
+        try:
+            _frontmatter, body = _split_frontmatter(text)
+        except FrontmatterError:
+            continue
+        body_start_line = text[: text.index(body)].count("\n") + 1
+        for pattern, label in SKILL_BODY_TRIGGER_PATTERNS:
+            if pattern.search(body):
+                errors.append(f"{rel} contains {label}; ordinary trigger text belongs in frontmatter description")
+        if re.search(r"\boptional references?\b", body, re.IGNORECASE):
+            errors.append(f"{rel} contains Optional Reference wording; references are mandatory purpose gates")
+
+        if skill_dir.name not in GOVERNANCE_CRITICAL_REFERENCE_GATE_SKILLS:
+            continue
+        for line_number, line in _iter_non_fenced_lines(body, body_start_line):
+            if not SKILL_REFERENCE_PATH_RE.search(line):
+                continue
+            if REQUIRED_REFERENCE_GATE_RE.search(line):
+                continue
+            errors.append(
+                f"{rel}:{line_number} has non-gated reference row in governance-critical skill; "
+                "use `Read <reference> when/before/for ...`"
+            )
+    if not deferred_skills:
+        errors.append("deferred reference-gate scope is empty")
+    return errors
+
+
+def _is_removed_path_scan_exempt(path: Path, root: Path) -> bool:
+    rel = path.relative_to(root).as_posix()
+    return rel in REMOVED_HARNESS_PATH_EXEMPTIONS
+
+
+def _validate_removed_harness_paths(root: Path) -> list[str]:
+    errors: list[str] = []
+    for path in sorted(root.rglob("*")):
+        if (
+            not path.is_file()
+            or path.suffix not in {".md", ".yaml", ".yml", ".toml", ".txt"}
+            or ".git" in path.parts
+            or _is_removed_path_scan_exempt(path, root)
+        ):
+            continue
+        text = path.read_text(encoding="utf-8")
+        rel = path.relative_to(root)
+        for removed_path in REMOVED_HARNESS_PATHS:
+            if removed_path in text:
+                errors.append(f"{rel} references removed harness path {removed_path}")
     return errors
 
 
@@ -851,6 +984,8 @@ def validate(root: Path) -> list[str]:
     _rows, openai_errors = _openai_metadata_rows(root)
     errors.extend(openai_errors)
     errors.extend(_validate_skill_references(root))
+    errors.extend(_validate_skill_body_contracts(root))
+    errors.extend(_validate_removed_harness_paths(root))
     errors.extend(_validate_role_parity(root))
     errors.extend(_validate_wave_lifecycle(root))
     errors.extend(_validate_backlog_detail_contract(root))

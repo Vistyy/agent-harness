@@ -14,7 +14,8 @@ non-trivial work.
 
 ## References
 
-- packet/task/proof schema: `references/wave-packet-contract.md`
+- Read `references/wave-packet-contract.md` when packet, task-card, proof-row,
+  or execution-state schema matters.
 
 ## Owned Work
 
@@ -50,7 +51,7 @@ Statuses:
 Before execution:
 - wave brief status is `execution-ready`
 - canonical `wave-execution.md` exists
-- packet satisfies `references/wave-packet-contract.md`
+- packet satisfies the wave packet contract
 - durable brief and packet preserve original objective plus accepted reductions
 - planning gate records real `planning_critic` and `quality_guard` approval
 
