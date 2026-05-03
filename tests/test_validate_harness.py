@@ -282,6 +282,27 @@ def test_validate_rejects_missing_skill_path_reference(tmp_path: Path) -> None:
     assert "README.md:1 references missing skill path ../../skills/missing-skill/SKILL.md" in errors
 
 
+def test_validate_rejects_agents_route_map_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "AGENTS.md",
+        """
+        Treat project-local `AGENTS.md` as a compact first-hop map.
+
+        ## Routing
+
+        - Full wave execution: `wave-autopilot`.
+        - Missing route: `missing-skill`.
+        - Runtime proof policy: `runtime-proof`.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "AGENTS.md routes to removed workflow skill 'wave-autopilot'" in errors
+    assert "AGENTS.md routes to missing skill 'missing-skill'" in errors
+
+
 def test_validate_rejects_skill_body_trigger_text(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
@@ -417,6 +438,35 @@ def test_validate_rejects_removed_harness_path_outside_archive(tmp_path: Path) -
         "README.md references removed harness path skills/webapp-testing/examples/console_logging.py"
         in errors
     )
+
+
+def test_validate_rejects_owner_only_doctrine_duplicates(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "documentation-stewardship" / "SKILL.md",
+        """
+        ---
+        name: documentation-stewardship
+        description: Test owner.
+        ---
+
+        Every durable rule has one owner.
+        """,
+    )
+    write(
+        tmp_path / "README.md",
+        """
+        Every durable rule has
+        one owner.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "README.md duplicates owner-only doctrine 'Every durable rule has one owner.'; "
+        "owner is skills/documentation-stewardship/SKILL.md"
+    ) in errors
 
 
 def test_validate_allows_removed_harness_path_in_closed_archive(tmp_path: Path) -> None:

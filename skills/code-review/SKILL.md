@@ -37,13 +37,10 @@ Owner docs and review gates carry the doctrine.
 
 ## Process
 
-1. Resolve base branch and diff range. Ask only if ambiguous.
-2. Load the owner docs and gates needed for the slice.
-3. List changed files and needed task/wave anchors.
-4. Inspect the slice with skeptical posture. Try to falsify claims, not confirm vibes.
-5. Check whether tests or runtime proof cover the binding objective and actual
-   risky path, not only the nominal or parent-minimized path.
-6. Report all material findings. Do not stop at first blocker.
+1. Resolve base branch, diff range, changed files, and task/wave anchors.
+2. Load only owner docs and gates needed for the slice.
+3. Try to falsify the claim against the binding objective and risky paths.
+4. Report every material finding.
 
 ## Output
 

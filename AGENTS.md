@@ -33,8 +33,7 @@ Precedence:
 - Reusable harness posture and project overlays: `harness-governance`.
 - Documentation ownership: `documentation-stewardship`.
 - Simplicity and touched-owner integrity: `code-simplicity`.
-- Planning and wave shaping: `planning-intake`.
-- Non-trivial durable planning: `planning-intake`.
+- Planning, wave shaping, and non-trivial durable planning: `planning-intake`.
 - Wave lifecycle, packet state, and durable execution: `initiatives-workflow`.
 - Delegation and role boundaries: `subagent-orchestration`.
 - Feedback-caused edits: `feedback-address`.

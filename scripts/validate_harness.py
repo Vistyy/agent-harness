@@ -33,6 +33,7 @@ BACKTICK_SKILL_REF_RE = re.compile(
     r"(?:\s+[a-z]+){0,4}\s+`([a-z0-9]+(?:-[a-z0-9]+)+)`",
     re.IGNORECASE,
 )
+BACKTICKED_SKILL_NAME_RE = re.compile(r"`([a-z][a-z0-9]*(?:-[a-z0-9]+)*)`")
 SKILL_PATH_RE = re.compile(
     r"(?<![A-Za-z0-9_-])((?:(?:\.\./)+)?(?:skills/)?([a-z0-9]+(?:-[a-z0-9]+)*)/SKILL\.md)(?![A-Za-z0-9_-])"
 )
@@ -275,6 +276,16 @@ REMOVED_HARNESS_PATH_EXEMPTIONS = {
     "docs-ai/current-work/closed-harness-audits-2026-04.md",
     "scripts/validate_harness.py",
     "tests/test_validate_harness.py",
+}
+OWNER_ONLY_DOCTRINE = {
+    "Every durable rule has one owner.": "skills/documentation-stewardship/SKILL.md",
+    "Every durable concept has one owner.": "skills/documentation-stewardship/SKILL.md",
+    "Runtime evidence is blocking, not advisory.": "skills/runtime-proof/SKILL.md",
+    "Task labels, packets, implementer summaries, and reviewer prompts do not replace it.": (
+        "skills/code-review/references/review-governance.md"
+    ),
+    "`description` = trigger and routing contract.": "skills/harness-governance/references/skill-architecture.md",
+    "references = mandatory purpose gates.": "skills/harness-governance/references/skill-architecture.md",
 }
 
 
@@ -656,6 +667,43 @@ def _validate_removed_harness_paths(root: Path) -> list[str]:
         for removed_path in REMOVED_HARNESS_PATHS:
             if removed_path in text:
                 errors.append(f"{rel} references removed harness path {removed_path}")
+    return errors
+
+
+def _validate_owner_only_doctrine(root: Path) -> list[str]:
+    errors: list[str] = []
+    for path in sorted(root.rglob("*")):
+        if not path.is_file() or path.suffix not in {".md", ".yaml", ".yml", ".toml", ".txt"} or ".git" in path.parts:
+            continue
+        rel = path.relative_to(root).as_posix()
+        text = path.read_text(encoding="utf-8")
+        normalized_text = " ".join(text.split())
+        for phrase, owner in OWNER_ONLY_DOCTRINE.items():
+            normalized_phrase = " ".join(phrase.split())
+            if rel != owner and normalized_phrase in normalized_text:
+                errors.append(f"{rel} duplicates owner-only doctrine {phrase!r}; owner is {owner}")
+    return errors
+
+
+def _validate_agents_instruction_map(root: Path) -> list[str]:
+    errors: list[str] = []
+    path = root / "AGENTS.md"
+    if not path.is_file():
+        return errors
+    text = path.read_text(encoding="utf-8")
+    if "compact first-hop map" not in text:
+        errors.append("AGENTS.md must describe project overlays as a compact first-hop map")
+    routing = _markdown_section(text, "Routing")
+    if not routing:
+        errors.append("AGENTS.md missing ## Routing skill map")
+        return errors
+    skill_names = {_skill_name(skill_dir) for skill_dir in _iter_skill_dirs(root)}
+    for match in BACKTICKED_SKILL_NAME_RE.finditer(routing):
+        skill_name = match.group(1)
+        if skill_name in REMOVED_WORKFLOW_SKILL_NAMES:
+            errors.append(f"AGENTS.md routes to removed workflow skill {skill_name!r}")
+        elif skill_name not in skill_names:
+            errors.append(f"AGENTS.md routes to missing skill {skill_name!r}")
     return errors
 
 
@@ -1147,6 +1195,8 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_skill_references(root))
     errors.extend(_validate_skill_body_contracts(root))
     errors.extend(_validate_removed_harness_paths(root))
+    errors.extend(_validate_owner_only_doctrine(root))
+    errors.extend(_validate_agents_instruction_map(root))
     errors.extend(_validate_role_parity(root))
     errors.extend(_validate_wave_lifecycle(root))
     errors.extend(_validate_backlog_detail_contract(root))

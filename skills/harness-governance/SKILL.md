@@ -33,6 +33,8 @@ and project-overlay contracts.
 - Follow `documentation-stewardship` for one-owner durable concepts. Harness
   skills, adapters, and bootstrap docs may repeat only compressed owner
   pointers plus local load, input, output, or stop consequences.
+- Enforce duplicate doctrine with exact owner-only checks only when the phrase
+  has one durable owner and a concrete counterexample.
 - Delete, collapse, demote, or reuse before adding harness structure.
 - Exceptions need an owner, protected surface, and removal condition.
 

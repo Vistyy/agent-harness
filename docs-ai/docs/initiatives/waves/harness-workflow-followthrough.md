@@ -1,6 +1,6 @@
 # Wave harness-workflow-followthrough - Harness workflow follow-through
 
-**Status:** execution-ready
+**Status:** done
 
 ## Problem
 
@@ -43,7 +43,6 @@ rule.
 
 ## References
 
-- `docs-ai/current-work/harness-workflow-followthrough/wave-execution.md`
 - `skills/work-routing/SKILL.md`
 - `skills/initiatives-workflow/SKILL.md`
 - `skills/harness-governance/SKILL.md`
@@ -59,4 +58,11 @@ rule.
 
 ## Packet
 
-- `docs-ai/current-work/harness-workflow-followthrough/wave-execution.md`
+- closed after final review on 2026-05-04
+
+## Closeout
+
+- quality_guard: APPROVE for all eight task cards.
+- final_reviewer: APPROVE on 2026-05-04.
+- proof: harness validation, harness validator tests, diff check,
+  `just quality-fast`, and governance check passed.

@@ -10,39 +10,27 @@ with their owner skills.
 
 ## Full Work Rule
 
-Route to the lightest shape that can complete the binding objective and fix the
-touched owner surface required to make it true. Do not route a broad objective
-into a smaller invented task.
-
-If full correction is blocked, stop and name the blocker instead of patching
-around it.
-
-If the objective is too broad to complete to normal depth now, pause breadth,
-not responsibility. Use technical dependency, ordering, proof, and owner-boundary
-evidence to select the first coherent owner/problem when the choice is
-technical and reversible, then route and proceed deeply under the normal
-direct/planning/wave gates.
-
-The selected owner/problem is execution scope, not an accepted reduction. The
-original objective remains binding for continuity and closeout; final wording
-may claim only the completed owner/problem unless durable state covers the
-rest.
-
-Ask only when the first-owner choice depends on product priority, irreversible
-tradeoff, accepted reduction, credentials/access, or another user-owned
-decision, or when the user explicitly asks for an audit/map.
-
-Do not perform shallow breadth work across many requested areas to create
-apparent coverage.
+- Route to the lightest shape that can complete the binding objective and fix
+  the touched owner surface required to make it true.
+- Do not route a broad objective into a smaller invented task.
+- If full correction is blocked, stop and name the blocker.
+- If the objective is too broad to complete deeply now, pause breadth, not
+  responsibility. Use technical dependency, ordering, proof, and owner-boundary
+  evidence to select the first coherent owner/problem when that choice is
+  technical and reversible.
+- The selected owner/problem is execution scope, not an accepted reduction.
+- The original objective remains binding; final wording may claim only completed
+  scope unless durable state covers the rest.
+- Ask only for product priority, irreversible tradeoff, accepted reduction,
+  credentials/access, another user-owned decision, or requested audit/map.
+- Do not perform shallow breadth work for apparent coverage.
 
 ## Objective Continuity
 
-After interruption, resume, or a new user message, re-check the binding
-objective before continuing.
-
-The newest user instruction can update the objective. Before execution,
-handoff, review, or closeout, check prior plan, delegation, review, and proof
-scope against the updated objective.
+- Re-check the binding objective after interruption, resume, or a new user
+  message.
+- Before execution, handoff, review, or closeout, compare plan, delegation,
+  review, and proof scope to the newest objective.
 
 ## Routes
 
@@ -73,18 +61,17 @@ compatibility, or public behavior.
 
 ## Slice State Gate
 
-When routing narrows a broad objective to a first executable owner/problem, the
-slice is execution scope, not a replacement objective.
-
-Execution may start only from an `execution-ready` wave brief and canonical
-packet. Draft packets preserve candidate slice state during planning; they do
-not authorize execution.
-
-Durable state must preserve objective continuity, route scope, proof/review
-gates, and stop conditions through the existing `initiatives-workflow` packet
-contract. Thread discussion is not planning state. If the packet feels too
-heavy, shrink the packet template; do not execute from memory or create another
-artifact.
+- A narrowed broad-objective slice is execution scope, not replacement
+  objective.
+- Execution starts only from an `execution-ready` wave brief and canonical
+  packet.
+- Draft packets preserve candidate slice state during planning; they do not
+  authorize execution.
+- Durable state preserves objective continuity, route scope, proof/review gates,
+  and stop conditions through `initiatives-workflow`.
+- Thread discussion is not planning state.
+- If the packet feels too heavy, shrink the packet template; do not execute from
+  memory or create another artifact.
 
 ## Gate Matrix
 
