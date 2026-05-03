@@ -18,12 +18,12 @@ def fail(message: str) -> None:
     raise AssertionError(message)
 
 
-def run_install(codex_home: Path, bin_dir: Path, *args: str) -> None:
+def run_installer(codex_home: Path, bin_dir: Path, mode: str = "--apply", *args: str) -> subprocess.CompletedProcess[str]:
     env = os.environ.copy()
     env["CODEX_HOME"] = str(codex_home)
     env["AGENT_HARNESS_BIN_DIR"] = str(bin_dir)
     result = subprocess.run(
-        ["bash", str(INSTALLER), "--apply", *args],
+        ["bash", str(INSTALLER), mode, *args],
         cwd=ROOT,
         env=env,
         text=True,
@@ -35,6 +35,15 @@ def run_install(codex_home: Path, bin_dir: Path, *args: str) -> None:
         sys.stderr.write(result.stdout)
         sys.stderr.write(result.stderr)
         fail(f"installer exited {result.returncode}")
+    return result
+
+
+def run_install(codex_home: Path, bin_dir: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return run_installer(codex_home, bin_dir, "--apply", *args)
+
+
+def run_dry_run(codex_home: Path, bin_dir: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return run_installer(codex_home, bin_dir, "--dry-run", *args)
 
 
 def assert_symlink(path: Path, expected_source: Path) -> None:
@@ -105,6 +114,75 @@ def assert_repo_codex_not_regular_file() -> None:
         fail("repo root contains a regular-file .codex stub")
 
 
+def latest_manifest_dir(codex_home: Path) -> Path:
+    backups = sorted((codex_home / "backups").glob("agent-harness-*"))
+    if not backups:
+        fail("installer did not create a backup/manifest directory")
+    return backups[-1]
+
+
+def assert_pruned_manifest(codex_home: Path, expected_targets: set[Path]) -> None:
+    manifest = latest_manifest_dir(codex_home) / "backup-manifest.json"
+    text = manifest.read_text(encoding="utf-8")
+    for target in sorted(expected_targets):
+        if str(target) not in text:
+            fail(f"backup manifest missing pruned symlink {target}")
+
+
+def seed_prune_fixtures(codex_home: Path, external_root: Path) -> dict[str, Path]:
+    skills = codex_home / "skills"
+    agents = codex_home / "agents"
+    skills.mkdir(parents=True, exist_ok=True)
+    agents.mkdir(parents=True, exist_ok=True)
+    external_root.mkdir(parents=True, exist_ok=True)
+
+    stale_skill = skills / "old-workflow-skill"
+    stale_relative_skill = skills / "old-relative-workflow-skill"
+    stale_root_skill = skills / "old-root-skill"
+    stale_agent = agents / "old-agent.toml"
+    external_link = skills / "external-skill"
+    outside_dotdot_link = skills / "outside-dotdot-skill"
+    regular_file = skills / "user-file"
+    directory = skills / "user-dir"
+    system_dir = skills / ".system"
+
+    stale_skill.symlink_to(ROOT / "skills" / "wave-autopilot")
+    stale_relative_skill.symlink_to(os.path.relpath(ROOT / "skills" / "wave-autopilot", stale_relative_skill.parent))
+    stale_root_skill.symlink_to(ROOT)
+    stale_agent.symlink_to(ROOT / "adapters" / "codex" / "agents" / "old-agent.toml")
+    external_link.symlink_to(external_root / "external-skill")
+    outside_dotdot_link.symlink_to(ROOT / ".." / "external" / "outside-skill")
+    regular_file.write_text("user content\n", encoding="utf-8")
+    directory.mkdir()
+    system_dir.mkdir()
+
+    return {
+        "stale_skill": stale_skill,
+        "stale_relative_skill": stale_relative_skill,
+        "stale_root_skill": stale_root_skill,
+        "stale_agent": stale_agent,
+        "external_link": external_link,
+        "outside_dotdot_link": outside_dotdot_link,
+        "regular_file": regular_file,
+        "directory": directory,
+        "system_dir": system_dir,
+    }
+
+
+def assert_prune_fixtures_preserved(fixtures: dict[str, Path]) -> None:
+    for name in ("external_link", "outside_dotdot_link", "regular_file", "directory", "system_dir"):
+        path = fixtures[name]
+        if not (path.exists() or path.is_symlink()):
+            fail(f"installer removed preserved fixture {name}: {path}")
+
+
+def assert_pruned(fixtures: dict[str, Path]) -> None:
+    for name in ("stale_skill", "stale_relative_skill", "stale_root_skill", "stale_agent"):
+        path = fixtures[name]
+        if path.exists() or path.is_symlink():
+            fail(f"installer did not prune stale symlink {path}")
+
+
 def assert_install(codex_home: Path, bin_dir: Path) -> None:
     assert_symlink(codex_home / "AGENTS.md", ROOT / "AGENTS.md")
     assert_all_skills(codex_home)
@@ -133,15 +211,40 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="codex-install-smoke-") as temp_dir:
         codex_home = Path(temp_dir) / "codex-home"
         bin_dir = Path(temp_dir) / "bin"
+        external_root = Path(temp_dir) / "external"
+        fixtures = seed_prune_fixtures(codex_home, external_root)
+        dry_run = run_dry_run(codex_home, bin_dir)
+        for name in ("stale_skill", "stale_relative_skill", "stale_root_skill", "stale_agent"):
+            if str(fixtures[name]) not in dry_run.stdout:
+                fail(f"dry-run did not report planned prune for {fixtures[name]}")
+            if not fixtures[name].is_symlink():
+                fail(f"dry-run removed stale symlink {fixtures[name]}")
+        assert_prune_fixtures_preserved(fixtures)
         run_install(codex_home, bin_dir)
         assert_install(codex_home, bin_dir)
+        assert_pruned(fixtures)
+        assert_prune_fixtures_preserved(fixtures)
+        assert_pruned_manifest(
+            codex_home,
+            {
+                fixtures["stale_skill"],
+                fixtures["stale_relative_skill"],
+                fixtures["stale_root_skill"],
+                fixtures["stale_agent"],
+            },
+        )
         run_install(codex_home, bin_dir)
         assert_install(codex_home, bin_dir)
         shutil.rmtree(codex_home)
         stage_codex_home = Path(temp_dir) / "stage-codex-home"
         stage_bin_dir = Path(temp_dir) / "stage-bin"
+        stage_stale = stage_codex_home / "skills" / "old-stage-skill"
+        stage_stale.parent.mkdir(parents=True, exist_ok=True)
+        stage_stale.symlink_to(ROOT / "skills" / "wave-autopilot")
         run_install(stage_codex_home, stage_bin_dir, "--stage-harness-governance")
         assert_stage_only(stage_codex_home, stage_bin_dir)
+        if not stage_stale.is_symlink():
+            fail("stage-only install pruned a stale symlink")
     print("codex install smoke passed")
     return 0
 

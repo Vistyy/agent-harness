@@ -8,6 +8,15 @@ The baseline Codex adapter installs only individual symlinks:
 
 It never replaces whole directories.
 
+Full install prunes stale harness-owned symlinks directly under
+`$CODEX_HOME/skills` and `$CODEX_HOME/agents` when the link target is inside
+this harness repo and the basename is outside the current planned install set.
+It does not prune during `--stage-harness-governance`.
+
+Pruning never removes regular files, directories, `.system`, or symlinks that
+point outside this harness repo. Pruned symlinks are recorded in the backup
+manifest.
+
 `AGENTS.md` is the installed adapter prompt source for reusable harness policy.
 Do not move global policy only into a project-local overlay or role file.
 

@@ -102,7 +102,18 @@ target_matches() {
   [[ -L "$target" && "$(readlink "$target")" == "$source" ]]
 }
 
+resolved_symlink_target() {
+  local target="$1"
+  local source="$2"
+  if [[ "$source" = /* ]]; then
+    realpath -m -- "$source"
+  else
+    realpath -m -- "$(dirname "$target")/$source"
+  fi
+}
+
 CONFLICTS=()
+PRUNES=()
 
 collect_conflicts() {
   CONFLICTS=()
@@ -134,6 +145,86 @@ collect_conflicts() {
     return 0
   fi
   return 1
+}
+
+planned_basenames() {
+  local kind="$1"
+  case "$kind" in
+    skills)
+      planned_skills | while IFS=$'\t' read -r target _source; do
+        [[ -z "$target" ]] && continue
+        basename "$target"
+      done
+      ;;
+    agents)
+      planned_agents | while IFS=$'\t' read -r target _source; do
+        [[ -z "$target" ]] && continue
+        basename "$target"
+      done
+      ;;
+  esac
+}
+
+is_planned_basename() {
+  local name="$1"
+  shift
+  local planned
+  for planned in "$@"; do
+    if [[ "$name" == "$planned" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+collect_stale_symlink_prunes() {
+  PRUNES=()
+  if [[ "$STAGE_ONLY" == "true" ]]; then
+    return
+  fi
+  local skill_names=()
+  local agent_names=()
+  while IFS= read -r name; do
+    [[ -z "$name" ]] && continue
+    skill_names+=("$name")
+  done < <(planned_basenames skills)
+  while IFS= read -r name; do
+    [[ -z "$name" ]] && continue
+    agent_names+=("$name")
+  done < <(planned_basenames agents)
+
+  local spec
+  for spec in "$SKILLS_HOME|skills|${skill_names[*]}" "$AGENTS_HOME|agents|${agent_names[*]}"; do
+    local dir="${spec%%|*}"
+    local rest="${spec#*|}"
+    local kind="${rest%%|*}"
+    local names_string="${rest#*|}"
+    local planned_names=()
+    if [[ -n "$names_string" ]]; then
+      read -r -a planned_names <<< "$names_string"
+    fi
+    [[ -d "$dir" ]] || continue
+    local target
+    while IFS= read -r target; do
+      local name source
+      name="$(basename "$target")"
+      [[ "$name" == ".system" ]] && continue
+      if is_planned_basename "$name" "${planned_names[@]}"; then
+        continue
+      fi
+      source="$(readlink "$target")"
+      local resolved_source
+      resolved_source="$(resolved_symlink_target "$target" "$source")"
+      case "$resolved_source" in
+        "$ROOT")
+          PRUNES+=("$target"$'\t'"$source"$'\t'"$kind")
+          ;;
+        "$ROOT"/*)
+          PRUNES+=("$target"$'\t'"$source"$'\t'"$kind")
+          ;;
+      esac
+    done < <(find "$dir" -mindepth 1 -maxdepth 1 -type l | sort)
+  done
 }
 
 write_inventory() {
@@ -254,6 +345,22 @@ write_manifests() {
       printf '    {"target": "%s", "old_source": "%s", "new_source": "%s", "type": "symlink"}' "$target" "$old_source" "$source"
     done
     echo
+    echo "  ],"
+    echo "  \"pruned_symlinks\": ["
+    local first_prune="true"
+    local prune
+    for prune in "${PRUNES[@]}"; do
+      local target="${prune%%$'\t'*}"
+      local rest="${prune#*$'\t'}"
+      local source="${rest%%$'\t'*}"
+      local kind="${rest#*$'\t'}"
+      if [[ "$first_prune" == "false" ]]; then
+        echo ","
+      fi
+      first_prune="false"
+      printf '    {"target": "%s", "old_source": "%s", "kind": "%s", "type": "symlink"}' "$target" "$source" "$kind"
+    done
+    echo
     echo "  ]"
     echo "}"
   } > "$RUN_DIR/backup-manifest.json"
@@ -292,6 +399,13 @@ apply_symlinks() {
   local conflict
   for conflict in "${CONFLICTS[@]}"; do
     local target="${conflict%%$'\t'*}"
+    if [[ -L "$target" ]]; then
+      rm "$target"
+    fi
+  done
+  local prune
+  for prune in "${PRUNES[@]}"; do
+    local target="${prune%%$'\t'*}"
     if [[ -L "$target" ]]; then
       rm "$target"
     fi
@@ -356,6 +470,21 @@ else
     [[ -z "$target" ]] && continue
     echo "$target -> $source"
   done < <(planned_cli)
+fi
+
+collect_stale_symlink_prunes
+
+echo "planned stale symlink prunes:"
+if [[ "${#PRUNES[@]}" -eq 0 ]]; then
+  echo "none"
+else
+  prune=""
+  for prune in "${PRUNES[@]}"; do
+    target="${prune%%$'\t'*}"
+    rest="${prune#*$'\t'}"
+    source="${rest%%$'\t'*}"
+    echo "$target -> $source"
+  done
 fi
 
 echo "conflict policy: stop before replacing non-matching live targets"
