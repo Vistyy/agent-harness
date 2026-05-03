@@ -5,83 +5,74 @@ description: "Use when work changes abstractions, ownership boundaries, cross-su
 
 # System-Boundary Architecture
 
-Structural decision skill for boundary-shaping work.
+Owns structural stop gates and boundary-shaping doctrine.
 
-Capability:
+## Boundary Rules
 
-- detecting structural triggers,
-- loading the relevant doctrine references,
-- enforcing the hard stop when ownership, authority, or boundary decisions are
-  unresolved.
+- one boundary, contract, state authority, registry, runtime-local-state,
+  shared-home, or path-resolution layout has one explicit owner
+- one vendor, framework, storage payload, or transport payload shape has one
+  parsing or normalization owner
+- stores, runtime state, and adapters must not import route, screen,
+  controller, or service owners only to reuse state or contract types
+- composition roots and dependency modules wire declared dependencies and
+  policy boundaries; they do not own request-scoped workflow wrappers,
+  execution policy, or business workflow logic
+- optional dependency availability policy is explicit at wiring time, not
+  hidden in import-time globals
+- routes, screens, shells, controllers, services, coordinators, and caches must
+  not become hidden state machines, policy owners, or cross-instance mutable
+  state holders
+- typed contracts cross boundaries as named contracts or adapters, not raw
+  `dict`, `list`, or object bags that the next owner must re-parse
+- cross-surface contract changes need one named authority and one propagation
+  path
+- static architecture checks need a durable owner and one forbidden dependency,
+  import, state-authority, or data-flow shape; aspirational target shapes stay
+  planning or backlog until explicit
 
-Keep runtime proof depth, completion evidence, browser/mobile runtime mechanics,
-and project runtime recipes out of structural doctrine.
+Apply `../code-simplicity/SKILL.md` for owner-correct repair and local shape.
+Keep runtime proof taxonomy and project runtime recipes out of this skill.
 
-## Load
+## Reference Gates
 
-Read only the references needed for the current task:
-
-- `references/system-and-boundary-architecture.md`
-- `references/engineering-principles.md`
-- `references/code-shape-and-local-design.md`
-- `references/migration-guardrails.md`
-- `references/python-service-and-boundary-doctrine.md`
-- `references/web-frontend-boundaries.md`
-- `references/web-route-and-state-boundary-doctrine.md`
+- Read `references/web-boundaries.md` when browser route, page, component,
+  shared UI, import direction, public-surface, route-state, facade, or
+  screen-model boundaries matter.
+- Read `references/python-service-boundaries.md` when Python application
+  service, unit-of-work, repository construction, dynamic input, cast, `Any`, or
+  typed-contract boundaries matter.
 
 ## Workflow
 
-1. Confirm the trigger is structural, not merely local implementation.
-2. Load `references/system-and-boundary-architecture.md`.
-3. Load companion references only for the affected surface:
-   - local code shape: `references/code-shape-and-local-design.md`
-   - Python services, unit-of-work shape, or typing integrity:
-     `references/python-service-and-boundary-doctrine.md`
-   - web layer ownership, route ownership, or state authority:
-     `references/web-frontend-boundaries.md` and
-     `references/web-route-and-state-boundary-doctrine.md`
-   - migration guardrails: `references/migration-guardrails.md`
-4. Check whether the active plan, packet, or other governing artifact already
-   closes the needed owner, proof, state-authority, runtime, compatibility,
-   rollout, migration, storage, and public-behavior decisions.
-5. If multiple confirmed bugs or findings collapse onto one shared owner,
-   diagnose common cause before tactical fixes. Record current authority,
-   leaked responsibilities, and target split.
-6. If the structural decision is not closed, stop and route back to planning.
-   Do not settle the boundary locally during implementation.
-7. If the decision is closed, apply the references and keep the governing
-   artifact's structural disposition aligned when one exists.
+1. Confirm the change is structural, not merely local implementation.
+2. Load only matched reference gates.
+3. Check whether the governing plan/packet already closes owner, authority,
+   proof, runtime, compatibility, rollout, migration, storage, and
+   public-behavior decisions.
+4. If the structural decision is open, stop and route back to planning.
+5. If closed, apply the relevant rules and keep the governing artifact's
+   structural disposition aligned.
 
 ## Stop Conditions
 
 Stop execution and return to planning when:
+- the new owner is ambiguous
+- two plausible authorities remain for the same contract, state, or policy
+- a composition root would need to decide policy to finish the change
+- the fix needs a new structural rule not closed by the governing artifact or
+  durable doctrine
+- a local tactical patch would preserve a wrong ownership boundary
+- an adapter, store, dependency module, route, service, or cache would become
+  hidden authority to make the change fit
 
-- a boundary changes but the new owner is ambiguous,
-- two plausible authorities remain for the same contract, state, or policy,
-- a composition root would need to make policy decisions to finish the change,
-- the fix needs a new structural rule not already closed by the governing
-  artifact or durable doctrine,
-- a local tactical patch would preserve a wrong ownership boundary,
-- runtime proof ownership would need to move into this structural skill.
+## Structural Smells
 
-## Structural Trigger Examples
-
-- a route, screen, shell, service, or controller becomes a hidden state machine,
-- a shared contract is parsed or normalized independently by multiple owners,
-- one nullable or dynamic shape carries multiple semantic meanings across
-  boundaries,
-- a service owns transaction lifecycle, mapping, repository choreography,
-  workflow policy, and error translation at once,
-- a shared component or facade gains caller-specific behavior by default,
-- a composition root starts deciding workflow policy instead of wiring declared
-  boundaries.
-
-## Anti-Patterns
-
-- loading this skill for every medium-sized edit just to be safe,
-- treating it as a general engineering-principles skill instead of a structural
-  decision skill,
-- using implementation judgment to settle unresolved ownership after the
-  structural trigger fired,
-- moving runtime proof taxonomy or project runtime recipes into structural
-  doctrine.
+- route, screen, shell, service, or controller becomes a hidden state machine
+- shared contract is parsed or normalized independently by multiple owners
+- one nullable or dynamic shape carries multiple meanings across boundaries
+- service owns transaction lifecycle, mapping, repository choreography,
+  workflow policy, and error translation at once
+- shared component or facade gains caller-specific behavior by default
+- composition root starts deciding workflow policy instead of wiring declared
+  boundaries

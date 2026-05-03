@@ -47,9 +47,17 @@ rule. Do not compress away the required outcome, forbidden workaround, owner,
 exception boundary, or proof obligation when they matter. A durable rule should
 leave a reviewer with one reasonable classification of the covered case.
 
-Read `references/domain-language.md` when terminology, aliases, or wording
-consistency matter. Do not introduce a new synonym for an owned workflow, proof,
-review, role, or state concept unless the owner doc records it as an alias.
+## Terminology
+
+One concept has one canonical term. The doc that owns the concept owns the
+term.
+
+Rules:
+- secondary docs reuse the owner term or record an explicit alias
+- do not rename a term casually during compaction
+- when moving or splitting docs, keep the canonical term with the moved rule
+- term changes update direct consumers in the same change or create backlog
+- do not run repo-wide wording churn without a term owner and alias list
 
 Use:
 - short sections

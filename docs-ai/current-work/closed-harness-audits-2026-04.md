@@ -5,14 +5,13 @@ There is no active execution plan in this file.
 
 ## Closed Records
 
-### Domain Language Audit Seed - 2026-04-27
+### Terminology Audit Seed - 2026-04-27
 
-- Added domain-language and doc-writing doctrine under
-  `documentation-stewardship`.
+- Added terminology and doc-writing doctrine under `documentation-stewardship`.
 - Seeded terminology checks for role vocabulary, testing doctrine, entrypoint
   language, and source-of-truth/owner wording.
-- No active terminology audit remains open here. Future terminology work should
-  start from `documentation-stewardship/references/domain-language.md`.
+- No active terminology audit remains open here. Future terminology work starts
+  from `documentation-stewardship`.
 
 ### OpenAI Metadata Audit - 2026-04-27
 

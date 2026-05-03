@@ -16,7 +16,7 @@ Load only when the condition applies:
 - deciding durable specs/tests versus one-shot browser proof:
   `../../testing-best-practices/references/testing-strategy.md`
 - touching route or state ownership:
-  `../../system-boundary-architecture/references/web-route-and-state-boundary-doctrine.md`
+  `../../system-boundary-architecture/references/web-boundaries.md`
 - completing review/closeout fields:
   `../../code-review/references/review-governance.md`
 
