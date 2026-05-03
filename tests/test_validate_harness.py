@@ -292,7 +292,7 @@ def test_validate_rejects_optional_reference_wording(tmp_path: Path) -> None:
     assert "skills/test-skill/SKILL.md contains Optional Reference wording; references are mandatory purpose gates" in errors
 
 
-def test_validate_rejects_non_gated_reference_row_in_governance_skill(tmp_path: Path) -> None:
+def test_validate_rejects_non_gated_reference_row_in_staged_skill(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     add_skill(tmp_path, "code-review")
     write(tmp_path / "skills" / "code-review" / "references" / "review-governance.md", "# Review Governance\n")
@@ -313,7 +313,7 @@ def test_validate_rejects_non_gated_reference_row_in_governance_skill(tmp_path: 
     errors = validate_harness.validate(tmp_path)
 
     assert (
-        "skills/code-review/SKILL.md:8 has non-gated reference row in governance-critical skill; "
+        "skills/code-review/SKILL.md:8 has non-gated reference row in staged reference-gate skill; "
         "use `Read <reference> when/before/for ...`"
     ) in errors
 

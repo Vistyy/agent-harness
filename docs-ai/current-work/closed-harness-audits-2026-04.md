@@ -17,7 +17,7 @@ There is no active execution plan in this file.
 
 - Verified skill `agents/openai.yaml` metadata coverage.
 - Updated selected prompts/descriptions for `code-review`,
-  `subagent-orchestration`, `svelte-core-bestpractices`,
+  `subagent-orchestration`, Svelte guidance,
   `systematic-debugging`, and `testing-best-practices`.
 - Added `workflow-feedback` metadata.
 - Validation command: `uv run python scripts/validate_harness.py`.

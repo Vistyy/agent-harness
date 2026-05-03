@@ -14,7 +14,7 @@ Load only when the condition applies:
 - placing proof artifacts:
   `../../verification-before-completion/references/verification-evidence.md`
 - deciding durable specs/tests versus one-shot browser proof:
-  `../../testing-best-practices/references/testing-strategy.md`
+  `../../testing-best-practices/SKILL.md`
 - touching route or state ownership:
   `../../system-boundary-architecture/references/web-boundaries.md`
 - completing review/closeout fields:

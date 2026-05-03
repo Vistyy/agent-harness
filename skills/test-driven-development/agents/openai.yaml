@@ -1,4 +1,0 @@
-interface:
-  display_name: "Test-Driven Development"
-  short_description: "Drive behavior changes from failing evidence"
-  default_prompt: "Use $test-driven-development when a behavior change needs failing executable evidence before implementation."

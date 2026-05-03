@@ -44,5 +44,5 @@ converting reference rows to mandatory gates.
 - Source wave/task:
   none; user-requested harness governance simplification pass
 - Files/evidence:
-  `skills/systematic-debugging/SKILL.md`, `skills/flutter-expert/SKILL.md`,
-  `skills/tailwind-design-system/SKILL.md`
+  `skills/mobile-design/SKILL.md`, `skills/webapp-testing/SKILL.md`,
+  `skills/mobileapp-testing/SKILL.md`

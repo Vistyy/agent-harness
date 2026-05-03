@@ -14,7 +14,7 @@ Load only when the condition applies:
 - placing proof artifacts:
   `../../verification-before-completion/references/verification-evidence.md`
 - deciding durable tests versus one-shot mobile proof:
-  `../../testing-best-practices/references/testing-strategy.md`
+  `../../testing-best-practices/SKILL.md`
 - completing review/closeout fields:
   `../../code-review/references/review-governance.md`
 

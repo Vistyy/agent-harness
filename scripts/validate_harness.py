@@ -117,25 +117,26 @@ BACKLOG_REQUIRED_FIELDS = (
     "files/evidence",
 )
 BACKLOG_ENTRY_TITLE_PREFIX = "# Backlog Entry:"
-GOVERNANCE_CRITICAL_REFERENCE_GATE_SKILLS = {
+STAGED_REFERENCE_GATE_SKILLS = {
     "code-review",
     "code-simplicity",
     "documentation-stewardship",
     "feedback-address",
+    "flutter-expert",
     "harness-governance",
     "initiatives-workflow",
     "planning-intake",
+    "svelte-code-writer",
     "subagent-orchestration",
     "system-boundary-architecture",
     "systematic-debugging",
+    "testing-best-practices",
     "verification-before-completion",
     "work-routing",
 }
 DEFERRED_REFERENCE_GATE_SKILL_GROUPS = {
-    "deeper testing pass": {"testing-best-practices", "test-driven-development"},
     "deeper runtime proof pass": {"webapp-testing", "mobileapp-testing"},
     "deeper mobile design pass": {"mobile-design"},
-    "deeper Svelte docs pass": {"svelte-core-bestpractices"},
 }
 SKILL_BODY_TRIGGER_PATTERNS = (
     (re.compile(r"^##\s+Use\s+(?:When|For)\b", re.IGNORECASE | re.MULTILINE), "body-level trigger heading"),
@@ -151,9 +152,22 @@ REMOVED_HARNESS_PATHS = (
     "skills/adversarial-review/agents/openai.yaml",
     "skills/code-simplicity/references/default-simplicity-posture.md",
     "skills/documentation-stewardship/references/domain-language.md",
+    "skills/flutter-expert/references/navigation.md",
+    "skills/flutter-expert/references/project-setup.md",
+    "skills/flutter-expert/references/state-and-providers.md",
+    "skills/flutter-expert/references/ui-patterns.md",
     "skills/initiatives-workflow/references/initiatives-workflow.md",
     "skills/planning-intake/references/intake-contract.md",
     "skills/subagent-orchestration/references/delegation-policy.md",
+    "skills/svelte-core-bestpractices/SKILL.md",
+    "skills/svelte-core-bestpractices/agents/openai.yaml",
+    "skills/svelte-core-bestpractices/references/$inspect.md",
+    "skills/svelte-core-bestpractices/references/@attach.md",
+    "skills/svelte-core-bestpractices/references/@render.md",
+    "skills/svelte-core-bestpractices/references/bind.md",
+    "skills/svelte-core-bestpractices/references/each.md",
+    "skills/svelte-core-bestpractices/references/snippet.md",
+    "skills/svelte-core-bestpractices/references/svelte-reactivity.md",
     "skills/system-boundary-architecture/references/code-shape-and-local-design.md",
     "skills/system-boundary-architecture/references/engineering-principles.md",
     "skills/system-boundary-architecture/references/migration-guardrails.md",
@@ -170,6 +184,10 @@ REMOVED_HARNESS_PATHS = (
     "skills/systematic-debugging/references/condition-based-waiting.md",
     "skills/systematic-debugging/references/defense-in-depth.md",
     "skills/systematic-debugging/references/root-cause-tracing.md",
+    "skills/test-driven-development/SKILL.md",
+    "skills/test-driven-development/agents/openai.yaml",
+    "skills/test-driven-development/references/testing-anti-patterns.md",
+    "skills/testing-best-practices/references/testing-strategy.md",
     "skills/verification-before-completion/references/quality-gate-selection.md",
 )
 REMOVED_HARNESS_PATH_EXEMPTIONS = {
@@ -524,7 +542,7 @@ def _validate_skill_body_contracts(root: Path) -> list[str]:
         if re.search(r"\boptional references?\b", body, re.IGNORECASE):
             errors.append(f"{rel} contains Optional Reference wording; references are mandatory purpose gates")
 
-        if skill_dir.name not in GOVERNANCE_CRITICAL_REFERENCE_GATE_SKILLS:
+        if skill_dir.name not in STAGED_REFERENCE_GATE_SKILLS:
             continue
         for line_number, line in _iter_non_fenced_lines(body, body_start_line):
             if not SKILL_REFERENCE_PATH_RE.search(line):
@@ -532,7 +550,7 @@ def _validate_skill_body_contracts(root: Path) -> list[str]:
             if REQUIRED_REFERENCE_GATE_RE.search(line):
                 continue
             errors.append(
-                f"{rel}:{line_number} has non-gated reference row in governance-critical skill; "
+                f"{rel}:{line_number} has non-gated reference row in staged reference-gate skill; "
                 "use `Read <reference> when/before/for ...`"
             )
     if not deferred_skills:

@@ -19,7 +19,7 @@ Included:
 Excluded:
 - feature-specific product correctness decisions, owned by the relevant product
   initiative
-- repo-wide global test strategy router, owned by `testing-strategy.md`
+- repo-wide testing strategy router, owned by `../SKILL.md`
 - runtime proof taxonomy and escalation, owned by
   `../../verification-before-completion/references/runtime-proof-escalation.md`
 - concrete runtime diagnostics and artifact mechanics, owned by the active
