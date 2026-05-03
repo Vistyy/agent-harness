@@ -17,6 +17,14 @@ into a smaller invented task.
 If full correction is blocked, stop and name the blocker instead of patching
 around it.
 
+If the objective is too broad to complete to normal depth now, stop before
+implementation. Name the broadness, recommend the first coherent owner/problem
+to tackle, and wait unless the user already selected that owner/problem or
+explicitly asked for an audit/map.
+
+Do not perform shallow breadth work across many requested areas to create
+apparent coverage.
+
 ## Objective Continuity
 
 After interruption, resume, or a new user message, re-check the binding

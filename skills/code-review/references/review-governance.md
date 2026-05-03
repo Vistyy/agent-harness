@@ -13,6 +13,11 @@ Owns approval boundaries, review modes, disposition, and completion claims.
   do not replace it.
 - Reject when implementation, proof, review request, or closeout satisfies a
   smaller invented objective.
+- Reject mis-scoped review requests. A reviewer approves against the binding
+  objective, not the prompt they were handed. Missing binding objective or
+  accepted reductions is blocking for non-trivial review.
+- Reject shallow breadth implementation when the objective required owner-depth.
+  Touching many requested areas lightly is not completion evidence.
 - Reject patch-over fixes that preserve a current-objective owner defect.
 - Default unresolved material issues to blocking.
 - Enumerate material findings with exact `file/path:line` evidence.

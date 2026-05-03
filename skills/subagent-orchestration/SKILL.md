@@ -30,6 +30,9 @@ handoff.
 
 ## Handoff Contract
 
+Slice scope is execution scope only. It is not the success claim. A handoff may
+narrow work; only the user or durable planning state may narrow success.
+
 Pass:
 - original user objective
 - accepted scope reductions and residual gaps
@@ -40,6 +43,9 @@ Pass:
 
 Do not substitute a task label, packet summary, implementer summary, or narrow
 review prompt for the original objective.
+
+If a non-trivial handoff omits the binding objective or accepted reductions, or
+cannot state how the slice preserves them, stop and return to planning.
 
 ## Implementer Rules
 

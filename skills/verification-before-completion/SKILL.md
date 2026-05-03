@@ -13,6 +13,9 @@ saying work is fixed, done, ready, or approved.
 The final claim cannot exceed the binding objective, accepted reductions, fresh
 proof, runtime evidence, and review coverage.
 
+Compare completion to the original objective plus accepted reductions, not to
+the implemented slice, diff summary, reviewer prompt, or handoff wording.
+
 ## Required References
 
 - Read `../runtime-proof/SKILL.md` when the claim is runtime-visible, uses

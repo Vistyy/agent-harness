@@ -19,6 +19,11 @@ binding objective without discovery or material design discretion.
 Binding objective = original user objective plus explicitly accepted reductions.
 Plans, packets, proof, and handoffs preserve it.
 
+If the objective is too broad to complete to normal depth, planning stops until
+the user selects the first coherent owner/problem, explicitly asks for an
+audit/map, or durable execution state covers the full objective. Do not promote
+shallow breadth plans that touch many areas lightly to simulate coverage.
+
 ## Gate
 
 Close or stop on:
@@ -72,6 +77,8 @@ schema.
 Do not promote while:
 - a material implementation-shaping decision remains open
 - the plan narrows requested breadth or quality without accepted reduction
+- a broad objective is spread shallowly across multiple owners instead of
+  selecting a deep owner/problem or full durable execution state
 - touched-component integrity is `not assessed`
 - unacceptable touched-component integrity lacks accepted debt and backlog link
 - discovery work leaks into execution
