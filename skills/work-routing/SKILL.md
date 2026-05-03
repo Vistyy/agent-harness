@@ -17,10 +17,20 @@ into a smaller invented task.
 If full correction is blocked, stop and name the blocker instead of patching
 around it.
 
-If the objective is too broad to complete to normal depth now, stop before
-implementation. Name the broadness, recommend the first coherent owner/problem
-to tackle, and wait unless the user already selected that owner/problem or
-explicitly asked for an audit/map.
+If the objective is too broad to complete to normal depth now, pause breadth,
+not responsibility. Use technical dependency, ordering, proof, and owner-boundary
+evidence to select the first coherent owner/problem when the choice is
+technical and reversible, then route and proceed deeply under the normal
+direct/planning/wave gates.
+
+The selected owner/problem is execution scope, not an accepted reduction. The
+original objective remains binding for continuity and closeout; final wording
+may claim only the completed owner/problem unless durable state covers the
+rest.
+
+Ask only when the first-owner choice depends on product priority, irreversible
+tradeoff, accepted reduction, credentials/access, or another user-owned
+decision, or when the user explicitly asks for an audit/map.
 
 Do not perform shallow breadth work across many requested areas to create
 apparent coverage.

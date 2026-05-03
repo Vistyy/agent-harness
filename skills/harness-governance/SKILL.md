@@ -28,7 +28,9 @@ condition when needed. Avoid inherited process stacks.
 - Skill bodies are post-selection contracts.
 - Reference rows are mandatory purpose gates; matched gates must be read, and
   unmatched references must not be loaded speculatively.
-- Keep one durable rule in one owner; point to the owner instead of copying.
+- Follow `documentation-stewardship` for one-owner durable concepts. Harness
+  skills, adapters, and bootstrap docs may repeat only compressed owner
+  pointers plus local load, input, output, or stop consequences.
 - Delete, collapse, demote, or reuse before adding harness structure.
 - Exceptions need an owner, protected surface, and removal condition.
 

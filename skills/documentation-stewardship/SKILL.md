@@ -11,6 +11,7 @@ writing posture.
 ## Source Of Truth
 
 Every durable rule has one owner.
+Every durable concept has one owner.
 
 Rules:
 - reusable agent workflow policy belongs in the global harness
@@ -19,6 +20,10 @@ Rules:
 - secondary docs point to the owner instead of copying full policy
 - consumer skills may name another owner for routing or handoff, but must not
   restate that owner's procedure or approval rule
+- consumers may state only their local input, output, stop condition, or
+  consequence for an owned concept
+- consumers must not redefine another owner's criteria, procedure, verdict,
+  approval semantics, exception policy, or canonical term
 - active execution detail belongs in active-work state, not durable docs
 - a rule must name the required outcome and forbidden workaround
 
