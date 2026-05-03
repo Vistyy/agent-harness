@@ -46,13 +46,13 @@ scope against the updated objective.
 
 ## Routes
 
-- `direct`: tiny/local work, or non-trivial in-thread work with an approved
-  direct brief. It must complete the routed objective in-thread and cannot
-  bypass planning, review, proof, runtime, compatibility, migration, or
-  public-behavior gates.
+- `direct`: tiny/local work, or bounded parent-only continuation from an
+  approved wave/packet. It must complete the routed objective without carrying
+  non-trivial planning state in thread and cannot bypass review, proof,
+  runtime, compatibility, migration, or public-behavior gates.
 - `planning-intake`: non-trivial work without execution-ready durable wave
-  state when a direct brief cannot close scope, decisions, proof, owner
-  boundary, runtime, migration, compatibility, or public behavior.
+  state, or any work whose planning state must survive compaction, resume, or
+  handoff.
 - `wave execution`: execute one `execution-ready` wave from durable wave state.
   A wave may be one task; it is the durable path when execution state must
   survive handoff, interruption, queue tracking, or multiple task cards.
@@ -61,27 +61,15 @@ Use the heavier route when two competent implementers could choose materially
 different owners, proof paths, runtime behavior, state authority, migration,
 compatibility, or public behavior.
 
-## Direct Brief
+## Planning State
 
-Non-trivial direct work needs an in-thread direct brief approved by
-`planning_critic` before implementation.
-
-The brief names:
-- binding objective and accepted reductions
-- routed owner/problem and why durable wave state is unnecessary
-- touched owner/component integrity
-- closed material decisions
-- proof allocation for each material claim: owner layer, exact proof command or
-  artifact, expected evidence, and counterfactual regression probe
-- stop triggers and handback conditions
-- required `quality_guard`, verification, runtime proof, and final review
-- parent-local implementation
-
-Route to `planning-intake` when the brief cannot fit in the current thread, a
-successor would need durable state to resume safely, or execution needs queue
-tracking, backlog state, multiple task cards, cross-session handoff, or
-implementer delegation, or implementation-shaping decisions not already
-closed.
+- Non-trivial planning state must be file-backed.
+- Use existing wave state; do not invent another planning document type.
+- If a one-task parent-local change needs a plan, make the wave smaller.
+- Direct parent-only continuation requires approved wave/packet state and
+  bounded remaining work.
+- Prior thread discussion alone never authorizes non-trivial resumed direct
+  work.
 
 ## Gate Matrix
 

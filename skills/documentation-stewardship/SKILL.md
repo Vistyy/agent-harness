@@ -61,6 +61,15 @@ rule. Do not compress away the required outcome, forbidden workaround, owner,
 exception boundary, or proof obligation when they matter. A durable rule should
 leave a reviewer with one reasonable classification of the covered case.
 
+## Density Rule
+
+Each sentence should carry at least one durable function: owner, outcome,
+input, output, stop condition, proof obligation, exception boundary, or routing
+consequence.
+
+If a sentence only explains, reassures, narrates history, or repeats an owner
+rule without local consequence, delete it or replace it with the owner pointer.
+
 ## Terminology
 
 One concept has one canonical term. The doc that owns the concept owns the

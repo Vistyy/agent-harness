@@ -20,6 +20,8 @@ one adapter.
 Write harness policy under `documentation-stewardship`: shortest enforceable
 rule that preserves owner, outcome, forbidden workaround, and proof or stop
 condition when needed. Avoid inherited process stacks.
+Apply its density rule to skills, adapter prompts, examples, validation docs,
+and project-overlay contracts.
 
 ## Rules
 

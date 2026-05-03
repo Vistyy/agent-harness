@@ -62,8 +62,8 @@ Precedence:
   flags, obsolete fallbacks, or migration bridges unless a durable owner names
   the protected surface and removal condition.
 - Do not execute while implementation-shaping planning is open.
-- Non-trivial work follows `work-routing` for direct brief, planning, or wave
-  route selection. Required reviewers and proof owners apply through that route.
+- Non-trivial work follows `work-routing` for direct, planning, or wave route
+  selection. Required reviewers and proof owners apply through that route.
 - Keep project overlays concise maps to owning skills and project docs.
 - No silent reverts or deletions of unknown files.
 

@@ -11,8 +11,8 @@ policy.
 
 - `explorer`: read-only repository discovery and context compression.
 - `check_runner`: targeted checks, logs, and diagnostics summary.
-- `planning_critic`: hostile planning review before direct non-trivial
-  implementation or execution-ready wave promotion.
+- `planning_critic`: hostile planning review before execution-ready wave
+  promotion or non-trivial scope expansion.
 - `implementer`: one bounded approved wave task card.
 - `quality_guard`: planning-gate and in-thread implementation gate.
 - `final_reviewer`: final isolated closeout review after verification.
