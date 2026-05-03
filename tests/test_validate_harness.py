@@ -346,11 +346,31 @@ def test_validate_rejects_non_gated_reference_row_in_staged_skill(tmp_path: Path
 
 def test_validate_rejects_removed_harness_path_outside_archive(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    write(tmp_path / "README.md", "See skills/adversarial-review/SKILL.md.\n")
+    write(
+        tmp_path / "README.md",
+        """
+        See skills/adversarial-review/SKILL.md.
+        See skills/user-apps-design/references/atomic-design.md.
+        See skills/user-apps-design/references/parity-dimensions.md.
+        See skills/user-apps-design/references/ui-direction-workflow.md.
+        """,
+    )
 
     errors = validate_harness.validate(tmp_path)
 
     assert "README.md references removed harness path skills/adversarial-review/SKILL.md" in errors
+    assert (
+        "README.md references removed harness path skills/user-apps-design/references/atomic-design.md"
+        in errors
+    )
+    assert (
+        "README.md references removed harness path skills/user-apps-design/references/parity-dimensions.md"
+        in errors
+    )
+    assert (
+        "README.md references removed harness path skills/user-apps-design/references/ui-direction-workflow.md"
+        in errors
+    )
 
 
 def test_validate_allows_removed_harness_path_in_closed_archive(tmp_path: Path) -> None:

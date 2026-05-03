@@ -1,7 +1,8 @@
 # Mobile UI Constraints
 
-Owner for mobile-specific UI constraints inside end-user app design. Runtime
-execution mechanics belong to `../../mobileapp-testing/SKILL.md`; backend,
+Owner for mobile-specific UI constraints inside end-user app design.
+
+Runtime mechanics belong to `../../mobileapp-testing/SKILL.md`. Backend,
 offline, sync, and API contracts belong to
 `../../system-boundary-architecture/references/mobile-client-boundaries.md`.
 
@@ -14,8 +15,8 @@ behavior.
 
 ## Required Inputs
 
-Name the target platform, framework, navigation model, target device classes,
-accessibility constraints, and any offline or interruption behavior that changes
+Name target platform, framework, navigation model, device classes,
+accessibility constraints, and offline or interruption behavior that changes
 the user experience.
 
 ## Hard Constraints
@@ -25,8 +26,8 @@ the user experience.
 - Back/navigation behavior follows platform conventions.
 - Safe areas, keyboard/IME, sheets, and overlays are checked where affected.
 - Text scaling preserves hierarchy, wrapping, truncation, and target sizes.
-- Loading, empty, error, recovery, interruption, and resume states are covered
-  when the changed flow can enter them.
+- Reachable loading, empty, error, recovery, interruption, and resume states are
+  designed.
 - Long lists use virtualized or builder rendering.
 - Animation and media-heavy surfaces avoid avoidable jank, leaks, and battery
   cost.
