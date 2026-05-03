@@ -6,6 +6,8 @@ description: "Use for runtime-visible claim maps, runtime evidence handoffs, ent
 # Runtime Proof
 
 Owns runtime evidence policy. Browser and mobile skills own platform mechanics.
+`../verification-before-completion/SKILL.md` owns final completion claim
+gating.
 
 ## Rule
 

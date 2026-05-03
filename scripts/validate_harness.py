@@ -163,6 +163,7 @@ REMOVED_HARNESS_PATHS = (
     "skills/initiatives-workflow/references/initiatives-workflow.md",
     "skills/planning-intake/references/intake-contract.md",
     "skills/subagent-orchestration/references/delegation-policy.md",
+    "skills/subagent-orchestration/references/coding-agent-topology.md",
     "skills/svelte-core-bestpractices/SKILL.md",
     "skills/svelte-core-bestpractices/agents/openai.yaml",
     "skills/svelte-core-bestpractices/references/$inspect.md",
@@ -632,14 +633,6 @@ def _extract_preauthorized_roles(path: Path, root: Path) -> tuple[set[str], list
     return roles, []
 
 
-def _extract_topology_roles(path: Path, root: Path) -> tuple[set[str], list[str]]:
-    text = path.read_text(encoding="utf-8")
-    roles = set(re.findall(r"^\| `([a-z0-9_]+)` \|", text, re.MULTILINE))
-    if not roles:
-        return roles, [f"{path.relative_to(root)} role table defines no roles"]
-    return roles, []
-
-
 def _validate_subagent_allowlist(root: Path, roles: set[str]) -> list[str]:
     errors: list[str] = []
     if not roles:
@@ -659,15 +652,6 @@ def _validate_subagent_allowlist(root: Path, roles: set[str]) -> list[str]:
                 f"do not match agents/roles.md roles {sorted(roles)}"
             )
 
-    topology = root / "skills" / "subagent-orchestration" / "references" / "coding-agent-topology.md"
-    if topology.is_file():
-        topology_roles, topology_errors = _extract_topology_roles(topology, root)
-        errors.extend(topology_errors)
-        if topology_roles and topology_roles != roles:
-            errors.append(
-                f"{topology.relative_to(root)} role table {sorted(topology_roles)} "
-                f"does not match agents/roles.md roles {sorted(roles)}"
-            )
     return errors
 
 
@@ -956,7 +940,6 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
         root / "AGENTS.md",
         root / "agents" / "roles.md",
         root / "skills" / "subagent-orchestration" / "SKILL.md",
-        root / "skills" / "subagent-orchestration" / "references" / "coding-agent-topology.md",
         root / "skills" / "runtime-proof" / "SKILL.md",
         root / "skills" / "verification-before-completion" / "SKILL.md",
     ]

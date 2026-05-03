@@ -10,7 +10,7 @@ description = "Default worker for narrowed non-runtime verification and diagnost
 config_file = "agents/check-runner.toml"
 
 [agents.planning_critic]
-description = "Hostile planning review before execution-ready promotion or non-trivial scope expansion; reviews plans, proof allocation, boundaries, and stop conditions, and returns approve/reject without implementing."
+description = "Hostile planning review before direct non-trivial implementation, execution-ready promotion, or non-trivial scope expansion; reviews direct briefs, wave plans, proof allocation, boundaries, and stop conditions, and returns approve/reject without implementing."
 config_file = "agents/planning-critic.toml"
 
 [agents.implementer]

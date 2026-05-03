@@ -18,18 +18,14 @@ Precedence:
   current task needs.
 - Use installed harness automation when a command exists.
 
-## Full Work Rule
+## Always-Loaded Guardrails
 
-- The unit of work is the binding user objective plus the owner surface required
-  to make that objective true.
-- Complete the requested outcome, not a convenient subset. Small, safe, or
-  minimal is valid only when it fully satisfies the objective.
-- If the touched owner is wrong in a way that affects the current objective, fix
-  the owner now.
-- Defer only unrelated nearby debt or explicitly accepted temporary debt with
-  owner, risk, and removal condition.
-- If full correction is blocked, stop and name the blocker; do not patch around
-  the wrong shape and call it done.
+- Do not replace the binding user objective with a convenient subset.
+- Do not patch around a current-objective owner defect and call it complete.
+- For non-trivial work, `not assessed` touched-owner integrity is not
+  approvable.
+- Final claims must stay within owner-selected proof, runtime evidence, and
+  approved review scope.
 
 ## Routing
 
@@ -66,13 +62,8 @@ Precedence:
   flags, obsolete fallbacks, or migration bridges unless a durable owner names
   the protected surface and removal condition.
 - Do not execute while implementation-shaping planning is open.
-- Non-trivial work requires `planning_critic` before implementation or scope
-  expansion and `quality_guard` after meaningful implementation chunks. Tiny
-  local fixes are exempt only when no material owner, proof, runtime,
-  compatibility, migration, or public-behavior decision is open.
-- Runtime-visible completion claims follow `runtime-proof` evidence rules.
-- Final completion claims cannot exceed the binding objective, accepted
-  reductions, fresh proof, runtime fidelity, and approved review scope.
+- Non-trivial work follows `work-routing` for direct brief, planning, or wave
+  route selection. Required reviewers and proof owners apply through that route.
 - Keep project overlays concise maps to owning skills and project docs.
 - No silent reverts or deletions of unknown files.
 

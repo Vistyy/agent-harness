@@ -5,6 +5,9 @@ description: "Use before any completion or fix claim to bind the final claim to 
 
 # Verification Before Completion
 
+Owns final completion claim gating. Review approval scope, runtime verdicts,
+and platform mechanics stay with their owner skills.
+
 Completion claims require fresh proof against the binding objective before
 saying work is fixed, done, ready, or approved.
 

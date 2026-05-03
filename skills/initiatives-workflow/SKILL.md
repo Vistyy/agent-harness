@@ -9,8 +9,9 @@ Owns durable wave, packet, delivery-map, backlog state, and full wave
 execution. It does not own planning, review, delegation, or verification
 doctrine.
 
-A wave may be one task. It is the single durable execution artifact for
-non-trivial work.
+A wave may be one task. It is the durable execution artifact when work needs
+queue tracking, cross-session state, backlog/roadmap state, multiple task
+cards, implementer handoff state, or an execution-ready packet.
 
 ## References
 
@@ -35,8 +36,8 @@ non-trivial work.
 - backlog: `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md`
 - `discovery-required` waves may have `wave-execution.draft.md`.
 - Only `execution-ready` waves keep canonical `wave-execution.md`.
-- Closeout removes delivery-map state and packet only after final review and
-  verification approve the binding objective.
+- Closeout removes delivery-map state and packet only after final review
+  approves review coverage and verification approves the final claim.
 - Backlog entries are for valid deferrals only: unrelated nearby debt or
   explicitly accepted temporary debt with owner, risk, and removal condition.
 

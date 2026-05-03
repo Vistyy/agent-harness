@@ -1,6 +1,7 @@
 # Review Governance
 
-Owns approval boundaries, review modes, disposition, and completion claims.
+Owns approval boundaries, review modes, disposition, and review coverage.
+`../../verification-before-completion/SKILL.md` owns final completion claims.
 
 ## Core Rules
 
@@ -77,23 +78,15 @@ omits the binding objective or final wording exceeds proof/review scope.
 Reject mis-scoped handoffs that ask review to approve less than the binding
 objective without an accepted reduction.
 
-## Completion Claims
+## Review Coverage For Completion
 
-Completion requires:
-- binding objective re-check
-- fresh verification
-- required runtime evidence for runtime-visible claims
-- in-thread `quality_guard` approval for non-trivial work
-- final isolated review approval for non-trivial closeout
-- touched owner/component integrity acceptable, or accepted debt linked
+Review approval is an input to completion, not the completion gate.
 
-Final wording cannot exceed accepted scope, proof, runtime fidelity, or review
-scope. Residual gaps must be unrelated to the current objective or explicitly
-accepted and persisted.
-
-Runtime-visible words such as `done`, `ready`, `works`, and `end-to-end` fail
-when broader than observed entrypoint fidelity, action coverage, data variant,
-or named unproved boundary.
+Review reports define:
+- reviewed scope
+- approval scope
+- proof and runtime evidence reviewed
+- residual risks
 
 ## Report Minimum
 

@@ -46,19 +46,42 @@ scope against the updated objective.
 
 ## Routes
 
-- `direct`: tiny/local work, or parent-local continuation after required gates
-  already approved. It must complete the full objective in-thread and cannot
-  bypass non-trivial planning, review, proof, runtime, compatibility,
-  migration, or public-behavior gates.
+- `direct`: tiny/local work, or non-trivial in-thread work with an approved
+  direct brief. It must complete the routed objective in-thread and cannot
+  bypass planning, review, proof, runtime, compatibility, migration, or
+  public-behavior gates.
 - `planning-intake`: non-trivial work without execution-ready durable wave
-  state, or any open scope, decision, proof, owner boundary, runtime,
-  migration, compatibility, public-behavior, or wave-shape decision.
+  state when a direct brief cannot close scope, decisions, proof, owner
+  boundary, runtime, migration, compatibility, or public behavior.
 - `wave execution`: execute one `execution-ready` wave from durable wave state.
-  A wave may be one task; it is the only durable path for non-trivial work.
+  A wave may be one task; it is the durable path when execution state must
+  survive handoff, interruption, queue tracking, or multiple task cards.
 
 Use the heavier route when two competent implementers could choose materially
 different owners, proof paths, runtime behavior, state authority, migration,
 compatibility, or public behavior.
+
+## Direct Brief
+
+Non-trivial direct work needs an in-thread direct brief approved by
+`planning_critic` before implementation.
+
+The brief names:
+- binding objective and accepted reductions
+- routed owner/problem and why durable wave state is unnecessary
+- touched owner/component integrity
+- closed material decisions
+- proof allocation for each material claim: owner layer, exact proof command or
+  artifact, expected evidence, and counterfactual regression probe
+- stop triggers and handback conditions
+- required `quality_guard`, verification, runtime proof, and final review
+- parent-local implementation
+
+Route to `planning-intake` when the brief cannot fit in the current thread, a
+successor would need durable state to resume safely, or execution needs queue
+tracking, backlog state, multiple task cards, cross-session handoff, or
+implementer delegation, or implementation-shaping decisions not already
+closed.
 
 ## Gate Matrix
 

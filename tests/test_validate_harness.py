@@ -461,24 +461,20 @@ def test_validate_rejects_preauthorized_subagent_allowlist_drift(tmp_path: Path)
     ) in errors
 
 
-def test_validate_rejects_topology_role_table_drift(tmp_path: Path) -> None:
+def test_validate_rejects_removed_subagent_topology_reference(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
-        tmp_path / "skills" / "subagent-orchestration" / "references" / "coding-agent-topology.md",
+        tmp_path / "README.md",
         """
-        # Coding Agent Topology
-
-        | Role | Mission |
-        | --- | --- |
-        | `explorer` | discovery |
+        See skills/subagent-orchestration/references/coding-agent-topology.md.
         """,
     )
 
     errors = validate_harness.validate(tmp_path)
 
     assert (
-        "skills/subagent-orchestration/references/coding-agent-topology.md role table ['explorer'] "
-        "does not match agents/roles.md roles ['explorer', 'quality_guard']"
+        "README.md references removed harness path "
+        "skills/subagent-orchestration/references/coding-agent-topology.md"
     ) in errors
 
 

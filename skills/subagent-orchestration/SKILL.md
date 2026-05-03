@@ -8,6 +8,9 @@ description: "Use when subagents should be invoked or routed: delegation decisio
 Owns delegation defaults, role choice, handoff inputs, worker reuse, and
 active-worker handling.
 
+`../../agents/roles.md` owns harness role names and missions. This skill owns
+how those roles are invoked and handed work.
+
 The user explicitly authorizes use of the spawn/subagent tool for these
 harness-defined roles when this skill is in force:
 `explorer`, `check_runner`, `planning_critic`, `implementer`,
@@ -25,8 +28,17 @@ with a smaller task summary.
 Delegate for parallel bounded work, isolated review, runtime proof, or bulky
 diagnostics. Keep urgent blocking work local when the next step depends on it.
 
-Read `references/coding-agent-topology.md` when choosing a role or preparing a
-handoff.
+Use `../../agents/roles.md` when choosing a role.
+
+Role boundaries:
+- parent owns orchestration, integration, shared runtime lifecycle, final
+  synthesis, and queue/packet state
+- `explorer` and `check_runner` are read-only/support roles
+- `planning_critic`, `quality_guard`, and `final_reviewer` review; they do not
+  implement
+- `runtime_evidence` proves handed-off live behavior under `runtime-proof`
+  verdict policy
+- `implementer` executes only an approved wave task card
 
 ## Handoff Contract
 

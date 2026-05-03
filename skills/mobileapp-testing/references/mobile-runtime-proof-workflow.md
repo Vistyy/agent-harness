@@ -9,7 +9,6 @@ belongs to `../../runtime-proof/SKILL.md`.
 - Runtime claim map, entrypoint fidelity, verdict, and reviewed-evidence rules:
   `../../runtime-proof/SKILL.md`
 - Durable test versus one-shot proof: `../../testing-best-practices/SKILL.md`
-- Review/closeout approval: `../../code-review/references/review-governance.md`
 
 ## Default Stack
 
@@ -23,7 +22,7 @@ alone, or an unlaunched build artifact.
 
 ## Preflight
 
-Before mobile proof, name:
+Add mobile-specific inputs to the `runtime-proof` claim map:
 - binding objective and accepted reductions
 - exact flow, platform, device/emulator, role, data, and state set
 - design anchors when UI quality is claimed

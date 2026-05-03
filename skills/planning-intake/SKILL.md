@@ -8,8 +8,8 @@ description: "Use to turn vague work into a wave plan or harden an existing wave
 Owns closing scope, owner, design, runtime, migration, proof, and wave-shaping
 decisions before implementation.
 
-Non-trivial durable work becomes a wave, even when it is only one task. There
-is no separate standalone-plan path.
+Durable planning produces wave state. Direct in-thread briefs are owned by
+`../work-routing/SKILL.md`.
 
 ## Outcome
 

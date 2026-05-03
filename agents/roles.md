@@ -4,12 +4,15 @@ This harness defines reusable coding-agent roles for adapters that support
 named subagents.
 
 Codex adapter role sources live under `adapters/codex/agents/`.
+`skills/subagent-orchestration/SKILL.md` owns invocation, handoff, and reuse
+policy.
 
 ## Roles
 
 - `explorer`: read-only repository discovery and context compression.
 - `check_runner`: targeted checks, logs, and diagnostics summary.
-- `planning_critic`: hostile planning review before execution-ready promotion.
+- `planning_critic`: hostile planning review before direct non-trivial
+  implementation or execution-ready wave promotion.
 - `implementer`: one bounded approved wave task card.
 - `quality_guard`: planning-gate and in-thread implementation gate.
 - `final_reviewer`: final isolated closeout review after verification.

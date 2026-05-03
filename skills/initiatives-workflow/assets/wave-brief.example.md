@@ -17,8 +17,8 @@
 ## Closed Decisions
 
 - route owner remains `work-routing`
-- technical contracts remain in review, verification, packet, and topology
-  owners
+- technical contracts remain with review, verification, packet, `agents/roles.md`,
+  and subagent-orchestration owners
 
 ## Proof Plan
 

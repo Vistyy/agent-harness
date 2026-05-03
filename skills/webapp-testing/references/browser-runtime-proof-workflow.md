@@ -10,11 +10,10 @@ and reporting details. Runtime verdict authority belongs to
   `../../runtime-proof/SKILL.md`
 - Durable test versus one-shot proof: `../../testing-best-practices/SKILL.md`
 - Route or state ownership: `../../system-boundary-architecture/references/web-boundaries.md`
-- Review/closeout approval: `../../code-review/references/review-governance.md`
 
 ## Preflight
 
-Before browser proof, name:
+Add browser-specific inputs to the `runtime-proof` claim map:
 - binding objective and accepted reductions
 - exact browser flow, state, role, data, and viewport set
 - design anchors when UI quality is claimed
