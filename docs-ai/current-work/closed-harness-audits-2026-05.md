@@ -11,12 +11,11 @@ There is no active execution plan in this file.
   runtime-visible UI, API, service, and mobile claims.
 - Clarified single owners:
   `verification-before-completion` for completion gating,
-  `runtime-proof-escalation.md` for runtime proof triggers,
-  `runtime-evidence-contract.md` for verdict/report shape,
+  `runtime-proof` for runtime proof triggers and verdict/report shape,
   `webapp-testing` for browser proof mechanics,
   `mobileapp-testing` for emulator/device proof mechanics,
   `user-apps-design` for end-user design direction, and
-  `mobile-design` for mobile design constraints.
+  `user-apps-design` for mobile design constraints.
 - Anchored browser one-shot proof on Microsoft `playwright-cli`
   (`microsoft/playwright-cli`, `@playwright/cli`) and kept generic adapter
   browser tooling as diagnostics unless it explicitly exposes that channel.

@@ -26,6 +26,8 @@ Owner docs and review gates carry the doctrine.
 - Cite exact `file/path:line` for every finding.
 - Keep severity explicit and ordered.
 - Load the owner docs and review gates that the slice actually needs.
+- Review against the binding objective and accepted reductions, not only the
+  parent's narrowed summary.
 - For non-trivial work, diff-only review is invalid. Assess touched-component
   integrity through `code-simplicity`.
 - Pressure-test realistic failure modes, hidden assumptions, invalid or stale
@@ -39,8 +41,8 @@ Owner docs and review gates carry the doctrine.
 2. Load the owner docs and gates needed for the slice.
 3. List changed files and needed task/wave anchors.
 4. Inspect the slice with skeptical posture. Try to falsify claims, not confirm vibes.
-5. Check whether tests or runtime proof cover the actual risky path, not only
-   the nominal path.
+5. Check whether tests or runtime proof cover the binding objective and actual
+   risky path, not only the nominal or parent-minimized path.
 6. Report all material findings. Do not stop at first blocker.
 
 ## Output

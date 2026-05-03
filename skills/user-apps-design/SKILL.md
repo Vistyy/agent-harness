@@ -1,15 +1,15 @@
 ---
 name: user-apps-design
-description: "Use for end-user web/mobile UI direction before implementation: IA, parity, composition, hierarchy, density, copy posture, and design anchors."
+description: "Use for end-user web/mobile UI direction before implementation: IA, parity, composition, hierarchy, density, copy posture, design anchors, and mobile-specific UI constraints."
 ---
 
 # User Apps Design
 
 Use for end-user visible UI changes in web or mobile apps.
 
-Owns product-facing UI direction, parity decisions, composition quality, and
-copy posture. Project strategy, language policy, app paths, and delivery timing
-stay in the project overlay.
+Owns product-facing UI direction, parity decisions, composition quality, copy
+posture, and mobile-specific UI constraints. Project strategy, language policy,
+app paths, runtime topology, and delivery timing stay in the project overlay.
 
 Does not own browser/mobile runtime proof mechanics or completion-gate
 verdicts.
@@ -32,5 +32,9 @@ composition layers.
 
 Read `references/text-constraints.md` when copy, labels, truncation, or text
 fit matters.
+
+Read `references/mobile-ui.md` when mobile touch ergonomics, safe areas,
+platform navigation, gestures, accessibility, text scaling, or mobile
+performance constraints matter.
 
 Do not stop at this file for UI direction work.

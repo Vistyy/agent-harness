@@ -1,4 +1,0 @@
-interface:
-  display_name: "Mobile Design"
-  short_description: "Validate mobile UI against platform constraints"
-  default_prompt: "Use $mobile-design to validate this mobile UI decision against touch, platform, and accessibility constraints."

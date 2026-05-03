@@ -56,12 +56,11 @@ For `.github/**`, `infra/**`, deployment scripts, runtime wiring:
 
 ## Runtime Proof Routing
 
-Runtime-bound claims route to
-`../../verification-before-completion/references/runtime-proof-escalation.md`.
+Runtime-bound claims route to `../../runtime-proof/SKILL.md`.
 
-For `multi-proof-required` claims, this file owns runtime handoff and cheapest
-honest persistent layer selection. `proof-strength.md` owns whether the
-persistent-test leg is valid and strong enough.
+For runtime claims, this file owns cheapest honest persistent layer selection.
+`proof-strength.md` owns whether any persistent-test leg is valid and strong
+enough.
 
 Concrete browser and mobile mechanics are owned by `webapp-testing` and
 `mobileapp-testing`. Project overlays own exact runtime recipes,
@@ -69,8 +68,8 @@ product-specific acceptance, and local UI verification strategy.
 
 ## CI Posture
 
-`../../verification-before-completion/SKILL.md`
-owns lane semantics; project overlays own stack-specific commands.
+`../../just-recipe-routing/SKILL.md` owns command selection; project overlays
+own stack-specific commands.
 
 Rule here:
 - do not promote broad smoke/e2e into faster shared lanes unless flow is

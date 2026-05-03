@@ -1,0 +1,4 @@
+interface:
+  display_name: Runtime Proof
+  short_description: "Validate runtime-visible claims against the binding objective"
+  default_prompt: "Use $runtime-proof to validate runtime evidence scope, verdict authority, and blocking runtime findings."

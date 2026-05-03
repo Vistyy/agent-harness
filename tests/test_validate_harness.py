@@ -127,6 +127,32 @@ def valid_packet() -> str:
 
 def minimal_valid_root(root: Path) -> None:
     add_skill(root, "test-skill")
+    write(
+        root / "skills" / "runtime-proof" / "SKILL.md",
+        """
+        ---
+        name: runtime-proof
+        description: Test runtime proof skill.
+        ---
+
+        # Runtime Proof
+
+        Runtime proof validates the binding objective, rejects mis-scoped
+        handoffs, reports entrypoint fidelity, and returns reject or blocked
+        when proof does not cover the runtime-visible claim. The tiny, local
+        exemption applies only when there is no public-behavior or
+        cross-boundary runtime risk.
+        """,
+    )
+    write(
+        root / "skills" / "runtime-proof" / "agents" / "openai.yaml",
+        """
+        interface:
+          display_name: "Runtime Proof"
+          short_description: "Valid runtime proof metadata"
+          default_prompt: "Use $runtime-proof for runtime proof."
+        """,
+    )
     add_roles(root)
     write(root / "README.md", "# Test\n")
 
@@ -455,6 +481,49 @@ def test_validate_rejects_runtime_evidence_project_doc_leakage(tmp_path: Path) -
 
     assert (
         "adapters/codex/agents/runtime-evidence.toml must not hard-code project-local docs-ai/docs/ paths"
+        in errors
+    )
+
+
+def test_validate_requires_runtime_proof_trigger_owner(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "runtime-proof" / "SKILL.md",
+        """
+        ---
+        name: runtime-proof
+        description: Test runtime proof skill.
+        ---
+
+        # Runtime Proof
+
+        Runtime proof validates the binding objective, rejects mis-scoped
+        handoffs, reports entrypoint fidelity, and returns reject or blocked.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "skills/runtime-proof/SKILL.md missing runtime proof policy term `runtime-visible`" in errors
+    assert "skills/runtime-proof/SKILL.md missing runtime proof policy term `tiny, local`" in errors
+    assert "skills/runtime-proof/SKILL.md missing runtime proof policy term `public-behavior`" in errors
+    assert (
+        "skills/runtime-proof/SKILL.md missing runtime proof policy term `cross-boundary runtime risk`"
+        in errors
+    )
+
+
+def test_validate_rejects_runtime_evidence_advisory_findings(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "runtime-evidence.toml",
+        'name = "runtime_evidence"\nmis-scoped\nOutput: `advisory` notes.\n',
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/runtime-evidence.toml must not classify runtime evidence findings as advisory"
         in errors
     )
 

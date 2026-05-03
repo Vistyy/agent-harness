@@ -44,6 +44,13 @@ gaps, or when a skill explicitly requires a lower-level tool.
 - `quality` is the default completion gate.
 - `quality-full` is the explicit expanded-confidence gate when the user, owner
   doc, reviewer, or risk profile calls for it.
+- Harness/workflow changes require `just quality-fast` plus
+  `agent-harness governance check --repo-root .`.
+- Runtime-visible changes require static quality plus the runtime proof owner
+  selected by `../runtime-proof/SKILL.md`.
+- Test-only changes require affected tests and any matched
+  `../testing-best-practices/SKILL.md` gates.
+- Docs-only changes require the validation that checks those docs.
 
 Harness-managed projects standardize the quality gate names:
 

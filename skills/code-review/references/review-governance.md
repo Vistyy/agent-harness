@@ -69,6 +69,8 @@ Required inputs:
 
 Treat earlier approvals as history, not final approval. Reject if the handoff
 omits the binding objective or final wording exceeds proof/review scope.
+Reject mis-scoped handoffs that ask review to approve less than the binding
+objective without an accepted reduction.
 
 ## Completion Claims
 

@@ -54,5 +54,10 @@ compatibility, or public behavior.
 | subagent routing | `../subagent-orchestration/SKILL.md` |
 | feedback-caused edits | `../feedback-address/SKILL.md` |
 | workflow friction not fixed immediately | `../feedback-address/SKILL.md` |
+| end-user or mobile UI design | `../user-apps-design/SKILL.md` |
 | completion proof | `../verification-before-completion/SKILL.md` |
+| runtime proof policy and verdicts | `../runtime-proof/SKILL.md` |
+| browser runtime mechanics | `../webapp-testing/SKILL.md` |
+| mobile runtime mechanics | `../mobileapp-testing/SKILL.md` |
 | review/approval semantics | `../code-review/SKILL.md` |
+| mobile backend/offline/API contracts | `../system-boundary-architecture/SKILL.md` |

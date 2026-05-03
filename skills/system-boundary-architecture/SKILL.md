@@ -39,6 +39,9 @@ Keep runtime proof taxonomy and project runtime recipes out of this skill.
 - Read `references/web-boundaries.md` when browser route, page, component,
   shared UI, import direction, public-surface, route-state, facade, or
   screen-model boundaries matter.
+- Read `references/mobile-client-boundaries.md` when mobile backend, offline,
+  sync, API payload, version, auth, notification, media, or observability
+  contracts shape app behavior.
 - Read `references/python-service-boundaries.md` when Python application
   service, unit-of-work, repository construction, dynamic input, cast, `Any`, or
   typed-contract boundaries matter.

@@ -5,10 +5,7 @@ provable claim disposition, exact-string limits, and source/implementation-shape
 assertion policy.
 
 Runtime proof escalation, runtime evidence reports, visual verdict vocabulary,
-and artifact promotion are owned by:
-- `../../verification-before-completion/references/runtime-proof-escalation.md`
-- `../../verification-before-completion/references/runtime-evidence-contract.md`
-- `../../verification-before-completion/references/verification-evidence.md`
+and evidence-of-record rules are owned by `../../runtime-proof/SKILL.md`.
 
 ## Persistent Proof Posture
 
@@ -16,10 +13,9 @@ Persistent automated proof is enough only when the claim does not depend on a
 composed runtime, UI, environment, service process, or cross-process boundary.
 
 Runtime and multi-proof class selection is owned by
-`../../verification-before-completion/references/runtime-proof-escalation.md`.
-When that owner requires `multi-proof-required`, this file owns whether the
-persistent-test leg is valid and strong enough. Layer choice and runtime handoff
-belong to `layer-selection.md`.
+`../../runtime-proof/SKILL.md`. This file owns whether any persistent-test leg
+is valid and strong enough. Layer choice and runtime handoff belong to
+`layer-selection.md`.
 
 ## Proof Strength Rules
 

@@ -1,6 +1,6 @@
 ---
 name: mobileapp-testing
-description: Use for live mobile runtime proof on emulator/device; prefer Dart MCP, keep adb serial-scoped for install, launch, screenshots, recovery, and device lifecycle.
+description: "Use for mobile runtime proof mechanics: emulator/device execution, Dart MCP, serial-scoped adb, screenshots, logs, widget trees, recovery, and lifecycle."
 ---
 
 # Mobile Application Testing
@@ -14,14 +14,15 @@ adb only for install, launch, screenshot, recovery, or device lifecycle work.
 Project overlays own service names, ports, device IDs, and host-specific
 recovery recipes.
 
-Does not own mobile design constraints or completion-gate verdict semantics.
+Does not own mobile design constraints or runtime verdict authority. Use
+`../runtime-proof/SKILL.md` for runtime claim maps, entrypoint fidelity,
+blocking verdicts, and evidence-of-record rules.
 
 ## Required References
 
 Read `references/mobile-runtime-proof-workflow.md` before mobile runtime proof.
 It owns default stack, preflight, runtime-loop, interaction, recovery, and
-reporting rules, plus direct owner handoffs for runtime evidence, durable
-tests, artifacts, and completion fields.
+reporting rules, plus direct owner handoffs.
 
 Read `references/mobile-emulator-proof-contract.md` when parallel emulator or
 device lifecycle exception guidance matters.

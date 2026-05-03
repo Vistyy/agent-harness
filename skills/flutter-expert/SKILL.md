@@ -7,7 +7,8 @@ description: "Use when implementing or debugging Flutter/Dart mobile code: repo-
 
 Owns Flutter/Dart implementation and debugging mechanics.
 
-Does not own mobile UX design or emulator/device runtime proof.
+Does not own mobile UX design (`../user-apps-design/SKILL.md`) or
+emulator/device runtime proof (`../mobileapp-testing/SKILL.md`).
 
 ## Implementation Loop
 

@@ -26,8 +26,8 @@ every consumer together.
 - `implementer` executes only its assigned approved slice.
 - `quality_guard` approves or rejects planning gates and implementation chunks.
 - `final_reviewer` performs final isolated closeout review.
-- `runtime_evidence` proves handed-off live behavior and returns `pass`,
-  `reject`, or `blocked`.
+- `runtime_evidence` proves handed-off live behavior against `runtime-proof`
+  policy and returns `pass`, `reject`, or `blocked`.
 
 ## Handoff Baseline
 
@@ -46,4 +46,5 @@ smaller invented objective.
 
 - wave packets: `../../initiatives-workflow/references/wave-packet-contract.md`
 - review semantics: `../../code-review/references/review-governance.md`
+- runtime proof policy: `../../runtime-proof/SKILL.md`
 - delegation policy: `../SKILL.md`

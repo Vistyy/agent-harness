@@ -6,9 +6,10 @@ The wave brief `**Status:**` is the execution gate.
 
 No active execution-ready waves.
 
+## Current Evidence
+
+- `docs-ai/current-work/harness-runtime-proof-design-refactor.md`
+
 ## Deferred Backlog
 
-- `skill-reference-gates-normalization`: Normalize existing skill reference
-  sections so each reference is a mandatory purpose gate or is removed/demoted;
-  detail:
-  `docs-ai/current-work/backlog/harness__skill-reference-gates-normalization.md`.
+None.

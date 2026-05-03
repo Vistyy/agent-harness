@@ -42,7 +42,11 @@ Precedence:
 - Wave lifecycle, packet state, and durable execution: `initiatives-workflow`.
 - Delegation and role boundaries: `subagent-orchestration`.
 - Feedback-caused edits: `feedback-address`.
+- End-user and mobile UI design: `user-apps-design`.
 - Verification and completion claims: `verification-before-completion`.
+- Runtime proof policy and evidence verdicts: `runtime-proof`.
+- Browser runtime proof mechanics: `webapp-testing`.
+- Mobile runtime proof mechanics: `mobileapp-testing`.
 - Review and approval semantics: `code-review`.
 - Test design and cleanup: `testing-best-practices`.
 - Architecture and owner-boundary changes: `system-boundary-architecture`.
@@ -66,8 +70,7 @@ Precedence:
   expansion and `quality_guard` after meaningful implementation chunks. Tiny
   local fixes are exempt only when no material owner, proof, runtime,
   compatibility, migration, or public-behavior decision is open.
-- Runtime-visible completion claims require `runtime_evidence` unless the claim
-  is tiny, local, and has no public-behavior or cross-boundary runtime risk.
+- Runtime-visible completion claims follow `runtime-proof` evidence rules.
 - Final completion claims cannot exceed the binding objective, accepted
   reductions, fresh proof, runtime fidelity, and approved review scope.
 - Keep project overlays concise maps to owning skills and project docs.

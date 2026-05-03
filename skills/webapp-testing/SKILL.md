@@ -1,6 +1,6 @@
 ---
 name: webapp-testing
-description: "Use for browser runtime proof and browser-visible UI validation; choose durable specs versus Microsoft playwright-cli one-shot proof, artifacts, screenshots, and diagnostics."
+description: "Use for browser runtime proof mechanics: Playwright vehicles, browser sessions, screenshots, artifacts, console/network diagnostics, and viewport evidence."
 ---
 
 # Browser UI Testing
@@ -10,8 +10,9 @@ Goal: operate browser proof mechanics for browser-visible behavior.
 Use `runtime_evidence` for live browser/runtime proof. Use `check_runner` for
 targeted automated checks, log/trace sweeps, and large output triage.
 
-Does not own completion-gate triggers, runtime verdict schema, or product
-design anchors.
+Does not own runtime verdict authority, completion-gate triggers, or product
+design anchors. Use `../runtime-proof/SKILL.md` for runtime claim maps,
+entrypoint fidelity, blocking verdicts, and evidence-of-record rules.
 
 Project overlays own ports, services, upload-provider recipes, and runtime
 topology.
@@ -19,9 +20,8 @@ topology.
 ## Required References
 
 Read `references/browser-runtime-proof-workflow.md` before browser proof. It
-owns preflight, runtime-loop, delegation, reporting, and direct owner handoffs
-for runtime evidence, durable tests, artifacts, completion fields, and
-route/state boundaries.
+owns browser preflight, runtime-loop mechanics, delegation inputs, browser
+reporting, and direct owner handoffs.
 
 Read `references/browser-proof-layering-contract.md` before choosing the proof
 channel.

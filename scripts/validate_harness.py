@@ -95,6 +95,9 @@ RUNTIME_EVIDENCE_ADAPTER_FILES = (
     "adapters/codex/agents/runtime-evidence.toml",
     "adapters/github-copilot/agents/runtime_evidence.agent.md",
 )
+RUNTIME_PROOF_POLICY_FILES = (
+    "skills/runtime-proof/SKILL.md",
+)
 WEB_BROWSER_PROOF_FILES = (
     "skills/webapp-testing/references/browser-runtime-proof-workflow.md",
     "skills/webapp-testing/references/browser-proof-layering-contract.md",
@@ -131,13 +134,14 @@ STAGED_REFERENCE_GATE_SKILLS = {
     "system-boundary-architecture",
     "systematic-debugging",
     "testing-best-practices",
+    "runtime-proof",
+    "user-apps-design",
     "verification-before-completion",
+    "webapp-testing",
+    "mobileapp-testing",
     "work-routing",
 }
-DEFERRED_REFERENCE_GATE_SKILL_GROUPS = {
-    "deeper runtime proof pass": {"webapp-testing", "mobileapp-testing"},
-    "deeper mobile design pass": {"mobile-design"},
-}
+DEFERRED_REFERENCE_GATE_SKILL_GROUPS = {}
 SKILL_BODY_TRIGGER_PATTERNS = (
     (re.compile(r"^##\s+Use\s+(?:When|For)\b", re.IGNORECASE | re.MULTILINE), "body-level trigger heading"),
     (re.compile(r"\bUse this skill when\b", re.IGNORECASE), "body-level trigger phrase"),
@@ -189,6 +193,19 @@ REMOVED_HARNESS_PATHS = (
     "skills/test-driven-development/references/testing-anti-patterns.md",
     "skills/testing-best-practices/references/testing-strategy.md",
     "skills/verification-before-completion/references/quality-gate-selection.md",
+    "skills/verification-before-completion/references/runtime-evidence-contract.md",
+    "skills/verification-before-completion/references/runtime-proof-escalation.md",
+    "skills/verification-before-completion/references/verification-evidence.md",
+    "skills/mobile-design/SKILL.md",
+    "skills/mobile-design/agents/openai.yaml",
+    "skills/mobile-design/references/mobile-backend.md",
+    "skills/mobile-design/references/mobile-design-thinking.md",
+    "skills/mobile-design/references/mobile-design-workflow.md",
+    "skills/mobile-design/references/mobile-performance.md",
+    "skills/mobile-design/references/mobile-testing.md",
+    "skills/mobile-design/references/platform-android.md",
+    "skills/mobile-design/references/platform-ios.md",
+    "skills/mobile-design/references/touch-psychology.md",
 )
 REMOVED_HARNESS_PATH_EXEMPTIONS = {
     "docs-ai/current-work/closed-harness-audits-2026-04.md",
@@ -524,7 +541,6 @@ def _iter_non_fenced_lines(text: str, start_line: int = 1) -> list[tuple[int, st
 
 def _validate_skill_body_contracts(root: Path) -> list[str]:
     errors: list[str] = []
-    deferred_skills = set().union(*DEFERRED_REFERENCE_GATE_SKILL_GROUPS.values())
     for skill_dir in _iter_skill_dirs(root):
         skill_file = skill_dir / "SKILL.md"
         if not skill_file.is_file():
@@ -553,8 +569,6 @@ def _validate_skill_body_contracts(root: Path) -> list[str]:
                 f"{rel}:{line_number} has non-gated reference row in staged reference-gate skill; "
                 "use `Read <reference> when/before/for ...`"
             )
-    if not deferred_skills:
-        errors.append("deferred reference-gate scope is empty")
     return errors
 
 
@@ -891,6 +905,31 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
         text = path.read_text(encoding="utf-8")
         if "docs-ai/docs/" in text:
             errors.append(f"{relative_path} must not hard-code project-local docs-ai/docs/ paths")
+        if "mis-scoped" not in text:
+            errors.append(f"{relative_path} missing mis-scoped runtime handoff blocking rule")
+        if "`advisory`" in text or "advisory notes" in text:
+            errors.append(f"{relative_path} must not classify runtime evidence findings as advisory")
+
+    for relative_path in RUNTIME_PROOF_POLICY_FILES:
+        path = root / relative_path
+        if not path.is_file():
+            errors.append(f"{relative_path} missing runtime proof policy owner")
+            continue
+        text = path.read_text(encoding="utf-8")
+        required_terms = (
+            "binding objective",
+            "mis-scoped",
+            "reject",
+            "blocked",
+            "entrypoint fidelity",
+            "runtime-visible",
+            "tiny, local",
+            "public-behavior",
+            "cross-boundary runtime risk",
+        )
+        for term in required_terms:
+            if term not in text:
+                errors.append(f"{relative_path} missing runtime proof policy term `{term}`")
 
     web_texts: list[str] = []
     for relative_path in WEB_BROWSER_PROOF_FILES:
@@ -910,9 +949,8 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
         root / "agents" / "roles.md",
         root / "skills" / "subagent-orchestration" / "SKILL.md",
         root / "skills" / "subagent-orchestration" / "references" / "coding-agent-topology.md",
+        root / "skills" / "runtime-proof" / "SKILL.md",
         root / "skills" / "verification-before-completion" / "SKILL.md",
-        root / "skills" / "verification-before-completion" / "references" / "runtime-proof-escalation.md",
-        root / "skills" / "verification-before-completion" / "references" / "runtime-evidence-contract.md",
     ]
     for path in scan_files:
         if not path.is_file():
