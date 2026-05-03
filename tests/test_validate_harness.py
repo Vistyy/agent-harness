@@ -50,26 +50,39 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
                 "",
             ]
         )
-        write(
-            root / "adapters" / "codex" / "agents" / f"{role.replace('_', '-')}.toml",
-            (
+        if role == "quality_guard":
+            codex_body = (
                 f'name = "{role}"\n'
                 "# touched-component integrity gate\n"
                 "# binding objective\n# accepted reductions\n# final approval\n"
                 "# Do not claim final approval.\n"
-                if role == "quality_guard"
-                else f'name = "{role}"\n# touched-component integrity gate\n'
-            ),
-        )
-        write(
-            root / "adapters" / "github-copilot" / "agents" / f"{role}.agent.md",
-            (
+            )
+            copilot_body = (
                 f"---\nname: {role}\n---\n\n"
                 "Touched-component integrity gate. binding objective accepted reductions final approval. "
                 "Do not claim final approval.\n"
-                if role == "quality_guard"
-                else f"---\nname: {role}\n---\n\nTouched-component integrity gate.\n"
-            ),
+            )
+        elif role == "explorer":
+            codex_body = (
+                f'name = "{role}"\n'
+                "# touched-component integrity gate\n"
+                "# Stay read-only\n# Do not edit code or take implementation ownership.\n"
+            )
+            copilot_body = (
+                f"---\nname: {role}\n---\n\n"
+                "Touched-component integrity gate. Stay read-only. "
+                "Do not edit code or take implementation ownership.\n"
+            )
+        else:
+            codex_body = f'name = "{role}"\n# touched-component integrity gate\n'
+            copilot_body = f"---\nname: {role}\n---\n\nTouched-component integrity gate.\n"
+        write(
+            root / "adapters" / "codex" / "agents" / f"{role.replace('_', '-')}.toml",
+            codex_body,
+        )
+        write(
+            root / "adapters" / "github-copilot" / "agents" / f"{role}.agent.md",
+            copilot_body,
         )
     write(root / "adapters" / "codex" / "config.toml", "\n".join(config_blocks))
 
@@ -673,6 +686,21 @@ def test_validate_rejects_review_role_contract_drift(tmp_path: Path) -> None:
     errors = validate_harness.validate(tmp_path)
 
     assert "adapters/codex/agents/quality-guard.toml missing quality_guard final-approval negation" in errors
+
+
+def test_validate_rejects_role_boundary_contract_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "explorer.toml",
+        'name = "explorer"\n# touched-component integrity gate\n# Stay read-only\n',
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/explorer.toml missing role boundary contract term "
+        "'Do not edit code or take implementation ownership.'"
+    ) in errors
 
 
 def test_validate_requires_microsoft_playwright_cli_anchor(tmp_path: Path) -> None:

@@ -138,6 +138,46 @@ REVIEW_ROLE_CONTRACTS = {
         "not final approval",
     ),
 }
+ROLE_BOUNDARY_CONTRACTS = {
+    "adapters/codex/agents/explorer.toml": (
+        "Stay read-only",
+        "Do not edit code or take implementation ownership.",
+    ),
+    "adapters/github-copilot/agents/explorer.agent.md": (
+        "Stay read-only",
+        "Do not edit code or take implementation ownership.",
+    ),
+    "adapters/codex/agents/check-runner.toml": (
+        "Run only the bounded verification or diagnostics commands",
+        "Do not edit code, take implementation ownership, or claim final approval",
+        "final diagnosis",
+    ),
+    "adapters/github-copilot/agents/check_runner.agent.md": (
+        "Run only the bounded verification or diagnostics commands",
+        "Do not edit code, take implementation ownership, or claim final approval",
+        "final diagnosis",
+    ),
+    "adapters/codex/agents/implementer.toml": (
+        "one bounded approved wave task card",
+        "active `execution-ready` wave packet",
+        "Do not claim final approval.",
+    ),
+    "adapters/github-copilot/agents/implementer.agent.md": (
+        "one bounded approved wave task card",
+        "active `execution-ready` wave packet",
+        "Do not claim final approval.",
+    ),
+    "adapters/codex/agents/planning-critic.toml": (
+        "Review non-trivial planning only",
+        "Stay read-only and do not edit code or docs.",
+        "Do not act as a final approver, implementation reviewer, or implementation owner.",
+    ),
+    "adapters/github-copilot/agents/planning_critic.agent.md": (
+        "Review non-trivial planning only",
+        "Stay read-only and do not edit code or docs.",
+        "Do not act as a final approver, implementation reviewer, or implementation owner.",
+    ),
+}
 REMOVED_WORKFLOW_SKILL_NAMES = (
     "executing-plans",
     "wave-autopilot",
@@ -1170,6 +1210,20 @@ def _validate_review_role_contracts(root: Path) -> list[str]:
     return errors
 
 
+def _validate_role_boundary_contracts(root: Path) -> list[str]:
+    errors: list[str] = []
+    for relative_path, required_terms in ROLE_BOUNDARY_CONTRACTS.items():
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        normalized_text = " ".join(text.split())
+        for term in required_terms:
+            if " ".join(term.split()) not in normalized_text:
+                errors.append(f"{relative_path} missing role boundary contract term {term!r}")
+    return errors
+
+
 def validate(root: Path) -> list[str]:
     errors: list[str] = []
 
@@ -1204,6 +1258,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_live_validation_contracts(root))
     errors.extend(_validate_provider_prompt_contracts(root))
     errors.extend(_validate_review_role_contracts(root))
+    errors.extend(_validate_role_boundary_contracts(root))
 
     for markdown_file in _iter_markdown(root):
         text = markdown_file.read_text(encoding="utf-8")
