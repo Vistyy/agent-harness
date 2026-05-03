@@ -1,100 +1,59 @@
 ---
 name: harness-governance
-description: "Use for reusable agent-harness governance: skill architecture, global AGENTS/project overlays, adapter install behavior, repo posture, and checks."
+description: "Use for reusable agent-harness governance: skill architecture, global AGENTS/project overlays, adapter install behavior, project-overlay contracts, and checks."
 ---
 
 # Harness Governance
 
-Use this skill for the reusable agent-harness repository and for
-harness-managed project overlay contracts.
+Owns reusable harness posture, project-overlay contracts, adapter posture,
+skill architecture, and harness checks.
 
-## Operating Model
+## Contract
 
-The global agent harness owns reusable agent workflow policy, skills, role
-adapters, templates, prompts, and validation. Harness-managed projects own
-product facts, architecture, roadmap, runtime topology, local command bodies,
-active execution state, and project-only exceptions.
+The harness is a contract, not a playbook. It owns reusable agent-facing policy
+and tooling; projects own product facts, runtime shape, local command bodies,
+roadmap, queue state, active execution state, and project-only exceptions.
 
-Codex is one adapter. The harness identity is generic.
+Keep harness policy adapter-neutral unless it lives in an adapter file. Codex is
+one adapter.
 
-Global reusable policy lives in this harness repository. Project overlays may
-narrow or extend global policy only for project facts, local runtime shape, or
-explicit documented exceptions. Reusable global truth must not live in a
-project active-work directory.
+Write harness policy under `documentation-stewardship`: shortest enforceable
+rule that preserves owner, outcome, forbidden workaround, and proof or stop
+condition when needed. Avoid inherited process stacks.
 
-Harness changes are reviewed and committed in the harness repository.
-Project-overlay changes are reviewed in the project repository. Closeout
-reports must state both repository statuses when a task touches both.
+## Rules
 
-A harness change is non-trivial when it touches any of:
+- Keep `AGENTS.md` and skill bodies as maps/contracts, not manuals.
+- Frontmatter `description` owns ordinary trigger/routing text.
+- Skill bodies are post-selection contracts.
+- Reference rows are mandatory purpose gates; matched gates must be read, and
+  unmatched references must not be loaded speculatively.
+- Keep one durable rule in one owner; point to the owner instead of copying.
+- Delete, collapse, demote, or reuse before adding harness structure.
+- Exceptions need an owner, protected surface, and removal condition.
 
-- `AGENTS.md`
-- skills or skill metadata
-- adapter prompts, role policy, or adapter config
-- validation checks
-- planning, review, verification, delegation, or workflow policy
-- removal, replacement, or split of a workflow owner
+Non-trivial harness changes touch `AGENTS.md`, reusable skills or metadata,
+adapter prompts/config, validation checks, workflow policy, project-overlay
+contracts, or reusable policy ownership.
 
-Harness closeout adds:
+Harness closeout names changed reusable owners, removed obsolete routes, changed
+routing triggers, harness repo status, and project repo status when overlays
+also changed.
 
-- changed reusable owners
-- removed obsolete routes
-- new or changed routing triggers
-- harness repository status
-- project repository status when project overlays also changed
+## Reference Gates
 
-## Reference Loading
+- Read `references/harness-contracts.md` before changing project overlays,
+  `AGENTS.md`, project-overlay documentation layout, or governance check
+  semantics.
+- Read `references/skill-architecture.md` before changing skill authoring,
+  splitting, installing, metadata, reference rows, templates, helper commands,
+  validation, skill eval posture, or split proposals.
 
-Load `references/harness-contracts.md` when changing project overlays,
-`AGENTS.md`, repository posture, or reusable enforcement checks.
-
-Load `references/skill-architecture.md` when authoring, splitting, installing,
-or validating reusable skills.
-
-Load `references/skill-invocation-cost.md` when auditing broad entrypoints,
-reference reading cost, or proposed routing, extraction, or splitting changes.
-
-Load `references/skill-evaluation.md` when proposing or implementing
-behavioral evals for skill trigger, workflow, or output regressions.
-
-## Boundary
-
-Keep this skill focused on reusable harness governance, project overlays,
-adapter posture, skill architecture, and enforcement checks.
-
-Use this skill when a workflow-feedback entry is promoted into reusable harness
-policy, skill guidance, adapter posture, or validation.
-
-## Skill Architecture
-
-Reusable skill architecture policy lives in `references/skill-architecture.md`.
-This entrypoint keeps only the hot-path owner summary.
-
-- `SKILL.md` contains trigger description and workflow mechanics.
-- Reference extraction and splitting require the separability gates in the
-  skill architecture reference; length alone is not a split reason.
-- Asset folders own templates copied or consumed by the skill.
-- Reusable helper commands should be exposed through the installed
-  agent-harness CLI when they are project-facing.
-- Agent-adapter folders own platform-specific hints.
-
-Keep project facts out of reusable skills. Keep skill frontmatter concise and
-route by description. Keep cross-skill references rare: use them only for direct
-coupling, complex routing, or a dedicated routing skill. Move reusable
-supporting material with the owning skill instead of leaving it in a project
-documentation tree. Do not duplicate the same durable rule in multiple skills.
-Keep examples generic unless the skill is explicitly project-local.
-
-Detailed skill-authoring quality rules live in
-`references/skill-architecture.md`.
-
-## Enforcement Checks
-
-Reusable project-overlay link validation is owned here:
+## Check
 
 ```bash
 agent-harness governance check --repo-root .
 ```
 
-Load `references/harness-contracts.md` before changing check semantics or
-project-overlay enforcement policy.
+When this skill changes, validation plus readback must prove owner boundary,
+non-trivial classification, closeout obligations, and reference gates survive.

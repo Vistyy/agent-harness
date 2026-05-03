@@ -1,86 +1,39 @@
 # Harness Contracts
 
-Load this reference when changing project-overlay contracts, global
-`AGENTS.md`, repository posture, or reusable harness enforcement checks.
+Owns reusable harness/project-overlay boundaries and the governance check.
 
-## Project Overlay Contract
+## Overlay Boundary
 
-A harness-managed project keeps its local instructions as an overlay. The
-overlay owns:
+Projects own product facts, architecture maps, roadmap and queue state, runtime
+topology, local command bodies, project-local skills, active execution state,
+and project-only exceptions.
 
-- product and domain facts
-- roadmap and initiative queue
-- architecture maps
-- runtime topology and environment wiring
-- project-local skills
-- local command recipe bodies
-- safety invariants that are specific to the project
+Project overlays point to global harness owners instead of copying reusable
+doctrine. Temporary duplication needs a named retirement or pointerization path.
 
-The overlay must point to global harness owners instead of copying reusable
-policy after the global owner is installed and proven. Temporary duplicated
-project docs are allowed during an extraction wave only when the active packet
-names their retirement or pointerization wave.
+## AGENTS.md
 
-## AGENTS.md Contract
+`AGENTS.md` is a first-hop map: precedence, compact repo map,
+project-specific invariants, and pointers to global skills or project owners.
 
-`AGENTS.md` is the first-hop map for an agent working in a project. It should
-contain:
+It must not copy reusable harness doctrine. Skill routing is owned by
+frontmatter `description`; read skill bodies only after selection.
 
-- precedence rules
-- compact repo map
-- project-specific invariants
-- pointers to global harness skills for reusable policy
-- pointers to project owner docs for project truth
+## Documentation Layout
 
-It should not become a second copy of reusable harness doctrine after the
-global harness is installed and proven.
+- `docs-ai/docs/**`: durable project truth.
+- `docs-ai/current-work/**`: queue state, active execution state, evidence,
+  blockers, and resume notes.
 
-If an entrypoint is a skill, route by the skill frontmatter `description`
-first. Read the skill body only for workflow mechanics and deeper owner links.
+Code, tests, services, packages, runtime topology, and command bodies remain
+project-owned unless a global harness owner explicitly owns a reusable
+convention.
 
-## Repository Structure
+## Governance Check
 
-Harness-managed projects use this documentation layout:
+`agent-harness governance check --repo-root .` validates local markdown links in
+`AGENTS.md`, `docs-ai/docs/**`, and `docs-ai/current-work/**`. It ignores
+external URLs, anchors, and template-like paths.
 
-- `docs-ai/docs/**` for durable project truth
-- `docs-ai/current-work/**` for active execution state, queue state, evidence,
-  blockers, and resume notes
-
-Code, test, service, package, and runtime layout remains project-owned unless a
-global skill explicitly owns a reusable convention.
-
-## Repository Posture
-
-Default posture when no user instruction or project owner doc overrides it:
-
-- Treat a project as pre-release unless a durable owner marks a surface live or
-  release-critical.
-- Treat a project as single-developer unless a durable owner names other
-  stakeholders.
-- For internal-only surfaces, avoid compatibility shims, migration bridges,
-  rollback ceremony, and approval choreography unless a real owner contract
-  requires them.
-- For released or externalized surfaces, assess compatibility, migration,
-  rollout, and user impact explicitly. Shims or bridges still need an explicit
-  durable owner requirement and removal condition; otherwise replace the old
-  path and delete obsolete code in the same change.
-
-Prefer the simplest operational path that honestly serves the current posture.
-
-## Enforcement Checks
-
-This skill owns `agent-harness governance check`, a reusable project-overlay
-check for markdown links in `AGENTS.md`, `docs-ai/docs/**`, and
-`docs-ai/current-work/**`. It reports broken local or absolute markdown targets
-and ignores external URLs, anchors, and template-like paths.
-
-Use it from a harness-managed project when changing project overlay docs or
-validating extraction/pointerization work:
-
-```bash
-agent-harness governance check --repo-root .
-```
-
-Project-local harness checks should stay narrow, high-signal, and tied to owned
-policy surfaces. Recurring reusable misses should move to global harness skills
-rather than growing project overlays.
+Reusable checks must stay narrow, high-signal, and tied to owned policy
+surfaces.

@@ -24,6 +24,9 @@ Rules:
 
 ## Placement
 
+Stable contracts live in durable owner docs. Temporary cleanup, migration,
+evidence, queue state, and resume state live in current-work.
+
 Use this split:
 - global reusable policy: harness skill references
 - project durable truth: project `docs-ai/docs/**`
@@ -31,6 +34,9 @@ Use this split:
 - exact behavior: code and tests
 
 Do not store durable truth in active-work state.
+
+Durable owner docs may link durable owner docs or exact validation surfaces.
+Current-work items may link the durable owner they are cleaning up.
 
 ## Writing Contract
 

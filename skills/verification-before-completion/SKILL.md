@@ -92,10 +92,11 @@ Before any completion claim:
     Tiny parent-local runtime proof is allowed only when the claim is local and
     has no public-behavior or cross-boundary runtime risk.
 11. For non-trivial runtime-visible claims, cite the Runtime Claim Map from
-    `references/runtime-proof-escalation.md`. Use `not-needed` only for
-    non-runtime claims or tiny local runtime claims with no public-behavior or
-    cross-boundary runtime risk. Final wording cannot exceed covered entrypoint
-    fidelity, action, variants, observable result, and unproved boundaries.
+    `references/runtime-proof-escalation.md`. Use the literal value not-needed
+    only for non-runtime claims or tiny local runtime claims with no
+    public-behavior or cross-boundary runtime risk. Final wording cannot exceed
+    covered entrypoint fidelity, action, variants, observable result, and
+    unproved boundaries.
 12. For runtime/debug/observability-heavy claims, cite selected trace/log
     artifact/query pointers and selected trace/correlation IDs, or explicit
     `none observed`, or why observability was intentionally not used.

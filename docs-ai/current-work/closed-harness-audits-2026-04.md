@@ -77,5 +77,5 @@ Disposition:
   `Owner Routing`, or `Cross-Skill Routing` sections.
 - Remaining owner maps live in reference docs or the dedicated `work-routing`
   skill, where the map is the artifact's direct purpose.
-- Added `harness-governance/references/skill-evaluation.md` as a lightweight
-  starting point for future skill behavioral evals.
+- Added lightweight skill-eval posture later folded into
+  `harness-governance/references/skill-architecture.md`.

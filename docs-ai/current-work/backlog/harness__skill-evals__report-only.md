@@ -34,7 +34,7 @@ clear value.
 ## References
 
 - Owning durable doc:
-  `skills/harness-governance/references/skill-evaluation.md`
+  `skills/harness-governance/references/skill-architecture.md`
 - Queue/backlog source:
   `docs-ai/current-work/delivery-map.md` (`skill-evals-report-only`)
 - Source wave/task:
