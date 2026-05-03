@@ -31,7 +31,9 @@ For each changed persistent test file:
    weak-proof, or branch-coverage concerns.
 6. Load `references/layer-selection.md` when layer, persistence lane, runtime
    handoff, CI lane, or workflow/infra proof is material.
-7. If cluster is too big for slice, schedule follow-up now.
+7. Load `references/condition-based-waiting.md` when tests use sleeps, fixed
+   delays, or wait-heavy retries before assertions.
+8. If cluster is too big for slice, schedule follow-up now.
 
 For corpus-wide audit work:
 1. Inventory and score suspicious clusters first.

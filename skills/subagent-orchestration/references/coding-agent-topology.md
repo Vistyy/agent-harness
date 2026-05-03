@@ -46,4 +46,4 @@ smaller invented objective.
 
 - wave packets: `../../initiatives-workflow/references/wave-packet-contract.md`
 - review semantics: `../../code-review/references/review-governance.md`
-- delegation policy: `delegation-policy.md`
+- delegation policy: `../SKILL.md`

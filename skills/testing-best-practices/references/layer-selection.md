@@ -69,7 +69,7 @@ product-specific acceptance, and local UI verification strategy.
 
 ## CI Posture
 
-`../../verification-before-completion/references/quality-gate-selection.md`
+`../../verification-before-completion/SKILL.md`
 owns lane semantics; project overlays own stack-specific commands.
 
 Rule here:

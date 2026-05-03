@@ -32,6 +32,7 @@ Examples and helper scripts are indexed in `../SKILL.md`.
 | persistence lane placement | `layer-selection.md` |
 | workflow/infra proof routing | `layer-selection.md` |
 | runtime proof handoff and cheapest persistent layer | `layer-selection.md` |
+| arbitrary sleeps and condition-based waiting | `condition-based-waiting.md` |
 | persistent-test validity/strength for `multi-proof-required` | `proof-strength.md` |
 | CI posture | `layer-selection.md` |
 | practical add/keep checks | `layer-selection.md` |
@@ -50,5 +51,7 @@ Examples and helper scripts are indexed in `../SKILL.md`.
   concerns: load `proof-strength.md`.
 - Choosing layer, persistence lane, runtime handoff, CI lane, or workflow/infra
   proof: load `layer-selection.md`.
+- Replacing sleeps, fixed waits, or wait-heavy retries: load
+  `condition-based-waiting.md`.
 - Running a suite cleanup tranche, suspicious-cluster audit, test cost cleanup,
   or harness-level testing follow-up: load `corpus-audit.md`.

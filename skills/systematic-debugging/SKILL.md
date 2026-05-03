@@ -9,92 +9,44 @@ Root cause first. No guess-fixing.
 
 ## Iron Law
 
-`NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST`
+No fix before root-cause investigation.
 
-If Phase 1 is incomplete, do not propose fix.
+## Loop
 
-## Use When
+1. Read the full error or symptom.
+2. Reproduce or gather enough evidence to explain why reproduction is blocked.
+3. Find the immediate cause, then trace backward through callers, data, state,
+   config, and boundaries until the original trigger is known.
+4. Compare with a working in-repo pattern.
+5. State one hypothesis and test one variable.
+6. Fix the source, not the symptom.
+7. Add bounded guards or proof only where supported paths can still bypass the
+   source fix.
+8. Verify the fix and surrounding checks.
 
-- test failure
-- bug
-- unexpected behavior
-- performance issue
-- build failure
-- integration break
+For multi-component failures, record what enters and leaves each boundary until
+the failing layer is known.
 
-Use it especially when pressure is high or "quick fix" feels obvious.
+## Handoffs
 
-## Process
+- After root cause is known, apply `../code-simplicity/SKILL.md` for
+  owner-correct repair.
+- Use `../testing-best-practices/references/condition-based-waiting.md` when
+  tests rely on arbitrary sleeps or fixed waits.
+- If the root cause is unresolved ownership, authority, contract, state,
+  storage, or interface boundary, use
+  `../system-boundary-architecture/SKILL.md`.
+- If feedback caused the investigation, use `../feedback-address/SKILL.md` for
+  disposition first.
 
-### 1. Root Cause Investigation
-
-- read errors fully
-- reproduce consistently
-- check recent changes
-- gather evidence across component boundaries
-- trace bad data backward to source
-
-For multi-component systems:
-- log what enters and leaves each boundary
-- verify config and env propagation
-- identify exact failing layer before changing code
-
-### 2. Pattern Analysis
-
-- find working example in same codebase
-- read reference pattern completely
-- list concrete differences
-- understand required dependencies and assumptions
-- after second confirmed defect in same surface, ask whether one shared owner or
-  authority mistake explains both failures
-- if yes, stop stacking symptom patches and route through structural diagnosis
-
-### 3. Hypothesis And Test
-
-- state one hypothesis clearly
-- make smallest possible change to test it
-- test one variable at a time
-- if it fails, form new hypothesis instead of stacking fixes
-
-### 4. Implementation
-
-- create failing test or repro first
-- implement one fix for root cause
-- verify fix and surrounding checks
-
-If 3 fixes failed:
-- stop
-- question architecture
-- discuss before more fixes
-
-If 2+ valid findings share same controller/store/service:
-- stop incremental patching
-- write boundary diagnosis first
-- prefer common-cause refactor over third local fix
-
-## Guardrails
+## Stop
 
 - no symptom fix first
-- no bundled "while here" cleanup during root-cause step
-- no pretending to understand what you do not understand
-- if issue is not reproducible, gather more evidence instead of guessing
+- no bundled cleanup during investigation
+- no pretending to understand an unreproduced issue
+- after three failed fixes, stop and reopen diagnosis
 
-## Optional References
+## Reference Gate
 
-- `references/root-cause-tracing.md`: use when the symptom appears deep in a
-  call stack or the original trigger is unclear.
-- `references/condition-based-waiting.md`: use when tests rely on arbitrary sleeps.
-- `examples/condition-based-waiting-example.ts`: illustrative example only; do
-  not copy project-shaped imports directly.
-- `references/defense-in-depth.md`: use after root cause is known and
-  supported paths need layered validation.
-- `references/diagnostics.md`: use when structured logs, correlation IDs, or
-  runtime diagnostic fields matter.
-- `examples/find-polluter.sh`: npm-specific example helper for finding a test
-  that creates unwanted files or shared state.
-
-Evaluation-only files:
-- `evaluations/test-academic.md`
-- `evaluations/test-pressure-1.md`
-- `evaluations/test-pressure-2.md`
-- `evaluations/test-pressure-3.md`
+- Read `references/diagnostics.md` when structured diagnostic evidence,
+  correlation IDs, or bounded runtime context matters.
