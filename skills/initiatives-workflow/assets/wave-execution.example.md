@@ -27,14 +27,10 @@
 
 ## Task Plan
 
-| Task slug | State | Dependencies | Outcome summary | Proof rows |
-| --- | --- | --- | --- | --- |
-| `workflow/trim` |  | `none` | `Compact workflow owners and remove duplicate doctrine.` | `P1` |
-
-Allowed states: blank, `done`, `blocked`.
-
 ### `workflow/trim`
 
+- State:
+  - `blank`
 - Outcome:
   - `Workflow docs are materially shorter and still preserve hard gates.`
 - In scope:

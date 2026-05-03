@@ -71,6 +71,21 @@ compatibility, or public behavior.
 - Prior thread discussion alone never authorizes non-trivial resumed direct
   work.
 
+## Slice State Gate
+
+When routing narrows a broad objective to a first executable owner/problem, the
+slice is execution scope, not a replacement objective.
+
+Execution may start only from an `execution-ready` wave brief and canonical
+packet. Draft packets preserve candidate slice state during planning; they do
+not authorize execution.
+
+Durable state must preserve objective continuity, route scope, proof/review
+gates, and stop conditions through the existing `initiatives-workflow` packet
+contract. Thread discussion is not planning state. If the packet feels too
+heavy, shrink the packet template; do not execute from memory or create another
+artifact.
+
 ## Gate Matrix
 
 | Need | Owner |

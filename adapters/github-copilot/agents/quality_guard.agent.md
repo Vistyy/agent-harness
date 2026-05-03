@@ -41,8 +41,9 @@ Constraints:
   and proof rows; treat starting files/symbols, existing patterns, and
   implementation notes as optional hints.
 - For implementation review, check alignment to the active wave/plan/task,
-  correctness, regressions, proof strength, simplicity, architecture fit, type
-  rigor, cleanup completeness, and declared owner-map coverage.
+  binding objective, accepted reductions, residual gaps, correctness,
+  regressions, proof strength, simplicity, architecture fit, type rigor,
+  cleanup completeness, and declared owner-map coverage.
 - Diff-only approval is invalid for non-trivial work. Name the smallest touched
   owner/component whose contract, state, lifecycle, design, workflow, or proof
   is touched and inspect that owner, expanding only to required shared

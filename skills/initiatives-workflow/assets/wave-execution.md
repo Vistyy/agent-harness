@@ -27,14 +27,10 @@
 
 ## Task Plan
 
-| Task slug | State | Dependencies | Outcome summary | Proof rows |
-| --- | --- | --- | --- | --- |
-| `<task/slug>` |  | `none` | `<outcome>` | `P1` |
-
-Allowed states: blank, `done`, `blocked`.
-
 ### `<task/slug>`
 
+- State:
+  - `<blank | done | blocked>`
 - Outcome:
   - `<complete outcome>`
 - In scope:

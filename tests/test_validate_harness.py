@@ -52,11 +52,24 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
         )
         write(
             root / "adapters" / "codex" / "agents" / f"{role.replace('_', '-')}.toml",
-            f'name = "{role}"\n# touched-component integrity gate\n',
+            (
+                f'name = "{role}"\n'
+                "# touched-component integrity gate\n"
+                "# binding objective\n# accepted reductions\n# final approval\n"
+                "# Do not claim final approval.\n"
+                if role == "quality_guard"
+                else f'name = "{role}"\n# touched-component integrity gate\n'
+            ),
         )
         write(
             root / "adapters" / "github-copilot" / "agents" / f"{role}.agent.md",
-            f"---\nname: {role}\n---\n\nTouched-component integrity gate.\n",
+            (
+                f"---\nname: {role}\n---\n\n"
+                "Touched-component integrity gate. binding objective accepted reductions final approval. "
+                "Do not claim final approval.\n"
+                if role == "quality_guard"
+                else f"---\nname: {role}\n---\n\nTouched-component integrity gate.\n"
+            ),
         )
     write(root / "adapters" / "codex" / "config.toml", "\n".join(config_blocks))
 
@@ -69,12 +82,10 @@ def valid_packet() -> str:
 
     ## Task Plan
 
-    | Task slug | State | Dependencies | Outcome summary | Proof rows |
-    | --- | --- | --- | --- | --- |
-    | `example/task` |  | `none` | `Example outcome.` | `P1` |
-
     ### `example/task`
 
+    - State:
+      - `blank`
     - Outcome:
       - `Example outcome.`
     - In scope:
@@ -358,6 +369,8 @@ def test_validate_rejects_removed_harness_path_outside_archive(tmp_path: Path) -
         See skills/testing-best-practices/references/layer-selection.md.
         See skills/testing-best-practices/references/proof-strength.md.
         See skills/testing-best-practices/references/touched-test-gate.md.
+        See skills/initiatives-workflow/assets/wave-brief.example.md.
+        See skills/webapp-testing/examples/console_logging.py.
         """,
     )
 
@@ -394,6 +407,14 @@ def test_validate_rejects_removed_harness_path_outside_archive(tmp_path: Path) -
     )
     assert (
         "README.md references removed harness path skills/testing-best-practices/references/touched-test-gate.md"
+        in errors
+    )
+    assert (
+        "README.md references removed harness path skills/initiatives-workflow/assets/wave-brief.example.md"
+        in errors
+    )
+    assert (
+        "README.md references removed harness path skills/webapp-testing/examples/console_logging.py"
         in errors
     )
 
@@ -558,7 +579,7 @@ def test_validate_rejects_runtime_evidence_advisory_findings(tmp_path: Path) -> 
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "adapters" / "codex" / "agents" / "runtime-evidence.toml",
-        'name = "runtime_evidence"\nmis-scoped\nOutput: `advisory` notes.\n',
+        'name = "runtime_evidence"\nmis-scoped\nRuntime findings are advisory.\n',
     )
 
     errors = validate_harness.validate(tmp_path)
@@ -567,6 +588,41 @@ def test_validate_rejects_runtime_evidence_advisory_findings(tmp_path: Path) -> 
         "adapters/codex/agents/runtime-evidence.toml must not classify runtime evidence findings as advisory"
         in errors
     )
+
+
+def test_validate_rejects_provider_prompt_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "README.md",
+        "Route full wave execution to wave-autopilot.\n",
+    )
+    write(
+        tmp_path / "adapters" / "github-copilot" / "README.md",
+        "Runtime findings are advisory.\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "adapters/codex/README.md references removed workflow skill 'wave-autopilot'" in errors
+    assert "adapters/github-copilot/README.md must not classify blocking evidence as advisory" in errors
+
+
+def test_validate_rejects_review_role_contract_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml",
+        (
+            'name = "quality_guard"\n'
+            "# touched-component integrity gate\n"
+            "# binding objective\n"
+            "# accepted reductions\n"
+            "# quality_guard may claim final approval\n"
+        ),
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "adapters/codex/agents/quality-guard.toml missing quality_guard final-approval negation" in errors
 
 
 def test_validate_requires_microsoft_playwright_cli_anchor(tmp_path: Path) -> None:
@@ -648,6 +704,8 @@ def test_validate_rejects_wave_task_card_missing_touched_integrity(tmp_path: Pat
 
         ### `example/task`
 
+        - State:
+          - `blank`
         - Outcome:
           - `Example outcome.`
         - In scope:
@@ -706,6 +764,34 @@ def test_validate_rejects_wave_task_card_missing_touched_integrity(tmp_path: Pat
         "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' missing touched owner/component integrity"
         in errors
     )
+
+
+def test_validate_rejects_wave_task_card_missing_or_invalid_state(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace(
+        "    - State:\n      - `blank`\n",
+        "",
+    )
+    write(tmp_path / "docs-ai" / "current-work" / "missing-state" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "missing-state.md",
+        "# Wave missing-state\n\n**Status:** execution-ready\n",
+    )
+
+    invalid_packet = valid_packet().replace("`blank`", "`reviewing`", 1)
+    write(tmp_path / "docs-ai" / "current-work" / "invalid-state" / "wave-execution.md", invalid_packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "invalid-state.md",
+        "# Wave invalid-state\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/missing-state/wave-execution.md task card '`example/task`' missing state" in errors
+    assert (
+        "docs-ai/current-work/invalid-state/wave-execution.md task card '`example/task`' "
+        "invalid state 'reviewing'; expected one of ['blank', 'blocked', 'done']"
+    ) in errors
 
 
 def test_validate_rejects_wave_packet_with_proof_rows_but_no_task_cards(tmp_path: Path) -> None:

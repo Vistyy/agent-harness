@@ -32,18 +32,19 @@ must not substitute for missing planning closure.
 
 ## Task Cards
 
-Task states are only blank, `done`, or `blocked`.
+Task states are only `blank`, `done`, or `blocked`.
 
-- blank: task is not yet closed
+- `blank`: task is not yet closed
 - `done`: scoped implementation, cleanup/removal, review gates, and proof rows
   are satisfied
 - `blocked`: next required move depends on an external dependency or explicit
   user action
 
 Do not invent extra task states; nuance belongs in proof rows, blocker entries,
-or task evidence.
+or task evidence. Store state on each task card. Summary tables are optional.
 
 Each `### <task_slug>` card states:
+- state
 - outcome
 - in scope / out of scope
 - owned files and surfaces

@@ -20,3 +20,9 @@ Copilot, and Gemini homes.
 Global `AGENTS.md` is the installed Codex adapter prompt source for reusable
 harness policy. Adapter install must preserve that source instead of relocating
 global policy into project overlays or role files.
+
+Provider install/config prompts are maps, not doctrine owners.
+
+- Do not name removed workflow skills.
+- Do not classify blocking evidence as advisory.
+- Do not copy review/runtime rules owned by skills or role files.

@@ -25,8 +25,9 @@ Constraints:
   diagnostics triage, or runtime validation.
 - Review the whole diff against the stated base, wave/plan anchors, user
   constraints, proof artifacts, and touched public surfaces.
-- Treat in-thread `quality_guard` approvals as useful history, not final
-  approval.
+- Review against the binding objective, accepted reductions, residual gaps,
+  changed surfaces, base/diff range, and proof artifacts.
+- Treat in-thread `quality_guard` approvals as useful history, not final approval.
 - Do not assemble or approve the final completion claim; report the review
   scope, evidence coverage, and claim support for verification to consume.
 - Enumerate every material finding with exact `file/path:line` evidence. Do not

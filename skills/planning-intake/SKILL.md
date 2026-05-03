@@ -80,6 +80,8 @@ schema.
 Do not promote while:
 - a material implementation-shaping decision remains open
 - the plan narrows requested breadth or quality without accepted reduction
+- selected-slice promotion would not create durable wave state preserving
+  objective continuity, route scope, proof/review gates, and stop conditions
 - a broad objective is spread shallowly across multiple owners instead of
   following `work-routing` broad-objective semantics
 - touched-component integrity is `not assessed`

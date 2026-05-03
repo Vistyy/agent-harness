@@ -67,6 +67,8 @@ PROOF_ROW_REQUIRED_KEYS = (
     "status",
 )
 TASK_CARD_TOUCHED_INTEGRITY_FIELD = "- Touched owner/component integrity:"
+TASK_CARD_STATE_FIELD = "- State:"
+TASK_CARD_ALLOWED_STATES = {"blank", "done", "blocked"}
 WAVE_STATUSES = {"discovery-required", "execution-ready", "done", "retired"}
 PREAUTHORIZED_SUBAGENT_SENTINEL = (
     "The user explicitly authorizes use of the spawn/subagent tool for these"
@@ -95,6 +97,55 @@ RUNTIME_EVIDENCE_ADAPTER_FILES = (
     "adapters/codex/agents/runtime-evidence.toml",
     "adapters/github-copilot/agents/runtime_evidence.agent.md",
 )
+RUNTIME_EVIDENCE_ADAPTER_REQUIRED_TERMS = (
+    "binding objective",
+    "accepted reductions",
+    "mis-scoped",
+    "entrypoint fidelity",
+    "reject",
+    "blocked",
+    "blocking",
+    "not overall code quality",
+    "Do not take over shared or ambiguous runtime coordination",
+)
+PROVIDER_PROMPT_FILES = (
+    "adapters/codex/README.md",
+    "adapters/codex/config.toml",
+    "adapters/codex/install-scope.md",
+    "adapters/codex/install.sh",
+    "adapters/github-copilot/README.md",
+)
+REVIEW_ROLE_CONTRACTS = {
+    "adapters/codex/agents/quality-guard.toml": (
+        "binding objective",
+        "accepted reductions",
+    ),
+    "adapters/github-copilot/agents/quality_guard.agent.md": (
+        "binding objective",
+        "accepted reductions",
+    ),
+    "adapters/codex/agents/final-reviewer.toml": (
+        "binding objective",
+        "accepted reductions",
+        "Do not perform planning-gate review",
+        "not final approval",
+    ),
+    "adapters/github-copilot/agents/final_reviewer.agent.md": (
+        "binding objective",
+        "accepted reductions",
+        "Do not perform planning-gate review",
+        "not final approval",
+    ),
+}
+REMOVED_WORKFLOW_SKILL_NAMES = (
+    "executing-plans",
+    "wave-autopilot",
+    "workflow-feedback",
+    "writing-plans",
+)
+ADVISORY_DRIFT_RE = re.compile(r"\badvisory\b", re.IGNORECASE)
+ADVISORY_NEGATION_RE = re.compile(r"\b(?:must not|do not|not classify|not treat|never)\b", re.IGNORECASE)
+QUALITY_GUARD_FINAL_APPROVAL_NEGATION_RE = re.compile(r"\bDo not\b.*\bclaim final approval\b", re.IGNORECASE)
 RUNTIME_PROOF_POLICY_FILES = (
     "skills/runtime-proof/SKILL.md",
 )
@@ -161,6 +212,7 @@ REMOVED_HARNESS_PATHS = (
     "skills/flutter-expert/references/state-and-providers.md",
     "skills/flutter-expert/references/ui-patterns.md",
     "skills/initiatives-workflow/references/initiatives-workflow.md",
+    "skills/initiatives-workflow/assets/wave-brief.example.md",
     "skills/planning-intake/references/intake-contract.md",
     "skills/subagent-orchestration/references/delegation-policy.md",
     "skills/subagent-orchestration/references/coding-agent-topology.md",
@@ -205,6 +257,9 @@ REMOVED_HARNESS_PATHS = (
     "skills/verification-before-completion/references/runtime-evidence-contract.md",
     "skills/verification-before-completion/references/runtime-proof-escalation.md",
     "skills/verification-before-completion/references/verification-evidence.md",
+    "skills/webapp-testing/examples/console_logging.py",
+    "skills/webapp-testing/examples/element_discovery.py",
+    "skills/webapp-testing/examples/static_html_automation.py",
     "skills/mobile-design/SKILL.md",
     "skills/mobile-design/agents/openai.yaml",
     "skills/mobile-design/references/mobile-backend.md",
@@ -759,6 +814,21 @@ def _task_card_sections(text: str) -> list[tuple[str, str]]:
     return cards
 
 
+def _task_card_field_value(task_body: str, field: str) -> str | None:
+    field_name = field.removeprefix("- ").removesuffix(":")
+    match = re.search(
+        rf"(?m)^-\s+{re.escape(field_name)}:[ \t]*(?:`([^`]+)`|([^\n`]*))?"
+        rf"(?:\n\s+-\s*(?:`([^`]+)`|([^\n`]*)))?",
+        task_body,
+    )
+    if not match:
+        return None
+    for group in match.groups():
+        if group is not None and group.strip():
+            return group.strip()
+    return ""
+
+
 def _validate_wave_packet(path: Path, root: Path) -> list[str]:
     errors: list[str] = []
     text = path.read_text(encoding="utf-8")
@@ -800,6 +870,14 @@ def _validate_wave_packet(path: Path, root: Path) -> list[str]:
         if isinstance(task_slug, str) and task_slug not in task_card_by_title:
             errors.append(f"{path.relative_to(root)} proof_plan row {index} task_slug {task_slug!r} has no matching task card")
     for task_title, task_body in task_cards:
+        state = _task_card_field_value(task_body, TASK_CARD_STATE_FIELD)
+        if state is None:
+            errors.append(f"{path.relative_to(root)} task card {task_title!r} missing state")
+        elif state not in TASK_CARD_ALLOWED_STATES:
+            errors.append(
+                f"{path.relative_to(root)} task card {task_title!r} invalid state {state!r}; "
+                f"expected one of {sorted(TASK_CARD_ALLOWED_STATES)}"
+            )
         if TASK_CARD_TOUCHED_INTEGRITY_FIELD not in task_body:
             errors.append(
                 f"{path.relative_to(root)} task card {task_title!r} missing touched owner/component integrity"
@@ -897,10 +975,13 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
         text = path.read_text(encoding="utf-8")
         if "docs-ai/docs/" in text:
             errors.append(f"{relative_path} must not hard-code project-local docs-ai/docs/ paths")
-        if "mis-scoped" not in text:
-            errors.append(f"{relative_path} missing mis-scoped runtime handoff blocking rule")
-        if "`advisory`" in text or "advisory notes" in text:
-            errors.append(f"{relative_path} must not classify runtime evidence findings as advisory")
+        for term in RUNTIME_EVIDENCE_ADAPTER_REQUIRED_TERMS:
+            if term not in text:
+                errors.append(f"{relative_path} missing runtime evidence adapter term {term!r}")
+        for line in text.splitlines():
+            if ADVISORY_DRIFT_RE.search(line) and not ADVISORY_NEGATION_RE.search(line):
+                errors.append(f"{relative_path} must not classify runtime evidence findings as advisory")
+                break
 
     for relative_path in RUNTIME_PROOF_POLICY_FILES:
         path = root / relative_path
@@ -1008,6 +1089,39 @@ def write_openai_metadata_report(root: Path, report_path: Path) -> list[str]:
     return errors
 
 
+def _validate_provider_prompt_contracts(root: Path) -> list[str]:
+    errors: list[str] = []
+    for relative_path in PROVIDER_PROMPT_FILES:
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        for skill_name in REMOVED_WORKFLOW_SKILL_NAMES:
+            if skill_name in text:
+                errors.append(f"{relative_path} references removed workflow skill {skill_name!r}")
+        for line in text.splitlines():
+            if ADVISORY_DRIFT_RE.search(line) and not ADVISORY_NEGATION_RE.search(line):
+                errors.append(f"{relative_path} must not classify blocking evidence as advisory")
+                break
+    return errors
+
+
+def _validate_review_role_contracts(root: Path) -> list[str]:
+    errors: list[str] = []
+    for relative_path, required_terms in REVIEW_ROLE_CONTRACTS.items():
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        for term in required_terms:
+            if term not in text:
+                errors.append(f"{relative_path} missing review role contract term {term!r}")
+        if "quality-guard" in relative_path or "quality_guard" in relative_path:
+            if not QUALITY_GUARD_FINAL_APPROVAL_NEGATION_RE.search(text):
+                errors.append(f"{relative_path} missing quality_guard final-approval negation")
+    return errors
+
+
 def validate(root: Path) -> list[str]:
     errors: list[str] = []
 
@@ -1038,6 +1152,8 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_backlog_detail_contract(root))
     errors.extend(_validate_simplicity_gate(root))
     errors.extend(_validate_live_validation_contracts(root))
+    errors.extend(_validate_provider_prompt_contracts(root))
+    errors.extend(_validate_review_role_contracts(root))
 
     for markdown_file in _iter_markdown(root):
         text = markdown_file.read_text(encoding="utf-8")

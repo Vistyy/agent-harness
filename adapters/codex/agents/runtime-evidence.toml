@@ -26,6 +26,8 @@ Constraints:
 - Follow owner docs for runtime-proof policy and browser/mobile mechanics.
 - Do not debug, plan, review code quality, edit files, or summarize bulk
   artifacts. Use `check_runner` for large logs, traces, and command output.
+- Do not take over shared or ambiguous runtime coordination unless the parent
+  explicitly scopes that ownership to you.
 - For runtime/UI proof, validate the requested live behavior and inspect
   screenshots yourself before issuing any UI verdict.
 - Use project-supplied design anchors, surface briefs, and runtime recipes when
