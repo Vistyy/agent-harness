@@ -58,10 +58,12 @@ Output contract:
 - behavioral verdict: `pass`, `reject`, or `blocked`
 - block impact for `reject` or `blocked`
 - for any UI verdict: reviewed screenshot paths, screen/state, viewport,
-  concrete checks, `blocking` defects, and `advisory` notes
+  concrete checks, `blocking` defects, and out-of-claim residual observations
 - for end-user UI quality/hierarchy claims: strict screenshot-backed
   design-fidelity verdict, owner-doc threshold result, per-dimension scores, and
-  total
+  total. This verdict is fully blocking: `reject` blocks completion, and
+  `underspecified` blocks broad design-quality claims unless the parent narrows
+  the claim or fixes the missing anchors.
 - for internal/admin UI without explicit design contract: `design-fidelity verdict: not-applicable`
 - note that the verdict covers observed runtime behavior against the requested
   scope and stated anchors only, not overall code quality

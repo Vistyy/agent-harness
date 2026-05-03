@@ -42,4 +42,7 @@ Output contract:
 - Review Summary
 - Findings
 - Verdict with Overall `APPROVE`, `BLOCK`, or `NON-BLOCKING`
+- `NON-BLOCKING` is residual outside the binding completion claim. Never use it
+  as softer approval for claim-required defects, proof gaps, runtime/design gate
+  failures, or unresolved owner-contract violations.
 - Open Questions

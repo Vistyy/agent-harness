@@ -74,16 +74,22 @@ dials before editing.
 4. Write parity matrix before editing: must-match behavior, state, copy, and
    component semantics; allowed divergence is layout/navigation structure.
 5. Map route work to atomic layers and identify reuse/new reusable blocks.
-6. Run density/layout pass before polish: remove oversized shell chrome and
+6. For non-trivial visual redesigns or new end-user surfaces, use an approved
+   or inspected whole-screen composition, prototype, or reference before
+   product-code implementation. Inspect it as a complete screen against project
+   design anchors. Component, token, or rule compliance alone is insufficient.
+   If the whole-screen composition fails, implementation is blocked; do not
+   iterate in product code from a bad composition.
+7. Run density/layout pass before polish: remove oversized shell chrome and
    improve scanability/spacing rhythm.
-7. For IA-affecting changes, evaluate established patterns and record `adopt`
+8. For IA-affecting changes, evaluate established patterns and record `adopt`
    or `reject` in planning artifacts.
-8. When claiming hierarchy, density, shell, or UI quality, define `3-7`
+9. When claiming hierarchy, density, shell, or UI quality, define `3-7`
    design-intent anchors per project surface-discovery contract.
-9. Use existing project tokens, components, patterns, and design-system
+10. Use existing project tokens, components, patterns, and design-system
    contracts. No ad hoc styling values.
-10. Runtime UI proof must use project design-fidelity governance verdict terms.
-11. Web route ownership changes must close route/state authority before editing.
+11. Runtime UI proof must use project design-fidelity governance verdict terms.
+12. Web route ownership changes must close route/state authority before editing.
 
 ## Missing Source Of Truth
 

@@ -16,10 +16,12 @@ project overlay migration guardrails.
 Rule: CI baseline is `quality-fast`. Completion proof is still local
 `quality` unless another owner doc raises bar.
 
-Rule: self-contained local advisory performance budgets may live in
-`quality-full`. Runtime-bound browser or app-carrier advisory proof should stay
-explicit runtime proof, not a shared quality-tier dependency, unless a durable
-owner doc explicitly chooses the heavier gate.
+Rule: self-contained local performance budgets that are optional
+expanded-confidence follow-up may live in `quality-full`. Runtime-bound browser
+or app-carrier follow-up should stay explicit runtime proof, not a shared
+quality-tier dependency, unless a durable owner doc explicitly chooses the
+heavier gate. Once a durable owner adopts a budget or proof as required for the
+claim or owned path, failure is blocking.
 
 Rule: root `tests` is a separate rollup and is not part of the quality tier
 contract.
@@ -42,16 +44,16 @@ Tier meaning:
 - stack `quality` should compose on top of `quality-fast` and add only the
   smaller default-completion delta that still belongs in the normal gate
 - stack `quality-full` is where slower policy, security, persistence, or local
-  advisory follow-up belongs when that extra proof really earns a separate,
-  self-contained tier
+  expanded-confidence follow-up belongs when that extra proof really earns a
+  separate, self-contained tier
 
 Rule: a stack may omit `quality-full` when the only remaining extra proof is
 runtime-bound browser/app verification that should stay explicit.
 
-When a feature adopts local advisory performance budgets through `quality-full`,
-run that gate on purpose for changes on the owned performance path and for any
-baseline recalibration. When the proof is runtime-bound and explicit instead,
-run the owner command directly instead of relying on memory of ad hoc scripts.
+When a feature adopts local performance budgets through `quality-full`, run that
+gate on purpose for changes on the owned performance path and for any baseline
+recalibration. When the proof is runtime-bound and explicit instead, run the
+owner command directly instead of relying on memory of ad hoc scripts.
 
 CI workflow names, hosted branch-protection checks, and stack-specific command
 bodies belong to the active project overlay or repo-local workflow docs.

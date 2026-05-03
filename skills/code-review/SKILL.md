@@ -77,6 +77,10 @@ Owner docs and review gates carry the doctrine.
 - Required `code-simplicity`: `<yes | no | not applicable>`
 - Top risks: `<max 3 bullets>`
 
+`NON-BLOCKING` is residual outside the binding completion claim. Never use it
+as softer approval for claim-required defects, proof gaps, runtime/design gate
+failures, or unresolved owner-contract violations.
+
 ### Open Questions
 
 Only blocking questions. Else: `None.`

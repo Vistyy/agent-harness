@@ -33,6 +33,12 @@ Owner for approval boundaries, disposition, and completion claims.
 - No approval while any material issue lacks disposition.
 - Default unresolved issue to merge-blocking.
 - Compare the change against the binding user objective and any active wave or task intent.
+- A finding, evidence gap, review result, or gate result may be
+  advisory/non-blocking only when it is outside the binding user objective and
+  final completion claim, or is explicitly optional expanded-confidence
+  follow-up. If the claim depends on that gate, owner contract, design anchor,
+  runtime proof, threshold, scorecard, or required review result, an unresolved
+  failure is blocking and must reject, block, or narrow the claim.
 - For non-trivial review, an objective anchor is mandatory. Use the active wave or task anchor when it exists; otherwise use the original request, issue, or review ask.
 - Silence, positive tone, or "looks good" is not approval.
 - Enumerate all meaningful findings. Do not stop at first blocker.
@@ -171,6 +177,9 @@ Runtime-visible closeout rule:
   observable result, or named unproved boundaries.
 - Proxy runtime proof and objective narrowing are invalid unless the residual
   unproved user/operator path is named and the final claim is narrowed.
+- `NON-BLOCKING` is not a softer approval for claim-required defects, proof
+  gaps, runtime/design gate failures, or unresolved owner-contract violations.
+  It may describe only residual issues outside the binding completion claim.
 
 Any message claiming done, complete, ready, or approved must include:
 - `In-thread quality_guard:` actual verdict plus reviewed scope

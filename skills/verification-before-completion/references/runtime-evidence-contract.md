@@ -41,7 +41,7 @@ Design-fidelity verdict:
 
 Finding severity:
 - `blocking`
-- `advisory`
+- `out-of-claim residual observation`
 
 ## Guard Authority
 
@@ -67,6 +67,13 @@ narrowed claim.
 
 `reject`, `blocked`, or incomplete runtime evidence blocks or narrows the
 affected claim even when automated tests or review agents pass.
+
+When end-user UI quality, hierarchy, visual design, layout, density, polish, or
+cohesion is part of the claim, the design-fidelity verdict is a completion
+gate. A `reject` blocks completion. An `underspecified` verdict blocks broad
+design-quality claims; narrow the claim or fix the missing design anchors.
+Violations of supplied design anchors, scorecard thresholds, anti-pattern
+taxonomy, or the automatic visual reject floor are `blocking`.
 
 ## Shared Report Fields
 
@@ -114,7 +121,7 @@ Do not apply end-user scorecard or archetype scoring by default.
 Use:
 - behavioral verdict
 - visible-defect `blocking` findings
-- layout/usability `advisory` findings
+- out-of-claim residual observations
 - `design-fidelity verdict: not-applicable`
 
 Exception:
@@ -146,8 +153,8 @@ For end-user UI quality or hierarchy claims:
   verdict
 
 If no project design contract is supplied for an end-user UI quality claim, the
-runtime worker may still report obvious `blocking` defects and `advisory`
-issues, but must not call the design quality fully proven.
+runtime worker may still report obvious `blocking` defects and out-of-claim
+residual observations, but must not call the design quality fully proven.
 
 ## Visual Verdict Fields
 
@@ -164,18 +171,23 @@ When end-user design-fidelity applies, also include:
 - total score and threshold result
 - anti-pattern matches
 - `blocking` defects
-- `advisory` notes
+
+Do not include advisory design-fidelity notes for end-user UI verdicts.
+Optional observations may be reported only outside the verdict as
+`out-of-claim residual observations`. They cannot satisfy, soften, or bypass
+the behavioral verdict, design-fidelity verdict, thresholds, anchors, or reject
+floor.
 
 When end-user design-fidelity is underspecified, include:
 - `design-fidelity verdict: underspecified`
 - missing owner inputs
 - any `blocking` defects still observed
-- any `advisory` notes still worth reporting
+- any out-of-claim residual observations still worth reporting
 
 When internal/admin default posture applies, include:
 - `design-fidelity verdict: not-applicable`
 - `blocking` defects
-- `advisory` notes
+- out-of-claim residual observations
 
 ## Review Notes
 
