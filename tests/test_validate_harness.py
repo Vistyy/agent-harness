@@ -353,6 +353,11 @@ def test_validate_rejects_removed_harness_path_outside_archive(tmp_path: Path) -
         See skills/user-apps-design/references/atomic-design.md.
         See skills/user-apps-design/references/parity-dimensions.md.
         See skills/user-apps-design/references/ui-direction-workflow.md.
+        See skills/testing-best-practices/references/condition-based-waiting.md.
+        See skills/testing-best-practices/references/corpus-audit.md.
+        See skills/testing-best-practices/references/layer-selection.md.
+        See skills/testing-best-practices/references/proof-strength.md.
+        See skills/testing-best-practices/references/touched-test-gate.md.
         """,
     )
 
@@ -369,6 +374,26 @@ def test_validate_rejects_removed_harness_path_outside_archive(tmp_path: Path) -
     )
     assert (
         "README.md references removed harness path skills/user-apps-design/references/ui-direction-workflow.md"
+        in errors
+    )
+    assert (
+        "README.md references removed harness path skills/testing-best-practices/references/condition-based-waiting.md"
+        in errors
+    )
+    assert (
+        "README.md references removed harness path skills/testing-best-practices/references/corpus-audit.md"
+        in errors
+    )
+    assert (
+        "README.md references removed harness path skills/testing-best-practices/references/layer-selection.md"
+        in errors
+    )
+    assert (
+        "README.md references removed harness path skills/testing-best-practices/references/proof-strength.md"
+        in errors
+    )
+    assert (
+        "README.md references removed harness path skills/testing-best-practices/references/touched-test-gate.md"
         in errors
     )
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Testing Best Practices"
   short_description: "Apply the repo's high-signal testing doctrine"
-  default_prompt: "Use $testing-best-practices to shape tests, review tests, or drive behavior changes that need failing executable evidence."
+  default_prompt: "Use $testing-best-practices for persistent test work: add, edit, delete, review, or decide durable test proof; route runtime and completion proof to their owners."
