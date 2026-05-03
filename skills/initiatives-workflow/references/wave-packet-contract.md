@@ -1,9 +1,8 @@
 # Wave Packet Contract
 
-Owns packet, task-card, proof-row, and packet-state schema for
-`docs-ai/current-work/<wave-id>/wave-execution.md`.
+Owns the durable packet schema for `wave-execution.md`.
 
-## Required Sections
+## Sections
 
 - `Scope And Execution Posture`
 - `Task Plan`
@@ -12,23 +11,17 @@ Owns packet, task-card, proof-row, and packet-state schema for
 - `System-Boundary Architecture Disposition` when
   `System-boundary trigger: triggered`
 
-## Scope And Execution Posture
+## Scope And Posture
 
-Required fields:
-- in-scope and out-of-scope work
-- non-obvious constraints
-- `System-boundary trigger`
-- `Implementer delegation posture`
-- `Parent-only rationale`
-- frozen decisions
-- planning exceptions
+Required: in/out scope, non-obvious constraints, system-boundary trigger,
+delegation posture, parent-only rationale, frozen decisions, and planning
+exceptions.
 
 `implementer-eligible` is the default. `parent-only` needs a concrete reason:
 `packet-declared-parent-only`, `repeated-implementer-handback`,
 `tool-or-runtime-limit`, `shared-file-churn`, or `tiny-local-followup`.
 
-Planning exceptions need owner, reason, and review/removal condition. Packets
-must not substitute for missing planning closure.
+Planning exceptions need owner, reason, and review/removal condition.
 
 ## Task Cards
 
@@ -40,8 +33,8 @@ Task states are only `blank`, `done`, or `blocked`.
 - `blocked`: next required move depends on an external dependency or explicit
   user action
 
-Do not invent extra task states; nuance belongs in proof rows, blocker entries,
-or task evidence. Store state on each task card. Summary tables are optional.
+Do not invent extra task states. Nuance belongs in proof rows, blocker entries,
+or task evidence.
 
 Each `### <task_slug>` card states:
 - state
@@ -79,29 +72,27 @@ The `Proof Plan` JSON contains `proof_plan` rows with:
 Every material claim needs exact proof and a counterfactual probe. No proof row
 may prove a smaller invented objective.
 
-Runtime proof rows use existing fields to carry the Runtime Claim Map:
-- `exact_proof` names entrypoint, runtime target, action/request/flow,
-  observable result, and simulation boundary or `none`
-- `expected_evidence` ties to the same or downstream owner/user-visible surface
-- simulated boundaries are named, not hidden in command text
+Runtime rows carry the Runtime Claim Map in existing fields: `exact_proof`
+names entrypoint, target, action/flow, result, and simulation boundary;
+`expected_evidence` ties to the same or downstream visible surface.
 
 ## System-Boundary Appendix
 
-When `System-boundary trigger: triggered`, include why triggered, planning
-disposition, execution stop rule, changed authorities/contracts, single owner,
-public write paths, read-repair paths, forbidden bypass paths, rejected
+When triggered, include why, planning disposition, stop rule, changed
+contracts, single owner, write/read-repair paths, forbidden bypasses, rejected
 alternatives, why scope is not artificially narrowed, and stable-to-extend
 expectation.
 
 ## Execution State
 
-Track decisions, blockers, technical debt, and deferred follow-up.
+Track decisions, blockers, technical debt, task evidence, and deferred
+follow-up.
 
 Accepted touched-component debt must live here and link backlog detail with
 owner, affected files/surfaces, accepted must-block signals, risk, removal
 condition, and explicit user acceptance.
 
-## Execution Trust
+## Trust
 
 An implementer may trust an `execution-ready` packet for closed decisions and
 owned scope. The implementer stops when scope is underfed, discovery leaks into

@@ -5,19 +5,17 @@ description: "Use when choosing whether work should be direct, planning-intake, 
 
 # Work Routing
 
-Owns route selection and the workflow gate matrix. Technical contracts stay
-with their owner skills.
+Owns route selection. Technical contracts stay with their owner skills.
 
-## Full Work Rule
+## Rule
 
 - Route to the lightest shape that can complete the binding objective and fix
   the touched owner surface required to make it true.
 - Do not route a broad objective into a smaller invented task.
 - If full correction is blocked, stop and name the blocker.
 - If the objective is too broad to complete deeply now, pause breadth, not
-  responsibility. Use technical dependency, ordering, proof, and owner-boundary
-  evidence to select the first coherent owner/problem when that choice is
-  technical and reversible.
+  responsibility. Select the first coherent owner/problem only from technical
+  dependency, ordering, proof, or owner-boundary evidence.
 - The selected owner/problem is execution scope, not an accepted reduction.
 - The original objective remains binding; final wording may claim only completed
   scope unless durable state covers the rest.
@@ -49,7 +47,7 @@ Use the heavier route when two competent implementers could choose materially
 different owners, proof paths, runtime behavior, state authority, migration,
 compatibility, or public behavior.
 
-## Planning State
+## State Gate
 
 - Non-trivial planning state must be file-backed.
 - Use existing wave state; do not invent another planning document type.
@@ -58,9 +56,6 @@ compatibility, or public behavior.
   bounded remaining work.
 - Prior thread discussion alone never authorizes non-trivial resumed direct
   work.
-
-## Slice State Gate
-
 - A narrowed broad-objective slice is execution scope, not replacement
   objective.
 - Execution starts only from an `execution-ready` wave brief and canonical
@@ -73,22 +68,6 @@ compatibility, or public behavior.
 - If the packet feels too heavy, shrink the packet template; do not execute from
   memory or create another artifact.
 
-## Gate Matrix
-
-| Need | Owner |
-| --- | --- |
-| reusable harness/project overlay posture | `../harness-governance/SKILL.md` |
-| simplicity or touched-owner integrity | `../code-simplicity/SKILL.md` |
-| vague or non-trivial planning | `../planning-intake/SKILL.md` |
-| wave lifecycle or packet state | `../initiatives-workflow/SKILL.md` |
-| full wave execution | `../initiatives-workflow/SKILL.md` |
-| subagent routing | `../subagent-orchestration/SKILL.md` |
-| feedback-caused edits | `../feedback-address/SKILL.md` |
-| workflow friction not fixed immediately | `../feedback-address/SKILL.md` |
-| end-user or mobile UI design | `../user-apps-design/SKILL.md` |
-| completion proof | `../verification-before-completion/SKILL.md` |
-| runtime proof policy and verdicts | `../runtime-proof/SKILL.md` |
-| browser runtime mechanics | `../webapp-testing/SKILL.md` |
-| mobile runtime mechanics | `../mobileapp-testing/SKILL.md` |
-| review/approval semantics | `../code-review/SKILL.md` |
-| mobile backend/offline/API contracts | `../system-boundary-architecture/SKILL.md` |
+After route selection, use the owner skill named by `AGENTS.md` or the active
+project overlay. This skill does not own downstream proof, review, runtime,
+testing, architecture, or design doctrine.

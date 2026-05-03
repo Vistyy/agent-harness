@@ -1,8 +1,8 @@
 # Mobile Runtime Proof Workflow
 
-Owner for live mobile runtime mechanics: stack setup, device targeting,
-interaction, recovery, and mobile-specific evidence. Runtime verdict authority
-belongs to `../../runtime-proof/SKILL.md`.
+Owns mobile stack setup, device targeting, interaction, recovery, and
+mobile-specific evidence. Runtime verdict authority belongs to
+`../../runtime-proof/SKILL.md`.
 
 ## Handoffs
 
@@ -22,13 +22,10 @@ alone, or an unlaunched build artifact.
 
 ## Preflight
 
-Add mobile-specific inputs to the `runtime-proof` claim map:
-- binding objective and accepted reductions
-- exact flow, platform, device/emulator, role, data, and state set
-- design anchors when UI quality is claimed
-- permission, OS-mediated, or lifecycle posture when material
-- telemetry or trace IDs when material, or `none`
-- unproved mobile/runtime boundaries, or `none`
+Add mobile-specific claim-map inputs: exact flow, platform, device/emulator,
+role, data, state set, design anchors when UI quality is claimed, material
+permission/OS/lifecycle posture, telemetry/trace IDs or `none`, and unproved
+mobile/runtime boundaries or `none`.
 
 If the runtime recipe cannot establish deterministic device targeting, report
 blocked or narrow the claim.
@@ -44,12 +41,10 @@ blocked or narrow the claim.
 
 ## Evidence
 
-For mobile proof, capture only evidence the verdict relies on:
-- selected device/emulator posture
-- flow exercised
-- widget tree, logs, screenshots, or adb artifacts reviewed
-- screenshot/device-captured visual artifacts for layout, safe-area, keyboard,
-  permission, touch-target, or UI quality claims
+Capture only evidence the verdict relies on: selected device/emulator posture,
+flow, reviewed widget tree/logs/screenshots/adb artifacts, and device-captured
+visual artifacts for layout, safe-area, keyboard, permission, touch-target, or
+UI quality claims.
 
 Widget-tree presence alone is not layout or interaction proof.
 

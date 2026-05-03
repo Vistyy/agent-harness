@@ -1,9 +1,6 @@
 # Mobile Emulator Parallel Runtime Contract
 
-## Purpose
-
-Define the durable guardrails for the parallel-emulator exception path in the
-engineering harness.
+Owns durable guardrails for the parallel-emulator exception path.
 
 Run-specific evidence, troubleshooting, and host-local recovery details belong
 in `docs-ai/current-work/**` or `.artifacts/runtime/**`, not here.

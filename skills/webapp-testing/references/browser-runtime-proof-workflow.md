@@ -1,8 +1,7 @@
 # Browser Runtime Proof Workflow
 
-Owner for browser preflight, live browser operation, browser-specific evidence,
-and reporting details. Runtime verdict authority belongs to
-`../../runtime-proof/SKILL.md`.
+Owns browser preflight, live operation, browser evidence, and reporting
+mechanics. Runtime verdict authority belongs to `../../runtime-proof/SKILL.md`.
 
 ## Handoffs
 
@@ -13,12 +12,9 @@ and reporting details. Runtime verdict authority belongs to
 
 ## Preflight
 
-Add browser-specific inputs to the `runtime-proof` claim map:
-- binding objective and accepted reductions
-- exact browser flow, state, role, data, and viewport set
-- design anchors when UI quality is claimed
-- telemetry or trace IDs when material, or `none`
-- unproved browser/runtime boundaries, or `none`
+Add browser-specific claim-map inputs: exact flow, state, role, data, viewport,
+design anchors when UI quality is claimed, material telemetry/trace IDs or
+`none`, and unproved browser/runtime boundaries or `none`.
 
 Same route with different auth, authority, session, or persistence behavior is
 a different proof. Anonymous browse proof does not cover authenticated writes.
@@ -38,26 +34,22 @@ Do not call generic browser tools the Playwright CLI channel unless they expose
 
 ## Runtime Loop
 
-Use the project-owned runtime recipe. It must cover starting dependencies,
-serving the app, readiness, proof command, and shutdown. If live data is
-required, discover candidates first, then prove the flow against actual runtime
-data in the same execution window.
+Use the project-owned runtime recipe for dependencies, app serving, readiness,
+proof command, and shutdown. If live data is required, discover candidates and
+prove the flow against active runtime data in the same execution window.
 
 Pass `runtime_evidence` the binding objective, accepted reductions, target
-flow, runtime recipe, variants, design anchors, constraints, and states to
-inspect. Do not pass prewritten conclusions.
+flow, recipe, variants, design anchors, constraints, and states to inspect. Do
+not pass prewritten conclusions.
 
 Use `check_runner` for large logs, traces, HTML dumps, console output, and
 network output.
 
 ## Evidence
 
-For browser proof, capture only evidence the verdict relies on:
-- selected channel
-- pages and flows exercised
-- reviewed screenshots with viewport when visual quality is claimed
-- bounded console/network findings when material
-- diagnostic paths only when needed for triage
+Capture only evidence the verdict relies on: channel, pages/flows, reviewed
+screenshots with viewport for visual claims, bounded console/network findings,
+and diagnostic paths when needed for triage.
 
 Prefer snapshots over screenshots for state checks. Use screenshots when visual
 review, layout, hierarchy, responsive behavior, or design quality is claimed.

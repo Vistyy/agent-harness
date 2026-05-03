@@ -9,32 +9,23 @@ Owns closing scope, owner, design, runtime, migration, proof, and wave-shaping
 decisions before implementation.
 
 Durable planning produces wave state. Non-trivial planning state must be
-file-backed through the existing wave path.
+file-backed through `initiatives-workflow`.
 
 ## Outcome
 
-Planning is ready only when durable wave state lets an implementer complete the
-binding objective without discovery or material design discretion.
+Planning is ready only when durable wave state preserves the binding objective
+and lets execution proceed without discovery or material design discretion.
 
 Binding objective = original user objective plus explicitly accepted reductions.
 Plans, packets, proof, and handoffs preserve it.
 
-`../work-routing/SKILL.md` owns broad-objective routing and full-work
-semantics. Planning preserves the original objective when routing selects an
-execution owner/problem, and promotion is blocked while that routing decision
-is unresolved.
-
-Do not promote shallow breadth plans that touch many areas lightly to simulate
-coverage.
+`../work-routing/SKILL.md` owns route selection and broad-objective semantics.
+Do not promote shallow breadth plans that simulate coverage.
 
 ## Gate
 
-Close or stop on:
-1. scope and non-goals
-2. material decisions
-3. touched owner/component integrity
-4. proof allocation
-5. deferrals
+Close or stop on scope, material decisions, touched owner/component integrity,
+proof allocation, and deferrals.
 
 Deferrals are valid only when unrelated to the current objective or explicitly
 accepted temporary debt with owner, risk, and removal condition.
@@ -46,7 +37,7 @@ default. Ask the user only for user-owned choices such as product intent,
 priority, irreversible tradeoff, credential/tenant access, or acceptance of
 temporary debt.
 
-Every blocking question includes a recommendation and the reason.
+Blocking questions include a recommendation and reason.
 
 ## Touched Owner
 
@@ -69,8 +60,8 @@ Check that the plan did not drop:
 
 ## Proof Allocation
 
-For every material claim, name owner layer, exact proof command or artifact,
-expected evidence, and counterfactual regression probe.
+For every material claim, name owner layer, exact proof, expected evidence, and
+counterfactual regression probe.
 
 Use initiatives workflow references only when shaping wave state or packet
 schema.

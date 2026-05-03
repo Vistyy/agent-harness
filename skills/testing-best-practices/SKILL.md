@@ -20,11 +20,10 @@ Persistent tests protect durable boundaries, not ceremony.
 Rules:
 - choose the cheapest honest persistent layer
 - assert public behavior or a narrow durable contract
-- add a persistent test only for a changed durable boundary with a named weaker
-  implementation it rejects
-- delete, shrink, or rewrite bad touched tests; they are not grandfathered
-- do not fake red evidence to satisfy ritual
-- runtime proof is not replaced by persistent tests
+- require changed durable boundary plus named weaker implementation
+- delete, shrink, or rewrite bad touched tests
+- never fake red evidence
+- never replace runtime proof with persistent tests
 
 ## Reference Gates
 
@@ -45,13 +44,8 @@ For each changed persistent test file:
 Use only when the work owns a broader persistent-test suite slice, not for
 ordinary touched-test edits.
 
-For corpus cleanup:
-- inventory and rank suspicious clusters
-- take one coherent tranche: directory, route family, controller family, or
-  provider family
-- assign `keep | shrink | rewrite | delete` dispositions across the tranche
-- finish the tranche before moving on
-- refresh the inventory after each tranche
+For corpus cleanup, inventory suspicious clusters, take one coherent tranche,
+assign `keep | shrink | rewrite | delete`, finish it, then refresh inventory.
 
 Do not hide repo-wide ballast behind "untouched files" once cleanup is the
 owned work.
@@ -62,7 +56,7 @@ queues.
 
 Suspicious by default: giant mixed-purpose suites, status/presence/snapshot
 clusters, heavy mocks/waits with thin assertions, runner-heavy low-layer tests,
-and expensive tests without an explicit retained contract.
+and expensive tests without explicit retained contract.
 
 Delete redundant expensive tests before optimizing them. Move behavior downward
 before speeding up the wrong layer.

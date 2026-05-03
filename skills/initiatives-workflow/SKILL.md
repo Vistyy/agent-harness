@@ -6,19 +6,18 @@ description: "Use for full wave execution or durable wave/backlog state: deliver
 # Initiatives Workflow
 
 Owns durable wave, packet, delivery-map, backlog state, and full wave
-execution. It does not own planning, review, delegation, or verification
-doctrine.
+execution. Planning, review, delegation, and verification doctrine stay with
+their owner skills.
 
-A wave may be one task. It is the durable execution artifact when work needs
-queue tracking, cross-session state, backlog/roadmap state, multiple task
-cards, implementer handoff state, or an execution-ready packet.
+A wave may be one task. Use it when execution state must survive queue
+tracking, handoff, interruption, backlog/roadmap state, or multiple task cards.
 
 ## References
 
 - Read `references/wave-packet-contract.md` when packet, task-card, proof-row,
   or execution-state schema matters.
 
-## Owned Work
+## Owned State
 
 - backlog to wave promotion
 - delivery-map updates
@@ -27,7 +26,7 @@ cards, implementer handoff state, or an execution-ready packet.
 - wave closeout cleanup
 - full execution of one `execution-ready` wave
 
-## State Rules
+## Paths And Statuses
 
 - map: `docs-ai/current-work/delivery-map.md`
 - brief: `docs-ai/docs/initiatives/waves/<wave-id>.md`
@@ -41,7 +40,6 @@ cards, implementer handoff state, or an execution-ready packet.
 - Backlog entries are for valid deferrals only: unrelated nearby debt or
   explicitly accepted temporary debt with owner, risk, and removal condition.
 
-Statuses:
 - `discovery-required`: decisions still open; no canonical packet.
 - `execution-ready`: planning gate approved; canonical packet exists.
 - `done`: verified and final-reviewed; current-work packet can be cleaned.
@@ -58,9 +56,6 @@ Before execution:
 
 During execution:
 - execute task cards in dependency order
-- use `subagent-orchestration` for implementer handoffs when useful
-- pass original objective, accepted reductions, residual gaps, exact task,
-  proof rows, risks, and stop triggers in every handoff
 - stop on discovery leakage, objective mismatch, owner defect outside accepted
   debt, or materially stale packet assumptions
 - run required proof and `quality_guard` after meaningful chunks
@@ -68,7 +63,6 @@ During execution:
 Before closeout:
 - run wave-level verification and final isolated review
 - ensure final claim does not exceed proof, runtime fidelity, or accepted scope
-- update delivery map, brief, packet, backlog, and roadmap state consistently
 - remove packet state only after closeout is actually approved
 
 ## Assets

@@ -5,14 +5,14 @@ description: "Use for browser runtime proof mechanics: Playwright vehicles, brow
 
 # Browser UI Testing
 
-Goal: operate browser proof mechanics for browser-visible behavior.
+Owns browser proof mechanics for browser-visible behavior.
 
 Use `runtime_evidence` for live browser/runtime proof. Use `check_runner` for
 targeted automated checks, log/trace sweeps, and large output triage.
 
-Does not own runtime verdict authority, completion-gate triggers, or product
-design anchors. Use `../runtime-proof/SKILL.md` for runtime claim maps,
-entrypoint fidelity, blocking verdicts, and evidence-of-record rules.
+Does not own runtime verdicts, completion triggers, or product design anchors.
+Use `../runtime-proof/SKILL.md` for claim maps, entrypoint fidelity, blocking
+verdicts, and evidence-of-record rules.
 
 Project overlays own ports, services, upload-provider recipes, and runtime
 topology.

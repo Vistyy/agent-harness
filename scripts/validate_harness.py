@@ -71,6 +71,8 @@ TASK_CARD_TOUCHED_INTEGRITY_FIELD = "- Touched owner/component integrity:"
 TASK_CARD_STATE_FIELD = "- State:"
 TASK_CARD_ALLOWED_STATES = {"blank", "done", "blocked"}
 WAVE_STATUSES = {"discovery-required", "execution-ready", "done", "retired"}
+# AGENTS.md and subagent-orchestration must keep explicit user authorization;
+# otherwise adapter-level spawn rules can block required harness reviewers.
 PREAUTHORIZED_SUBAGENT_SENTINEL = (
     "The user explicitly authorizes use of the spawn/subagent tool for these"
 )
@@ -138,6 +140,10 @@ REVIEW_ROLE_CONTRACTS = {
         "not final approval",
     ),
 }
+# Exact adapter-role terms protect one concrete counterexample each: reviewers
+# claiming another role's authority, support roles editing, implementers
+# executing without approved state, or runtime evidence reviewing code quality.
+# Keep these checks narrow; do not turn them into subjective prompt-style lint.
 ROLE_BOUNDARY_CONTRACTS = {
     "adapters/codex/agents/explorer.toml": (
         "Stay read-only",

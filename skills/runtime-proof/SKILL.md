@@ -12,8 +12,8 @@ gating.
 ## Rule
 
 Runtime evidence proves the binding objective plus accepted reductions. A
-parent handoff that asks for a smaller claim is mis-scoped and must return
-`blocked`.
+handoff for a smaller claim without accepted reduction is mis-scoped and
+returns `blocked`.
 
 Use runtime proof when the completion claim is user-visible, API-visible,
 service-visible, integration-visible, or depends on live state.
@@ -21,9 +21,9 @@ service-visible, integration-visible, or depends on live state.
 Use `runtime_evidence` for non-trivial runtime-visible claims unless the claim
 is tiny, local, and has no public-behavior or cross-boundary runtime risk.
 
-Runtime evidence is blocking, not advisory. `reject`, `blocked`, incomplete, or
-mis-scoped proof blocks broad completion unless the issue is fixed and
-re-proven or the user explicitly accepts the narrowed claim.
+Runtime evidence is blocking, not advisory. `reject`, `blocked`, incomplete,
+or mis-scoped proof blocks broad completion until fixed and re-proven or
+explicitly narrowed by the user.
 
 ## Runtime Claim Map
 
@@ -46,8 +46,8 @@ Every runtime handoff names:
   behavior.
 
 Broad readiness, end-to-end, redesign, or user-flow claims require
-`real-entrypoint` or an accepted narrower claim. Simulated or adjacent proof
-must name the unproved boundary.
+`real-entrypoint` unless the claim is explicitly narrowed. Simulated or
+adjacent proof names the unproved boundary.
 
 ## Verdicts
 
@@ -59,18 +59,12 @@ must name the unproved boundary.
 
 ## Evidence
 
-Reviewed evidence must be small enough to inspect and complete enough to prove
-the claim. Artifact minimalism never justifies claim shrinking.
+Evidence must be small enough to inspect and complete enough to prove the
+claim. Artifact minimalism never justifies claim shrinking.
 
-Runtime evidence reports:
-- claim boundary covered
-- entrypoint fidelity
-- runtime recipe used
-- actions executed
-- evidence artifact paths
-- material logs/traces or `none observed`
-- verdict and block impact
-- screenshot-backed checks for UI quality claims
+Report claim boundary, entrypoint fidelity, recipe, actions, artifact paths,
+material logs/traces or `none observed`, verdict, block impact, and
+screenshot-backed checks for UI quality claims.
 
 ## Platform Owners
 
