@@ -10,69 +10,66 @@ Precedence:
 
 ## Scope
 
-- Keep project identity, product facts, runtime topology, and active queue state
-  in the target project.
-
-## Map First
-
+- Keep project identity, product facts, runtime topology, local command bodies,
+  roadmap, queue state, and active execution state in the target project.
 - Treat project-local `AGENTS.md` as a compact first-hop map, not a doctrine
   dump.
-- Start from the matching owner skill or project owner doc.
-- Read only what the current task needs.
-- Use the installed agent-harness CLI for reusable harness automation when a
-  command exists; do not call removed skill-local helper scripts or recreate
-  project-local wrappers.
+- Start from the matching owner skill or project owner doc; read only what the
+  current task needs.
+- Use installed harness automation when a command exists.
+
+## Full Work Rule
+
+- The unit of work is the binding user objective plus the owner surface required
+  to make that objective true.
+- Complete the requested outcome, not a convenient subset. Small, safe, or
+  minimal is valid only when it fully satisfies the objective.
+- If the touched owner is wrong in a way that affects the current objective, fix
+  the owner now.
+- Defer only unrelated nearby debt or explicitly accepted temporary debt with
+  owner, risk, and removal condition.
+- If full correction is blocked, stop and name the blocker; do not patch around
+  the wrong shape and call it done.
 
 ## Routing
 
-- Default workflow: use `subagent-orchestration` to decide whether discovery,
-  planning review, implementation, verification, runtime proof, or closeout
-  review stays local or routes to a harness-defined subagent.
-- Work route classification: use `work-routing`.
-- Project-overlay contracts and reusable harness posture: use `harness-governance`.
-- Planning and wave shaping: use `planning-intake`.
-- Full wave execution: use `wave-autopilot`.
-- Durable documentation ownership: use `documentation-stewardship`.
-- Review and completion claims: use `code-review`.
-- Verification and gate selection: use `verification-before-completion`.
-- Test design and test cleanup: use `testing-best-practices`.
-- Architecture and owner-boundary changes: use `system-boundary-architecture`.
-- Delegation and role boundaries: use `subagent-orchestration`.
-- Workflow friction and recurring agent/process issues not fixed immediately:
-  use `workflow-feedback`.
-- Simplicity gate: use `code-simplicity`.
+- Route selection and workflow gate matrix: `work-routing`.
+- Reusable harness posture and project overlays: `harness-governance`.
+- Documentation ownership: `documentation-stewardship`.
+- Simplicity and touched-owner integrity: `code-simplicity`.
+- Planning and wave shaping: `planning-intake`.
+- Non-trivial durable planning: `planning-intake`.
+- Wave lifecycle, packet state, and durable execution: `initiatives-workflow`.
+- Delegation and role boundaries: `subagent-orchestration`.
+- Feedback-caused edits: `feedback-address`.
+- Verification and completion claims: `verification-before-completion`.
+- Review and approval semantics: `code-review`.
+- Test design and cleanup: `testing-best-practices`.
+- Architecture and owner-boundary changes: `system-boundary-architecture`.
+- Workflow friction not fixed immediately: `feedback-address`.
 
 ## Operating Rules
 
-- Push back when a user request materially conflicts with these operating rules, the
-  active owner skill, or the simplicity gate. Name the conflict, recommend the
-  harness-compliant path, and pause before execution unless the harness permits
-  an exception and the user explicitly accepts it. Do not treat user direction
-  as overriding reusable safety, simplicity, boundary, proof, or review rules by
-  implication.
-- Prefer the simplest honest solution; complexity is a defect until justified.
-- Delete, collapse, demote, or reuse before adding; preserve required outcomes,
-  not inherited structure or ceremony.
-- For non-trivial work, evaluate the touched owner/component, not only the
-  diff. If the touched owner has unacceptable integrity under
-  `code-simplicity`, reshape or block unless the user explicitly accepts the
-  debt and it is recorded as backlog.
+- Push back when a request conflicts with the active owner skill, simplicity
+  gate, safety, proof, review, or boundary rule. Name the conflict and recommend
+  the compliant path before execution unless the harness permits an explicit
+  accepted exception.
+- Prefer the least complex complete correction. Delete, collapse, demote, or
+  reuse before adding structure.
+- For non-trivial work, assess the touched owner/component, not only the diff.
+  `not assessed` is not approvable.
 - Replace obsolete paths in the same change. Do not leave dead code, unused
-  flags, compatibility shims, obsolete fallbacks, or migration bridges unless a
-  durable owner requires a bounded compatibility, resilience, migration, or
-  rollout path.
-- Exceptions must name the owner, protected surface, and removal condition.
-- Prefer the right boundary now. If two or more findings share one
-  owner/boundary, diagnose the common cause.
+  flags, obsolete fallbacks, or migration bridges unless a durable owner names
+  the protected surface and removal condition.
 - Do not execute while implementation-shaping planning is open.
 - Non-trivial work requires `planning_critic` before implementation or scope
-  expansion and `quality_guard` after implementation. Tiny local fixes are
-  exempt only when no material owner, proof, runtime, compatibility, migration,
-  or public-behavior decision is open.
-- Runtime-visible completion claims require `runtime_evidence` unless the
-  claim is tiny, local, and has no public-behavior or cross-boundary runtime
-  risk. A `reject`, `blocked`, or incomplete runtime verdict blocks or narrows
-  the affected claim.
+  expansion and `quality_guard` after meaningful implementation chunks. Tiny
+  local fixes are exempt only when no material owner, proof, runtime,
+  compatibility, migration, or public-behavior decision is open.
+- Runtime-visible completion claims require `runtime_evidence` unless the claim
+  is tiny, local, and has no public-behavior or cross-boundary runtime risk.
+- Final completion claims cannot exceed the binding objective, accepted
+  reductions, fresh proof, runtime fidelity, and approved review scope.
 - Keep project overlays concise maps to owning skills and project docs.
 - No silent reverts or deletions of unknown files.
 
@@ -92,14 +89,9 @@ Precedence:
   workflow calls for them. Skipping a required named role is a workflow defect.
   Only adapter/runtime hard limits may prevent invocation.
 - Reuse the existing subagent for any continuation, revision, or follow-up in
-  the same role and same domain/slice, even if its last verdict was completed,
-  rejected, or approved; continue with `send_input` or `resume_agent`. Spawn a
-  replacement only when the role changes, the reviewed domain/slice materially
-  changes, the prior subagent was explicitly closed with a recorded reason
-  because the loop was finished, or the next review is intentionally
-  independent from prior context. Do not close and respawn same-role reviewers
-  merely to submit an updated draft after rejection; that remains the same
-  review loop.
+  the same role and same domain/slice. Spawn a replacement only when the role or
+  reviewed domain materially changes, or when a fresh independent review is the
+  point.
 - Never close, replace, or reclaim an active worker or its write scope because
   it is slow, silent, timed out, or blocking local work.
 

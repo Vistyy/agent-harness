@@ -1,41 +1,16 @@
 # Wave Packet Contract
 
-Owner for wave execution packet schema, task-card fields, proof-row fields, and
-packet state semantics.
-
-Does not own:
-- wave/backlog lifecycle or delivery-map placement:
-  `initiatives-workflow.md`
-- planning readiness and promotion decisions:
-  `../../planning-intake/SKILL.md`
-- delegation role policy:
-  `../../subagent-orchestration/SKILL.md`
-- completion and final approval fields:
-  `../../code-review/references/review-governance.md`
-
-## Paths
-
-Canonical packet:
-- `docs-ai/current-work/<wave-id>/wave-execution.md`
-
-Planning-gate draft:
-- `docs-ai/current-work/<wave-id>/wave-execution.draft.md`
-
-Rules:
-- one elastic packet layout; vary depth, not shape
-- no canonical packet while wave status is `discovery-required`
-- promote draft to canonical only with execution-ready promotion
-- `done` and `retired` waves have no packet
+Owns packet, task-card, proof-row, and packet-state schema for
+`docs-ai/current-work/<wave-id>/wave-execution.md`.
 
 ## Required Sections
 
-1. `Scope And Execution Posture`
-2. `Task Plan`
-3. `Proof Plan`
-4. `Execution State`
-
-Use `System-Boundary Architecture Disposition` only when the packet says
-`System-boundary trigger: triggered`.
+- `Scope And Execution Posture`
+- `Task Plan`
+- `Proof Plan`
+- `Execution State`
+- `System-Boundary Architecture Disposition` when
+  `System-boundary trigger: triggered`
 
 ## Scope And Execution Posture
 
@@ -48,71 +23,46 @@ Required fields:
 - frozen decisions
 - planning exceptions
 
-Rules:
-- `implementer-eligible` is the preferred default
-- `parent-only` requires a concrete reason
-- planning exceptions need owner, reason, and review/removal condition
-- packets must not substitute for missing planning closure
+`implementer-eligible` is the default. `parent-only` needs a concrete reason:
+`packet-declared-parent-only`, `repeated-implementer-handback`,
+`tool-or-runtime-limit`, `shared-file-churn`, or `tiny-local-followup`.
 
-Parent-only reason codes:
-- `packet-declared-parent-only`
-- `repeated-implementer-handback`
-- `tool-or-runtime-limit`
-- `shared-file-churn`
-- `tiny-local-followup`
+Planning exceptions need owner, reason, and review/removal condition. Packets
+must not substitute for missing planning closure.
 
 ## Task Cards
 
-Task states:
-- blank
-- `done`
-- `blocked`
+Task states are only blank, `done`, or `blocked`.
 
-Meanings:
 - blank: task is not yet closed
-- `done`: all scoped implementation obligations, cleanup/removal obligations,
-  review gates, and proof rows are satisfied
+- `done`: scoped implementation, cleanup/removal, review gates, and proof rows
+  are satisfied
 - `blocked`: next required move depends on an external dependency or explicit
   user action
 
-State rules:
-- do not invent extra task states to carry nuance that belongs in proof rows,
-  blocker entries, or task evidence
-- do not mark task `done` while any scoped cleanup/removal/demotion item is
-  still intentionally deferred
-- do not mark task `done` while any required hosted/runtime proof row remains
-  unsatisfied
-- use `blocked` only when the next required action is truly external;
-  otherwise leave the state blank and keep working
-- `Execution outcome` text in task sections must match the task-row state
+Do not invent extra task states; nuance belongs in proof rows, blocker entries,
+or task evidence.
 
-Task cards must include:
+Each `### <task_slug>` card states:
 - outcome
 - in scope / out of scope
 - owned files and surfaces
-- touched owner/component integrity for non-trivial work
+- `Touched owner/component integrity:`
 - locked invariants
 - allowed local implementer decisions
 - stop-and-handback triggers
 - proof rows
-- deferred follow-up disposition
+- deferred follow-up
 
-Optional hints:
-- starting files and symbols
-- existing patterns
-- implementation notes
+Task cards preserve the binding objective. Starting files, symbols, and
+implementation notes are hints, not required ceremony.
 
-Rules:
-- task cards are outcome-and-proof shaped, not command lists
-- allowed local decisions must stay minor and local
-- material owner, proof, state-authority, runtime, compatibility, migration,
-  public behavior, or forbidden-legacy-path choices are not implementer-local
-- structural, hotspot, or state-authority task plans must migrate every listed
-  write/read-repair path to the declared owner before follow-on cleanup
+Material owner, proof, state-authority, runtime, compatibility, migration,
+public behavior, and forbidden-legacy-path choices are not implementer-local.
 
-## Proof Plan
+## Proof Rows
 
-`proof_plan` rows include:
+The `Proof Plan` JSON contains `proof_plan` rows with:
 - `proof_id`
 - `task_slug`
 - `anchor_ids`
@@ -125,51 +75,33 @@ Rules:
 - `counterfactual_regression_probe`
 - `status`
 
-Proof rows assigned to a task define task-local verification obligations.
-Handback should leave those checks green or return an explicit blocker.
+Every material claim needs exact proof and a counterfactual probe. No proof row
+may prove a smaller invented objective.
 
-For runtime proof rows, existing fields must carry the Runtime Claim Map
-requirements from
-`../../verification-before-completion/references/runtime-proof-escalation.md`
-without adding packet columns:
-
-- `exact_proof` is invalid unless it names the entrypoint, runtime target,
-  action/request/flow, observable result, and simulation boundary or `none`.
-- `expected_evidence` is invalid unless the evidence is tied to the same or
-  downstream owner/user-visible surface.
-- `counterfactual_regression_probe` must include an adjacent artifact,
-  component-only, or helper-only implementation when that is a realistic weaker
-  path.
-
-Runtime rows should classify simulated boundaries honestly instead of hiding
-them in command text.
+Runtime proof rows use existing fields to carry the Runtime Claim Map:
+- `exact_proof` names entrypoint, runtime target, action/request/flow,
+  observable result, and simulation boundary or `none`
+- `expected_evidence` ties to the same or downstream owner/user-visible surface
+- simulated boundaries are named, not hidden in command text
 
 ## System-Boundary Appendix
 
-When `System-boundary trigger: triggered`, include:
-- why triggered
-- planning disposition
-- execution stop rule
-- changed authorities or contracts
-- single owner after change
-- public write paths
-- read-repair paths
-- forbidden bypass paths
-- rejected alternatives
-- why scope is not artificially narrowed
-- stable-to-extend expectation
+When `System-boundary trigger: triggered`, include why triggered, planning
+disposition, execution stop rule, changed authorities/contracts, single owner,
+public write paths, read-repair paths, forbidden bypass paths, rejected
+alternatives, why scope is not artificially narrowed, and stable-to-extend
+expectation.
 
 ## Execution State
 
-Track only:
-- decisions and blockers
-- technical debt and deferred follow-up
+Track decisions, blockers, technical debt, and deferred follow-up.
 
-Do not invent extra task states to carry nuance that belongs in proof rows,
-blocker entries, or evidence notes.
+Accepted touched-component debt must live here and link backlog detail with
+owner, affected files/surfaces, accepted must-block signals, risk, removal
+condition, and explicit user acceptance.
 
-Accepted touched-component debt must live under `technical debt and deferred
-follow-up` and link a backlog detail file. The entry must include owner,
-affected files/surfaces, accepted `code-simplicity` must-block signals, risk,
-removal condition, and the explicit user-acceptance note. Approval or closeout
-is invalid if accepted debt has no backlog link.
+## Execution Trust
+
+An implementer may trust an `execution-ready` packet for closed decisions and
+owned scope. The implementer stops when scope is underfed, discovery leaks into
+execution, proof drifts, or a current-objective owner defect appears.

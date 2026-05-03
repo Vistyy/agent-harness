@@ -1,4 +1,4 @@
 interface:
   display_name: "Feedback Address"
-  short_description: "Assess feedback before changing work"
-  default_prompt: "Use $feedback-address to decide whether this feedback needs a surface fix, owner fix, backlog item, or no change."
+  short_description: "Handle feedback and workflow friction"
+  default_prompt: "Use $feedback-address to decide whether feedback or workflow friction needs a surface fix, owner fix, ledger entry, accepted-debt backlog item, or no change."

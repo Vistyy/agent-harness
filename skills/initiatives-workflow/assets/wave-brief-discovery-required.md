@@ -1,32 +1,22 @@
-# Wave <wave-id> — <wave-title>
+# <Wave Title>
 
 **Status:** discovery-required
 
-## Problem
+## Objective Boundary
 
-<why this wave exists and what current weakness it addresses>
+- original objective: `<user objective>`
+- accepted reductions: `<none | explicit>`
+- residual gaps: `<none | explicit>`
 
-## Objective
+## Planning Gaps
 
-<what changes when this wave succeeds>
+- `<decision/proof/scope gap>`
 
-## In Scope
+## Starting Points
 
-- `<task-slug-1>`
-- `<task-slug-2>`
+- `<path-or-owner>`
 
-## Out Of Scope
+## Promotion Requirement
 
-- `<explicitly deferred scope>`
-
-## Constraints / Non-Goals
-
-- `<constraint>`
-
-## Risks / Dependencies
-
-- `<dependency or risk with disposition>`
-
-## References
-
-- `<owner doc / prior wave / key code path>`
+Promote only after `planning-intake`, `planning_critic`, and `quality_guard`
+close scope, decisions, proof, deferrals, and touched-owner integrity.

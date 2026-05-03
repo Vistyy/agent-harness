@@ -1,42 +1,48 @@
 ---
 name: work-routing
-description: "Use when choosing whether work should be direct, small bounded, standalone-plan, planning-intake, or wave execution."
+description: "Use when choosing whether work should be direct, small bounded, planning-intake, or wave execution."
 ---
 
 # Work Routing
 
-Initial route selection only. This skill chooses the lightest execution route
-that preserves the outcome, owner boundary, and proof bar.
+Owns route selection and the workflow gate matrix. Technical contracts stay
+with their owner skills.
 
-After route selection, use the owning workflow for planning readiness, wave
-promotion, packet schema, review approval, completion proof, or subagent
-delegation mechanics.
+## Full Work Rule
 
-## Route Table
+Route to the lightest shape that can complete the binding objective and fix the
+touched owner surface required to make it true. Do not route a broad objective
+into a smaller invented task.
 
-- `direct`: tiny/local work; execute directly with fresh proof and no plan
-  artifact.
-- `small bounded`: in-thread objective, expected touched files or surfaces, and
-  proof command or artifact; promote only if risk appears.
-- `standalone plan`: requirements and material decisions are closed, but ordered
-  implementation needs a durable plan under `docs/plans/**`.
-- `planning-intake`: ambiguous work, material decision open, vague scope, or
-  wave shaping.
-- `wave execution`: full execution of one `execution-ready` wave from its
-  delivery map, durable brief, and canonical packet.
+`small bounded` is valid only when the full objective is small. If full
+correction is blocked, stop and name the blocker instead of patching around it.
 
-## Escalate When
+## Routes
 
-Use the next heavier route when two competent implementers could choose
-materially different owners, proof paths, state authority, runtime posture,
-compatibility/migration behavior, or public behavior.
+- `direct`: tiny/local work; no material owner, proof, runtime, compatibility,
+  migration, or public-behavior decision is open.
+- `small bounded`: the full objective is bounded in-thread, with named surfaces
+  and proof.
+- `planning-intake`: scope, decisions, proof, owner boundary, or wave shape is
+  still open.
+- `wave execution`: execute one `execution-ready` wave from durable wave state.
+  A wave may be one task; it is the only durable path for non-trivial work.
 
-## Route Targets
+Use the heavier route when two competent implementers could choose materially
+different owners, proof paths, runtime behavior, state authority, migration,
+compatibility, or public behavior.
 
-- project overlays and reusable harness posture: `../harness-governance/SKILL.md`
-- ambiguous planning and wave shaping: `../planning-intake/SKILL.md`
-- standalone plan writing: `../writing-plans/SKILL.md`
-- standalone plan execution: `../executing-plans/SKILL.md`
-- wave execution: `../wave-autopilot/SKILL.md`
-- completion proof: `../verification-before-completion/SKILL.md`
-- subagent delegation: `../subagent-orchestration/SKILL.md`
+## Gate Matrix
+
+| Need | Owner |
+| --- | --- |
+| reusable harness/project overlay posture | `../harness-governance/SKILL.md` |
+| simplicity or touched-owner integrity | `../code-simplicity/SKILL.md` |
+| vague or non-trivial planning | `../planning-intake/SKILL.md` |
+| wave lifecycle or packet state | `../initiatives-workflow/SKILL.md` |
+| full wave execution | `../initiatives-workflow/SKILL.md` |
+| subagent routing | `../subagent-orchestration/SKILL.md` |
+| feedback-caused edits | `../feedback-address/SKILL.md` |
+| workflow friction not fixed immediately | `../feedback-address/SKILL.md` |
+| completion proof | `../verification-before-completion/SKILL.md` |
+| review/approval semantics | `../code-review/SKILL.md` |

@@ -1,35 +1,24 @@
-# Backlog Entry: <initiative/feature/item>
+# <Backlog Item Title>
 
 ## Metadata
 
-- Impact: `high` | `medium` | `low`
-- Effort: `S` | `M` | `L`
-- Queue bucket:
-  `Next Backlog Candidates` | `Deferred Backlog` | `Release / Post-Release Backlog` |
-  `Trigger-Based Backlog` | `Mobile-Only Backlog` | `Mobile Parity Queue`
+- status: `open`
+- owner: `<skill/project owner>`
+- created: `YYYY-MM-DD`
+- removal condition: `<condition | none>`
 
 ## Problem
 
-Short description of the gap/risk.
+<What remains and why it is not part of the current objective.>
 
 ## Why This Bucket
 
-Why this item belongs in its current delivery-map bucket (`Next Backlog Candidates`,
-`Deferred Backlog`, `Release / Post-Release Backlog`, `Trigger-Based Backlog`,
-`Mobile-Only Backlog`, or `Mobile Parity Queue`).
+<unrelated nearby debt | explicitly accepted temporary debt | out-of-claim follow-up>
 
 ## Suggested Next Step
 
-- Suggested target wave (if known):
-- Dependencies/prerequisites:
-- Trigger (only if this belongs in `Trigger-Based Backlog` and the trigger is a hard, durably trackable condition):
-- Smallest next slice:
-- Promotion/removal condition:
+<Smallest complete next action.>
 
 ## References
 
-- Owning durable doc:
-- Queue/backlog source:
-- Source wave/task:
-- Files/evidence:
-- Related PR/commit/log links:
+- `<path-or-issue>`

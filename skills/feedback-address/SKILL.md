@@ -1,53 +1,48 @@
 ---
 name: feedback-address
-description: Use before changing code, docs, plans, or workflow because of feedback or review findings.
+description: Use before changing code, docs, plans, or workflow because of feedback/review findings, or when workflow friction, recurring agent/process issues, or review patterns are not fixed immediately.
 ---
 
 # Feedback Address
 
 Use feedback as evidence. Fix the cause, not the comment.
 
-## Required Gate
+## Gate
 
-Do not edit until all three are true:
+Before editing:
+1. verify, disprove, or mark the claim unverifiable
+2. name the touched owner/component
+3. classify the path
 
-1. The claim is verified, disproved, or explicitly marked unverifiable.
-2. The touched owner/component is named.
-3. The path is classified as surface fix, owner fix, debt plus fix, or no
-   change.
+## Paths
 
-One valid finding is enough to expose bad owner shape. Multiple related
-findings are only extra evidence.
+- `surface fix`: owner contract is coherent; the defect is local.
+- `owner fix`: feedback exposes ambiguous defaults, wrong owner, duplicate
+  authority, stale path, hidden coupling, or patch-over behavior in the current
+  objective.
+- `debt plus fix`: only for unrelated nearby debt or explicitly accepted
+  temporary debt with owner, risk, and removal condition.
+- `no change`: stale, invalid, already addressed, or intentionally by design.
 
-## Classification
+## Rule
 
-Use surface fix only when the owner contract is coherent and the defect is a
-local mistake inside that contract.
+If the defect affects the current objective or touched owner, fix that owner
+now. Do not appease feedback with a smaller patch that preserves the reason the
+feedback was valid.
 
-Use owner fix when the defect is enabled by ambiguous defaults, duplicate
-authority, wrong ownership, misleading helper names, hidden coupling, unclear
-state lifecycle, or repeated caller-specific interpretation.
+Use `planning-intake` when feedback opens non-trivial implementation-shaping
+scope, owner boundaries, proof, public behavior, state authority, migration, or
+wave/plan scope.
 
-Use debt plus fix only after presenting the blocker, risk, recommended
-reshape, and backlog path, and only after explicit user acceptance. Then make
-the necessary immediate fix and record backlog with owner, risk, and removal
-condition.
+## Workflow Feedback
 
-Use no change only when the feedback is stale, invalid, already addressed, or
-intentionally by design.
+Use the ledger only for workflow friction not fixed in the current change.
+Current-objective defects are fixed in the active workflow, not parked here.
 
-## Handoff
+Project-specific observations go in
+`docs-ai/current-work/workflow-feedback-ledger.md`. If missing, create from
+`assets/workflow-feedback-ledger.md`.
 
-Use `planning-intake` before implementation when feedback opens non-trivial
-implementation-shaping scope, owner boundaries, proof, public behavior, state
-authority, migration, or wave/plan scope.
-
-Verify with proof matched to the touched owner.
-
-## Guardrails
-
-- Feedback suggestions are hypotheses, not binding implementation plans.
-- Push back on requests that preserve wrong ownership, add wrappers around bad
-  shape, or weaken the user objective.
-- Use a numbered disposition ledger only when the user asks for triage or when
-  several feedback items must be tracked explicitly.
+Each entry includes date, reporter/context, observed issue, affected surface,
+suggested disposition, and status. Promote reusable harness policy through
+`../harness-governance/SKILL.md`.

@@ -1,30 +1,27 @@
 # Default Simplicity Posture
 
-Use this for all planning, design, architecture, workflow, tests,
-implementation, and review.
+Use for planning, design, architecture, workflow, tests, implementation, and
+review.
 
-The rule is simple: keep the smallest honest shape that satisfies the required
-outcome. Complexity must prove necessity. Simplicity does not.
+The rule: complete the required outcome with the least structure that can
+honestly make it true.
 
 Prefer, in order:
 1. delete
 2. collapse
 3. demote to manual or breakglass
 4. reuse an existing owner
-5. add the smallest new structure that a real constraint requires
-
-Do not preserve inherited ceremony, abstractions, tests, workflow steps,
-compatibility paths, flags, adapters, or proof scaffolding because they already
-exist.
+5. add only the structure a real constraint requires
 
 Block or reshape when the plan:
 - treats a symptom as the root problem
+- preserves the wrong owner or duplicated authority
+- patches around a defect that affects the current objective
 - moves complexity instead of removing it
-- adds structure before proving direct reuse is insufficient
-- keeps optional automation that can honestly stay manual
-- preserves obsolete paths without owner and removal condition
-- creates proof or process machinery instead of reducing the system
-- narrows scope to avoid the owner that actually holds the problem
+- keeps optional workflow, proof, adapter, flag, or compatibility ceremony
+- narrows breadth, quality, runtime behavior, or review surface without
+  accepted reduction
+- defers debt that belongs to the current objective or touched owner
 
-For accepted complexity, state the constraint that requires it. If that
-constraint is absent, delete, collapse, demote, or block.
+Accepted complexity needs the constraint that requires it. Accepted debt needs
+owner, risk, and removal condition.
