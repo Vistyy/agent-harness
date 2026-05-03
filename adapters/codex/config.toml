@@ -14,7 +14,7 @@ description = "Hostile planning review before execution-ready promotion or non-t
 config_file = "agents/planning-critic.toml"
 
 [agents.implementer]
-description = "Implementation worker for one bounded approved wave task card or standalone-plan slice; edits only its owned files, respects parallel workers, and does not approve its own work."
+description = "Implementation worker for one bounded approved wave task card; edits only its owned files, respects parallel workers, and does not approve its own work."
 config_file = "agents/implementer.toml"
 
 [agents.quality_guard]

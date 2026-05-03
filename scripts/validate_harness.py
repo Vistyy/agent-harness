@@ -82,8 +82,6 @@ SIMPLICITY_GATE_FILES = (
     "skills/code-review/SKILL.md",
     "skills/code-review/references/review-governance.md",
     "skills/initiatives-workflow/references/wave-packet-contract.md",
-    "skills/writing-plans/SKILL.md",
-    "skills/writing-plans/references/standalone-plans.md",
 )
 SIMPLICITY_GATE_AGENT_FILES = (
     "adapters/codex/agents/planning-critic.toml",

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Wave Autopilot"
-  short_description: "Execute a full wave from its packet end to end"
-  default_prompt: "Use $wave-autopilot to execute this full wave from its packet end to end."

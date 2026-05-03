@@ -1,4 +1,0 @@
-interface:
-  display_name: "Executing Plans"
-  short_description: "Execute approved implementation plans in batches"
-  default_prompt: "Use $executing-plans to execute this approved standalone implementation plan in disciplined batches."

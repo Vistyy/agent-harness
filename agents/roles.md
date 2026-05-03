@@ -10,7 +10,7 @@ Codex adapter role sources live under `adapters/codex/agents/`.
 - `explorer`: read-only repository discovery and context compression.
 - `check_runner`: targeted checks, logs, and diagnostics summary.
 - `planning_critic`: hostile planning review before execution-ready promotion.
-- `implementer`: one bounded approved task-card or standalone-plan slice.
+- `implementer`: one bounded approved wave task card.
 - `quality_guard`: planning-gate and in-thread implementation gate.
 - `final_reviewer`: final isolated closeout review after verification.
 - `runtime_evidence`: live validation guard for handed-off runtime-visible
