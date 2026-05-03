@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Review"
   short_description: "Full isolated review of implemented changes"
-  default_prompt: "Use $code-review to perform a full isolated review when the user asks for review or after verified implementation."
+  default_prompt: "Use $code-review when the user asks for code review or when verified implementation requires final isolated closeout review."

@@ -1,4 +1,4 @@
 interface:
   display_name: "uv"
   short_description: "Manage Python environments and commands with uv"
-  default_prompt: "Use $uv to handle the Python environment, dependency, and command workflow for this task."
+  default_prompt: "Use $uv for Python commands, dependencies, scripts, or tooling in uv-managed projects; prefer project just commands first, otherwise use uv instead of raw python, pip, pytest, or manual virtualenvs."

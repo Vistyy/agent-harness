@@ -1,6 +1,6 @@
 ---
 name: initiatives-workflow
-description: "Use for wave/backlog workflow maintenance, delivery-map structure, packet schema upkeep, and closeout state cleanup."
+description: "Use for full wave execution or durable wave/backlog state: delivery-map structure, packet schema, backlog entries, and closeout cleanup."
 ---
 
 # Initiatives Workflow
@@ -14,10 +14,9 @@ non-trivial work.
 
 ## References
 
-- lifecycle/state: `references/initiatives-workflow.md`
 - packet/task/proof schema: `references/wave-packet-contract.md`
 
-## Use For
+## Owned Work
 
 - backlog to wave promotion
 - delivery-map updates
@@ -28,12 +27,23 @@ non-trivial work.
 
 ## State Rules
 
+- map: `docs-ai/current-work/delivery-map.md`
+- brief: `docs-ai/docs/initiatives/waves/<wave-id>.md`
+- draft packet: `docs-ai/current-work/<wave-id>/wave-execution.draft.md`
+- canonical packet: `docs-ai/current-work/<wave-id>/wave-execution.md`
+- backlog: `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md`
 - `discovery-required` waves may have `wave-execution.draft.md`.
 - Only `execution-ready` waves keep canonical `wave-execution.md`.
 - Closeout removes delivery-map state and packet only after final review and
   verification approve the binding objective.
 - Backlog entries are for valid deferrals only: unrelated nearby debt or
   explicitly accepted temporary debt with owner, risk, and removal condition.
+
+Statuses:
+- `discovery-required`: decisions still open; no canonical packet.
+- `execution-ready`: planning gate approved; canonical packet exists.
+- `done`: verified and final-reviewed; current-work packet can be cleaned.
+- `retired`: intentionally closed without execution.
 
 ## Execute A Wave
 

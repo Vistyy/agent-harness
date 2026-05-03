@@ -1,4 +1,4 @@
 interface:
   display_name: "Svelte Best Practices"
   short_description: "Apply Svelte posture and pitfalls"
-  default_prompt: "Use $svelte-core-bestpractices to implement this Svelte change with the right docs and tooling support."
+  default_prompt: "Use $svelte-core-bestpractices for Svelte work involving reactivity, route state, styling boundaries, SSR-safe state, or code-shape posture."

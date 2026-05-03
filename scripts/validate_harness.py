@@ -75,10 +75,8 @@ PREAUTHORIZED_SUBAGENT_END = "This preauthorization applies only to those named 
 SIMPLICITY_GATE_FILES = (
     "AGENTS.md",
     "skills/code-simplicity/SKILL.md",
-    "skills/code-simplicity/references/default-simplicity-posture.md",
     "skills/code-simplicity/references/touched-component-integrity-gate.md",
     "skills/planning-intake/SKILL.md",
-    "skills/planning-intake/references/intake-contract.md",
     "skills/code-review/SKILL.md",
     "skills/code-review/references/review-governance.md",
     "skills/initiatives-workflow/references/wave-packet-contract.md",
@@ -759,8 +757,8 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
     scan_files = [
         root / "AGENTS.md",
         root / "agents" / "roles.md",
+        root / "skills" / "subagent-orchestration" / "SKILL.md",
         root / "skills" / "subagent-orchestration" / "references" / "coding-agent-topology.md",
-        root / "skills" / "subagent-orchestration" / "references" / "delegation-policy.md",
         root / "skills" / "verification-before-completion" / "SKILL.md",
         root / "skills" / "verification-before-completion" / "references" / "runtime-proof-escalation.md",
         root / "skills" / "verification-before-completion" / "references" / "runtime-evidence-contract.md",

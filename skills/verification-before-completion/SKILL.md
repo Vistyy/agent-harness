@@ -5,7 +5,8 @@ description: "Use before any completion or fix claim to gather fresh proof, run 
 
 # Verification Before Completion
 
-Use before claiming work is fixed, done, ready, or approved.
+Completion claims require fresh proof before saying work is fixed, done, ready,
+or approved.
 
 ## Rule
 
@@ -15,10 +16,37 @@ objective.
 
 ## Required References
 
-- `references/quality-gate-selection.md`: choose static/test quality gate.
-- `references/verification-evidence.md`: evidence shape.
-- `references/runtime-proof-escalation.md`: when runtime proof is needed.
-- `references/runtime-evidence-contract.md`: runtime-evidence verdict shape.
+- Read `references/verification-evidence.md` when evidence shape, artifact
+  placement, or completion-note proof rows matter.
+- Read `references/runtime-proof-escalation.md` when deciding whether runtime
+  proof is required.
+- Read `references/runtime-evidence-contract.md` when producing or reviewing a
+  runtime-evidence verdict.
+
+## Quality Gate Selection
+
+Choose the smallest gate that proves the claim:
+- harness/workflow changes: `just quality-fast` plus
+  `agent-harness governance check --repo-root .`
+- project code changes: project `just ... quality*` owner command when present
+- test-only changes: affected tests and any test-doctrine validation
+- docs-only changes: validation that checks those docs
+- runtime-visible changes: static checks plus runtime evidence
+
+Do not substitute a cheaper gate when the claim depends on broader behavior.
+
+## Temporary Structural Checks
+
+Path, import, location, or allowlist checks used during refactors are temporary
+structural checks unless they verify durable behavior.
+
+Rules:
+- keep temporary structural checks out of persistent quality and runtime smoke
+  gates
+- store them in active execution state with owner, reason, removal trigger, and
+  planned removal
+- remove or archive them before closeout
+- durable behavior checks stay in persistent quality and smoke gates
 
 ## Gate
 

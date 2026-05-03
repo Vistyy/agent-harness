@@ -1,15 +1,11 @@
 ---
 name: code-review
-description: "Use when the user asks for code review, after verified implementation, or when closeout requires a final isolated review."
+description: "Use when the user asks for code review or when verified implementation requires final isolated closeout review."
 ---
 
 # Code Review
 
 Separate full review with fresh context and breadth-first skepticism.
-
-Use when:
-- user asks for review,
-- final separate breadth-first review is required before closeout.
 
 Use `final_reviewer` by default for subagent-backed closeout review.
 
@@ -20,7 +16,6 @@ Owner docs and review gates carry the doctrine.
 
 - Shared review doctrine: `references/review-governance.md`
 - Simplicity gate: `../code-simplicity/SKILL.md`
-- Adversarial lens: `../adversarial-review/SKILL.md`
 - Structural trigger handling: `../system-boundary-architecture/SKILL.md`
 
 ## Rules
@@ -32,6 +27,8 @@ Owner docs and review gates carry the doctrine.
 - Load the owner docs and review gates that the slice actually needs.
 - For non-trivial work, diff-only review is invalid. Assess touched-component
   integrity through `code-simplicity`.
+- Pressure-test realistic failure modes, hidden assumptions, invalid or stale
+  inputs, retries/races, partial updates, unsafe defaults, and proof gaps.
 - Assume checks already ran unless user asked to run more.
 - No code edits.
 
@@ -41,7 +38,9 @@ Owner docs and review gates carry the doctrine.
 2. Load the owner docs and gates needed for the slice.
 3. List changed files and needed task/wave anchors.
 4. Inspect the slice with skeptical posture. Try to falsify claims, not confirm vibes.
-5. Report all material findings. Do not stop at first blocker.
+5. Check whether tests or runtime proof cover the actual risky path, not only
+   the nominal path.
+6. Report all material findings. Do not stop at first blocker.
 
 ## Output
 

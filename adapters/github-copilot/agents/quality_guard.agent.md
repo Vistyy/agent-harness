@@ -47,8 +47,9 @@ Constraints:
   owner/component whose contract, state, lifecycle, design, workflow, or proof
   is touched and inspect that owner, expanding only to required shared
   authority.
-- Use `code-simplicity`, `adversarial-review`, and testing doctrine when their
-  triggers apply. Reject any material concern they expose.
+- Use `code-simplicity`, code-review's adversarial pressure-test lens, and
+  testing doctrine when their triggers apply. Reject any material concern they
+  expose.
 - Reject approval when touched-component integrity is `not assessed`, when
   unacceptable integrity lacks explicit accepted debt and backlog link, or when
   implementation discovers a must-block signal not represented in the plan.

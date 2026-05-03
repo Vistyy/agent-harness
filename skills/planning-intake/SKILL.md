@@ -5,8 +5,8 @@ description: "Use to turn vague work into a wave plan or harden an existing wave
 
 # Planning Intake
 
-Use when implementation would otherwise begin with open scope, owner, design,
-runtime, migration, proof, or wave-shaping decisions.
+Owns closing scope, owner, design, runtime, migration, proof, and wave-shaping
+decisions before implementation.
 
 Non-trivial durable work becomes a wave, even when it is only one task. There
 is no separate standalone-plan path.
@@ -31,11 +31,41 @@ Close or stop on:
 Deferrals are valid only when unrelated to the current objective or explicitly
 accepted temporary debt with owner, risk, and removal condition.
 
-## Required Reference
+## Decisions
 
-Read `references/intake-contract.md` for non-trivial planning, omission sweeps,
-proof allocation, or blocking questions. Use initiatives workflow references
-only when shaping wave state or packet schema.
+Close decisions locally when the harness/project owner already gives a clear
+default. Ask the user only for user-owned choices such as product intent,
+priority, irreversible tradeoff, credential/tenant access, or acceptance of
+temporary debt.
+
+Every blocking question includes a recommendation and the reason.
+
+## Touched Owner
+
+Touched owner/component is the smallest owner whose contract, state, lifecycle,
+design, workflow, or proof the change touches. Expand only to shared authority
+required by the objective.
+
+Assess whether the owner is coherent enough to complete the objective. If it is
+not, fix the owner now or stop for explicit accepted debt.
+
+## Omission Sweep
+
+Check that the plan did not drop:
+- original objective, breadth, quality bar, or runtime behavior
+- public surfaces and entrypoints
+- owner/state authority and migrations
+- proof for each claimed surface
+- cleanup of obsolete paths in touched scope
+- valid deferrals and their durable home
+
+## Proof Allocation
+
+For every material claim, name owner layer, exact proof command or artifact,
+expected evidence, and counterfactual regression probe.
+
+Use initiatives workflow references only when shaping wave state or packet
+schema.
 
 ## Stop Conditions
 

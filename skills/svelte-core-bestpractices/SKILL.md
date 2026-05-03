@@ -1,6 +1,6 @@
 ---
 name: svelte-core-bestpractices
-description: "Use alongside svelte-code-writer for durable Svelte posture: reactivity pitfalls, thin routes, styling boundaries, and code-shape guidance."
+description: "Use with Svelte code work when reactivity, route state, styling boundaries, SSR-safe state, or code-shape posture matters."
 ---
 
 # Svelte Core Best Practices

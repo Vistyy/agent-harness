@@ -5,6 +5,9 @@ Owns approval boundaries, review modes, disposition, and completion claims.
 ## Core Rules
 
 - Review skeptically. Try to disprove the claim.
+- Pressure-test realistic non-happy paths: hidden assumptions, invalid or stale
+  inputs, partial updates, retries/races, boundary misuse, unsafe defaults, and
+  proof that covers only the nominal path.
 - Binding objective = original user objective plus explicitly accepted
   reductions. Task labels, packets, implementer summaries, and reviewer prompts
   do not replace it.

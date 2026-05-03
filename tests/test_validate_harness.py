@@ -333,12 +333,12 @@ def test_validate_rejects_agent_missing_touched_component_gate(tmp_path: Path) -
 
 def test_validate_rejects_incomplete_touched_owner_definition(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    write(tmp_path / "skills" / "planning-intake" / "references" / "intake-contract.md", "Touched owner uses contract, state, lifecycle, or proof.\n")
+    write(tmp_path / "skills" / "planning-intake" / "SKILL.md", "Touched owner uses contract, state, lifecycle, or proof.\n")
 
     errors = validate_harness.validate(tmp_path)
 
     assert (
-        "skills/planning-intake/references/intake-contract.md has incomplete touched-owner definition; include design and workflow"
+        "skills/planning-intake/SKILL.md has incomplete touched-owner definition; include design and workflow"
         in errors
     )
 
@@ -380,7 +380,7 @@ def test_validate_requires_microsoft_playwright_cli_anchor(tmp_path: Path) -> No
 def test_validate_rejects_stale_runtime_optional_helper_wording(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
-        tmp_path / "skills" / "subagent-orchestration" / "references" / "delegation-policy.md",
+        tmp_path / "skills" / "subagent-orchestration" / "SKILL.md",
         """
         Delegate isolated runtime proof only when startup/teardown is
         deterministic and ownership is unambiguous.
@@ -390,7 +390,7 @@ def test_validate_rejects_stale_runtime_optional_helper_wording(tmp_path: Path) 
     errors = validate_harness.validate(tmp_path)
 
     assert (
-        "skills/subagent-orchestration/references/delegation-policy.md contains stale optional-helper runtime proof wording"
+        "skills/subagent-orchestration/SKILL.md contains stale optional-helper runtime proof wording"
         in errors
     )
 

@@ -5,7 +5,8 @@ description: Use before changing code, docs, plans, or workflow because of feedb
 
 # Feedback Address
 
-Use feedback as evidence. Fix the cause, not the comment.
+Classify feedback before editing. Feedback is evidence, not an implementation
+plan.
 
 ## Gate
 
@@ -16,32 +17,24 @@ Before editing:
 
 ## Paths
 
-- `surface fix`: owner contract is coherent; the defect is local.
+- `surface fix`: owner contract is coherent; defect is local.
 - `owner fix`: feedback exposes ambiguous defaults, wrong owner, duplicate
-  authority, stale path, hidden coupling, or patch-over behavior in the current
-  objective.
-- `debt plus fix`: only for unrelated nearby debt or explicitly accepted
-  temporary debt with owner, risk, and removal condition.
+  authority, stale path, hidden coupling, or current-objective patch-over.
+- `debt plus fix`: only unrelated nearby debt or explicitly accepted temporary
+  debt with owner, risk, and removal condition.
 - `no change`: stale, invalid, already addressed, or intentionally by design.
 
-## Rule
-
-If the defect affects the current objective or touched owner, fix that owner
-now. Do not appease feedback with a smaller patch that preserves the reason the
-feedback was valid.
-
-Use `planning-intake` when feedback opens non-trivial implementation-shaping
-scope, owner boundaries, proof, public behavior, state authority, migration, or
-wave/plan scope.
+Apply `../code-simplicity/SKILL.md` for owner-correct repair. Use
+`../planning-intake/SKILL.md` when feedback opens non-trivial scope, owner,
+proof, public behavior, state authority, migration, or wave shape.
 
 ## Workflow Feedback
 
 Use the ledger only for workflow friction not fixed in the current change.
-Current-objective defects are fixed in the active workflow, not parked here.
+Current-objective defects are fixed now, not parked here.
 
-Project-specific observations go in
-`docs-ai/current-work/workflow-feedback-ledger.md`. If missing, create from
-`assets/workflow-feedback-ledger.md`.
+Project observations go in `docs-ai/current-work/workflow-feedback-ledger.md`.
+If missing, create from `assets/workflow-feedback-ledger.md`.
 
 Each entry includes date, reporter/context, observed issue, affected surface,
 suggested disposition, and status. Promote reusable harness policy through

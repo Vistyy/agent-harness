@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: Use before implementing any behavior change to establish failing executable evidence first and drive work through red to green.
+description: Use before behavior changes that need failing executable evidence; drive the work from red to green instead of adding tests as ceremony.
 ---
 
 # Test-Driven Development
