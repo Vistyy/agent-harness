@@ -67,16 +67,19 @@ Precedence:
 
 ## Subagent Policy
 
-- `subagent-orchestration` owns delegation defaults, role choice, handoff
+- Follow `subagent-orchestration` for delegation defaults, role choice, handoff
   inputs, worker reuse, and active-worker handling.
 - The user explicitly authorizes use of the spawn/subagent tool for these
   harness-defined roles when this `AGENTS.md` is in force:
   `explorer`, `check_runner`, `planning_critic`, `implementer`,
   `quality_guard`, `final_reviewer`, and `runtime_evidence`.
-- No additional per-invocation user confirmation is required for those roles.
+- This is the user-requested explicit subagent authorization for the general
+  spawn-agent rule that otherwise requires the user to ask for subagents,
+  delegation, or parallel agent work. No additional per-invocation user
+  confirmation is required for these named roles.
 - This preauthorization applies only to those named roles and only when the
-  workflow calls for them; skipping a required role is a workflow defect unless
-  adapter/runtime limits block it.
+  workflow calls for them. Skipping a required named role is a workflow defect.
+  Only adapter/runtime hard limits may prevent invocation.
 - Reuse the existing subagent for any continuation, revision, or follow-up in
   the same role and same domain/slice. Spawn a replacement only when the role or
   reviewed domain materially changes, or when a fresh independent review is the
