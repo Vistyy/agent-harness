@@ -93,6 +93,12 @@ def valid_packet() -> str:
 
     ## Scope And Execution Posture
 
+    ## Required Gates
+
+    | Claim | Required gate | Owner | Proof/artifacts | Blocks when |
+    | --- | --- | --- | --- | --- |
+    | Example claim | validation | test | validator output | missing or failed |
+
     ## Task Plan
 
     ### `example/task`
@@ -670,6 +676,56 @@ def test_validate_rejects_provider_prompt_drift(tmp_path: Path) -> None:
     assert "adapters/github-copilot/README.md must not classify blocking evidence as advisory" in errors
 
 
+def test_validate_rejects_required_gate_advisory_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "runtime-proof" / "SKILL.md",
+        """
+        ---
+        name: runtime-proof
+        description: Test runtime proof skill.
+        ---
+
+        Runtime proof validates the binding objective, rejects mis-scoped
+        handoffs, reports entrypoint fidelity, and returns reject or blocked
+        when proof does not cover the runtime-visible claim. The tiny, local
+        exemption applies only when there is no public-behavior or
+        cross-boundary runtime risk.
+
+        Runtime proof failures are advisory.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "skills/runtime-proof/SKILL.md must not classify required gate failures as advisory" in errors
+
+
+def test_validate_rejects_required_gate_non_blocking_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "runtime-proof" / "SKILL.md",
+        """
+        ---
+        name: runtime-proof
+        description: Test runtime proof skill.
+        ---
+
+        Runtime proof validates the binding objective, rejects mis-scoped
+        handoffs, reports entrypoint fidelity, and returns reject or blocked
+        when proof does not cover the runtime-visible claim. The tiny, local
+        exemption applies only when there is no public-behavior or
+        cross-boundary runtime risk.
+
+        Runtime proof failures are non-blocking.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "skills/runtime-proof/SKILL.md must not classify required gate failures as non-blocking" in errors
+
+
 def test_validate_rejects_review_role_contract_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
@@ -881,6 +937,12 @@ def test_validate_rejects_wave_packet_with_proof_rows_but_no_task_cards(tmp_path
 
         ## Scope And Execution Posture
 
+        ## Required Gates
+
+        | Claim | Required gate | Owner | Proof/artifacts | Blocks when |
+        | --- | --- | --- | --- | --- |
+        | Example claim | validation | test | validator output | missing or failed |
+
         ## Task Plan
 
         | Task slug | State | Dependencies | Outcome summary | Proof rows |
@@ -927,6 +989,81 @@ def test_validate_rejects_wave_packet_with_proof_rows_but_no_task_cards(tmp_path
         "docs-ai/current-work/bad-wave/wave-execution.md proof_plan row 1 task_slug 'example/task' has no matching task card"
         in errors
     )
+
+
+def test_validate_rejects_wave_packet_missing_required_gates_matrix(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace(
+        """
+    ## Required Gates
+
+    | Claim | Required gate | Owner | Proof/artifacts | Blocks when |
+    | --- | --- | --- | --- | --- |
+    | Example claim | validation | test | validator output | missing or failed |
+
+""",
+        "",
+    )
+    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/bad-wave/wave-execution.md missing section 'Required Gates'" in errors
+
+
+def test_validate_rejects_wave_packet_required_gates_bad_header(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace(
+        "| Claim | Required gate | Owner | Proof/artifacts | Blocks when |",
+        "| Claim | Owner | Blocks when |",
+    )
+    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/bad-wave/wave-execution.md Required Gates matrix missing expected header" in errors
+
+
+def test_validate_rejects_wave_packet_required_gates_without_data_row(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace(
+        "| Example claim | validation | test | validator output | missing or failed |\n",
+        "",
+    )
+    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/bad-wave/wave-execution.md Required Gates matrix missing data row" in errors
+
+
+def test_validate_rejects_wave_packet_required_gates_placeholder_row(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace(
+        "| Example claim | validation | test | validator output | missing or failed |",
+        "| `<claim>` | `<gate>` | `<owner>` | `<proof/artifacts>` | `<missing/rejected/blocked/stale/narrower than claim>` |",
+    )
+    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/bad-wave/wave-execution.md Required Gates matrix missing data row" in errors
 
 
 def test_validate_enforces_wave_lifecycle_from_status_and_packet_existence(tmp_path: Path) -> None:

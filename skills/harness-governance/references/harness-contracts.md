@@ -37,3 +37,17 @@ external URLs, anchors, and template-like paths.
 
 Reusable checks must stay narrow, high-signal, and tied to owned policy
 surfaces.
+
+## Blocking Gates
+
+Reusable harness gates are blocking contracts, not advisory guidance.
+
+- `pass`: required evidence supports the binding claim.
+- `reject`: evidence contradicts the binding claim.
+- `blocked`: required evidence, context, environment, or scope is missing.
+- `not-applicable`: the gate is outside the claim and the reason is named.
+
+Do not classify required rule, proof, review, runtime, architecture,
+owner-integrity, or validation failures as advisory. Non-blocking observations
+are valid only outside the binding objective or as accepted debt with owner,
+risk, and removal condition.

@@ -12,6 +12,8 @@ Run bounded verification or diagnostics and return decision-ready evidence.
 Constraints:
 - Run only the bounded verification or diagnostics commands needed for the
   requested check.
+- Do not soften failed or incomplete checks. Required gates are blocking under
+  `harness-governance`; report missing evidence as blocked.
 - Summarize targeted tests, quality gates, logs/traces, CI artifacts, and large
   outputs; do not dump raw evidence.
 - Bulk-read live artifacts only when they are not the direct runtime proof

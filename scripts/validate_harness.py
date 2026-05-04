@@ -50,10 +50,12 @@ OPENAI_ALLOWED_INTERFACE_KEYS = {
 }
 PACKET_REQUIRED_SECTIONS = (
     "Scope And Execution Posture",
+    "Required Gates",
     "Task Plan",
     "Proof Plan",
     "Execution State",
 )
+REQUIRED_GATES_HEADER = "| Claim | Required gate | Owner | Proof/artifacts | Blocks when |"
 PROOF_ROW_REQUIRED_KEYS = (
     "proof_id",
     "task_slug",
@@ -191,7 +193,19 @@ REMOVED_WORKFLOW_SKILL_NAMES = (
     "writing-plans",
 )
 ADVISORY_DRIFT_RE = re.compile(r"\badvisory\b", re.IGNORECASE)
-ADVISORY_NEGATION_RE = re.compile(r"\b(?:must not|do not|not classify|not treat|never)\b", re.IGNORECASE)
+NON_BLOCKING_DRIFT_RE = re.compile(r"\bnon-blocking\b", re.IGNORECASE)
+ADVISORY_NEGATION_RE = re.compile(
+    r"\b(?:must not|do not|not classify|not treat|never|not advisory)\b",
+    re.IGNORECASE,
+)
+NON_BLOCKING_ALLOWED_RE = re.compile(
+    r"\b(?:outside|accepted debt|explicitly accepted debt|NON-BLOCKING is only)\b",
+    re.IGNORECASE,
+)
+REQUIRED_GATE_CONTEXT_RE = re.compile(
+    r"\b(?:required|gate|proof|review|runtime|architecture|owner-integrity|validation|finding|evidence)\b",
+    re.IGNORECASE,
+)
 QUALITY_GUARD_FINAL_APPROVAL_NEGATION_RE = re.compile(r"\bDo not\b.*\bclaim final approval\b", re.IGNORECASE)
 RUNTIME_PROOF_POLICY_FILES = (
     "skills/runtime-proof/SKILL.md",
@@ -930,6 +944,12 @@ def _validate_wave_packet(path: Path, root: Path) -> list[str]:
     for section in PACKET_REQUIRED_SECTIONS:
         if section not in headings:
             errors.append(f"{path.relative_to(root)} missing section {section!r}")
+    required_gates = _markdown_section(text, "Required Gates")
+    if "Required Gates" in headings:
+        if REQUIRED_GATES_HEADER not in required_gates:
+            errors.append(f"{path.relative_to(root)} Required Gates matrix missing expected header")
+        elif not _required_gates_has_data_row(required_gates):
+            errors.append(f"{path.relative_to(root)} Required Gates matrix missing data row")
 
     proof_plans: list[object] = []
     try:
@@ -1200,6 +1220,70 @@ def _validate_provider_prompt_contracts(root: Path) -> list[str]:
     return errors
 
 
+def _has_advisory_negation(lines: list[str], index: int) -> bool:
+    window = " ".join(lines[max(0, index - 1) : min(len(lines), index + 2)])
+    return ADVISORY_NEGATION_RE.search(window) is not None
+
+
+def _has_non_blocking_allowance(lines: list[str], index: int) -> bool:
+    window = " ".join(lines[max(0, index - 1) : min(len(lines), index + 2)])
+    return NON_BLOCKING_ALLOWED_RE.search(window) is not None
+
+
+def _required_gates_has_data_row(section: str) -> bool:
+    for line in section.splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("|") or not stripped.endswith("|"):
+            continue
+        if stripped == REQUIRED_GATES_HEADER or re.fullmatch(r"\|(?:\s*-+\s*\|)+", stripped):
+            continue
+        cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+        unquoted_cells = [cell.removeprefix("`").removesuffix("`") for cell in cells]
+        if (
+            len(cells) == 5
+            and all(cells)
+            and not any(cell.startswith("<") and cell.endswith(">") for cell in unquoted_cells)
+        ):
+            return True
+    return False
+
+
+def _validate_required_gate_advisory_drift(root: Path) -> list[str]:
+    errors: list[str] = []
+    scan_roots = [
+        root / "skills",
+        root / "adapters" / "codex" / "agents",
+        root / "adapters" / "github-copilot" / "agents",
+    ]
+    for scan_root in scan_roots:
+        if not scan_root.is_dir():
+            continue
+        for path in sorted(scan_root.rglob("*")):
+            if path.suffix not in {".md", ".toml"}:
+                continue
+            relative_path = str(path.relative_to(root))
+            lines = path.read_text(encoding="utf-8").splitlines()
+            for index, line in enumerate(lines):
+                if not ADVISORY_DRIFT_RE.search(line):
+                    continue
+                if not REQUIRED_GATE_CONTEXT_RE.search(line):
+                    continue
+                if _has_advisory_negation(lines, index):
+                    continue
+                errors.append(f"{relative_path} must not classify required gate failures as advisory")
+                break
+            for index, line in enumerate(lines):
+                if not NON_BLOCKING_DRIFT_RE.search(line):
+                    continue
+                if not REQUIRED_GATE_CONTEXT_RE.search(line):
+                    continue
+                if _has_non_blocking_allowance(lines, index):
+                    continue
+                errors.append(f"{relative_path} must not classify required gate failures as non-blocking")
+                break
+    return errors
+
+
 def _validate_review_role_contracts(root: Path) -> list[str]:
     errors: list[str] = []
     for relative_path, required_terms in REVIEW_ROLE_CONTRACTS.items():
@@ -1263,6 +1347,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_simplicity_gate(root))
     errors.extend(_validate_live_validation_contracts(root))
     errors.extend(_validate_provider_prompt_contracts(root))
+    errors.extend(_validate_required_gate_advisory_drift(root))
     errors.extend(_validate_review_role_contracts(root))
     errors.extend(_validate_role_boundary_contracts(root))
 

@@ -13,6 +13,8 @@ Outcome:
 
 Rules:
 - Be a hostile plan breaker, not a momentum helper.
+- Do not approve from politeness, effort, partial improvement, or plausible
+  acceptance. Required gates are blocking under `harness-governance`.
 - Challenge premise, scope, target architecture, proof, and deferrals.
 - Require a candidate wave plan that preserves the binding objective and
   accepted reductions. Do not co-plan raw problems.

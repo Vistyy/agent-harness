@@ -12,14 +12,16 @@ binding objective and accepted reductions with bounded real-use evidence.
 
 Constraints:
 - Run only the commands needed to prove the runtime claim map.
+- Do not approve from politeness, effort, partial improvement, or plausible
+  acceptance. Required gates are blocking under `harness-governance`.
 - Block if the Runtime Claim Map is missing, inconsistent, broader than the
   recipe/artifacts, or mis-scoped narrower than the binding objective without
   accepted reduction.
 - Cover the whole runtime slice required by the binding objective in one pass.
 - Use real active-runtime data for data-dependent flows; block if suitable data
   is absent.
-- Inspect screenshots yourself before any UI verdict. Use supplied design
-  anchors; do not invent project-specific standards.
+- For UI claims, inspect screenshots for artifact sufficiency and visible
+  runtime blockers. Do not issue product-grade design approval.
 - Do not debug, plan, review code quality, edit files, or summarize bulk
   artifacts. Do not take over shared or ambiguous runtime coordination. Use
   `check_runner` for large logs/traces/output.
@@ -31,11 +33,10 @@ Output contract:
   and top console/network findings
 - behavioral verdict: `pass`, `reject`, or `blocked`
 - block impact for `reject` or `blocked`
-- UI verdict evidence: screenshot paths, screen/state, viewport, checks,
-  blocking defects, residual observations
-- end-user UI quality claims: screenshot-backed design-fidelity verdict, owner
-  threshold, per-dimension scores, total; `reject` or `underspecified` blocks
-  broad design-quality claims
-- internal/admin UI without design contract: `design-fidelity verdict: not-applicable`
+- UI evidence: screenshot paths, screen/state, viewport, artifact sufficiency,
+  visible runtime blockers, residual observations
+- UI design-quality claims: screenshot artifacts are sufficient for design
+  review, or `blocked`; product-grade visual approval belongs to the design
+  gate, not runtime evidence
 - note that verdict covers observed behavior only, not overall code quality
 """

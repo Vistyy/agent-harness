@@ -5,6 +5,7 @@ Owns the durable packet schema for `wave-execution.md`.
 ## Sections
 
 - `Scope And Execution Posture`
+- `Required Gates`
 - `Task Plan`
 - `Proof Plan`
 - `Execution State`
@@ -22,6 +23,16 @@ exceptions.
 `tool-or-runtime-limit`, `shared-file-churn`, or `tiny-local-followup`.
 
 Planning exceptions need owner, reason, and review/removal condition.
+
+## Required Gates
+
+Required for material claims. The matrix names each claim's gate, owner,
+proof/artifacts, and blocking condition before execution.
+
+Rows must preserve the binding objective. Missing, rejected, blocked, stale, or
+narrower required gates block the claim. `not-applicable` needs a named reason.
+Do not use the matrix as a second proof plan; proof rows still carry exact
+commands, artifacts, and counterfactual probes.
 
 ## Task Cards
 

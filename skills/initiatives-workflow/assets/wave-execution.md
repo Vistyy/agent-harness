@@ -25,6 +25,12 @@
 - Planning Exceptions:
   - `none`
 
+## Required Gates
+
+| Claim | Required gate | Owner | Proof/artifacts | Blocks when |
+| --- | --- | --- | --- | --- |
+| `<claim>` | `<gate>` | `<owner>` | `<proof/artifacts>` | `<missing/rejected/blocked/stale/narrower than claim>` |
+
 ## Task Plan
 
 ### `<task/slug>`

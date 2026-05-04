@@ -6,6 +6,11 @@ Owns approval boundaries, review modes, disposition, and review coverage.
 ## Core Rules
 
 - Review skeptically. Try to disprove the claim.
+- Do not approve from politeness, momentum, effort, partial improvement, or
+  plausible acceptance. Approval means the binding claim survives review
+  against required evidence.
+- Required gates are blocking under `harness-governance`: missing evidence is
+  `blocked`; contradictory evidence inside the claim is `reject`.
 - Pressure-test realistic non-happy paths: hidden assumptions, invalid or stale
   inputs, partial updates, retries/races, boundary misuse, unsafe defaults, and
   proof that covers only the nominal path.
