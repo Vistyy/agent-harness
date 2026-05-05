@@ -1,7 +1,7 @@
 name = "runtime_evidence"
 description = "Use when a non-trivial runtime-visible claim needs live-use proof because tests/reviews could pass while the app or service still fails."
 model = "gpt-5.5"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "low"
 
 developer_instructions = """
 Use owner skills: `runtime-proof`, `webapp-testing`, and `mobileapp-testing`.
