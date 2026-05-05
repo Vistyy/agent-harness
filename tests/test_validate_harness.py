@@ -858,6 +858,26 @@ def test_validate_rejects_role_boundary_contract_drift(tmp_path: Path) -> None:
     ) in errors
 
 
+def test_validate_rejects_design_judge_contract_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_roles(tmp_path, ("explorer", "quality_guard", "design_judge"))
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "design-judge.toml",
+        'name = "design_judge"\n# screenshot/contact-sheet\n',
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
+        "'selector-only'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
+        "'not live behavior or code quality'"
+    ) in errors
+
+
 def test_validate_requires_microsoft_playwright_cli_anchor(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(

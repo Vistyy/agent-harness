@@ -77,6 +77,7 @@ Required inputs:
 - binding objective, accepted reductions, residual gaps
 - changed surfaces and base/diff range
 - proof artifacts and runtime evidence when applicable
+- `design_judge` report when broad product UI design readiness is claimed
 - in-thread `quality_guard` history
 - touched owner/component integrity
 
@@ -84,6 +85,10 @@ Treat earlier approvals as history, not final approval. Reject if the handoff
 omits the binding objective or final wording exceeds proof/review scope.
 Reject mis-scoped handoffs that ask review to approve less than the binding
 objective without an accepted reduction.
+Reject UI readiness closeout when runtime evidence or `design_judge` is
+missing, rejected, blocked, stale, or narrower than the final claim. Reviewers
+verify gate coverage; they do not replace runtime proof or product design
+judgment.
 
 ## Review Coverage For Completion
 

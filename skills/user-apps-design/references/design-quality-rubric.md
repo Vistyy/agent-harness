@@ -92,3 +92,8 @@ affected surfaces/states/viewports/devices, and screenshot artifacts.
 This file names UI-quality blockers. `../../runtime-proof/SKILL.md` owns
 runtime claim maps, `pass`/`reject`/`blocked` verdict semantics, entrypoint
 fidelity, and completion impact.
+
+`design_judge` applies this rubric to screenshot/contact-sheet artifacts and
+returns product UI design `pass`, `reject`, or `blocked`. Reject generic,
+scaffold-like, incoherent, inaccessible, ugly, or non-shippable UI even when
+functional assertions pass.

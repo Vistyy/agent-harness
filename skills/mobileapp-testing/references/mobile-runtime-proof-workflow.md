@@ -48,6 +48,11 @@ UI quality claims.
 
 Widget-tree presence alone is not layout or interaction proof.
 
+For UI-quality claims, screenshot/contact-sheet artifacts must be sufficient
+for `design_judge` handoff: path, screen/state, device/viewport, freshness, and
+claimed surface must be inspectable. Mobile proof does not approve product UI
+design.
+
 For `runtime-risk-ui`, prove both composed hit-testable surface and live
 emulator/device behavior in the same execution window.
 

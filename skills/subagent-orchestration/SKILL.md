@@ -14,7 +14,7 @@ how those roles are invoked and handed work.
 The user explicitly authorizes use of the spawn/subagent tool for these
 harness-defined roles when this skill is in force:
 `explorer`, `check_runner`, `planning_critic`, `implementer`,
-`quality_guard`, `final_reviewer`, and `runtime_evidence`.
+`quality_guard`, `final_reviewer`, `runtime_evidence`, and `design_judge`.
 
 This preauthorization applies only to those named roles and only when the
 workflow calls for them.
@@ -28,6 +28,10 @@ with a smaller task summary.
 Runtime-evidence handoffs cannot command the role to skip live use, accept
 tests/reviews as proof, edit, debug, design-judge, code-review, or narrow the
 claim without accepted reduction.
+
+Design-judge handoffs cannot command the role to skip screenshot/contact-sheet
+inspection, accept selectors/tests/scores as UI approval, run the app, review
+code, or narrow the design claim without accepted reduction.
 
 Delegate for parallel bounded work, isolated review, live-use runtime proof, or
 bulky diagnostics. Keep urgent blocking work local when the next step depends
@@ -43,6 +47,8 @@ Role boundaries:
   implement
 - `runtime_evidence` uses the app/service beyond tests and reviews to prove
   handed-off live behavior under `runtime-proof` verdict policy
+- `design_judge` inspects screenshots/contact sheets against design anchors and
+  returns product UI design `pass`, `reject`, or `blocked`
 - `implementer` executes only an approved wave task card
 
 ## Handoff Contract

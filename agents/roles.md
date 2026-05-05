@@ -19,6 +19,8 @@ policy.
 - `runtime_evidence`: independent live-use verifier for non-trivial
   runtime-visible claims when tests/reviews could pass while the app or service
   still fails.
+- `design_judge`: screenshot-led product UI design approval gate for broad
+  product-facing UI claims.
 
 Adapter configs must preserve these role names unless a reviewed migration
 updates every consumer and proof row together.

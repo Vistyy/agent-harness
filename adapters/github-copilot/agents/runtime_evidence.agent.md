@@ -25,7 +25,8 @@ Constraints:
 - Cover the whole runtime slice required by the binding objective.
 - Use active runtime data for data-dependent flows; block if absent.
 - For UI claims, inspect screenshot artifact sufficiency and visible runtime
-  blockers. Do not issue product-grade design approval.
+  blockers. Report whether artifacts are sufficient for `design_judge`
+  handoff. Do not issue product-grade design approval.
 - Do not debug, plan, review code quality, edit files, write e2e tests, or
   summarize bulk artifacts.
 - Do not take over shared or ambiguous runtime coordination. Use `check_runner`

@@ -28,7 +28,12 @@
   - Reports must stay compact but must include concrete visual findings when
     blocking or approving with issues.
   - Depends on `harness-strict-validation-governance-1` for blocking gate
-    semantics and packet `Required Gates` schema.
+    semantics and packet `Required Gates` schema; that dependency is done.
+  - `design_judge` must be present on pre-selection routing and authorization
+    surfaces, not only inside agent prompt bodies.
+  - Prompt/config files alone do not prove callability. If the active adapter
+    cannot expose `design_judge` as an invocable role, stop and record the
+    adapter/runtime blocker instead of claiming the gate exists.
 - System-boundary trigger:
   - `triggered`
 - Implementer delegation posture:
@@ -58,9 +63,7 @@
   - The old `20/20`-style design-fidelity score cannot be sufficient for
     approval and should be removed or demoted to non-authoritative observations.
 - Planning Exceptions:
-  - This packet remains draft until `harness-strict-validation-governance-1`
-    is execution-ready or this packet is revised to inline an approved
-    equivalent gate matrix contract.
+  - none.
 
 ## Required Gates
 
@@ -76,7 +79,7 @@
 ### harness/runtime-evidence/ui-design-gate-boundary-contract
 
 - State:
-  - `blank`
+  - `blocked`
 - Outcome:
   - Harness docs and agent instructions separate live runtime proof from
     product-grade UI design approval, while preserving blocking completion
@@ -90,6 +93,7 @@
   - `agents/roles.md`
   - `skills/subagent-orchestration/SKILL.md`
   - `skills/subagent-orchestration/agents/openai.yaml`
+  - `AGENTS.md`
   - `adapters/codex/config.toml`
   - `adapters/codex/agents/design-judge.toml`
   - `adapters/codex/agents/runtime-evidence.toml`
@@ -102,7 +106,7 @@
     coverage obligations.
 - Owned files and surfaces:
   - Runtime proof policy, design-quality ownership, runtime-evidence prompt
-    contracts.
+    contracts, subagent role routing, and adapter authorization surfaces.
 - Touched owner/component integrity:
   - acceptable; the existing owner split from `harness-ui-design-quality` and
     `harness-runtime-proof-design-refactor` remains coherent if runtime proof
@@ -119,6 +123,9 @@
   - `quality_guard` must block when required `runtime_evidence` or
     `design_judge` gates are missing, rejected, blocked, stale, or narrower
     than the implementation claim.
+  - `design_judge` trigger and authorization must live in pre-selection
+    surfaces: `AGENTS.md`, `agents/roles.md`, adapter role registry/config, and
+    `subagent-orchestration`.
 - Allowed local implementer decisions:
   - Exact wording and section placement.
   - Whether to remove numeric scoring entirely or demote it to optional
@@ -134,6 +141,7 @@
     visual blockers.
   - Any implementation path that folds visual design judgment back into
     `runtime_evidence`, `quality_guard`, or `final_reviewer`.
+  - Adapter/runtime support cannot expose `design_judge` as an invocable role.
 - Proof rows:
   - `P1`
 - Deferred follow-up:
@@ -142,7 +150,7 @@
 ### harness/runtime-evidence/screenshot-artifact-sufficiency-gate
 
 - State:
-  - `blank`
+  - `done`
 - Outcome:
   - UI-quality runtime handoffs and reports require screenshots/contact sheets
     for every claimed route/state/viewport/device and block when artifacts are
@@ -187,7 +195,7 @@
 ### harness/review/final-ui-closeout-screenshot-inspection-contract
 
 - State:
-  - `blank`
+  - `done`
 - Outcome:
   - Final closeout review blocks UI redesign completion unless runtime evidence
     and `design_judge` both cover the final claim.
@@ -224,7 +232,7 @@
 ### harness/evals/regression-case-bad-ui-must-reject
 
 - State:
-  - `blank`
+  - `done`
 - Outcome:
   - Harness validation includes a regression case proving a functional
     selector-passing but visibly poor UI cannot receive UI design approval.
@@ -255,14 +263,14 @@
     for oversized low-information rows, detached search/action grouping, weak
     hierarchy, scaffold-like material, and non-shippable composition.
   - A schema/report test may validate output shape, but the required regression
-    proof must include a real design_judge-eval artifact or a documented
-    model-eval/manual-run evidence artifact showing the bad UI is rejected.
-  - Until model-running evals are stable, the automated validator may prove
-    only contract shape; the wave cannot claim automated proof that judgment
-    rejected the image without the eval evidence artifact.
+    proof must include an executable `design_judge` fixture invocation that
+    reads the bad-UI artifact path, design anchors, runtime functional pass,
+    and expected `reject` verdict with visible findings.
+  - The wave cannot claim the bad-UI judgment proof from manual notes,
+    schema-only validation, score-only output, or prompt readback.
 - Allowed local implementer decisions:
-  - Exact fixture path and whether the design_judge rejection proof is captured
-    as model-eval output, manual eval evidence, or a stable report artifact.
+  - Exact fixture path and script name, provided the command is executable and
+    asserts the expected `reject` plus visible findings.
 - Stop-and-handback triggers:
   - Proving the gate requires unavailable screenshot analysis infrastructure.
   - Existing validation architecture cannot host the regression without a
@@ -284,22 +292,27 @@
       "claim": "Runtime evidence cannot be the sole approval path for broad UI design quality; product-grade visual approval is a separate design_judge gate with blocking completion impact.",
       "material_variants": ["web UI", "mobile UI", "internal/admin UI without design claim", "quality_guard gate-coverage review", "final_reviewer closeout coverage"],
       "proof_classification": "multi-proof-required",
-      "owner_layer": "doc-contract",
+      "owner_layer": "doc-contract/role-registry/adapter-routing",
       "exact_proof": [
-        "Readback of updated runtime-proof, user-apps-design, review-governance, verification-before-completion, subagent-orchestration, runtime-evidence prompt, design_judge prompt, quality_guard prompt, and final_reviewer prompt contracts showing isolated responsibilities and no authoritative numeric design score path.",
+        "Readback of updated runtime-proof, user-apps-design, review-governance, verification-before-completion, AGENTS.md, agents/roles.md, adapter role registry/config, subagent-orchestration, runtime-evidence prompt, design_judge prompt, quality_guard prompt, and final_reviewer prompt contracts showing isolated responsibilities, pre-selection design_judge routing, and no authoritative numeric design score path.",
+        "uv run python scripts/validate_harness.py",
+        "uv run python adapters/codex/assert_prompt_input_agents.py docs-ai/current-work/harness-ui-runtime-evidence-redesign-1/artifacts/design-judge-prompt-input.json design_judge",
         "rg -n \"20/20|design-fidelity score|per-dimension scores|numeric design\" skills adapters docs-ai"
       ],
       "expected_evidence": [
         "Docs state runtime evidence must block missing artifacts and cannot approve UI design by selector checks or numeric score alone.",
         "design_judge instructions own screenshot-led product UI approval and reject selector-only, score-only, and finding-free screenshot approval.",
+        "AGENTS.md, agents/roles.md, adapter config, and subagent-orchestration expose design_judge before prompt selection.",
+        "Fresh Codex prompt-input registry proof shows design_judge is exposed to the adapter runtime.",
+        "Harness validation rejects missing design_judge role registration, authorization, or required prompt/report contract terms.",
         "quality_guard instructions verify required gate coverage without performing runtime proof or visual design judgment.",
         "Search output shows no remaining authoritative numeric scoring contract for UI approval."
       ],
       "counterfactual_regression_probe": {
-        "weaker_implementation": "Runtime evidence keeps a numeric design-fidelity score as sufficient approval for broad UI redesign, or quality_guard/final_reviewer performs visual design judgment instead of verifying design_judge.",
-        "failing_assertion_or_artifact": "Readback, rg, or validation finds score-based approval language still authoritative or mixed-role design judgment."
+        "weaker_implementation": "Runtime evidence keeps a numeric design-fidelity score as sufficient approval for broad UI redesign, quality_guard/final_reviewer performs visual design judgment instead of verifying design_judge, or design_judge exists only in docs/prompts without pre-selection adapter exposure.",
+        "failing_assertion_or_artifact": "Readback, rg, validation, or assert_prompt_input_agents.py fails on score-based approval language, mixed-role design judgment, missing design_judge registration/authorization, or absent fresh prompt-input role exposure."
       },
-      "status": "planned"
+      "status": "blocked"
     },
     {
       "proof_id": "P2",
@@ -321,7 +334,7 @@
         "weaker_implementation": "A UI runtime report can pass with selectors, DOM assertions, or snapshots and no screenshots/contact sheets, or claims visual design approval itself.",
         "failing_assertion_or_artifact": "Validator or tests reject missing artifact-inspection fields and reject runtime-evidence design approval language."
       },
-      "status": "planned"
+      "status": "done"
     },
     {
       "proof_id": "P3",
@@ -343,7 +356,7 @@
         "weaker_implementation": "Final reviewer approves UI closeout by replacing runtime_evidence or design_judge with its own unsupported judgment.",
         "failing_assertion_or_artifact": "Contract readback or validation catches missing runtime/design gate coverage requirement."
       },
-      "status": "planned"
+      "status": "done"
     },
     {
       "proof_id": "P4",
@@ -356,20 +369,20 @@
       "exact_proof": [
         "uv run pytest tests/test_validate_harness.py -q",
         "uv run python scripts/validate_harness.py",
-        "documented design_judge eval/manual-run artifact showing the bad shopping-list UI receives design_judge reject with visible findings",
+        "uv run python scripts/eval_design_judge_fixture.py tests/fixtures/design_judge/bad-shopping-list.json",
         "just quality-fast"
       ],
       "expected_evidence": [
         "Regression fixture includes a shopping-list screenshot/contact-sheet artifact, functional pass evidence, design anchors, and design_judge rejection evidence.",
         "Contract tests reject selector-only pass, score-only approval, and screenshot-without-findings report variants.",
         "Quality-fast passes after docs, prompts, and validation are consistent.",
-        "The design_judge eval/manual-run artifact shows judgment rejection; automated tests prove only contract shape unless model eval is automated."
+        "The executable design_judge fixture command asserts expected reject, screenshot artifact path, functional-pass context, design anchors, and concrete visible findings for oversized rows, detached search/action grouping, weak hierarchy, scaffold-like material, and non-shippable composition."
       ],
       "counterfactual_regression_probe": {
         "weaker_implementation": "A report marks a generic, low-density, visually incoherent shopping-list UI as pass because selectors and console checks pass, or claims judgment proof from schema tests alone.",
-        "failing_assertion_or_artifact": "Contract tests fail weak report shape, and missing design_judge eval/manual-run artifact blocks the judgment claim."
+        "failing_assertion_or_artifact": "Contract tests fail weak report shape, and the executable design_judge fixture command fails when reject verdict, artifact path, anchors, or visible findings are missing."
       },
-      "status": "planned"
+      "status": "done"
     }
   ]
 }
@@ -386,6 +399,7 @@
 | `decision` | Artifact required for UI approval | Closed: inspected screenshot/contact sheet tied to claimed surface/state/viewport/device. | agent |
 | `decision` | Design verdicts and impact | Closed: `design_judge` returns `pass`, `reject`, or `blocked`; only `pass` can support broad UI completion. | agent |
 | `decision` | Regression shape | Closed: bad-but-functional shopping-list UI must reject/block despite passing selectors. | agent |
+| `blocker` | Active adapter callability proof | Repo registration, validation, and prompt contracts are implemented, but this session's live `spawn_agent` schema does not expose `design_judge`; P1 cannot close without fresh prompt-input proof or adapter/runtime exposure. | adapter/runtime |
 
 ### Technical Debt And Deferred Follow-Up
 
@@ -402,9 +416,9 @@
     Runtime evidence remains the live validation guard, not the sole design
     critic.
 - Execution stop rule:
-  - Stop if implementation requires a new spawn-agent role, moves design
-    ownership into platform mechanics, or lets runtime evidence approve broad
-    UI design by score/checklist alone.
+  - Stop if the adapter/runtime cannot expose the new authorized
+    `design_judge` role, moves design ownership into platform mechanics, or
+    lets runtime evidence approve broad UI design by score/checklist alone.
 - Changed authorities or contracts:
   - `runtime-proof`: UI runtime reports must include screenshot-backed artifact
     sufficiency for design handoff, not product-grade design approval.
@@ -427,8 +441,10 @@
   - Final review approval scope: `code-review`.
   - Completion claim assembly: `verification-before-completion`.
 - Public write paths:
-  - Skill docs, adapter agent prompt configs, validation tests, and wave state
-    only.
+  - Skill docs, global/subagent authorization surfaces, role registry, adapter
+    role registry/config, provider routing docs/prompts, role prompt files,
+    validation/tests, executable eval fixture/script, prompt-input proof
+    artifact, and wave state only.
 - Read-repair paths:
   - A failed `design_judge` gate returns concrete visible findings to the
     implementer; repair occurs in the target project, then runtime/design proof

@@ -54,6 +54,10 @@ and diagnostic paths when needed for triage.
 Prefer snapshots over screenshots for state checks. Use screenshots when visual
 review, layout, hierarchy, responsive behavior, or design quality is claimed.
 
+For UI-quality claims, screenshot/contact-sheet artifacts must be sufficient
+for `design_judge` handoff: path, screen/state, viewport, freshness, and claimed
+surface must be inspectable. Browser proof does not approve product UI design.
+
 Write flows need one real mutation plus request/response or follow-up UI proof.
 
 For `runtime-risk-ui`, prove hit testing, expected transition, responsive states

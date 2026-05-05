@@ -16,6 +16,10 @@ saying work is fixed, done, ready, or approved.
 The final claim cannot exceed the binding objective, accepted reductions, fresh
 proof, runtime evidence, and review coverage.
 
+Broad product-facing UI design readiness also requires `design_judge` `pass`
+covering the same screenshots/contact sheets, design anchors, states,
+viewports, and devices as the final claim.
+
 Compare completion to the original objective plus accepted reductions, not to
 the implemented slice, diff summary, reviewer prompt, or handoff wording.
 
@@ -26,6 +30,8 @@ the implemented slice, diff summary, reviewer prompt, or handoff wording.
 - Read `../just-recipe-routing/SKILL.md` when choosing quality or proof
   commands.
 - Read `../code-review/SKILL.md` when review coverage or approval scope matters.
+- Read `../user-apps-design/SKILL.md` when product UI design readiness is part
+  of the claim.
 
 ## Gate
 
@@ -34,8 +40,9 @@ Before completion:
 2. name the exact final claim
 3. run fresh owner-selected proof
 4. include runtime evidence when runtime-visible behavior is claimed
-5. confirm required review covers the same claim
-6. report residual risks or `none`
+5. include `design_judge` `pass` when broad product UI design is claimed
+6. confirm required review covers the same claim
+7. report residual risks or `none`
 
 ## Stop
 
@@ -43,6 +50,8 @@ Stop or narrow the claim when:
 - proof is stale, missing, indirect, or narrower than the claim
 - runtime evidence is required but missing, rejected, blocked, incomplete, or
   mis-scoped
+- broad product UI design readiness is claimed but `design_judge` is missing,
+  rejected, blocked, stale, or narrower than the claim
 - tests, code review, or approval history are offered as substitutes for
   required runtime evidence
 - review rejected or did not cover the binding objective

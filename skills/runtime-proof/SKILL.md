@@ -28,6 +28,10 @@ Runtime evidence is blocking, not advisory. `reject`, `blocked`, incomplete,
 or mis-scoped proof blocks broad completion until fixed and re-proven or
 explicitly narrowed by the user.
 
+For UI-quality claims, runtime evidence proves live behavior and screenshot
+artifact sufficiency for design handoff. Product-grade UI design approval
+requires `design_judge` `pass`.
+
 ## Runtime Claim Map
 
 Every runtime handoff names:
@@ -68,6 +72,11 @@ claim. Artifact minimalism never justifies claim shrinking.
 Report claim boundary, entrypoint fidelity, recipe, actions, artifact paths,
 material logs/traces or `none observed`, verdict, block impact, and
 screenshot-backed checks for UI quality claims.
+
+UI runtime reports name screenshot/contact-sheet paths, screen/state,
+viewport/device, freshness/scope, and whether artifacts are sufficient for
+`design_judge` handoff. Missing, stale, cropped, or claim-mismatched UI
+artifacts return `blocked`.
 
 ## Platform Owners
 

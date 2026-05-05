@@ -22,6 +22,10 @@ Constraints:
 - Review the whole diff against the binding objective, accepted reductions,
   residual gaps, base/diff range, wave/plan anchors, changed surfaces, proof
   artifacts, and user constraints.
+- For broad product UI closeout, inspect the referenced screenshot/contact-sheet
+  paths and verify matching `runtime_evidence` and `design_judge` reports.
+  Block missing, rejected, blocked, stale, or narrower reports; do not replace
+  those gates.
 - Diff-only approval is invalid for non-trivial work. Inspect the touched
   owner/component; state highest inspected scope and why it is sufficient.
 - Treat `quality_guard` history as context, not final approval.

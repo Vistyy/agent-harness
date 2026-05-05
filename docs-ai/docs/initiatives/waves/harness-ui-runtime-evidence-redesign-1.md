@@ -1,6 +1,6 @@
 # Wave harness-ui-runtime-evidence-redesign-1 - UI runtime evidence and design approval redesign
 
-**Status:** discovery-required
+**Status:** execution-ready
 
 ## Problem
 
@@ -29,11 +29,14 @@ In scope:
 - runtime evidence contract for UI-quality claims,
 - relationship between `runtime-proof`, `webapp-testing`/`mobileapp-testing`,
   `user-apps-design`, `code-review`, and final closeout,
-- a dedicated design-critic role with reject authority,
+- a dedicated `design_judge` role with reject authority,
+- pre-selection role registration, authorization, and adapter routing for
+  `design_judge`,
 - screenshot/contact-sheet inspection requirements,
 - hard visual rejection conditions for non-shippable UI,
 - constructive feedback requirements when rejecting or approving with issues,
-- eval or regression fixture where a functional but ugly UI must reject.
+- executable eval or regression fixture where a functional but ugly UI must
+  reject.
 
 Out of scope:
 
@@ -96,7 +99,8 @@ Out of scope:
 - Final closeout for UI redesign must inspect the reviewed screenshots or
   explicitly block.
 - A harness regression/eval must encode at least one bad-but-functional UI case
-  and prove the redesigned gate rejects it.
+  and prove with an executable fixture command that the redesigned gate rejects
+  it.
 
 ## Origin Evidence
 
@@ -118,6 +122,18 @@ before execution-ready promotion. This wave depends on
 `harness-runtime-evidence-live-use-contract-1` for runtime evidence role
 semantics.
 
+Planning critic blocked promotion on missing durable state promotion,
+pre-selection `design_judge` routing/authorization, and non-durable bad-UI
+proof. The draft packet now requires those fixes before execution-ready
+promotion.
+
+- planning_critic: APPROVE after packet repairs for stale dependency state,
+  pre-selection `design_judge` routing/authorization, adapter callability proof,
+  executable bad-UI rejection proof, and boundary write paths.
+- planning quality_guard: APPROVE for execution-ready promotion. Scope, role
+  boundaries, Required Gates, task cards, proof rows, stop conditions, and
+  touched-owner integrity are execution-ready.
+
 ## Packet
 
-- `docs-ai/current-work/harness-ui-runtime-evidence-redesign-1/wave-execution.draft.md`
+- `docs-ai/current-work/harness-ui-runtime-evidence-redesign-1/wave-execution.md`

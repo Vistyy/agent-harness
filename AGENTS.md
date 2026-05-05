@@ -72,7 +72,7 @@ Precedence:
 - The user explicitly authorizes use of the spawn/subagent tool for these
   harness-defined roles when this `AGENTS.md` is in force:
   `explorer`, `check_runner`, `planning_critic`, `implementer`,
-  `quality_guard`, `final_reviewer`, and `runtime_evidence`.
+  `quality_guard`, `final_reviewer`, `runtime_evidence`, and `design_judge`.
 - This is the user-requested explicit subagent authorization for the general
   spawn-agent rule that otherwise requires the user to ask for subagents,
   delegation, or parallel agent work. No additional per-invocation user

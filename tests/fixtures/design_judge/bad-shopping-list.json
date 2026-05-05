@@ -1,0 +1,48 @@
+{
+  "case_id": "bad-shopping-list-selector-passing",
+  "artifact_path": "bad-shopping-list-contact-sheet.svg",
+  "runtime_verdict": "pass",
+  "functional_pass_evidence": [
+    "Selectors found active list title, four product rows, search input, and estimated cost text.",
+    "No console error was observed in the triggering runtime pass."
+  ],
+  "design_anchors": [
+    "Shopping-list UI should be dense enough for repeated grocery planning.",
+    "Primary list, search, and cost comparison should read as one workflow.",
+    "Visual hierarchy should make item state, next action, and total cost scannable.",
+    "Surfaces should look product-specific, not default scaffold output."
+  ],
+  "forbidden_pass_basis": [
+    "selector-only",
+    "score-only",
+    "finding-free"
+  ],
+  "expected_verdict": "reject",
+  "visible_findings": [
+    {
+      "id": "oversized-low-information-rows",
+      "evidence": "Rows consume most of the viewport while showing only name and 1 szt.",
+      "repair_direction": "Use compact list density with quantity controls and status affordances."
+    },
+    {
+      "id": "detached-search-action-grouping",
+      "evidence": "Search and explore controls sit in a separate block below the active list.",
+      "repair_direction": "Integrate product discovery with the active shopping workflow."
+    },
+    {
+      "id": "weak-hierarchy",
+      "evidence": "Headers, list items, quick preview, and open-list action compete without a clear scan path.",
+      "repair_direction": "Establish primary, secondary, and action hierarchy around the list."
+    },
+    {
+      "id": "scaffold-like-material",
+      "evidence": "Large beige slabs and dashed links read as default scaffolding rather than a polished shopping app.",
+      "repair_direction": "Use intentional surfaces, spacing, and affordances tied to the app domain."
+    },
+    {
+      "id": "non-shippable-composition",
+      "evidence": "The cost slab overlaps the list card visually and the page lacks cohesive workflow composition.",
+      "repair_direction": "Recompose the screen so list, search, and cost comparison form a coherent product experience."
+    }
+  ]
+}

@@ -11,13 +11,18 @@ Project overlays own product facts, language policy, app paths, runtime
 topology, delivery timing, and project-specific design contracts.
 
 `runtime-proof` owns runtime verdict terms and completion impact. Browser and
-mobile testing skills own runtime mechanics.
+mobile testing skills own runtime mechanics. `design_judge` owns screenshot-led
+product UI design approval when broad UI completion is claimed.
 
 ## Rule
 
 UI work is complete only when it satisfies the binding objective, project design
 anchors, usability, visual quality, and affected platform constraints.
 Functional correctness alone is not a UI-quality claim.
+
+Broad product-facing UI completion requires inspected screenshot/contact-sheet
+artifacts and `design_judge` `pass`. Selector checks, tests, logs, snapshots,
+and numeric scores are not UI design approval.
 
 Generated mockups or external references may be used as planning inspiration
 for broad redesign, underspecified visual direction, or whole-screen

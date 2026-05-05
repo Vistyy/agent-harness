@@ -4,7 +4,7 @@ The wave brief `**Status:**` is the execution gate.
 
 ## Wave Plan
 
-#### Wave harness-ui-runtime-evidence-redesign-1 - UI runtime evidence and design approval redesign [discovery-required]
+#### Wave harness-ui-runtime-evidence-redesign-1 - UI runtime evidence and design approval redesign [execution-ready]
 
 - `harness/runtime-evidence/ui-design-gate-boundary-contract`
 - `harness/runtime-evidence/screenshot-artifact-sufficiency-gate`
