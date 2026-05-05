@@ -26,20 +26,19 @@ changing UI behavior. Record the missing rule, expected owner doc, and smallest
 source-of-truth update; continue only after confirmation or an explicitly
 narrowed claim that avoids the missing truth.
 
-`PRODUCT.md` is a portable strategic alias. When present, it must name
-register, users, product purpose, voice, anti-references, and accessibility or
-delivery constraints. `DESIGN.md` is a portable visual alias. When present, it
-must name design anchors, colors/tokens, typography, components/patterns,
-states or motion/elevation, and do/don't rules. Project overlays may point
-elsewhere; the harness must not require these files at repo root.
+Portable aliases: `PRODUCT.md` owns register, users, purpose, voice,
+anti-references, and accessibility or delivery constraints. `DESIGN.md` owns
+design anchors, tokens, typography, components/patterns, states or
+motion/elevation, and do/don't rules. Project overlays may point elsewhere;
+the harness must not require these files at repo root.
 
-Project-approved taste wins. Generic AI taste loses when no project truth
-supports it. Do not reject an explicit project identity cue solely because it
-resembles a common anti-pattern; do reject unsupported generic patterns such as
-template card grids, purposeless gradient text, decorative glass effects, or
-one-note AI palettes when they make the surface read as unowned.
+Project-approved taste wins. Generic AI taste loses without project truth.
+Preserve explicit identity cues even when they resemble common anti-patterns;
+reject unsupported template card grids, purposeless gradient text, decorative
+glass effects, one-note AI palettes, and other patterns that make the surface
+read as unowned.
 
-Broad UI quality claims also name an `anti_generic_report`:
+Broad UI quality claims name an `anti_generic_report`:
 
 - `source`: manual checklist, automated detector, combined, or `not-run`
 - `register`: `brand`, `product`, or `mixed`
@@ -50,11 +49,10 @@ Broad UI quality claims also name an `anti_generic_report`:
 
 Minimum checks: unsupported template card grids, nested cards, hero-metric
 layouts, icon tile stacks, purposeless gradient text, decorative glass/glow
-effects, one-note AI palettes, and generic centered-stack composition. Brand
-also checks unsupported default typography, timid palette, and missing imagery
-when imagery is core to the category. Product also checks component
-inconsistency, decorative motion, over-styled standard controls, weak density,
-and unfamiliar affordances without purpose.
+effects, one-note AI palettes, and generic centered stacks. Brand also checks
+unsupported default typography, timid palette, and missing core imagery.
+Product also checks component inconsistency, decorative motion, over-styled
+standard controls, weak density, and unfamiliar affordances without purpose.
 
 `not-run` blocks broad UI design readiness unless the claim is explicitly
 narrowed or the report is not applicable with a named reason. Detector-only
@@ -159,7 +157,6 @@ anchors or `not-applicable`, and screenshot/contact-sheet artifacts. Missing or
 contradictory required context returns `blocked`; an explicitly narrowed claim
 must name which design-context boundary is no longer claimed.
 
-`design_judge` consumes `anti_generic_report` with screenshots. It may treat
-project-approved findings as intentional, reject unsupported generic findings,
-or block missing/invalid reports. Clean detector output alone is not a design
-`pass`.
+`design_judge` consumes `anti_generic_report` with screenshots. It may accept
+project-approved findings, reject unsupported generic findings, or block
+missing/invalid reports. Clean detector output alone is not a design `pass`.

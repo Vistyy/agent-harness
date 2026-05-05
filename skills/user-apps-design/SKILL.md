@@ -30,8 +30,8 @@ composition. They are not pixel contracts or project truth.
 
 ## Design Operations
 
-Use a `design_operation` label to name the work posture in handoffs and
-readbacks. These are not slash commands, prompts, or a second router.
+Use `design_operation` to name posture in handoffs/readbacks. These are not
+slash commands, prompts, or a second router.
 
 - `shape`: define task-specific UI direction before code.
 - `critique`: inspect screenshots/artifacts and name design issues.
@@ -44,7 +44,7 @@ readbacks. These are not slash commands, prompts, or a second router.
 - `clarify`: improve UX copy, labels, errors, empty states, and terminology.
 
 Handoffs/readbacks name `design_operation`, design context source, register,
-design anchors, anti-generic report status, required references, and required
+design anchors, anti-generic report status, required references, and
 runtime/design/review gates or `not-applicable` with reason. Operation labels
 do not skip `runtime_evidence`, `design_judge`, tests, review, owner-skill
 routing, or matched references.
@@ -57,24 +57,18 @@ governance when present.
 
 Read `references/design-quality-rubric.md` before broad UI design, redesign,
 visual polish, hierarchy, composition, density, IA, generated mockup/reference
-anchors, or UI-quality runtime claims.
+anchors, UI-quality runtime claims, `shape`, `critique`, `audit`, `polish`,
+`harden` state quality, or `clarify` empty/error state quality.
 
 Read `references/parity.md` when cross-client parity, staged delivery, or UX
 divergence matters.
 
-Read `references/text-constraints.md` when copy, labels, truncation, or text
-fit matters.
+Read `references/text-constraints.md` when copy, labels, truncation, text fit,
+`harden` text/overflow/i18n/validation/long-data work, or `clarify`
+copy/label/terminology/validation-text work matters.
 
 Read `references/mobile-ui.md` when mobile touch ergonomics, safe areas,
 platform navigation, gestures, accessibility, text scaling, or mobile
 performance constraints matter.
-
-Read `references/design-quality-rubric.md` for `shape`, `critique`, `audit`,
-and `polish`, and for `harden` state quality or `clarify` empty/error state
-quality.
-
-Read `references/text-constraints.md` for `harden` text, overflow, i18n,
-validation, or long-data work, and for `clarify` copy, label, terminology, and
-validation-text work.
 
 Do not stop at this file for UI direction work.
