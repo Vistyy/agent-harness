@@ -31,6 +31,8 @@ Owns approval boundaries, review modes, disposition, and review coverage.
 - Touched owner/component is the smallest owner whose contract, state,
   lifecycle, design, workflow, or proof the change touches; expand only to
   required shared authority.
+- Approval is invalid when the highest inspected scope is narrower than that
+  owner. Name why the inspected scope is sufficient, or reject.
 - `not assessed` touched-component integrity is never valid on approval.
 - Accepted debt needs explicit user acceptance plus backlog owner, risk, and
   removal condition.

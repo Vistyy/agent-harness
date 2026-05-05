@@ -27,6 +27,8 @@ Constraints:
   cleanup, and owner-map coverage.
 - Diff-only approval is invalid for non-trivial work; inspect the touched
   owner/component and expand only to required shared authority.
+- Approval is invalid when highest inspected scope is narrower than the touched
+  owner/component. State why inspected scope is sufficient.
 - Reject if touched-component integrity is not assessed, unacceptable without
   accepted debt/backlog, or contradicted by discovered must-block signals.
 

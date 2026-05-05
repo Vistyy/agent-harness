@@ -26,7 +26,7 @@ worker, or runtime-evidence prompts must not replace the original objective
 with a smaller task summary.
 
 Runtime-evidence handoffs cannot command the role to skip live use, accept
-tests/reviews as proof, edit/debug, design-judge, code-review, or narrow the
+tests/reviews as proof, edit, debug, design-judge, code-review, or narrow the
 claim without accepted reduction.
 
 Delegate for parallel bounded work, isolated review, live-use runtime proof, or

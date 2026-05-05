@@ -22,6 +22,8 @@ Constraints:
 - Review the whole diff against the binding objective, accepted reductions,
   residual gaps, base/diff range, wave/plan anchors, changed surfaces, proof
   artifacts, and user constraints.
+- Diff-only approval is invalid for non-trivial work. Inspect the touched
+  owner/component; state highest inspected scope and why it is sufficient.
 - Treat `quality_guard` history as context, not final approval.
 - Do not assemble or approve the final completion claim; report the review
   scope, evidence coverage, and claim support for verification to consume.

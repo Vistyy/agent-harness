@@ -56,11 +56,14 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
                 "# touched-component integrity gate\n"
                 "# binding objective\n# accepted reductions\n# final approval\n"
                 "# Do not claim final approval.\n"
+                "# Diff-only approval is invalid\n"
+                "# why inspected scope is sufficient\n"
             )
             copilot_body = (
                 f"---\nname: {role}\n---\n\n"
                 "Touched-component integrity gate. binding objective accepted reductions final approval. "
-                "Do not claim final approval.\n"
+                "Do not claim final approval. Diff-only approval is invalid. "
+                "why inspected scope is sufficient.\n"
             )
         elif role == "explorer":
             codex_body = (
@@ -642,7 +645,7 @@ def test_validate_rejects_runtime_evidence_without_live_use_terms(tmp_path: Path
     ) in errors
     assert (
         "adapters/codex/agents/runtime-evidence.toml missing runtime evidence adapter term "
-        "'passing tests, code review, or approval history'"
+        "'accept tests/reviews as proof'"
     ) in errors
 
 
@@ -654,7 +657,7 @@ def test_validate_rejects_runtime_evidence_without_non_override_boundary(tmp_pat
         name = "runtime_evidence"
         app, service, API, or operator path
         binding objective accepted reductions mis-scoped entrypoint fidelity
-        reject blocked blocking passing tests, code review, or approval history
+        reject blocked blocking accept tests/reviews as proof
         not overall code quality product-grade design approval
         Do not take over shared or ambiguous runtime coordination
         """,
@@ -805,6 +808,39 @@ def test_validate_rejects_review_role_contract_drift(tmp_path: Path) -> None:
     errors = validate_harness.validate(tmp_path)
 
     assert "adapters/codex/agents/quality-guard.toml missing quality_guard final-approval negation" in errors
+    assert (
+        "adapters/codex/agents/quality-guard.toml missing review role contract term "
+        "'Diff-only approval is invalid'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/quality-guard.toml missing review role contract term "
+        "'why inspected scope is sufficient'"
+    ) in errors
+
+
+def test_validate_rejects_final_reviewer_scope_contract_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "final-reviewer.toml",
+        (
+            'name = "final_reviewer"\n'
+            "# binding objective\n"
+            "# accepted reductions\n"
+            "# Do not perform planning-gate review\n"
+            "# final_reviewer is not final approval\n"
+        ),
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/final-reviewer.toml missing review role contract term "
+        "'Diff-only approval is invalid'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/final-reviewer.toml missing review role contract term "
+        "'why it is sufficient'"
+    ) in errors
 
 
 def test_validate_rejects_role_boundary_contract_drift(tmp_path: Path) -> None:

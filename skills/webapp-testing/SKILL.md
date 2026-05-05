@@ -7,9 +7,9 @@ description: "Use for browser runtime proof mechanics: Playwright vehicles, brow
 
 Owns browser proof mechanics for browser-visible behavior.
 
-Use `runtime_evidence` when a browser-visible claim needs live app use beyond
-tests or code review. Use `check_runner` for targeted automated checks,
-log/trace sweeps, and large output triage.
+Runtime verdicts route to `../runtime-proof/SKILL.md` and `runtime_evidence`.
+Use `check_runner` for targeted automated checks, log/trace sweeps, and large
+output triage.
 
 Does not own runtime verdicts, completion triggers, or product design anchors.
 Use `../runtime-proof/SKILL.md` for claim maps, entrypoint fidelity, blocking
