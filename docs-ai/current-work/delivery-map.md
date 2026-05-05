@@ -6,6 +6,7 @@ The wave brief `**Status:**` is the execution gate.
 
 None.
 
+
 ## Current Evidence
 
 - `docs-ai/current-work/harness-runtime-proof-design-refactor.md`

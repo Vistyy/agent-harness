@@ -841,6 +841,72 @@ def test_validate_rejects_final_reviewer_scope_contract_drift(tmp_path: Path) ->
         "adapters/codex/agents/final-reviewer.toml missing review role contract term "
         "'why it is sufficient'"
     ) in errors
+    assert (
+        "adapters/codex/agents/final-reviewer.toml missing review role contract term "
+        "'required preservation anchors'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/final-reviewer.toml missing review role contract term "
+        "'preservation anchors'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/final-reviewer.toml missing review role contract term "
+        "'block missing, stale, blocked, rejected, or narrower'"
+    ) in errors
+
+
+def test_validate_rejects_copilot_final_reviewer_preservation_anchor_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "github-copilot" / "agents" / "final_reviewer.agent.md",
+        """
+        ---
+        name: final_reviewer
+        ---
+
+        binding objective. accepted reductions. Diff-only approval is invalid.
+        why it is sufficient. Do not perform planning-gate review. not final approval.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
+        "'required preservation anchors'"
+    ) in errors
+    assert (
+        "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
+        "'preservation anchors'"
+    ) in errors
+    assert (
+        "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
+        "'block missing, stale, blocked, rejected, or narrower'"
+    ) in errors
+
+
+def test_validate_rejects_missing_review_governance_preservation_anchor_coverage(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "code-review" / "references" / "review-governance.md",
+        """
+        # Review Governance
+
+        Reject UI readiness closeout when runtime evidence or `design_judge` is
+        missing, rejected, blocked, stale, or narrower than the final claim.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/code-review/references/review-governance.md missing review governance "
+        "contract term 'required preservation anchors'"
+    ) in errors
+    assert (
+        "skills/code-review/references/review-governance.md missing review governance "
+        "contract term 'missing, stale, blocked, rejected, or narrower'"
+    ) in errors
 
 
 def test_validate_rejects_role_boundary_contract_drift(tmp_path: Path) -> None:
@@ -875,6 +941,48 @@ def test_validate_rejects_design_judge_contract_drift(tmp_path: Path) -> None:
     assert (
         "adapters/codex/agents/design-judge.toml missing role boundary contract term "
         "'not live behavior or code quality'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
+        "'project-defined visual language or product-defining UI pattern'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
+        "'Missing anchors are `blocked`'"
+    ) in errors
+
+
+def test_validate_rejects_copilot_design_judge_preservation_anchor_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_roles(tmp_path, ("explorer", "quality_guard", "design_judge"))
+    write(
+        tmp_path / "adapters" / "github-copilot" / "agents" / "design_judge.agent.md",
+        """
+        ---
+        name: design_judge
+        ---
+
+        screenshot/contact-sheet. binding objective. accepted reductions.
+        design anchors. selector-only. score-only. finding-free.
+        generic scaffold. pass. reject. blocked.
+        Do not perform `runtime_evidence`, `quality_guard`, `final_reviewer`.
+        not live behavior or code quality.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
+        "'project-defined visual language or product-defining UI pattern'"
+    ) in errors
+    assert (
+        "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
+        "'preservation anchors'"
+    ) in errors
+    assert (
+        "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
+        "'Missing anchors are `blocked`'"
     ) in errors
 
 

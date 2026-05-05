@@ -144,6 +144,9 @@ REVIEW_ROLE_CONTRACTS = {
         "why it is sufficient",
         "Do not perform planning-gate review",
         "not final approval",
+        "required preservation anchors",
+        "preservation anchors",
+        "block missing, stale, blocked, rejected, or narrower",
     ),
     "adapters/github-copilot/agents/final_reviewer.agent.md": (
         "binding objective",
@@ -152,8 +155,16 @@ REVIEW_ROLE_CONTRACTS = {
         "why it is sufficient",
         "Do not perform planning-gate review",
         "not final approval",
+        "required preservation anchors",
+        "preservation anchors",
+        "block missing, stale, blocked, rejected, or narrower",
     ),
 }
+REVIEW_GOVERNANCE_REQUIRED_TERMS = (
+    "required preservation anchors",
+    "missing, stale, blocked, rejected, or narrower",
+    "does not decide the design verdict",
+)
 # Exact adapter-role terms protect one concrete counterexample each: reviewers
 # claiming another role's authority, support roles editing, implementers
 # executing without approved state, or runtime evidence reviewing code quality.
@@ -202,6 +213,11 @@ ROLE_BOUNDARY_CONTRACTS = {
         "binding objective",
         "accepted reductions",
         "design anchors",
+        "project-defined visual language or product-defining UI pattern",
+        "preservation anchors",
+        "Missing anchors are `blocked`",
+        "visibly generic replacement",
+        "approved identity cues",
         "selector-only",
         "score-only",
         "finding-free",
@@ -217,6 +233,11 @@ ROLE_BOUNDARY_CONTRACTS = {
         "binding objective",
         "accepted reductions",
         "design anchors",
+        "project-defined visual language or product-defining UI pattern",
+        "preservation anchors",
+        "Missing anchors are `blocked`",
+        "visibly generic replacement",
+        "approved identity cues",
         "selector-only",
         "score-only",
         "finding-free",
@@ -1332,13 +1353,24 @@ def _validate_required_gate_advisory_drift(root: Path) -> list[str]:
 
 def _validate_review_role_contracts(root: Path) -> list[str]:
     errors: list[str] = []
+    review_governance = root / "skills" / "code-review" / "references" / "review-governance.md"
+    if review_governance.is_file():
+        text = review_governance.read_text(encoding="utf-8")
+        normalized_text = " ".join(text.split())
+        for term in REVIEW_GOVERNANCE_REQUIRED_TERMS:
+            if " ".join(term.split()) not in normalized_text:
+                errors.append(
+                    "skills/code-review/references/review-governance.md "
+                    f"missing review governance contract term {term!r}"
+                )
     for relative_path, required_terms in REVIEW_ROLE_CONTRACTS.items():
         path = root / relative_path
         if not path.is_file():
             continue
         text = path.read_text(encoding="utf-8")
+        normalized_text = " ".join(text.split())
         for term in required_terms:
-            if term not in text:
+            if " ".join(term.split()) not in normalized_text:
                 errors.append(f"{relative_path} missing review role contract term {term!r}")
         if "quality-guard" in relative_path or "quality_guard" in relative_path:
             if not QUALITY_GUARD_FINAL_APPROVAL_NEGATION_RE.search(text):

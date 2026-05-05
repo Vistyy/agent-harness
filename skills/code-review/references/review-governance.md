@@ -90,6 +90,10 @@ missing, rejected, blocked, stale, or narrower than the final claim. Reviewers
 verify gate coverage; they do not replace runtime proof or product design
 judgment.
 
+For broad UI closeout, block missing, stale, blocked, rejected, or narrower
+`design_judge` coverage for required preservation anchors. Final review
+verifies coverage; it does not decide the design verdict.
+
 ## Review Coverage For Completion
 
 Review approval is an input to completion, not the completion gate.

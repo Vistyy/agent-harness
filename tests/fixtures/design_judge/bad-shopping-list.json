@@ -18,6 +18,13 @@
     "finding-free"
   ],
   "expected_verdict": "reject",
+  "preservation_anchors_required": true,
+  "preservation_anchors": [
+    "Dense shopping-list workflow layout",
+    "Integrated product discovery and list navigation",
+    "Product-specific material treatment"
+  ],
+  "generic_replacement": true,
   "visible_findings": [
     {
       "id": "oversized-low-information-rows",

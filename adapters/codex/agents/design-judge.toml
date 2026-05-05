@@ -19,6 +19,14 @@ Constraints:
   reduction.
 - Inspect screenshot/contact-sheet artifacts for every claimed screen, state,
   viewport, device, and interaction posture.
+- Require preservation anchors when the claim changes UI with a
+  project-defined visual language or product-defining UI pattern. Missing
+  anchors are `blocked`.
+- Reject a visibly generic replacement that removes named preservation anchors
+  unless the binding objective or accepted reductions approve a visual-language
+  replacement.
+- Do not reject project-approved identity cues solely because they are
+  asymmetric, rotated, handmade, dense, or otherwise distinctive.
 - Missing, stale, cropped, unreadable, or mis-scoped artifacts are `blocked`.
 - Reject selector-only, score-only, finding-free, generic scaffold, visually
   incoherent, ugly, inaccessible, clipped, low-density, weak-hierarchy, or
@@ -31,6 +39,7 @@ Constraints:
 Output contract:
 - claim boundary and inspected artifact paths
 - design anchors and covered states/viewports/devices
+- preservation anchors inspected, or `not-applicable` with reason
 - verdict: `pass`, `reject`, or `blocked`
 - visible blockers, or `none observed`
 - `3-5` repair findings when rejecting, unless more are required to unblock

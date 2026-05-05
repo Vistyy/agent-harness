@@ -12,6 +12,8 @@ density, or UI-quality proof, name:
 - affected surfaces, states, roles, viewports, and devices
 - project design contract, archetype, or explicit missing-design-source blocker
 - `3-7` design anchors for the surface
+- preservation anchors for changed UI with a project-defined visual language or
+  product-defining UI pattern
 - reference/mockup artifact path or URL when used, or `none`
 
 If project design truth is missing or contradictory for the claim, stop before
@@ -21,6 +23,19 @@ narrowed claim that avoids the missing truth.
 
 For broad visual redesign, record the approved archetype or explicit exception
 before product-code implementation.
+
+## Preservation Anchors
+
+Changed UI with a project-defined visual language or product-defining UI
+pattern requires preservation anchors unless replacement is explicit in the
+binding objective. Missing anchors block design judgment.
+
+Reject a cleaner but generic replacement when it removes named preservation
+anchors without an approved visual-language replacement objective.
+
+Do not reject project-approved identity cues solely because they are asymmetric,
+rotated, handmade, dense, or otherwise distinctive. Judge whether they satisfy
+the project anchors, task posture, accessibility, and visible quality bar.
 
 ## Mockup Anchors
 
