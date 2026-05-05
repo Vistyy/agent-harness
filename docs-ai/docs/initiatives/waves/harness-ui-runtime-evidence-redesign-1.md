@@ -1,6 +1,6 @@
 # Wave harness-ui-runtime-evidence-redesign-1 - UI runtime evidence and design approval redesign
 
-**Status:** execution-ready
+**Status:** done
 
 ## Problem
 
@@ -136,4 +136,13 @@ promotion.
 
 ## Packet
 
-- `docs-ai/current-work/harness-ui-runtime-evidence-redesign-1/wave-execution.md`
+- closed after final review on 2026-05-05
+
+## Closeout
+
+- design_judge: `reject` on bad-shopping-list fixture/contact sheet with
+  visible product UI findings and design-only scope.
+- quality_guard: APPROVE for implementation state and honest blocker handling.
+- final_reviewer: APPROVE after live `design_judge` proof resolved P1.
+- proof: focused validator/design tests, executable design_judge fixture,
+  harness validation, and `just quality-fast` passed.
