@@ -10,16 +10,34 @@ density, or UI-quality proof, name:
 
 - binding objective and accepted reductions
 - affected surfaces, states, roles, viewports, and devices
+- design context source: project overlay, durable project doc, `PRODUCT.md`,
+  `DESIGN.md`, or `missing`
+- register: `brand`, `product`, or `mixed`
 - project design contract, archetype, or explicit missing-design-source blocker
 - `3-7` design anchors for the surface
 - preservation anchors for changed UI with a project-defined visual language or
   product-defining UI pattern
+- anti-generic taste posture: project-approved taste and anti-references, plus
+  generic AI tells to avoid unless project truth explicitly approves them
 - reference/mockup artifact path or URL when used, or `none`
 
 If project design truth is missing or contradictory for the claim, stop before
 changing UI behavior. Record the missing rule, expected owner doc, and smallest
 source-of-truth update; continue only after confirmation or an explicitly
 narrowed claim that avoids the missing truth.
+
+`PRODUCT.md` is a portable strategic alias. When present, it must name
+register, users, product purpose, voice, anti-references, and accessibility or
+delivery constraints. `DESIGN.md` is a portable visual alias. When present, it
+must name design anchors, colors/tokens, typography, components/patterns,
+states or motion/elevation, and do/don't rules. Project overlays may point
+elsewhere; the harness must not require these files at repo root.
+
+Project-approved taste wins. Generic AI taste loses when no project truth
+supports it. Do not reject an explicit project identity cue solely because it
+resembles a common anti-pattern; do reject unsupported generic patterns such as
+template card grids, purposeless gradient text, decorative glass effects, or
+one-note AI palettes when they make the surface read as unowned.
 
 For broad visual redesign, record the approved archetype or explicit exception
 before product-code implementation.
@@ -112,3 +130,9 @@ fidelity, and completion impact.
 returns product UI design `pass`, `reject`, or `blocked`. Reject generic,
 scaffold-like, incoherent, inaccessible, ugly, or non-shippable UI even when
 functional assertions pass.
+
+`design_judge` handoffs for broad UI design claims include design context
+source, register, anti-generic taste posture, design anchors, preservation
+anchors or `not-applicable`, and screenshot/contact-sheet artifacts. Missing or
+contradictory required context returns `blocked`; an explicitly narrowed claim
+must name which design-context boundary is no longer claimed.

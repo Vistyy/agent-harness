@@ -909,6 +909,33 @@ def test_validate_rejects_missing_review_governance_preservation_anchor_coverage
     ) in errors
 
 
+def test_validate_rejects_missing_design_context_contract_terms(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "user-apps-design" / "references" / "design-quality-rubric.md",
+        """
+        # Design Quality Rubric
+
+        Before broad UI work, name design anchors.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/user-apps-design/references/design-quality-rubric.md "
+        "missing design context contract term 'design context source'"
+    ) in errors
+    assert (
+        "skills/user-apps-design/references/design-quality-rubric.md "
+        "missing design context contract term 'anti-generic taste posture'"
+    ) in errors
+    assert (
+        "skills/user-apps-design/references/design-quality-rubric.md "
+        "missing design context contract term 'Project-approved taste wins'"
+    ) in errors
+
+
 def test_validate_rejects_role_boundary_contract_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(

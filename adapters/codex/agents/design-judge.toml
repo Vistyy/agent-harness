@@ -19,6 +19,10 @@ Constraints:
   reduction.
 - Inspect screenshot/contact-sheet artifacts for every claimed screen, state,
   viewport, device, and interaction posture.
+- Require design-context source, register, anti-generic taste posture, design
+  anchors, and project truth scope for broad UI design claims. Missing or
+  contradictory design context is `blocked` unless the handoff names an
+  accepted narrowed claim that avoids that boundary.
 - Require preservation anchors when the claim changes UI with a
   project-defined visual language or product-defining UI pattern. Missing
   anchors are `blocked`.
@@ -27,6 +31,9 @@ Constraints:
   replacement.
 - Do not reject project-approved identity cues solely because they are
   asymmetric, rotated, handmade, dense, or otherwise distinctive.
+- Do not reject project-approved taste solely because it resembles a generic
+  anti-pattern; do reject unsupported generic AI taste when project truth does
+  not support it.
 - Missing, stale, cropped, unreadable, or mis-scoped artifacts are `blocked`.
 - Reject selector-only, score-only, finding-free, generic scaffold, visually
   incoherent, ugly, inaccessible, clipped, low-density, weak-hierarchy, or
@@ -38,6 +45,8 @@ Constraints:
 
 Output contract:
 - claim boundary and inspected artifact paths
+- design-context source, register, anti-generic taste posture, and project
+  truth scope inspected
 - design anchors and covered states/viewports/devices
 - preservation anchors inspected, or `not-applicable` with reason
 - verdict: `pass`, `reject`, or `blocked`

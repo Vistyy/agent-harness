@@ -165,6 +165,20 @@ REVIEW_GOVERNANCE_REQUIRED_TERMS = (
     "missing, stale, blocked, rejected, or narrower",
     "does not decide the design verdict",
 )
+DESIGN_CONTEXT_CONTRACT_REQUIRED_TERMS = (
+    "design context source",
+    "register",
+    "brand",
+    "product",
+    "mixed",
+    "anti-generic taste posture",
+    "PRODUCT.md",
+    "DESIGN.md",
+    "missing or contradictory",
+    "explicitly narrowed claim",
+    "Project-approved taste wins",
+    "Generic AI taste loses",
+)
 # Exact adapter-role terms protect one concrete counterexample each: reviewers
 # claiming another role's authority, support roles editing, implementers
 # executing without approved state, or runtime evidence reviewing code quality.
@@ -212,12 +226,20 @@ ROLE_BOUNDARY_CONTRACTS = {
         "screenshot/contact-sheet",
         "binding objective",
         "accepted reductions",
+        "design-context source",
+        "register",
+        "anti-generic taste posture",
+        "project truth scope",
+        "Missing or contradictory design context is `blocked`",
+        "accepted narrowed claim",
         "design anchors",
         "project-defined visual language or product-defining UI pattern",
         "preservation anchors",
         "Missing anchors are `blocked`",
         "visibly generic replacement",
         "approved identity cues",
+        "project-approved taste",
+        "unsupported generic AI taste",
         "selector-only",
         "score-only",
         "finding-free",
@@ -232,12 +254,20 @@ ROLE_BOUNDARY_CONTRACTS = {
         "screenshot/contact-sheet",
         "binding objective",
         "accepted reductions",
+        "design-context source",
+        "register",
+        "anti-generic taste posture",
+        "project truth scope",
+        "Missing or contradictory design context is `blocked`",
+        "accepted narrowed claim",
         "design anchors",
         "project-defined visual language or product-defining UI pattern",
         "preservation anchors",
         "Missing anchors are `blocked`",
         "visibly generic replacement",
         "approved identity cues",
+        "project-approved taste",
+        "unsupported generic AI taste",
         "selector-only",
         "score-only",
         "finding-free",
@@ -1378,6 +1408,20 @@ def _validate_review_role_contracts(root: Path) -> list[str]:
     return errors
 
 
+def _validate_design_context_contract(root: Path) -> list[str]:
+    errors: list[str] = []
+    relative_path = "skills/user-apps-design/references/design-quality-rubric.md"
+    path = root / relative_path
+    if not path.is_file():
+        return errors
+    text = path.read_text(encoding="utf-8")
+    normalized_text = " ".join(text.split())
+    for term in DESIGN_CONTEXT_CONTRACT_REQUIRED_TERMS:
+        if " ".join(term.split()) not in normalized_text:
+            errors.append(f"{relative_path} missing design context contract term {term!r}")
+    return errors
+
+
 def _validate_role_boundary_contracts(root: Path) -> list[str]:
     errors: list[str] = []
     for relative_path, required_terms in ROLE_BOUNDARY_CONTRACTS.items():
@@ -1426,6 +1470,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_live_validation_contracts(root))
     errors.extend(_validate_provider_prompt_contracts(root))
     errors.extend(_validate_required_gate_advisory_drift(root))
+    errors.extend(_validate_design_context_contract(root))
     errors.extend(_validate_review_role_contracts(root))
     errors.extend(_validate_role_boundary_contracts(root))
 
