@@ -194,6 +194,25 @@ DESIGN_ANTIPATTERN_CONTRACT_REQUIRED_TERMS = (
     "Detector-only pass is invalid",
     "Clean detector output alone is not a design",
 )
+DESIGN_OPERATION_CONTRACT_REQUIRED_TERMS = (
+    "design_operation",
+    "shape",
+    "critique",
+    "audit",
+    "polish",
+    "harden",
+    "clarify",
+    "not slash commands",
+    "second router",
+    "Handoffs/readbacks",
+    "anti-generic report status",
+    "runtime/design/review gates",
+    "Operation labels do not skip",
+    "runtime_evidence",
+    "design_judge",
+    "references/design-quality-rubric.md",
+    "references/text-constraints.md",
+)
 # Exact adapter-role terms protect one concrete counterexample each: reviewers
 # claiming another role's authority, support roles editing, implementers
 # executing without approved state, or runtime evidence reviewing code quality.
@@ -1448,6 +1467,25 @@ def _validate_design_context_contract(root: Path) -> list[str]:
     return errors
 
 
+def _validate_design_operation_contract(root: Path) -> list[str]:
+    errors: list[str] = []
+    relative_path = "skills/user-apps-design/SKILL.md"
+    path = root / relative_path
+    if not path.is_file():
+        return errors
+    text = path.read_text(encoding="utf-8")
+    normalized_text = " ".join(text.split())
+    for term in DESIGN_OPERATION_CONTRACT_REQUIRED_TERMS:
+        if " ".join(term.split()) not in normalized_text:
+            errors.append(f"{relative_path} missing design operation contract term {term!r}")
+    metadata_path = root / "skills/user-apps-design/agents/openai.yaml"
+    if metadata_path.is_file():
+        metadata = metadata_path.read_text(encoding="utf-8")
+        if "design_operation" not in metadata:
+            errors.append("skills/user-apps-design/agents/openai.yaml missing design_operation metadata term")
+    return errors
+
+
 def _validate_role_boundary_contracts(root: Path) -> list[str]:
     errors: list[str] = []
     for relative_path, required_terms in ROLE_BOUNDARY_CONTRACTS.items():
@@ -1497,6 +1535,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_provider_prompt_contracts(root))
     errors.extend(_validate_required_gate_advisory_drift(root))
     errors.extend(_validate_design_context_contract(root))
+    errors.extend(_validate_design_operation_contract(root))
     errors.extend(_validate_review_role_contracts(root))
     errors.extend(_validate_role_boundary_contracts(root))
 

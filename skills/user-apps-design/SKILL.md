@@ -28,6 +28,27 @@ Generated mockups or external references may be used as planning inspiration
 for broad redesign, underspecified visual direction, or whole-screen
 composition. They are not pixel contracts or project truth.
 
+## Design Operations
+
+Use a `design_operation` label to name the work posture in handoffs and
+readbacks. These are not slash commands, prompts, or a second router.
+
+- `shape`: define task-specific UI direction before code.
+- `critique`: inspect screenshots/artifacts and name design issues.
+- `audit`: check measurable UI quality, responsive behavior, accessibility,
+  performance risk, and anti-generic report coverage.
+- `polish`: refine alignment, hierarchy, rhythm, component fit, and details
+  after function is complete.
+- `harden`: cover loading, empty, error, disabled, overflow, i18n, long data,
+  and recovery states.
+- `clarify`: improve UX copy, labels, errors, empty states, and terminology.
+
+Handoffs/readbacks name `design_operation`, design context source, register,
+design anchors, anti-generic report status, required references, and required
+runtime/design/review gates or `not-applicable` with reason. Operation labels
+do not skip `runtime_evidence`, `design_judge`, tests, review, owner-skill
+routing, or matched references.
+
 ## Required References
 
 Read project overlay docs first for surface discovery, product language,
@@ -47,5 +68,13 @@ fit matters.
 Read `references/mobile-ui.md` when mobile touch ergonomics, safe areas,
 platform navigation, gestures, accessibility, text scaling, or mobile
 performance constraints matter.
+
+Read `references/design-quality-rubric.md` for `shape`, `critique`, `audit`,
+and `polish`, and for `harden` state quality or `clarify` empty/error state
+quality.
+
+Read `references/text-constraints.md` for `harden` text, overflow, i18n,
+validation, or long-data work, and for `clarify` copy, label, terminology, and
+validation-text work.
 
 Do not stop at this file for UI direction work.

@@ -962,6 +962,64 @@ def test_validate_rejects_missing_design_antipattern_contract_terms(tmp_path: Pa
     ) in errors
 
 
+def test_validate_rejects_missing_design_operation_contract_terms(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_skill(tmp_path, "user-apps-design")
+    write(
+        tmp_path / "skills" / "user-apps-design" / "SKILL.md",
+        """
+        ---
+        name: user-apps-design
+        description: Test user apps design.
+        ---
+
+        # User Apps Design
+
+        UI design work.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "skills/user-apps-design/SKILL.md missing design operation contract term 'design_operation'" in errors
+    assert "skills/user-apps-design/SKILL.md missing design operation contract term 'clarify'" in errors
+    assert "skills/user-apps-design/SKILL.md missing design operation contract term 'Operation labels do not skip'" in errors
+
+
+def test_validate_rejects_missing_design_operation_metadata_term(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "user-apps-design" / "SKILL.md",
+        """
+        ---
+        name: user-apps-design
+        description: Test user apps design.
+        ---
+
+        # User Apps Design
+
+        design_operation shape critique audit polish harden clarify not slash
+        commands second router Handoffs/readbacks anti-generic report status
+        runtime/design/review gates Operation labels do not skip
+        runtime_evidence design_judge references/design-quality-rubric.md
+        references/text-constraints.md
+        """,
+    )
+    write(
+        tmp_path / "skills" / "user-apps-design" / "agents" / "openai.yaml",
+        """
+        interface:
+          display_name: "User Apps Design"
+          short_description: "Valid helper text"
+          default_prompt: "Use $user-apps-design for UI work."
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "skills/user-apps-design/agents/openai.yaml missing design_operation metadata term" in errors
+
+
 def test_validate_rejects_role_boundary_contract_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
