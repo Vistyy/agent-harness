@@ -2,6 +2,10 @@
 
 **Status:** done
 
+Superseded by later UI workflow compaction: `runtime_evidence` is no longer a
+default broad UI design-readiness gate. Current visual approval is
+screenshot/contact-sheet based and owned by `design_judge`.
+
 ## Problem
 
 The current UI runtime evidence flow can pass a visibly poor product UI when
@@ -26,7 +30,7 @@ design judgment with constructive findings and an explicit ship-quality verdict.
 
 In scope:
 
-- runtime evidence contract for UI-quality claims,
+- runtime evidence contract for broad visual claims,
 - relationship between `runtime-proof`, `webapp-testing`/`mobileapp-testing`,
   `user-apps-design`, `code-review`, and final closeout,
 - a dedicated `design_judge` role with reject authority,
@@ -42,7 +46,7 @@ Out of scope:
 
 - project-specific redesign implementation,
 - replacing product design ownership with generic harness taste,
-- backend/runtime correctness proof unrelated to UI quality.
+- backend/runtime correctness proof unrelated to visual approval.
 
 ## Candidate Task Cards
 
@@ -67,21 +71,17 @@ Out of scope:
 - closed: A UI-design pass requires inspected screenshot/contact-sheet
   artifacts for the claimed surface, state, viewport/device, and interaction
   posture. DOM assertions, snapshots, logs, or selector checks are insufficient.
-- closed: Hard blockers include generic scaffold output, incoherent
-  composition, unusable density, weak hierarchy, unreadable or clipped text,
-  inaccessible contrast or target sizing, missing reachable states, and visible
-  mismatch with project design anchors.
+- superseded: hard visual blockers are now owned by the current
+  `design_judge` prompt and project design source, not this historical wave.
 - closed: Final review must name the screenshot/contact-sheet paths it
   inspected and cite any visible blockers or explicitly state `none observed`;
   missing inspection blocks UI closeout.
 - closed: Runtime and design reports stay bounded by requiring artifact paths,
   verdict, blockers, and at most `3-5` concrete repair findings unless the
   gate rejects and more detail is necessary to unblock repair.
-- closed: The regression fixture is a bad-but-functional shopping-list UI
-  report/contact-sheet case with passing selectors, screenshot artifact path,
-  required visible findings, and unacceptable composition/density/hierarchy.
-  The new gate must reject selector-only, score-only, and finding-free
-  screenshot approval.
+- superseded: later compaction removed the static bad-UI fixture and score-like
+  proof language. Current `design_judge` approval is screenshot/contact-sheet
+  based and scoped by project design source.
 
 ## Minimum Acceptance Bar
 
@@ -89,18 +89,17 @@ Out of scope:
   sheet artifact sufficiency for `design_judge` handoff.
 - Broad UI completion must require `design_judge` `pass`; `quality_guard` and
   `final_reviewer` may only verify gate coverage, not replace it.
-- Functional assertions, selector checks, absence of console errors, and DOM
-  order cannot by themselves satisfy a UI-quality claim.
-- Runtime evidence must block missing, stale, mis-scoped, or unusable
-  screenshot/contact-sheet artifacts for UI-quality claims.
+- Functional assertions, absence of console errors, and DOM order cannot by
+  themselves satisfy broad visual approval.
+- Runtime evidence is not the default visual approval gate; screenshot capture
+  mechanics feed `design_judge` when broad visual approval is claimed.
 - `design_judge` must reject when artifacts show generic, visually incoherent,
   scaffold-like, ugly, or non-shippable UI, and include concrete visible
   findings with enough direction for repair.
 - Final closeout for UI redesign must inspect the reviewed screenshots or
   explicitly block.
-- A harness regression/eval must encode at least one bad-but-functional UI case
-  and prove with an executable fixture command that the redesigned gate rejects
-  it.
+- Superseded: the static regression/eval requirement was removed as low-value
+  schema proof.
 
 ## Origin Evidence
 
@@ -140,9 +139,9 @@ promotion.
 
 ## Closeout
 
-- design_judge: `reject` on bad-shopping-list fixture/contact sheet with
-  visible product UI findings and design-only scope.
+- superseded: static bad-UI fixture proof was later removed as low-value
+  schema proof that did not exercise `design_judge`.
 - quality_guard: APPROVE for implementation state and honest blocker handling.
 - final_reviewer: APPROVE after live `design_judge` proof resolved P1.
-- proof: focused validator/design tests, executable design_judge fixture,
-  harness validation, and `just quality-fast` passed.
+- proof: focused validator/design tests, harness validation, and
+  `just quality-fast` passed.

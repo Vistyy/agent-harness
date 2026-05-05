@@ -47,8 +47,8 @@ Role boundaries:
   implement
 - `runtime_evidence` uses the app/service beyond tests and reviews to prove
   handed-off live behavior under `runtime-proof` verdict policy
-- `design_judge` inspects screenshots/contact sheets against design anchors and
-  returns product UI design `pass`, `reject`, or `blocked`
+- `design_judge` inspects screenshots/contact sheets against the binding
+  objective, project design source, and applicable project-local artifacts
 - `implementer` executes only an approved wave task card
 
 ## Handoff Contract

@@ -23,7 +23,7 @@ alone, or an unlaunched build artifact.
 ## Preflight
 
 Add mobile-specific claim-map inputs: exact flow, platform, device/emulator,
-role, data, state set, design anchors when UI quality is claimed, material
+role, data, state set, UI behavior risks when claimed, material
 permission/OS/lifecycle posture, telemetry/trace IDs or `none`, and unproved
 mobile/runtime boundaries or `none`.
 
@@ -44,14 +44,14 @@ blocked or narrow the claim.
 Capture only evidence the verdict relies on: selected device/emulator posture,
 flow, reviewed widget tree/logs/screenshots/adb artifacts, and device-captured
 visual artifacts for layout, safe-area, keyboard, permission, touch-target, or
-UI quality claims.
+claimed UI behavior.
 
 Widget-tree presence alone is not layout or interaction proof.
 
-For UI-quality claims, screenshot/contact-sheet artifacts must be sufficient
-for `design_judge` handoff: path, screen/state, device/viewport, freshness, and
-claimed surface must be inspectable. Mobile proof does not approve product UI
-design.
+For broad UI design claims, mobile mechanics may capture screenshot/contact
+sheets for `design_judge` handoff: path, screen/state, device/viewport,
+freshness, and claimed surface must be inspectable. Mobile proof does not
+approve product UI design.
 
 For `runtime-risk-ui`, prove both composed hit-testable surface and live
 emulator/device behavior in the same execution window.

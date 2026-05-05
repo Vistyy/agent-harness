@@ -2,6 +2,10 @@
 
 **Status:** done
 
+Superseded by later UI workflow compaction: global report contracts were
+removed. Current reusable visual approval ownership lives in
+`skills/user-apps-design/SKILL.md` and `design_judge`.
+
 ## Objective Boundary
 
 - original objective: continue the Impeccable-derived design workflow
@@ -12,21 +16,22 @@
 
 ## Scope
 
-- in scope: register-aware anti-generic report semantics in `user-apps-design`,
+- superseded scope: register-aware report semantics in `user-apps-design`,
   design-judge/runtime-evidence consumption rules, and focused fixture proof.
 - out of scope: browser extension, HMR live variants, full deterministic
   detector implementation, and project-specific style bans.
 
 ## Closed Decisions
 
-- `user-apps-design` owns the anti-generic report contract.
+- superseded: `user-apps-design` owned a report contract that was later
+  removed.
 - The report is evidence, not approval; `design_judge` still owns UI design
   verdicts and `runtime_evidence` still owns live behavior/artifact
   sufficiency.
 - Register matters: product UI may use familiar/system patterns when project
   truth supports them; brand UI has a stronger distinctiveness bar.
 - Detector findings are inputs. Project-approved taste can override them;
-  unsupported generic patterns can block/reject broad UI quality.
+  unsupported generic patterns can block/reject broad visual approval.
 
 ## Planning Gate
 

@@ -25,9 +25,10 @@ Constraints:
 - For implementation, review against the active plan, binding objective,
   accepted reductions, residual gaps, proof, simplicity, architecture fit,
   cleanup, and owner-map coverage.
-- For broad product UI work, verify required `runtime_evidence` and
-  `design_judge` reports exist, are fresh, and cover the claim. Do not replace
-  those gates.
+- For broad product UI work, verify required screenshots/contact sheets and
+  `design_judge` reports exist, are fresh, and cover the claim. Verify
+  `runtime_evidence` only when the claim includes non-trivial runtime-visible
+  behavior that needs it. Do not replace those gates.
 - Diff-only approval is invalid for non-trivial work; inspect the touched
   owner/component and expand only to required shared authority.
 - Approval is invalid when highest inspected scope is narrower than the touched

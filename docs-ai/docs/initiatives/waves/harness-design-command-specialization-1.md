@@ -2,6 +2,10 @@
 
 **Status:** done
 
+Superseded by later UI workflow compaction: operation labels were removed from
+the current reusable UI contract. Current visual approval ownership lives in
+`skills/user-apps-design/SKILL.md` and `design_judge`.
+
 ## Objective Boundary
 
 - original objective: finish the Impeccable-derived backlog by adding a small
@@ -53,8 +57,8 @@
 
 ## Closeout
 
-- added the internal `design_operation` labels `shape`, `critique`, `audit`,
-  `polish`, `harden`, and `clarify` to `user-apps-design`.
+- superseded: added internal operation labels that were later removed from
+  `user-apps-design`.
 - added adapter-neutral handoff/readback guidance and OpenAI metadata so agents
   name the operation without creating commands or another router.
 - added harness validation and focused tests for operation terms, metadata, and

@@ -1,74 +1,67 @@
 ---
 name: user-apps-design
-description: "Use for end-user web/mobile UI design work: IA, composition, hierarchy, density, parity, copy fit, design anchors, visual quality, optional mockup inspiration, and mobile UI constraints."
+description: "Use for product-facing UI work that needs project design context, rendered artifacts, or screenshot-led visual approval."
 ---
 
 # User Apps Design
 
-Owns product-facing UI design quality for web and mobile apps.
+Owns the reusable UI completion contract. Projects own design taste and method.
 
-Project overlays own product facts, language policy, app paths, runtime
-topology, delivery timing, and project-specific design contracts.
+## Contract
 
-`runtime-proof` owns runtime verdict terms and completion impact. Browser and
-mobile testing skills own runtime mechanics. `design_judge` owns screenshot-led
-product UI design approval when broad UI completion is claimed.
+Broad product UI is not complete from code, tests, selectors, logs, detectors,
+runtime evidence, or review alone.
 
-## Rule
+It needs:
 
-UI work is complete only when it satisfies the binding objective, project design
-anchors, usability, visual quality, and affected platform constraints.
-Functional correctness alone is not a UI-quality claim.
+- project design source, or a narrowed claim that does not assert project
+  visual quality;
+- rendered screenshot/contact-sheet artifacts for claimed screens, states,
+  viewports, and devices;
+- `design_judge` `pass` for the same claim.
 
-Broad product-facing UI completion requires inspected screenshot/contact-sheet
-artifacts and `design_judge` `pass`. Selector checks, tests, logs, snapshots,
-and numeric scores are not UI design approval.
+If the project design source or declared local design workflow is missing or
+contradictory, stop or narrow the claim. Do not invent visual direction in the
+global harness.
 
-Generated mockups or external references may be used as planning inspiration
-for broad redesign, underspecified visual direction, or whole-screen
-composition. They are not pixel contracts or project truth.
+## Approval
 
-## Design Operations
+Handoffs for broad UI approval name:
 
-Use `design_operation` to name posture in handoffs/readbacks. These are not
-slash commands, prompts, or a second router.
+- binding objective and accepted reductions;
+- affected screens, states, viewports, and devices;
+- project design source, or `missing`;
+- project-local artifacts required by that source, or `none`;
+- screenshot/contact-sheet artifact paths.
 
-- `shape`: define task-specific UI direction before code.
-- `critique`: inspect screenshots/artifacts and name design issues.
-- `audit`: check measurable UI quality, responsive behavior, accessibility,
-  performance risk, and anti-generic report coverage.
-- `polish`: refine alignment, hierarchy, rhythm, component fit, and details
-  after function is complete.
-- `harden`: cover loading, empty, error, disabled, overflow, i18n, long data,
-  and recovery states.
-- `clarify`: improve UX copy, labels, errors, empty states, and terminology.
+Missing project design source blocks broad visual-quality approval unless the
+claim is explicitly narrowed.
 
-Handoffs/readbacks name `design_operation`, design context source, register,
-design anchors, anti-generic report status, required references, and
-runtime/design/review gates or `not-applicable` with reason. Operation labels
-do not skip `runtime_evidence`, `design_judge`, tests, review, owner-skill
-routing, or matched references.
+`design_judge` compares rendered artifacts against the binding objective,
+project design source, and required project-local artifacts. Reject when the
+rendered UI is not inspectable, visibly broken, generic against the project
+target, materially weaker than an approved target, inaccessible, clipped,
+incoherent, or non-shippable.
 
-## Required References
+Runtime evidence, tests, selectors, detector output, numeric scores, code
+review, and final review do not approve visual quality. `design_judge` returns
+`pass`, `reject`, or `blocked` for visual quality only; it does not decide live
+behavior or code quality.
 
-Read project overlay docs first for surface discovery, product language,
-delivery timing, design contracts, design archetypes, and design-fidelity
-governance when present.
+## Boundary
 
-Read `references/design-quality-rubric.md` before broad UI design, redesign,
-visual polish, hierarchy, composition, density, IA, generated mockup/reference
-anchors, UI-quality runtime claims, `shape`, `critique`, `audit`, `polish`,
-`harden` state quality, or `clarify` empty/error state quality.
+A project design source is any current, project-owned, or user-approved source
+that defines visual intent for the claim. It can be a local doc, design-system
+contract, mockup, screenshot, reference, workflow artifact, or direct user
+decision.
 
-Read `references/parity.md` when cross-client parity, staged delivery, or UX
-divergence matters.
+The global harness does not prescribe that source's format, tool, artifact
+names, or design method. It only checks that the declared source was followed
+for the claim.
 
-Read `references/text-constraints.md` when copy, labels, truncation, text fit,
-`harden` text/overflow/i18n/validation/long-data work, or `clarify`
-copy/label/terminology/validation-text work matters.
+## References
 
-Read `references/mobile-ui.md` when mobile touch ergonomics, safe areas,
-platform navigation, gestures, accessibility, text scaling, or mobile
-performance constraints matter.
-
-Do not stop at this file for UI direction work.
+Read project overlay docs first.
+Read `references/parity.md` when cross-client parity, staged delivery, or UX divergence is part of the claim.
+Read `references/text-constraints.md` when copy, truncation, overflow, i18n, validation text, or UX copy is part of the claim.
+Read `references/mobile-ui.md` when mobile touch ergonomics, safe areas, platform navigation, gestures, accessibility, text scaling, or mobile performance is part of the claim.

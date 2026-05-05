@@ -20,7 +20,7 @@ There is no active execution plan in this file.
   (`microsoft/playwright-cli`, `@playwright/cli`) and kept generic adapter
   browser tooling as diagnostics unless it explicitly exposes that channel.
 - Tightened mobile proof around deterministic device targeting, Dart MCP first,
-  serial-scoped adb, and screenshot/device artifacts for mobile UI quality
+  serial-scoped adb, and screenshot/device artifacts for mobile visual
   claims.
 - Updated adapter prompts and Codex adapter role descriptions so
   `runtime_evidence` returns `pass | reject | blocked` with claim boundary and

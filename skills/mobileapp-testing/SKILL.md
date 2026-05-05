@@ -7,8 +7,9 @@ description: "Use for mobile runtime proof mechanics: emulator/device execution,
 
 Owns live mobile runtime proof mechanics with deterministic device evidence.
 
-Runtime verdicts route to `../runtime-proof/SKILL.md` and `runtime_evidence`.
-Use Dart MCP first. Use adb only for install, launch, screenshot, recovery, or
+Runtime verdicts route to `../runtime-proof/SKILL.md`. Use `runtime_evidence`
+only when the runtime proof plan requires an independent live-use verifier. Use
+Dart MCP first. Use adb only for install, launch, screenshot, recovery, or
 device lifecycle work.
 
 Project overlays own service names, ports, device IDs, and host-specific

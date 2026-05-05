@@ -2,6 +2,10 @@
 
 **Status:** done
 
+Superseded by later UI workflow compaction: global context/register and taste
+contracts were collapsed into a generic project design source requirement in
+`skills/user-apps-design/SKILL.md`.
+
 ## Objective Boundary
 
 - original objective: enhance the harness design workflow with the useful ideas
@@ -15,8 +19,8 @@
 
 ## Scope
 
-- in scope: reusable `user-apps-design` design-context/register contract,
-  register-aware anti-generic taste pressure, screenshot-led `design_judge`
+- superseded scope: reusable `user-apps-design` context/register contract,
+  register-aware taste pressure, screenshot-led `design_judge`
   handoff consequences, and focused validation that prevents adapter drift.
 - out of scope: importing Impeccable as a dependency, adding a browser
   extension, implementing HMR live variants, project-specific product/design
@@ -42,8 +46,8 @@
 - `user-apps-design` owns reusable design context and register semantics.
 - Projects own product facts, visual systems, and exact file locations; the
   harness may recognize `PRODUCT.md` and `DESIGN.md` as portable aliases.
-- Broad UI work must name the design-context source, register, and
-  anti-generic taste posture before claiming UI quality.
+- superseded: broad UI work named a context source, register, and taste
+  posture before claiming visual approval.
 - Missing or contradictory design context blocks broad visual claims unless the
   user explicitly narrows the claim to avoid the missing truth.
 - `design_judge` verifies design-context/register coverage from handoff
@@ -63,8 +67,8 @@
   anti-pattern automation and command specialization in backlog, triggers the
   system-boundary disposition, and gives bounded proof through exact test and
   fixture artifacts.
-- `quality_guard`: APPROVE. The repaired draft chooses
-  `design-quality-rubric.md` as the canonical owner, keeps project truth out
+- `quality_guard`: APPROVE. Later compaction moved the canonical reusable UI
+  approval owner to `skills/user-apps-design/SKILL.md`, keeps project truth out
   of global harness policy, includes the required system-boundary disposition,
   and strengthens proof rows to cover blocking behavior and adapter handoff
   coverage.

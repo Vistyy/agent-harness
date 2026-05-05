@@ -19,8 +19,8 @@ Runtime evidence proves the binding objective plus accepted reductions. A
 handoff for a smaller claim without accepted reduction is mis-scoped and
 returns `blocked`.
 
-Runtime evidence is required for non-trivial runtime-visible claims unless the
-claim is tiny, local, and has no public-behavior or cross-boundary runtime risk.
+Runtime evidence is required for non-trivial runtime-visible behavior claims
+unless the claim is tiny, local, and has no public-behavior or cross-boundary runtime risk.
 Durable e2e tests may supply runtime artifacts only when they exercise the same
 claim through a faithful entrypoint and leave inspectable evidence.
 
@@ -28,12 +28,14 @@ Runtime evidence is blocking, not advisory. `reject`, `blocked`, incomplete,
 or mis-scoped proof blocks broad completion until fixed and re-proven or
 explicitly narrowed by the user.
 
-For UI-quality claims, runtime evidence proves live behavior and screenshot
-artifact sufficiency for design handoff. Product-grade UI design approval
-requires `design_judge` `pass`.
+Visual-only UI design readiness does not require runtime evidence by default.
+Browser and mobile testing skills own screenshot/contact-sheet mechanics.
+Product-grade UI design approval requires `design_judge` `pass`.
 
-For broad UI claims, runtime evidence reports anti-generic report artifact
-sufficiency for `design_judge`; it does not decide design quality.
+Use `runtime_evidence` as an independent verifier only when a non-trivial live
+behavior claim needs it, such as auth/session, checkout/payment, destructive
+actions, mobile install/deep links/offline behavior, queues/sync,
+notifications, tenant/data-dependent flows, or release smoke checks.
 
 ## Runtime Claim Map
 
@@ -43,7 +45,7 @@ Every runtime handoff names:
 - exact runtime claim
 - target entrypoint or recipe
 - affected surfaces, states, roles, data, devices, browsers, or viewports
-- design anchors when UI quality is claimed
+- UI behavior risks when the runtime claim includes them
 - unproved boundaries, or `none`
 
 ## Entrypoint Fidelity
@@ -62,9 +64,9 @@ adjacent proof names the unproved boundary.
 ## Verdicts
 
 - `pass`: observed runtime behavior satisfies the runtime claim map.
-- `reject`: observed behavior contradicts the runtime claim, design anchors,
-  public behavior, or accepted quality bar.
-- `blocked`: recipe, data, environment, missing anchors, or mis-scoped handoff
+- `reject`: observed behavior contradicts the runtime claim, public behavior,
+  or accepted quality bar.
+- `blocked`: recipe, data, environment, missing inputs, or mis-scoped handoff
   prevents proof.
 
 ## Evidence
@@ -73,17 +75,11 @@ Evidence must be small enough to inspect and complete enough to prove the
 claim. Artifact minimalism never justifies claim shrinking.
 
 Report claim boundary, entrypoint fidelity, recipe, actions, artifact paths,
-material logs/traces or `none observed`, verdict, block impact, and
-screenshot-backed checks for UI quality claims.
+material logs/traces or `none observed`, verdict, and block impact.
 
-UI runtime reports name screenshot/contact-sheet paths, screen/state,
-viewport/device, freshness/scope, and whether artifacts are sufficient for
-`design_judge` handoff. Missing, stale, cropped, or claim-mismatched UI
-artifacts return `blocked`.
-
-When required, UI runtime reports name the anti-generic source, artifact, and
-handoff sufficiency. Missing or detector-only design approval evidence is
-insufficient for broad UI design readiness.
+When a runtime behavior claim includes UI behavior risk, evidence may include
+screenshots for hit testing, transitions, responsive state, or observed device
+behavior. Those screenshots do not approve product UI design.
 
 ## Platform Owners
 

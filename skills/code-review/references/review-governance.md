@@ -85,14 +85,16 @@ Treat earlier approvals as history, not final approval. Reject if the handoff
 omits the binding objective or final wording exceeds proof/review scope.
 Reject mis-scoped handoffs that ask review to approve less than the binding
 objective without an accepted reduction.
-Reject UI readiness closeout when runtime evidence or `design_judge` is
-missing, rejected, blocked, stale, or narrower than the final claim. Reviewers
-verify gate coverage; they do not replace runtime proof or product design
-judgment.
+Reject UI readiness closeout when required `design_judge` coverage is missing,
+rejected, blocked, stale, or narrower than the final claim. Runtime evidence is
+required only when the final claim includes non-trivial runtime-visible behavior
+that needs it. Reviewers verify gate coverage; they do not replace runtime
+proof or product design judgment.
 
 For broad UI closeout, block missing, stale, blocked, rejected, or narrower
-`design_judge` coverage for required preservation anchors. Final review
-verifies coverage; it does not decide the design verdict.
+`design_judge` coverage for the project design source and any project-local
+artifacts required by the claim. Final review verifies coverage; it does
+not decide the design verdict.
 
 ## Review Coverage For Completion
 

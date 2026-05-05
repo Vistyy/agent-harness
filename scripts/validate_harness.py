@@ -114,11 +114,8 @@ RUNTIME_EVIDENCE_ADAPTER_REQUIRED_TERMS = (
     "blocking",
     "accept tests/reviews as proof",
     "not overall code quality",
+    "Do not use this role for visual-only UI design readiness",
     "product-grade design approval",
-    "anti-generic report artifact sufficiency",
-    "detector-only design approval",
-    "vague `not-run` reasons",
-    "Do not decide design quality",
     "Do not take over shared or ambiguous runtime coordination",
 )
 PROVIDER_PROMPT_FILES = (
@@ -148,8 +145,8 @@ REVIEW_ROLE_CONTRACTS = {
         "why it is sufficient",
         "Do not perform planning-gate review",
         "not final approval",
-        "required preservation anchors",
-        "preservation anchors",
+        "project design source",
+        "project-local artifacts",
         "block missing, stale, blocked, rejected, or narrower",
     ),
     "adapters/github-copilot/agents/final_reviewer.agent.md": (
@@ -159,59 +156,28 @@ REVIEW_ROLE_CONTRACTS = {
         "why it is sufficient",
         "Do not perform planning-gate review",
         "not final approval",
-        "required preservation anchors",
-        "preservation anchors",
+        "project design source",
+        "project-local artifacts",
         "block missing, stale, blocked, rejected, or narrower",
     ),
 }
 REVIEW_GOVERNANCE_REQUIRED_TERMS = (
-    "required preservation anchors",
+    "project design source",
+    "project-local artifacts",
     "missing, stale, blocked, rejected, or narrower",
     "does not decide the design verdict",
 )
 DESIGN_CONTEXT_CONTRACT_REQUIRED_TERMS = (
-    "design context source",
-    "register",
-    "brand",
-    "product",
-    "mixed",
-    "anti-generic taste posture",
-    "PRODUCT.md",
-    "DESIGN.md",
-    "missing or contradictory",
-    "explicitly narrowed claim",
-    "Project-approved taste wins",
-    "Generic AI taste loses",
+    "project design source",
+    "project-local artifacts",
+    "screenshot/contact-sheet",
+    "Missing project design source blocks",
+    "claim is explicitly narrowed",
 )
-DESIGN_ANTIPATTERN_CONTRACT_REQUIRED_TERMS = (
-    "anti_generic_report",
-    "manual checklist",
-    "automated detector",
-    "not-run",
-    "project-approved",
-    "fix-required",
-    "blocked",
-    "Detector-only pass is invalid",
-    "Clean detector output alone is not a design",
-)
-DESIGN_OPERATION_CONTRACT_REQUIRED_TERMS = (
-    "design_operation",
-    "shape",
-    "critique",
-    "audit",
-    "polish",
-    "harden",
-    "clarify",
-    "not slash commands",
-    "second router",
-    "Handoffs/readbacks",
-    "anti-generic report status",
-    "runtime/design/review gates",
-    "Operation labels do not skip",
-    "runtime_evidence",
-    "design_judge",
-    "references/design-quality-rubric.md",
-    "references/text-constraints.md",
+UI_APPROVAL_BOUNDARY_REQUIRED_TERMS = (
+    "Runtime evidence",
+    "do not approve visual quality",
+    "does not decide live behavior or code quality",
 )
 # Exact adapter-role terms protect one concrete counterexample each: reviewers
 # claiming another role's authority, support roles editing, implementers
@@ -260,28 +226,11 @@ ROLE_BOUNDARY_CONTRACTS = {
         "screenshot/contact-sheet",
         "binding objective",
         "accepted reductions",
-        "design-context source",
-        "register",
-        "anti-generic taste posture",
-        "project truth scope",
-        "Missing or contradictory design context is `blocked`",
+        "project design source",
+        "Missing or contradictory project design source is `blocked`",
         "accepted narrowed claim",
-        "design anchors",
-        "project-defined visual language or product-defining UI pattern",
-        "preservation anchors",
-        "Missing anchors are `blocked`",
-        "visibly generic replacement",
-        "approved identity cues",
-        "project-approved taste",
-        "unsupported generic AI taste",
-        "anti-generic report",
-        "vague `not-run` reasons",
-        "detector-only pass claims",
-        "anti-generic report source",
-        "selector-only",
-        "score-only",
-        "finding-free",
-        "generic scaffold",
+        "materially weaker than the target",
+        "runtime-evidence-based",
         "pass",
         "reject",
         "blocked",
@@ -292,28 +241,11 @@ ROLE_BOUNDARY_CONTRACTS = {
         "screenshot/contact-sheet",
         "binding objective",
         "accepted reductions",
-        "design-context source",
-        "register",
-        "anti-generic taste posture",
-        "project truth scope",
-        "Missing or contradictory design context is `blocked`",
+        "project design source",
+        "Missing or contradictory project design source is `blocked`",
         "accepted narrowed claim",
-        "design anchors",
-        "project-defined visual language or product-defining UI pattern",
-        "preservation anchors",
-        "Missing anchors are `blocked`",
-        "visibly generic replacement",
-        "approved identity cues",
-        "project-approved taste",
-        "unsupported generic AI taste",
-        "anti-generic report",
-        "vague `not-run` reasons",
-        "detector-only pass claims",
-        "anti-generic report source",
-        "selector-only",
-        "score-only",
-        "finding-free",
-        "generic scaffold",
+        "materially weaker than the target",
+        "runtime-evidence-based",
         "pass",
         "reject",
         "blocked",
@@ -1450,24 +1382,7 @@ def _validate_review_role_contracts(root: Path) -> list[str]:
     return errors
 
 
-def _validate_design_context_contract(root: Path) -> list[str]:
-    errors: list[str] = []
-    relative_path = "skills/user-apps-design/references/design-quality-rubric.md"
-    path = root / relative_path
-    if not path.is_file():
-        return errors
-    text = path.read_text(encoding="utf-8")
-    normalized_text = " ".join(text.split())
-    for term in DESIGN_CONTEXT_CONTRACT_REQUIRED_TERMS:
-        if " ".join(term.split()) not in normalized_text:
-            errors.append(f"{relative_path} missing design context contract term {term!r}")
-    for term in DESIGN_ANTIPATTERN_CONTRACT_REQUIRED_TERMS:
-        if " ".join(term.split()) not in normalized_text:
-            errors.append(f"{relative_path} missing design anti-pattern contract term {term!r}")
-    return errors
-
-
-def _validate_design_operation_contract(root: Path) -> list[str]:
+def _validate_ui_approval_contract(root: Path) -> list[str]:
     errors: list[str] = []
     relative_path = "skills/user-apps-design/SKILL.md"
     path = root / relative_path
@@ -1475,14 +1390,12 @@ def _validate_design_operation_contract(root: Path) -> list[str]:
         return errors
     text = path.read_text(encoding="utf-8")
     normalized_text = " ".join(text.split())
-    for term in DESIGN_OPERATION_CONTRACT_REQUIRED_TERMS:
+    for term in DESIGN_CONTEXT_CONTRACT_REQUIRED_TERMS:
         if " ".join(term.split()) not in normalized_text:
-            errors.append(f"{relative_path} missing design operation contract term {term!r}")
-    metadata_path = root / "skills/user-apps-design/agents/openai.yaml"
-    if metadata_path.is_file():
-        metadata = metadata_path.read_text(encoding="utf-8")
-        if "design_operation" not in metadata:
-            errors.append("skills/user-apps-design/agents/openai.yaml missing design_operation metadata term")
+            errors.append(f"{relative_path} missing UI approval context term {term!r}")
+    for term in UI_APPROVAL_BOUNDARY_REQUIRED_TERMS:
+        if " ".join(term.split()) not in normalized_text:
+            errors.append(f"{relative_path} missing UI approval boundary term {term!r}")
     return errors
 
 
@@ -1497,6 +1410,38 @@ def _validate_role_boundary_contracts(root: Path) -> list[str]:
         for term in required_terms:
             if " ".join(term.split()) not in normalized_text:
                 errors.append(f"{relative_path} missing role boundary contract term {term!r}")
+    return errors
+
+
+def _validate_runtime_evidence_ui_default_contract(root: Path) -> list[str]:
+    errors: list[str] = []
+    stale_patterns = (
+        "required `runtime_evidence` and `design_judge`",
+        "matching `runtime_evidence` and `design_judge`",
+        "runtime evidence or `design_judge` is missing",
+    )
+    checked_files = (
+        "skills/user-apps-design/SKILL.md",
+        "skills/runtime-proof/SKILL.md",
+        "skills/verification-before-completion/SKILL.md",
+        "skills/code-review/references/review-governance.md",
+        "adapters/codex/agents/quality-guard.toml",
+        "adapters/github-copilot/agents/quality_guard.agent.md",
+        "adapters/codex/agents/final-reviewer.toml",
+        "adapters/github-copilot/agents/final_reviewer.agent.md",
+    )
+    for relative_path in checked_files:
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        normalized_text = " ".join(text.split())
+        for pattern in stale_patterns:
+            if pattern in normalized_text:
+                errors.append(
+                    f"{relative_path} must not require runtime_evidence by default for broad UI design readiness"
+                )
+                break
     return errors
 
 
@@ -1534,10 +1479,10 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_live_validation_contracts(root))
     errors.extend(_validate_provider_prompt_contracts(root))
     errors.extend(_validate_required_gate_advisory_drift(root))
-    errors.extend(_validate_design_context_contract(root))
-    errors.extend(_validate_design_operation_contract(root))
+    errors.extend(_validate_ui_approval_contract(root))
     errors.extend(_validate_review_role_contracts(root))
     errors.extend(_validate_role_boundary_contracts(root))
+    errors.extend(_validate_runtime_evidence_ui_default_contract(root))
 
     for markdown_file in _iter_markdown(root):
         text = markdown_file.read_text(encoding="utf-8")

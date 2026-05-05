@@ -2,6 +2,10 @@
 
 **Status:** done
 
+Superseded owner note: later compaction folded reusable UI approval ownership
+into `skills/user-apps-design/SKILL.md` and deleted the former rubric
+reference.
+
 ## Problem
 
 A project UI defect fix can drift into a generic replacement when
@@ -21,7 +25,7 @@ broad packet taxonomy.
 
 In scope:
 
-- `skills/user-apps-design/references/design-quality-rubric.md` preservation-anchor rule shape,
+- `skills/user-apps-design/SKILL.md` visual approval rule shape,
 - `adapters/github-copilot/agents/design_judge.agent.md` role contract parity,
 - `adapters/codex/agents/design-judge.toml` role contract parity,
 - final-review coverage check owner and wording, if needed,
@@ -36,8 +40,8 @@ Out of scope:
 
 ## Discovery Questions
 
-- closed: `skills/user-apps-design/references/design-quality-rubric.md` owns
-  the reusable preservation-anchor rule. Adapter prompts repeat only local
+- superseded: reusable visual approval rules now live in
+  `skills/user-apps-design/SKILL.md`. Adapter prompts repeat only local
   verdict, handoff, and output consequences.
 - closed: final-review coverage semantics belong in
   `skills/code-review/references/review-governance.md`. `final_reviewer`

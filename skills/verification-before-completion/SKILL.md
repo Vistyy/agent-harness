@@ -14,11 +14,11 @@ saying work is fixed, done, ready, or approved.
 ## Rule
 
 The final claim cannot exceed the binding objective, accepted reductions, fresh
-proof, runtime evidence, and review coverage.
+proof, required runtime evidence, and review coverage.
 
 Broad product-facing UI design readiness also requires `design_judge` `pass`
-covering the same screenshots/contact sheets, design anchors, states,
-viewports, and devices as the final claim.
+covering the same screenshots/contact sheets, project design source, applicable
+project-local artifacts, states, viewports, and devices as the final claim.
 
 Compare completion to the original objective plus accepted reductions, not to
 the implemented slice, diff summary, reviewer prompt, or handoff wording.
@@ -39,7 +39,8 @@ Before completion:
 1. name the binding objective and accepted reductions
 2. name the exact final claim
 3. run fresh owner-selected proof
-4. include runtime evidence when runtime-visible behavior is claimed
+4. include runtime evidence when the claim includes non-trivial runtime-visible
+   behavior that needs it
 5. include `design_judge` `pass` when broad product UI design is claimed
 6. confirm required review covers the same claim
 7. report residual risks or `none`
@@ -54,6 +55,8 @@ Stop or narrow the claim when:
   rejected, blocked, stale, or narrower than the claim
 - tests, code review, or approval history are offered as substitutes for
   required runtime evidence
+- runtime evidence is offered as a substitute for broad product UI design
+  approval
 - review rejected or did not cover the binding objective
 - residual gaps belong to the current objective
 

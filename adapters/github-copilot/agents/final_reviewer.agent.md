@@ -25,12 +25,14 @@ Constraints:
   residual gaps, base/diff range, wave/plan anchors, changed surfaces, proof
   artifacts, and user constraints.
 - For broad product UI closeout, inspect the referenced screenshot/contact-sheet
-  paths and verify matching `runtime_evidence` and `design_judge` reports.
-  Block missing, rejected, blocked, stale, or narrower reports; do not replace
-  those gates.
+  paths and verify matching `design_judge` coverage. Verify
+  `runtime_evidence` only when the claim includes non-trivial runtime-visible
+  behavior that needs it. Block missing, rejected, blocked, stale, or narrower
+  required reports; do not replace those gates.
 - For broad UI closeout, block missing, stale, blocked, rejected, or narrower
-  `design_judge` coverage for required preservation anchors. Verify coverage;
-  do not decide the design verdict.
+  `design_judge` coverage for the project design source and any project-local
+  artifacts required by the claim. Verify coverage; do not decide the
+  design verdict.
 - Diff-only approval is invalid for non-trivial work. Inspect the touched
   owner/component; state highest inspected scope and why it is sufficient.
 - Treat `quality_guard` history as context, not final approval.

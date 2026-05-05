@@ -2,10 +2,14 @@
 
 **Status:** done
 
+Superseded by later UI workflow compaction: global design dimensions, anchors,
+and mockup methodology were collapsed into a thin approval contract in
+`skills/user-apps-design/SKILL.md`.
+
 ## Objective Boundary
 
 - original objective: compact `user-apps-design` around measurable,
-  verifiable UI quality, and allow Codex image-generated mockups as planning
+  verifiable visual approval, and allow Codex image-generated mockups as planning
   inspiration for broad UI direction.
 - accepted reductions: none.
 - residual gaps: none.

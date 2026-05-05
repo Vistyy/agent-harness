@@ -26,9 +26,9 @@ description = "Use only for the final isolated closeout review after implementat
 config_file = "agents/final-reviewer.toml"
 
 [agents.runtime_evidence]
-description = "Use for non-trivial runtime-visible UI/API/service claims when tests or reviews could pass while the app/service still fails; verifies faithful live behavior and artifacts, then returns pass/reject/blocked."
+description = "Use only for non-trivial runtime-visible behavior claims when tests or reviews could pass while the app/service still fails; verifies faithful live behavior and artifacts, then returns pass/reject/blocked."
 config_file = "agents/runtime-evidence.toml"
 
 [agents.design_judge]
-description = "Use for broad product-facing UI design approval after screenshot/contact-sheet artifacts exist; rejects ugly, scaffold-like, incoherent, inaccessible, or non-shippable UI."
+description = "Use for broad product-facing UI visual-quality approval after screenshot/contact-sheet artifacts exist; rejects broken, incoherent, inaccessible, or non-shippable UI."
 config_file = "agents/design-judge.toml"

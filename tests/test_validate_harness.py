@@ -719,6 +719,30 @@ def test_validate_rejects_runtime_evidence_advisory_findings(tmp_path: Path) -> 
     )
 
 
+def test_broad_ui_design_does_not_require_runtime_evidence_by_default(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml",
+        """
+        name = "quality_guard"
+        developer_instructions = \"\"\"
+        touched-component integrity gate
+        binding objective accepted reductions Diff-only approval is invalid
+        why inspected scope is sufficient Do not claim final approval.
+        For broad product UI work, verify required `runtime_evidence` and
+        `design_judge` reports exist, are fresh, and cover the claim.
+        \"\"\"
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/quality-guard.toml must not require runtime_evidence "
+        "by default for broad UI design readiness"
+    ) in errors
+
+
 def test_validate_rejects_provider_prompt_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
@@ -843,11 +867,11 @@ def test_validate_rejects_final_reviewer_scope_contract_drift(tmp_path: Path) ->
     ) in errors
     assert (
         "adapters/codex/agents/final-reviewer.toml missing review role contract term "
-        "'required preservation anchors'"
+        "'project design source'"
     ) in errors
     assert (
         "adapters/codex/agents/final-reviewer.toml missing review role contract term "
-        "'preservation anchors'"
+        "'project-local artifacts'"
     ) in errors
     assert (
         "adapters/codex/agents/final-reviewer.toml missing review role contract term "
@@ -855,7 +879,7 @@ def test_validate_rejects_final_reviewer_scope_contract_drift(tmp_path: Path) ->
     ) in errors
 
 
-def test_validate_rejects_copilot_final_reviewer_preservation_anchor_drift(tmp_path: Path) -> None:
+def test_validate_rejects_copilot_final_reviewer_project_artifact_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "adapters" / "github-copilot" / "agents" / "final_reviewer.agent.md",
@@ -873,11 +897,11 @@ def test_validate_rejects_copilot_final_reviewer_preservation_anchor_drift(tmp_p
 
     assert (
         "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
-        "'required preservation anchors'"
+        "'project design source'"
     ) in errors
     assert (
         "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
-        "'preservation anchors'"
+        "'project-local artifacts'"
     ) in errors
     assert (
         "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
@@ -885,15 +909,15 @@ def test_validate_rejects_copilot_final_reviewer_preservation_anchor_drift(tmp_p
     ) in errors
 
 
-def test_validate_rejects_missing_review_governance_preservation_anchor_coverage(tmp_path: Path) -> None:
+def test_validate_rejects_missing_review_governance_project_artifact_coverage(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "skills" / "code-review" / "references" / "review-governance.md",
         """
         # Review Governance
 
-        Reject UI readiness closeout when runtime evidence or `design_judge` is
-        missing, rejected, blocked, stale, or narrower than the final claim.
+        Reject UI readiness closeout when `design_judge` is missing, rejected,
+        blocked, stale, or narrower than the final claim.
         """,
     )
 
@@ -901,7 +925,7 @@ def test_validate_rejects_missing_review_governance_preservation_anchor_coverage
 
     assert (
         "skills/code-review/references/review-governance.md missing review governance "
-        "contract term 'required preservation anchors'"
+        "contract term 'project design source'"
     ) in errors
     assert (
         "skills/code-review/references/review-governance.md missing review governance "
@@ -909,84 +933,7 @@ def test_validate_rejects_missing_review_governance_preservation_anchor_coverage
     ) in errors
 
 
-def test_validate_rejects_missing_design_context_contract_terms(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "user-apps-design" / "references" / "design-quality-rubric.md",
-        """
-        # Design Quality Rubric
-
-        Before broad UI work, name design anchors.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "skills/user-apps-design/references/design-quality-rubric.md "
-        "missing design context contract term 'design context source'"
-    ) in errors
-    assert (
-        "skills/user-apps-design/references/design-quality-rubric.md "
-        "missing design context contract term 'anti-generic taste posture'"
-    ) in errors
-    assert (
-        "skills/user-apps-design/references/design-quality-rubric.md "
-        "missing design context contract term 'Project-approved taste wins'"
-    ) in errors
-
-
-def test_validate_rejects_missing_design_antipattern_contract_terms(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "user-apps-design" / "references" / "design-quality-rubric.md",
-        """
-        # Design Quality Rubric
-
-        Before broad UI work, name design context source, register, brand,
-        product, mixed, anti-generic taste posture, PRODUCT.md, DESIGN.md,
-        missing or contradictory, explicitly narrowed claim, Project-approved
-        taste wins, and Generic AI taste loses.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "skills/user-apps-design/references/design-quality-rubric.md "
-        "missing design anti-pattern contract term 'anti_generic_report'"
-    ) in errors
-    assert (
-        "skills/user-apps-design/references/design-quality-rubric.md "
-        "missing design anti-pattern contract term 'Detector-only pass is invalid'"
-    ) in errors
-
-
-def test_validate_rejects_missing_design_operation_contract_terms(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    add_skill(tmp_path, "user-apps-design")
-    write(
-        tmp_path / "skills" / "user-apps-design" / "SKILL.md",
-        """
-        ---
-        name: user-apps-design
-        description: Test user apps design.
-        ---
-
-        # User Apps Design
-
-        UI design work.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "skills/user-apps-design/SKILL.md missing design operation contract term 'design_operation'" in errors
-    assert "skills/user-apps-design/SKILL.md missing design operation contract term 'clarify'" in errors
-    assert "skills/user-apps-design/SKILL.md missing design operation contract term 'Operation labels do not skip'" in errors
-
-
-def test_validate_rejects_missing_design_operation_metadata_term(tmp_path: Path) -> None:
+def test_validate_rejects_missing_ui_approval_context_terms(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "skills" / "user-apps-design" / "SKILL.md",
@@ -998,26 +945,54 @@ def test_validate_rejects_missing_design_operation_metadata_term(tmp_path: Path)
 
         # User Apps Design
 
-        design_operation shape critique audit polish harden clarify not slash
-        commands second router Handoffs/readbacks anti-generic report status
-        runtime/design/review gates Operation labels do not skip
-        runtime_evidence design_judge references/design-quality-rubric.md
-        references/text-constraints.md
-        """,
-    )
-    write(
-        tmp_path / "skills" / "user-apps-design" / "agents" / "openai.yaml",
-        """
-        interface:
-          display_name: "User Apps Design"
-          short_description: "Valid helper text"
-          default_prompt: "Use $user-apps-design for UI work."
+        Before broad UI work, name visual goals.
         """,
     )
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "skills/user-apps-design/agents/openai.yaml missing design_operation metadata term" in errors
+    assert (
+        "skills/user-apps-design/SKILL.md "
+        "missing UI approval context term 'project design source'"
+    ) in errors
+    assert (
+        "skills/user-apps-design/SKILL.md "
+        "missing UI approval context term 'project-local artifacts'"
+    ) in errors
+    assert (
+        "skills/user-apps-design/SKILL.md "
+        "missing UI approval context term 'screenshot/contact-sheet'"
+    ) in errors
+
+
+def test_validate_rejects_missing_ui_approval_boundary_terms(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "user-apps-design" / "SKILL.md",
+        """
+        ---
+        name: user-apps-design
+        description: Test user apps design.
+        ---
+
+        # User Apps Design
+
+        Before broad UI work, name project design source, project-local
+        artifacts, screenshot/contact-sheet, Missing project design source
+        blocks, and claim is explicitly narrowed.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/user-apps-design/SKILL.md "
+        "missing UI approval boundary term 'Runtime evidence'"
+    ) in errors
+    assert (
+        "skills/user-apps-design/SKILL.md "
+        "missing UI approval boundary term 'does not decide live behavior or code quality'"
+    ) in errors
 
 
 def test_validate_rejects_role_boundary_contract_drift(tmp_path: Path) -> None:
@@ -1047,7 +1022,7 @@ def test_validate_rejects_design_judge_contract_drift(tmp_path: Path) -> None:
 
     assert (
         "adapters/codex/agents/design-judge.toml missing role boundary contract term "
-        "'selector-only'"
+        "'runtime-evidence-based'"
     ) in errors
     assert (
         "adapters/codex/agents/design-judge.toml missing role boundary contract term "
@@ -1055,15 +1030,15 @@ def test_validate_rejects_design_judge_contract_drift(tmp_path: Path) -> None:
     ) in errors
     assert (
         "adapters/codex/agents/design-judge.toml missing role boundary contract term "
-        "'project-defined visual language or product-defining UI pattern'"
+        "'project design source'"
     ) in errors
     assert (
         "adapters/codex/agents/design-judge.toml missing role boundary contract term "
-        "'Missing anchors are `blocked`'"
+        "'materially weaker than the target'"
     ) in errors
 
 
-def test_validate_rejects_copilot_design_judge_preservation_anchor_drift(tmp_path: Path) -> None:
+def test_validate_rejects_copilot_design_judge_project_target_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     add_roles(tmp_path, ("explorer", "quality_guard", "design_judge"))
     write(
@@ -1074,8 +1049,7 @@ def test_validate_rejects_copilot_design_judge_preservation_anchor_drift(tmp_pat
         ---
 
         screenshot/contact-sheet. binding objective. accepted reductions.
-        design anchors. selector-only. score-only. finding-free.
-        generic scaffold. pass. reject. blocked.
+        visual goals. runtime-evidence-based. pass. reject. blocked.
         Do not perform `runtime_evidence`, `quality_guard`, `final_reviewer`.
         not live behavior or code quality.
         """,
@@ -1085,15 +1059,15 @@ def test_validate_rejects_copilot_design_judge_preservation_anchor_drift(tmp_pat
 
     assert (
         "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
-        "'project-defined visual language or product-defining UI pattern'"
+        "'project design source'"
     ) in errors
     assert (
         "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
-        "'preservation anchors'"
+        "'accepted narrowed claim'"
     ) in errors
     assert (
         "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
-        "'Missing anchors are `blocked`'"
+        "'materially weaker than the target'"
     ) in errors
 
 
