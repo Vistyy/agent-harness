@@ -115,6 +115,10 @@ RUNTIME_EVIDENCE_ADAPTER_REQUIRED_TERMS = (
     "accept tests/reviews as proof",
     "not overall code quality",
     "product-grade design approval",
+    "anti-generic report artifact sufficiency",
+    "detector-only design approval",
+    "vague `not-run` reasons",
+    "Do not decide design quality",
     "Do not take over shared or ambiguous runtime coordination",
 )
 PROVIDER_PROMPT_FILES = (
@@ -179,6 +183,17 @@ DESIGN_CONTEXT_CONTRACT_REQUIRED_TERMS = (
     "Project-approved taste wins",
     "Generic AI taste loses",
 )
+DESIGN_ANTIPATTERN_CONTRACT_REQUIRED_TERMS = (
+    "anti_generic_report",
+    "manual checklist",
+    "automated detector",
+    "not-run",
+    "project-approved",
+    "fix-required",
+    "blocked",
+    "Detector-only pass is invalid",
+    "Clean detector output alone is not a design",
+)
 # Exact adapter-role terms protect one concrete counterexample each: reviewers
 # claiming another role's authority, support roles editing, implementers
 # executing without approved state, or runtime evidence reviewing code quality.
@@ -240,6 +255,10 @@ ROLE_BOUNDARY_CONTRACTS = {
         "approved identity cues",
         "project-approved taste",
         "unsupported generic AI taste",
+        "anti-generic report",
+        "vague `not-run` reasons",
+        "detector-only pass claims",
+        "anti-generic report source",
         "selector-only",
         "score-only",
         "finding-free",
@@ -268,6 +287,10 @@ ROLE_BOUNDARY_CONTRACTS = {
         "approved identity cues",
         "project-approved taste",
         "unsupported generic AI taste",
+        "anti-generic report",
+        "vague `not-run` reasons",
+        "detector-only pass claims",
+        "anti-generic report source",
         "selector-only",
         "score-only",
         "finding-free",
@@ -1419,6 +1442,9 @@ def _validate_design_context_contract(root: Path) -> list[str]:
     for term in DESIGN_CONTEXT_CONTRACT_REQUIRED_TERMS:
         if " ".join(term.split()) not in normalized_text:
             errors.append(f"{relative_path} missing design context contract term {term!r}")
+    for term in DESIGN_ANTIPATTERN_CONTRACT_REQUIRED_TERMS:
+        if " ".join(term.split()) not in normalized_text:
+            errors.append(f"{relative_path} missing design anti-pattern contract term {term!r}")
     return errors
 
 

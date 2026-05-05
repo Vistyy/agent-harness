@@ -936,6 +936,32 @@ def test_validate_rejects_missing_design_context_contract_terms(tmp_path: Path) 
     ) in errors
 
 
+def test_validate_rejects_missing_design_antipattern_contract_terms(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "user-apps-design" / "references" / "design-quality-rubric.md",
+        """
+        # Design Quality Rubric
+
+        Before broad UI work, name design context source, register, brand,
+        product, mixed, anti-generic taste posture, PRODUCT.md, DESIGN.md,
+        missing or contradictory, explicitly narrowed claim, Project-approved
+        taste wins, and Generic AI taste loses.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/user-apps-design/references/design-quality-rubric.md "
+        "missing design anti-pattern contract term 'anti_generic_report'"
+    ) in errors
+    assert (
+        "skills/user-apps-design/references/design-quality-rubric.md "
+        "missing design anti-pattern contract term 'Detector-only pass is invalid'"
+    ) in errors
+
+
 def test_validate_rejects_role_boundary_contract_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(

@@ -1,0 +1,13 @@
+{
+  "broad_ui_claim": true,
+  "anti_generic_report": {
+    "source": "not-run",
+    "register": "brand",
+    "project_context": "Brand register requires anti-generic review.",
+    "findings": [],
+    "disposition": "none",
+    "artifact": "none",
+    "reason": ""
+  },
+  "expected_outcome": "blocked"
+}

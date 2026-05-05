@@ -13,5 +13,4 @@ None.
 
 ## Deferred Backlog
 
-- `docs-ai/current-work/backlog/harness__design-workflow__anti-pattern-gate.md`
 - `docs-ai/current-work/backlog/harness__design-workflow__command-specialization.md`

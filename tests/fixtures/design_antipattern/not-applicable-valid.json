@@ -1,0 +1,14 @@
+{
+  "broad_ui_claim": true,
+  "anti_generic_report": {
+    "source": "not-run",
+    "register": "product",
+    "project_context": "No browser-visible UI readiness claim is made.",
+    "findings": [],
+    "disposition": "none",
+    "artifact": "none",
+    "not_applicable": true,
+    "reason": "No browser-visible UI surface is claimed in this documentation-only change."
+  },
+  "expected_outcome": "pass"
+}

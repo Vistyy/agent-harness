@@ -1,0 +1,13 @@
+{
+  "broad_ui_claim": true,
+  "project_approved_finding": true,
+  "anti_generic_report": {
+    "source": "combined",
+    "register": "brand",
+    "project_context": "Project visual language explicitly approves handmade asymmetric cards.",
+    "disposition": "project-approved",
+    "findings": ["asymmetric handmade cards are project-approved identity cues"],
+    "artifact": "anti-generic-report.md"
+  },
+  "expected_outcome": "pass"
+}

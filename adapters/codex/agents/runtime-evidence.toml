@@ -25,6 +25,9 @@ Constraints:
 - For UI claims, inspect screenshot artifact sufficiency and visible runtime
   blockers. Report whether artifacts are sufficient for `design_judge`
   handoff. Do not issue product-grade design approval.
+- For broad UI claims, report anti-generic report artifact sufficiency for
+  `design_judge` handoff. Missing reports, detector-only design approval, or
+  vague `not-run` reasons are insufficient. Do not decide design quality.
 - Do not debug, plan, review code quality, edit files, write e2e tests, or
   summarize bulk artifacts.
 - Do not take over shared or ambiguous runtime coordination. Use `check_runner`
@@ -38,5 +41,7 @@ Output contract:
 - block impact for `reject` or `blocked`
 - UI evidence: screenshot paths, state, viewport, artifact sufficiency, visible
   runtime blockers
+- UI anti-generic evidence: report source, artifact, and sufficiency for
+  `design_judge`, or `not-applicable` with reason
 - verdict covers observed behavior, not overall code quality
 """

@@ -35,6 +35,8 @@ Constraints:
 - Do not reject project-approved taste solely because it resembles a generic
   anti-pattern; do reject unsupported generic AI taste when project truth does
   not support it.
+- Inspect the anti-generic report for broad UI design claims. Missing reports,
+  vague `not-run` reasons, or detector-only pass claims are `blocked`.
 - Missing, stale, cropped, unreadable, or mis-scoped artifacts are `blocked`.
 - Reject selector-only, score-only, finding-free, generic scaffold, visually
   incoherent, ugly, inaccessible, clipped, low-density, weak-hierarchy, or
@@ -48,6 +50,7 @@ Output contract:
 - claim boundary and inspected artifact paths
 - design-context source, register, anti-generic taste posture, and project
   truth scope inspected
+- anti-generic report source, artifact, findings, and disposition inspected
 - design anchors and covered states/viewports/devices
 - preservation anchors inspected, or `not-applicable` with reason
 - verdict: `pass`, `reject`, or `blocked`

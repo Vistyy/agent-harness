@@ -32,6 +32,10 @@ For UI-quality claims, runtime evidence proves live behavior and screenshot
 artifact sufficiency for design handoff. Product-grade UI design approval
 requires `design_judge` `pass`.
 
+For broad UI claims, runtime evidence also reports whether anti-generic report
+artifacts are present and sufficient for `design_judge`. It does not decide
+whether the design passes.
+
 ## Runtime Claim Map
 
 Every runtime handoff names:
@@ -77,6 +81,10 @@ UI runtime reports name screenshot/contact-sheet paths, screen/state,
 viewport/device, freshness/scope, and whether artifacts are sufficient for
 `design_judge` handoff. Missing, stale, cropped, or claim-mismatched UI
 artifacts return `blocked`.
+
+When an anti-generic report is required, UI runtime reports name its source,
+artifact, and sufficiency for design handoff. Missing or detector-only design
+approval evidence is insufficient for broad UI design readiness.
 
 ## Platform Owners
 

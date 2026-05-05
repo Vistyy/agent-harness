@@ -39,6 +39,28 @@ resembles a common anti-pattern; do reject unsupported generic patterns such as
 template card grids, purposeless gradient text, decorative glass effects, or
 one-note AI palettes when they make the surface read as unowned.
 
+Broad UI quality claims also name an `anti_generic_report`:
+
+- `source`: manual checklist, automated detector, combined, or `not-run`
+- `register`: `brand`, `product`, or `mixed`
+- `project_context`: project-approved taste and anti-references used
+- `findings`: concrete visible or static findings with severity and surfaces
+- `disposition`: `none`, `project-approved`, `fix-required`, or `blocked`
+- `artifact`: path, command output, screenshot note, or `none` with reason
+
+Minimum checks: unsupported template card grids, nested cards, hero-metric
+layouts, icon tile stacks, purposeless gradient text, decorative glass/glow
+effects, one-note AI palettes, and generic centered-stack composition. Brand
+also checks unsupported default typography, timid palette, and missing imagery
+when imagery is core to the category. Product also checks component
+inconsistency, decorative motion, over-styled standard controls, weak density,
+and unfamiliar affordances without purpose.
+
+`not-run` blocks broad UI design readiness unless the claim is explicitly
+narrowed or the report is not applicable with a named reason. Detector-only
+pass is invalid; anti-generic evidence never replaces screenshot-led design
+judgment.
+
 For broad visual redesign, record the approved archetype or explicit exception
 before product-code implementation.
 
@@ -136,3 +158,8 @@ source, register, anti-generic taste posture, design anchors, preservation
 anchors or `not-applicable`, and screenshot/contact-sheet artifacts. Missing or
 contradictory required context returns `blocked`; an explicitly narrowed claim
 must name which design-context boundary is no longer claimed.
+
+`design_judge` consumes `anti_generic_report` with screenshots. It may treat
+project-approved findings as intentional, reject unsupported generic findings,
+or block missing/invalid reports. Clean detector output alone is not a design
+`pass`.

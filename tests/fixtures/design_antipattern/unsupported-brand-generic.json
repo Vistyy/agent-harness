@@ -1,0 +1,13 @@
+{
+  "broad_ui_claim": true,
+  "unsupported_generic_finding": true,
+  "anti_generic_report": {
+    "source": "manual checklist",
+    "register": "brand",
+    "project_context": "No project truth supports generic AI hero/card patterns.",
+    "disposition": "blocked",
+    "findings": ["template centered hero with icon tile stack and purposeless gradient text"],
+    "artifact": "manual-report.md"
+  },
+  "expected_outcome": "reject"
+}
