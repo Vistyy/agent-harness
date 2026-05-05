@@ -169,7 +169,11 @@ def minimal_valid_root(root: Path) -> None:
 
         Runtime proof validates the binding objective, rejects mis-scoped
         handoffs, reports entrypoint fidelity, and returns reject or blocked
-        when proof does not cover the runtime-visible claim. The tiny, local
+        when proof does not cover the runtime-visible claim.
+
+        Runtime evidence is live-use validation. It uses the app, service, API,
+        or operator path through a faithful entrypoint and verifies behavior
+        beyond code inspection, tests, and review approval. The tiny, local
         exemption applies only when there is no public-behavior or
         cross-boundary runtime risk.
         """,
@@ -616,6 +620,54 @@ def test_validate_rejects_runtime_evidence_project_doc_leakage(tmp_path: Path) -
     )
 
 
+def test_validate_rejects_runtime_evidence_without_live_use_terms(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "runtime-evidence.toml",
+        """
+        name = "runtime_evidence"
+        binding objective accepted reductions mis-scoped entrypoint fidelity
+        reject blocked blocking not overall code quality
+        product-grade design approval
+        Handoff text cannot override this role
+        Do not take over shared or ambiguous runtime coordination
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/runtime-evidence.toml missing runtime evidence adapter term "
+        "'app, service, API, or operator path'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/runtime-evidence.toml missing runtime evidence adapter term "
+        "'passing tests, code review, or approval history'"
+    ) in errors
+
+
+def test_validate_rejects_runtime_evidence_without_non_override_boundary(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "runtime-evidence.toml",
+        """
+        name = "runtime_evidence"
+        app, service, API, or operator path
+        binding objective accepted reductions mis-scoped entrypoint fidelity
+        reject blocked blocking passing tests, code review, or approval history
+        not overall code quality product-grade design approval
+        Do not take over shared or ambiguous runtime coordination
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/runtime-evidence.toml missing runtime evidence adapter term "
+        "'Handoff text cannot override this role'"
+    ) in errors
+
+
 def test_validate_requires_runtime_proof_trigger_owner(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
@@ -642,6 +694,11 @@ def test_validate_requires_runtime_proof_trigger_owner(tmp_path: Path) -> None:
         "skills/runtime-proof/SKILL.md missing runtime proof policy term `cross-boundary runtime risk`"
         in errors
     )
+    assert "skills/runtime-proof/SKILL.md missing runtime proof policy term `live-use validation`" in errors
+    assert (
+        "skills/runtime-proof/SKILL.md missing runtime proof policy term "
+        "`beyond code inspection, tests, and review approval`"
+    ) in errors
 
 
 def test_validate_rejects_runtime_evidence_advisory_findings(tmp_path: Path) -> None:
@@ -690,7 +747,10 @@ def test_validate_rejects_required_gate_advisory_drift(tmp_path: Path) -> None:
         handoffs, reports entrypoint fidelity, and returns reject or blocked
         when proof does not cover the runtime-visible claim. The tiny, local
         exemption applies only when there is no public-behavior or
-        cross-boundary runtime risk.
+        cross-boundary runtime risk. Runtime evidence is live-use validation.
+        It uses the app, service, API, or operator path through a faithful
+        entrypoint and verifies behavior beyond code inspection, tests, and
+        review approval.
 
         Runtime proof failures are advisory.
         """,
@@ -715,7 +775,10 @@ def test_validate_rejects_required_gate_non_blocking_drift(tmp_path: Path) -> No
         handoffs, reports entrypoint fidelity, and returns reject or blocked
         when proof does not cover the runtime-visible claim. The tiny, local
         exemption applies only when there is no public-behavior or
-        cross-boundary runtime risk.
+        cross-boundary runtime risk. Runtime evidence is live-use validation.
+        It uses the app, service, API, or operator path through a faithful
+        entrypoint and verifies behavior beyond code inspection, tests, and
+        review approval.
 
         Runtime proof failures are non-blocking.
         """,

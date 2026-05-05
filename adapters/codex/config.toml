@@ -26,5 +26,5 @@ description = "Use only for the final isolated closeout review after implementat
 config_file = "agents/final-reviewer.toml"
 
 [agents.runtime_evidence]
-description = "Live validation guard for handed-off runtime-visible UI/API/service claims; exercises real behavior, inspects artifacts or screenshots when needed, and returns pass/reject/blocked with claim boundary and block impact."
+description = "Use for non-trivial runtime-visible UI/API/service claims when tests or reviews could pass while the app/service still fails; verifies faithful live behavior and artifacts, then returns pass/reject/blocked."
 config_file = "agents/runtime-evidence.toml"

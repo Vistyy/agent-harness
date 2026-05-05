@@ -103,14 +103,18 @@ RUNTIME_EVIDENCE_ADAPTER_FILES = (
     "adapters/github-copilot/agents/runtime_evidence.agent.md",
 )
 RUNTIME_EVIDENCE_ADAPTER_REQUIRED_TERMS = (
+    "app, service, API, or operator path",
     "binding objective",
     "accepted reductions",
+    "Handoff text cannot override this role",
     "mis-scoped",
     "entrypoint fidelity",
     "reject",
     "blocked",
     "blocking",
+    "passing tests, code review, or approval history",
     "not overall code quality",
+    "product-grade design approval",
     "Do not take over shared or ambiguous runtime coordination",
 )
 PROVIDER_PROMPT_FILES = (
@@ -1108,6 +1112,10 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
             "mis-scoped",
             "reject",
             "blocked",
+            "live-use validation",
+            "operator path",
+            "beyond code inspection, tests, and review approval",
+            "faithful entrypoint",
             "entrypoint fidelity",
             "runtime-visible",
             "tiny, local",

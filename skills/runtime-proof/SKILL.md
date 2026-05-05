@@ -1,6 +1,6 @@
 ---
 name: runtime-proof
-description: "Use for runtime-visible claim maps, runtime evidence handoffs, entrypoint fidelity, pass/reject/blocked verdict semantics, and blocking runtime findings."
+description: "Use for runtime-visible claim maps, live-use runtime evidence handoffs beyond tests/reviews, entrypoint fidelity, pass/reject/blocked verdict semantics, and blocking runtime findings."
 ---
 
 # Runtime Proof
@@ -11,6 +11,10 @@ gating.
 
 ## Rule
 
+Runtime evidence is live-use validation. It uses the app, service, API, or
+operator path through a faithful entrypoint and verifies the claimed behavior
+actually works beyond code inspection, tests, and review approval.
+
 Runtime evidence proves the binding objective plus accepted reductions. A
 handoff for a smaller claim without accepted reduction is mis-scoped and
 returns `blocked`.
@@ -20,6 +24,11 @@ service-visible, integration-visible, or depends on live state.
 
 Use `runtime_evidence` for non-trivial runtime-visible claims unless the claim
 is tiny, local, and has no public-behavior or cross-boundary runtime risk.
+Durable e2e tests may supply runtime artifacts only when they exercise the same
+claim through a faithful entrypoint and leave inspectable evidence.
+
+Invoke `runtime_evidence` when tests, quality review, or final review could pass
+while the real app, service, integration, or operator workflow still fails.
 
 Runtime evidence is blocking, not advisory. `reject`, `blocked`, incomplete,
 or mis-scoped proof blocks broad completion until fixed and re-proven or

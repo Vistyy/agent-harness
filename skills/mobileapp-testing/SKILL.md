@@ -7,8 +7,9 @@ description: "Use for mobile runtime proof mechanics: emulator/device execution,
 
 Owns live mobile runtime proof mechanics with deterministic device evidence.
 
-Use `runtime_evidence` for live mobile/runtime proof. Use Dart MCP first. Use
-adb only for install, launch, screenshot, recovery, or device lifecycle work.
+Use `runtime_evidence` when a mobile-visible claim needs live app use beyond
+tests or code review. Use Dart MCP first. Use adb only for install, launch,
+screenshot, recovery, or device lifecycle work.
 
 Project overlays own service names, ports, device IDs, and host-specific
 recovery recipes.

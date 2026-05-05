@@ -4,15 +4,6 @@ The wave brief `**Status:**` is the execution gate.
 
 ## Wave Plan
 
-#### Wave harness-runtime-evidence-live-use-contract-1 - Runtime evidence live-use contract [discovery-required]
-
-- `harness/runtime-proof/live-use-owner-contract`
-- `harness/runtime-evidence/adapter-role-prompts`
-- `harness/orchestration/runtime-evidence-routing`
-- `harness/testing/e2e-runtime-proof-relationship`
-- `harness/runtime-evidence/interrupted-edit-sweep`
-- `harness/validation/runtime-evidence-live-use-drift`
-
 #### Wave harness-ui-runtime-evidence-redesign-1 - UI runtime evidence and design approval redesign [discovery-required]
 
 - `harness/runtime-evidence/ui-design-gate-boundary-contract`

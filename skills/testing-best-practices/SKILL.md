@@ -24,6 +24,9 @@ Rules:
 - delete, shrink, or rewrite bad touched tests
 - never fake red evidence
 - never replace runtime proof with persistent tests
+- e2e tests are written by implementers when an approved task owns them; they
+  support runtime evidence only when they exercise the same claim through a
+  faithful entrypoint and leave inspectable artifacts
 
 ## Reference Gates
 

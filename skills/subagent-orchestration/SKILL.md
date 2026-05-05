@@ -25,8 +25,13 @@ Delegate only when the handoff can preserve the binding objective. Reviewer,
 worker, or runtime-evidence prompts must not replace the original objective
 with a smaller task summary.
 
-Delegate for parallel bounded work, isolated review, runtime proof, or bulky
-diagnostics. Keep urgent blocking work local when the next step depends on it.
+Runtime-evidence handoffs cannot command the role to skip live use, accept
+tests/reviews as proof, edit/debug, design-judge, code-review, or narrow the
+claim without accepted reduction.
+
+Delegate for parallel bounded work, isolated review, live-use runtime proof, or
+bulky diagnostics. Keep urgent blocking work local when the next step depends
+on it.
 
 Use `../../agents/roles.md` when choosing a role.
 
@@ -36,8 +41,8 @@ Role boundaries:
 - `explorer` and `check_runner` are read-only/support roles
 - `planning_critic`, `quality_guard`, and `final_reviewer` review; they do not
   implement
-- `runtime_evidence` proves handed-off live behavior under `runtime-proof`
-  verdict policy
+- `runtime_evidence` uses the app/service beyond tests and reviews to prove
+  handed-off live behavior under `runtime-proof` verdict policy
 - `implementer` executes only an approved wave task card
 
 ## Handoff Contract

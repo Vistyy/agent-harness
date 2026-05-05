@@ -1,6 +1,6 @@
 # Wave harness-runtime-evidence-live-use-contract-1 - Runtime evidence live-use contract
 
-**Status:** discovery-required
+**Status:** done
 
 ## Objective Boundary
 
@@ -92,10 +92,24 @@ Out of scope:
 
 ## Promotion Requirement
 
-Promote only after `planning-intake`, `planning_critic`, and `quality_guard`
-approve scope, role boundaries, proof allocation, validator terms, and touched
-owner integrity.
+Promotion complete.
+
+## Planning Gate
+
+- planning_critic: APPROVE for planning direction. Separate wave topology,
+  validator scope, interrupted-edit sweep, touched-owner integrity, and UI wave
+  dependency are acceptable.
+- quality_guard: APPROVE for execution-ready promotion. Scope, role boundaries,
+  e2e split, Required Gates, task cards, proof rows, stop conditions, and
+  touched-owner integrity are execution-ready.
 
 ## Packet
 
-- `docs-ai/current-work/harness-runtime-evidence-live-use-contract-1/wave-execution.draft.md`
+- closed after final review on 2026-05-05
+
+## Closeout
+
+- quality_guard: APPROVE after packet-state fix.
+- final_reviewer: APPROVE after non-override validator fixture fix.
+- proof: focused validator tests, harness validation, governance check, and
+  `just quality-fast` passed.

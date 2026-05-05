@@ -43,6 +43,8 @@ Stop or narrow the claim when:
 - proof is stale, missing, indirect, or narrower than the claim
 - runtime evidence is required but missing, rejected, blocked, incomplete, or
   mis-scoped
+- tests, code review, or approval history are offered as substitutes for
+  required runtime evidence
 - review rejected or did not cover the binding objective
 - residual gaps belong to the current objective
 

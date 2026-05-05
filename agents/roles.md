@@ -16,8 +16,9 @@ policy.
 - `implementer`: one bounded approved wave task card.
 - `quality_guard`: planning-gate and in-thread implementation gate.
 - `final_reviewer`: final isolated closeout review after verification.
-- `runtime_evidence`: live validation guard for handed-off runtime-visible
-  UI/API/service claims.
+- `runtime_evidence`: independent live-use verifier for non-trivial
+  runtime-visible claims when tests/reviews could pass while the app or service
+  still fails.
 
 Adapter configs must preserve these role names unless a reviewed migration
 updates every consumer and proof row together.
