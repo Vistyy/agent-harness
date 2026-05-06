@@ -20,6 +20,11 @@ It needs:
   viewports, and devices;
 - `design_judge` `pass` for the same claim.
 
+When a project has a local design workflow such as Impeccable, shape there
+first. Use `imagegen` for mockups or reference images when a visual target would
+improve implementation. Generated mockups become design sources only after user
+approval or project-workflow recording.
+
 If the project design source or declared local design workflow is missing or
 contradictory, stop or narrow the claim. Do not invent visual direction in the
 global harness.
