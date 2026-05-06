@@ -495,14 +495,19 @@ def test_validate_rejects_owner_only_doctrine_duplicates(tmp_path: Path) -> None
     ) in errors
 
 
-def test_validate_allows_removed_harness_path_in_closed_archive(tmp_path: Path) -> None:
+def test_validate_rejects_removed_harness_path_in_closed_archive(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "docs-ai" / "current-work" / "closed-harness-audits-2026-04.md",
         "Archived deletion: skills/adversarial-review/SKILL.md.\n",
     )
 
-    assert validate_harness.validate(tmp_path) == []
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "docs-ai/current-work/closed-harness-audits-2026-04.md references removed harness path "
+        "skills/adversarial-review/SKILL.md"
+    ) in errors
 
 
 def test_validate_rejects_removed_harness_path_in_other_tests(tmp_path: Path) -> None:

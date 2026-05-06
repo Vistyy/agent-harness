@@ -400,7 +400,6 @@ REMOVED_HARNESS_PATHS = (
     "skills/mobile-design/references/touch-psychology.md",
 )
 REMOVED_HARNESS_PATH_EXEMPTIONS = {
-    "docs-ai/current-work/closed-harness-audits-2026-04.md",
     "scripts/validate_harness.py",
     "tests/test_validate_harness.py",
 }
