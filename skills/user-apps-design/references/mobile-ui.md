@@ -34,19 +34,6 @@ the user experience.
 - Dark mode, contrast, focus order, semantics, and non-color state cues are
   checked when the surface claims mobile quality.
 
-## Platform Notes
-
-iOS:
-- respect Dynamic Type, safe areas, swipe/back conventions, sheets, and native
-  list affordances
-- prefer system typography and SF Symbols when the project has no stricter
-  design system
-
-Android:
-- respect system back, text scaling, responsive phone/tablet layouts, Material
-  feedback, and dark theme
-- prefer Material Symbols when the project has no stricter design system
-
 ## Proof
 
 Mobile design claims require proof for the affected states and device classes.

@@ -5,7 +5,8 @@ description: "Use for product-facing UI work that needs project design context, 
 
 # User Apps Design
 
-Owns the reusable UI completion contract. Projects own design taste and method.
+Owns reusable end-user UI completion constraints. Projects own design taste and
+method.
 
 ## Contract
 
