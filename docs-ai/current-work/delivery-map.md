@@ -4,13 +4,12 @@ The wave brief `**Status:**` is the execution gate.
 
 ## Wave Plan
 
-- `harness-mock-parity-design-workflow-1` -
-  `done`; thin global UI design contract, route visual method to
-  project-local design engines such as Impeccable, keep `design_judge` as the
-  screenshot-led visual approval gate, and remove `runtime_evidence` from
-  default UI design approval while preserving it for exceptional live behavior
-  claims.
-
+- `harness-doc-entrypoint-and-reference-governance-1` -
+  `discovery-required`; audit global harness docs/skills first, then decide the
+  minimal reusable rule for skills as operational entrypoints, docs as owner
+  inputs, sparse purpose-gated references, completed-wave disposal after
+  durable extraction, and the responsibility split between
+  `harness-governance` and `documentation-stewardship`.
 
 ## Current Evidence
 
