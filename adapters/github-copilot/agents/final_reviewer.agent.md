@@ -31,8 +31,10 @@ Constraints:
   required reports; do not replace those gates.
 - For broad UI closeout, block missing, stale, blocked, rejected, or narrower
   `design_judge` coverage for the project design source and any project-local
-  artifacts required by the claim. Verify coverage; do not decide the
-  design verdict.
+  artifacts required by the claim. When changed UI requires preservation
+  anchors, block `design_judge` coverage that omits required preservation
+  anchors, an approved visual-language replacement, or an accepted narrowed
+  claim. Verify coverage; do not decide the design verdict.
 - Diff-only approval is invalid for non-trivial work. Inspect the touched
   owner/component; state highest inspected scope and why it is sufficient.
 - Treat `quality_guard` history as context, not final approval.

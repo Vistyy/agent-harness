@@ -882,6 +882,10 @@ def test_validate_rejects_final_reviewer_scope_contract_drift(tmp_path: Path) ->
         "adapters/codex/agents/final-reviewer.toml missing review role contract term "
         "'block missing, stale, blocked, rejected, or narrower'"
     ) in errors
+    assert (
+        "adapters/codex/agents/final-reviewer.toml missing review role contract term "
+        "'preservation anchors'"
+    ) in errors
 
 
 def test_validate_rejects_copilot_final_reviewer_project_artifact_drift(tmp_path: Path) -> None:
@@ -912,6 +916,10 @@ def test_validate_rejects_copilot_final_reviewer_project_artifact_drift(tmp_path
         "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
         "'block missing, stale, blocked, rejected, or narrower'"
     ) in errors
+    assert (
+        "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
+        "'preservation anchors'"
+    ) in errors
 
 
 def test_validate_rejects_missing_review_governance_project_artifact_coverage(tmp_path: Path) -> None:
@@ -935,6 +943,10 @@ def test_validate_rejects_missing_review_governance_project_artifact_coverage(tm
     assert (
         "skills/code-review/references/review-governance.md missing review governance "
         "contract term 'missing, stale, blocked, rejected, or narrower'"
+    ) in errors
+    assert (
+        "skills/code-review/references/review-governance.md missing review governance "
+        "contract term 'preservation anchors'"
     ) in errors
 
 
@@ -967,6 +979,10 @@ def test_validate_rejects_missing_ui_approval_context_terms(tmp_path: Path) -> N
     assert (
         "skills/user-apps-design/SKILL.md "
         "missing UI approval context term 'screenshot/contact-sheet'"
+    ) in errors
+    assert (
+        "skills/user-apps-design/SKILL.md "
+        "missing UI approval context term 'preservation anchors'"
     ) in errors
 
 
@@ -1041,6 +1057,10 @@ def test_validate_rejects_design_judge_contract_drift(tmp_path: Path) -> None:
         "adapters/codex/agents/design-judge.toml missing role boundary contract term "
         "'materially weaker than the target'"
     ) in errors
+    assert (
+        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
+        "'preservation anchors'"
+    ) in errors
 
 
 def test_validate_rejects_copilot_design_judge_project_target_drift(tmp_path: Path) -> None:
@@ -1073,6 +1093,10 @@ def test_validate_rejects_copilot_design_judge_project_target_drift(tmp_path: Pa
     assert (
         "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
         "'materially weaker than the target'"
+    ) in errors
+    assert (
+        "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
+        "'preservation anchors'"
     ) in errors
 
 

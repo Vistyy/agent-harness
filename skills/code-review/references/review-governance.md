@@ -93,8 +93,10 @@ proof or product design judgment.
 
 For broad UI closeout, block missing, stale, blocked, rejected, or narrower
 `design_judge` coverage for the project design source and any project-local
-artifacts required by the claim. Final review verifies coverage; it does
-not decide the design verdict.
+artifacts required by the claim. When changed UI requires preservation anchors,
+block `design_judge` coverage that omits required preservation anchors, an
+approved visual-language replacement, or an accepted narrowed claim. Final
+review verifies coverage; it does not decide the design verdict.
 
 ## Review Coverage For Completion
 

@@ -37,10 +37,20 @@ Handoffs for broad UI approval name:
 - affected screens, states, viewports, and devices;
 - project design source, or `missing`;
 - project-local artifacts required by that source, or `none`;
+- preservation anchors for changed UI with a project-defined visual language or
+  product-defining UI pattern, or an approved visual-language replacement /
+  narrowed claim;
 - screenshot/contact-sheet artifact paths.
 
 Missing project design source blocks broad visual-quality approval unless the
 claim is explicitly narrowed.
+
+Missing preservation anchors block broad visual-quality approval for changed UI
+with a project-defined visual language or product-defining UI pattern unless
+the project explicitly approved a visual-language replacement or the claim is
+narrowed. Reject a generic replacement that drops those anchors without that
+approval. Do not reject project-approved identity cues solely because they are
+unusual.
 
 `design_judge` compares rendered artifacts against the binding objective,
 project design source, and required project-local artifacts. Reject when the
