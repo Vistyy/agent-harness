@@ -17,8 +17,9 @@ The final claim cannot exceed the binding objective, accepted reductions, fresh
 proof, required runtime evidence, and review coverage.
 
 Broad product-facing UI design readiness also requires `design_judge` `pass`
-covering the same screenshots/contact sheets, project design source, applicable
-project-local artifacts, states, viewports, and devices as the final claim.
+covering the same screenshots/contact sheets, declared project design source,
+project design source requirements, applicable project-local artifacts, states,
+viewports, and devices as the final claim.
 
 Compare completion to the original objective plus accepted reductions, not to
 the implemented slice, diff summary, reviewer prompt, or handoff wording.

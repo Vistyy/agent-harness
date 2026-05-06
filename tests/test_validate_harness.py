@@ -876,7 +876,7 @@ def test_validate_rejects_final_reviewer_scope_contract_drift(tmp_path: Path) ->
     ) in errors
     assert (
         "adapters/codex/agents/final-reviewer.toml missing review role contract term "
-        "'project-local artifacts'"
+        "'project design source requirements'"
     ) in errors
     assert (
         "adapters/codex/agents/final-reviewer.toml missing review role contract term "
@@ -884,7 +884,7 @@ def test_validate_rejects_final_reviewer_scope_contract_drift(tmp_path: Path) ->
     ) in errors
     assert (
         "adapters/codex/agents/final-reviewer.toml missing review role contract term "
-        "'preservation anchors'"
+        "'project-local artifacts'"
     ) in errors
 
 
@@ -910,7 +910,7 @@ def test_validate_rejects_copilot_final_reviewer_project_artifact_drift(tmp_path
     ) in errors
     assert (
         "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
-        "'project-local artifacts'"
+        "'project design source requirements'"
     ) in errors
     assert (
         "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
@@ -918,7 +918,7 @@ def test_validate_rejects_copilot_final_reviewer_project_artifact_drift(tmp_path
     ) in errors
     assert (
         "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
-        "'preservation anchors'"
+        "'project-local artifacts'"
     ) in errors
 
 
@@ -946,7 +946,7 @@ def test_validate_rejects_missing_review_governance_project_artifact_coverage(tm
     ) in errors
     assert (
         "skills/code-review/references/review-governance.md missing review governance "
-        "contract term 'preservation anchors'"
+        "contract term 'project design source requirements'"
     ) in errors
 
 
@@ -974,15 +974,19 @@ def test_validate_rejects_missing_ui_approval_context_terms(tmp_path: Path) -> N
     ) in errors
     assert (
         "skills/user-apps-design/SKILL.md "
+        "missing UI approval context term 'project design source requirements'"
+    ) in errors
+    assert (
+        "skills/user-apps-design/SKILL.md "
+        "missing UI approval context term 'declared project design source'"
+    ) in errors
+    assert (
+        "skills/user-apps-design/SKILL.md "
         "missing UI approval context term 'project-local artifacts'"
     ) in errors
     assert (
         "skills/user-apps-design/SKILL.md "
         "missing UI approval context term 'screenshot/contact-sheet'"
-    ) in errors
-    assert (
-        "skills/user-apps-design/SKILL.md "
-        "missing UI approval context term 'preservation anchors'"
     ) in errors
 
 
@@ -1051,7 +1055,7 @@ def test_validate_rejects_design_judge_contract_drift(tmp_path: Path) -> None:
     ) in errors
     assert (
         "adapters/codex/agents/design-judge.toml missing role boundary contract term "
-        "'project design source'"
+        "'declared project design source'"
     ) in errors
     assert (
         "adapters/codex/agents/design-judge.toml missing role boundary contract term "
@@ -1059,7 +1063,11 @@ def test_validate_rejects_design_judge_contract_drift(tmp_path: Path) -> None:
     ) in errors
     assert (
         "adapters/codex/agents/design-judge.toml missing role boundary contract term "
-        "'preservation anchors'"
+        "'invent design criteria'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
+        "'visual quality only'"
     ) in errors
 
 
@@ -1084,7 +1092,7 @@ def test_validate_rejects_copilot_design_judge_project_target_drift(tmp_path: Pa
 
     assert (
         "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
-        "'project design source'"
+        "'declared project design source'"
     ) in errors
     assert (
         "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
@@ -1096,7 +1104,11 @@ def test_validate_rejects_copilot_design_judge_project_target_drift(tmp_path: Pa
     ) in errors
     assert (
         "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
-        "'preservation anchors'"
+        "'invent design criteria'"
+    ) in errors
+    assert (
+        "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
+        "'visual quality only'"
     ) in errors
 
 

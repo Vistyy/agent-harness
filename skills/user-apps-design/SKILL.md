@@ -20,10 +20,9 @@ It needs:
   viewports, and devices;
 - `design_judge` `pass` for the same claim.
 
-When a project has a local design workflow such as Impeccable, shape there
-first. Use `imagegen` for mockups or reference images when a visual target would
-improve implementation. Generated mockups become design sources only after user
-approval or project-workflow recording.
+Projects own design taste, visual method, mockup requirements, before/after
+comparison, preservation language, replacement approval, and generated-image
+workflow choices.
 
 If the project design source or declared local design workflow is missing or
 contradictory, stop or narrow the claim. Do not invent visual direction in the
@@ -35,22 +34,16 @@ Handoffs for broad UI approval name:
 
 - binding objective and accepted reductions;
 - affected screens, states, viewports, and devices;
-- project design source, or `missing`;
-- project-local artifacts required by that source, or `none`;
-- preservation anchors for changed UI with a project-defined visual language or
-  product-defining UI pattern, or an approved visual-language replacement /
-  narrowed claim;
+- declared project design source, or `missing`;
+- project design source requirements and project-local artifacts required by
+  that source, or `none`;
 - screenshot/contact-sheet artifact paths.
 
 Missing project design source blocks broad visual-quality approval unless the
 claim is explicitly narrowed.
 
-Missing preservation anchors block broad visual-quality approval for changed UI
-with a project-defined visual language or product-defining UI pattern unless
-the project explicitly approved a visual-language replacement or the claim is
-narrowed. Reject a generic replacement that drops those anchors without that
-approval. Do not reject project-approved identity cues solely because they are
-unusual.
+Missing, contradictory, stale, or narrower project design source requirements
+block broad visual-quality approval unless the claim is explicitly narrowed.
 
 `design_judge` compares rendered artifacts against the binding objective,
 project design source, and required project-local artifacts. Reject when the
@@ -60,8 +53,10 @@ incoherent, or non-shippable.
 
 Runtime evidence, tests, selectors, detector output, numeric scores, code
 review, and final review do not approve visual quality. `design_judge` returns
-`pass`, `reject`, or `blocked` for visual quality only; it does not decide live
-behavior or code quality.
+`pass`, `reject`, or `blocked` for visual quality only; it does not run the
+app, review code, debug, prove runtime behavior, invent design criteria, or
+perform other role work. The verdict does not decide live behavior or code
+quality.
 
 ## Boundary
 
