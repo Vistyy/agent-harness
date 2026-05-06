@@ -37,6 +37,8 @@ tracking, handoff, interruption, backlog/roadmap state, or multiple task cards.
 - Only `execution-ready` waves keep canonical `wave-execution.md`.
 - Closeout removes delivery-map state and packet only after final review
   approves review coverage and verification approves the final claim.
+- Completed wave briefs are disposable after retained invariants are extracted
+  to the owning durable surface or valid backlog.
 - Backlog entries are for valid deferrals only: unrelated nearby debt or
   explicitly accepted temporary debt with owner, risk, and removal condition.
 

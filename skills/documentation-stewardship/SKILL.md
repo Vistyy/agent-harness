@@ -32,6 +32,9 @@ Every durable concept has one owner.
 - cleanup, migration, evidence, queue, resume state: current-work
 - durable owner docs may link durable owners or exact validation surfaces
 - current-work may link the durable owner being changed
+- completed-wave context is retained only by extraction to the durable owner or
+  valid backlog; do not preserve it through closed audit archives, ADR defaults,
+  or closed-wave indexes.
 
 ## Successor Review
 

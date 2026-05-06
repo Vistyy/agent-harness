@@ -35,6 +35,10 @@ convention.
 `AGENTS.md`, `docs-ai/docs/**`, and `docs-ai/current-work/**`. It ignores
 external URLs, anchors, and template-like paths.
 
+`docs.completed-wave-doctrine-reference` rejects durable non-wave docs that
+link to `done` wave briefs. It scans markdown links and backticked local paths
+in `AGENTS.md` and `docs-ai/docs/**`, excluding wave briefs themselves.
+
 Reusable checks must stay narrow, high-signal, and tied to owned policy
 surfaces.
 

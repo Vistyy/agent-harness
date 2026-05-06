@@ -8,8 +8,10 @@ from typing import TextIO
 from urllib.parse import unquote
 
 MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+INLINE_LOCAL_PATH_PATTERN = re.compile(r"`([^`]+)`")
 MARKDOWN_LINK_SCAN_ROOTS = ("AGENTS.md", "docs-ai/docs", "docs-ai/current-work")
 MARKDOWN_LINK_TEMPLATE_CHARS = ("<", ">", "{", "}", "*")
+COMPLETED_WAVE_STATUS_PATTERN = re.compile(r"^\*\*Status:\*\*\s*done\s*$", re.MULTILINE)
 
 
 class GovernanceCommandError(ValueError):
@@ -34,15 +36,69 @@ def _iter_markdown_files(repo_root: Path) -> list[Path]:
     return sorted(files)
 
 
-def _link_target_exists(markdown_file: Path, target: str) -> bool:
+def _local_target_path(markdown_file: Path, target: str) -> Path | None:
     if "://" in target or target.startswith("#"):
-        return True
+        return None
     raw_target = unquote(target.split("#", 1)[0])
     if not raw_target or any(char in raw_target for char in MARKDOWN_LINK_TEMPLATE_CHARS):
-        return True
+        return None
     if raw_target.startswith("/"):
-        return Path(raw_target).exists()
-    return (markdown_file.parent / raw_target).exists()
+        return Path(raw_target)
+    return markdown_file.parent / raw_target
+
+
+def _link_target_exists(markdown_file: Path, target: str) -> bool:
+    target_path = _local_target_path(markdown_file, target)
+    if target_path is None:
+        return True
+    return target_path.exists()
+
+
+def _is_relative_to(path: Path, parent: Path) -> bool:
+    try:
+        path.relative_to(parent)
+    except ValueError:
+        return False
+    return True
+
+
+def _iter_completed_wave_reference_sources(repo_root: Path) -> list[Path]:
+    files: list[Path] = []
+    agents_path = repo_root / "AGENTS.md"
+    if agents_path.is_file():
+        files.append(agents_path)
+    docs_path = repo_root / "docs-ai" / "docs"
+    wave_dir = docs_path / "initiatives" / "waves"
+    if docs_path.is_dir():
+        for markdown_file in sorted(docs_path.rglob("*.md")):
+            if _is_relative_to(markdown_file.resolve(), wave_dir.resolve()):
+                continue
+            files.append(markdown_file)
+    return sorted(files)
+
+
+def _is_done_wave_brief(repo_root: Path, target_path: Path) -> bool:
+    wave_dir = (repo_root / "docs-ai" / "docs" / "initiatives" / "waves").resolve()
+    resolved_target = target_path.resolve()
+    if not _is_relative_to(resolved_target, wave_dir):
+        return False
+    if resolved_target.suffix != ".md" or not resolved_target.is_file():
+        return False
+    return bool(COMPLETED_WAVE_STATUS_PATTERN.search(resolved_target.read_text(encoding="utf-8")))
+
+
+def _completed_wave_references(markdown_file: Path, repo_root: Path) -> list[str]:
+    text = markdown_file.read_text(encoding="utf-8")
+    targets = [match.group(1) for match in MARKDOWN_LINK_PATTERN.finditer(text)]
+    targets.extend(match.group(1) for match in INLINE_LOCAL_PATH_PATTERN.finditer(text))
+    completed_wave_targets: list[str] = []
+    for target in targets:
+        target_path = _local_target_path(markdown_file, target)
+        if target_path is None:
+            continue
+        if _is_done_wave_brief(repo_root, target_path):
+            completed_wave_targets.append(target)
+    return completed_wave_targets
 
 
 def run_harness_checks(*, repo_root: Path) -> list[CheckFailure]:
@@ -65,6 +121,19 @@ def run_harness_checks(*, repo_root: Path) -> list[CheckFailure]:
                     check_id="docs.cross-doc-links",
                     message=f"{markdown_file.relative_to(repo_root)} has broken markdown links: {', '.join(broken_links)}",
                     remediation="Retarget links to the owning local project doc or global harness reference.",
+                )
+            )
+    for markdown_file in _iter_completed_wave_reference_sources(repo_root):
+        completed_wave_targets = _completed_wave_references(markdown_file, repo_root)
+        if completed_wave_targets:
+            failures.append(
+                CheckFailure(
+                    check_id="docs.completed-wave-doctrine-reference",
+                    message=(
+                        f"{markdown_file.relative_to(repo_root)} references completed wave files as durable "
+                        f"doctrine: {', '.join(completed_wave_targets)}"
+                    ),
+                    remediation="Extract retained context to the owning durable doc or valid backlog, then remove the completed-wave reference.",
                 )
             )
     return failures

@@ -339,6 +339,63 @@ def test_governance_check_passes_valid_project_doc_links(tmp_path: Path) -> None
     assert result.stdout == ""
 
 
+def test_governance_check_rejects_durable_completed_wave_doctrine_reference(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    write(
+        project / "docs-ai" / "docs" / "initiatives" / "waves" / "closed-wave.md",
+        """
+        # Wave closed-wave
+
+        **Status:** done
+        """,
+    )
+    write(project / "docs-ai" / "docs" / "policy.md", "[Old rule](initiatives/waves/closed-wave.md)\n")
+
+    result = run_cli(["governance", "check", "--repo-root", str(project)])
+
+    assert result.returncode == 1
+    assert "docs.completed-wave-doctrine-reference" in result.stdout
+    assert "docs-ai/docs/policy.md references completed wave files as durable doctrine" in result.stdout
+    assert "initiatives/waves/closed-wave.md" in result.stdout
+
+
+def test_governance_check_allows_active_wave_planning_reference(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    write(
+        project / "docs-ai" / "docs" / "initiatives" / "waves" / "active-wave.md",
+        """
+        # Wave active-wave
+
+        **Status:** execution-ready
+        """,
+    )
+    write(project / "docs-ai" / "docs" / "policy.md", "[Active](initiatives/waves/active-wave.md)\n")
+
+    result = run_cli(["governance", "check", "--repo-root", str(project)])
+
+    assert result.returncode == 0
+    assert result.stdout == ""
+
+
+def test_governance_check_rejects_inline_completed_wave_path(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    write(
+        project / "docs-ai" / "docs" / "initiatives" / "waves" / "closed-wave.md",
+        """
+        # Wave closed-wave
+
+        **Status:** done
+        """,
+    )
+    write(project / "docs-ai" / "docs" / "policy.md", "See `initiatives/waves/closed-wave.md`.\n")
+
+    result = run_cli(["governance", "check", "--repo-root", str(project)])
+
+    assert result.returncode == 1
+    assert "docs.completed-wave-doctrine-reference" in result.stdout
+    assert "initiatives/waves/closed-wave.md" in result.stdout
+
+
 def test_governance_check_rejects_missing_repo_root_without_traceback(tmp_path: Path) -> None:
     result = run_cli(["governance", "check", "--repo-root", str(tmp_path / "missing")])
 

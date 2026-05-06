@@ -38,6 +38,8 @@ and project-overlay contracts.
 - Follow `documentation-stewardship` for one-owner durable concepts. Harness
   skills, adapters, and bootstrap docs may repeat only compressed owner
   pointers plus local load, input, output, or stop consequences.
+- Completed wave briefs are not durable doctrine. After extraction to the real
+  owner or valid backlog, durable docs must not depend on `done` wave files.
 - Enforce duplicate doctrine with exact owner-only checks only when the phrase
   has one durable owner and a concrete counterexample.
 - Delete, collapse, demote, or reuse before adding harness structure.
