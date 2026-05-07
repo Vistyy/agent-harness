@@ -49,13 +49,22 @@ OPENAI_ALLOWED_INTERFACE_KEYS = {
     "default_prompt",
 }
 PACKET_REQUIRED_SECTIONS = (
-    "Scope And Execution Posture",
-    "Required Gates",
+    "Work Context",
     "Task Plan",
     "Proof Plan",
     "Execution State",
 )
-REQUIRED_GATES_HEADER = "| Claim | Required gate | Owner | Proof/artifacts | Blocks when |"
+WORK_CONTEXT_REQUIRED_SUBSECTIONS = (
+    "Binding Objective",
+    "Owner Skill Intake",
+    "Scope And Owners",
+    "Decisions And Assumptions",
+    "Adequacy Challenge",
+    "Required Gates",
+    "Subagent Handoff Payload",
+    "Stop Conditions",
+)
+REQUIRED_GATES_HEADER = "| Claim | Owner | Status | Blocks when | Proof rows | Role |"
 PROOF_ROW_REQUIRED_KEYS = (
     "proof_id",
     "task_slug",
@@ -273,6 +282,20 @@ ROLE_BOUNDARY_CONTRACTS = {
         "Do not perform `runtime_evidence`, `quality_guard`, `final_reviewer`",
         "not live behavior or code quality",
     ),
+}
+ADAPTER_HANDOFF_CONTEXT_CONTRACTS = {
+    "adapters/codex/agents/implementer.toml": ("Work Context", "active `execution-ready` wave packet", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
+    "adapters/github-copilot/agents/implementer.agent.md": ("Work Context", "active `execution-ready` wave packet", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
+    "adapters/codex/agents/planning-critic.toml": ("Work Context", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
+    "adapters/github-copilot/agents/planning_critic.agent.md": ("Work Context", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
+    "adapters/codex/agents/quality-guard.toml": ("Work Context", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
+    "adapters/github-copilot/agents/quality_guard.agent.md": ("Work Context", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
+    "adapters/codex/agents/final-reviewer.toml": ("Work Context", "binding objective", "accepted reductions", "proof artifacts", "assumptions", "risks", "stop conditions"),
+    "adapters/github-copilot/agents/final_reviewer.agent.md": ("Work Context", "binding objective", "accepted reductions", "proof artifacts", "assumptions", "risks", "stop conditions"),
+    "adapters/codex/agents/runtime-evidence.toml": ("Work Context", "binding objective", "accepted reductions", "artifacts", "assumptions", "risks", "stop conditions"),
+    "adapters/github-copilot/agents/runtime_evidence.agent.md": ("Work Context", "binding objective", "accepted reductions", "artifacts", "assumptions", "risks", "stop conditions"),
+    "adapters/codex/agents/design-judge.toml": ("Work Context", "binding objective", "accepted reductions", "artifacts", "assumptions", "risks", "stop conditions"),
+    "adapters/github-copilot/agents/design_judge.agent.md": ("Work Context", "binding objective", "accepted reductions", "artifacts", "assumptions", "risks", "stop conditions"),
 }
 REMOVED_WORKFLOW_SKILL_NAMES = (
     "executing-plans",
@@ -887,20 +910,39 @@ def _validate_subagent_allowlist(root: Path, roles: set[str]) -> list[str]:
     errors: list[str] = []
     if not roles:
         return errors
-    sources = [
-        root / "AGENTS.md",
-        root / "skills" / "subagent-orchestration" / "SKILL.md",
-    ]
-    for path in sources:
-        if not path.is_file():
-            continue
-        preauthorized, source_errors = _extract_preauthorized_roles(path, root)
+    agents_path = root / "AGENTS.md"
+    if agents_path.is_file():
+        preauthorized, source_errors = _extract_preauthorized_roles(agents_path, root)
         errors.extend(source_errors)
         if preauthorized and preauthorized != roles:
             errors.append(
-                f"{path.relative_to(root)} preauthorized subagents {sorted(preauthorized)} "
+                f"AGENTS.md preauthorized subagents {sorted(preauthorized)} "
                 f"do not match agents/roles.md roles {sorted(roles)}"
             )
+    metadata_path = root / "skills" / "subagent-orchestration" / "agents" / "openai.yaml"
+    if metadata_path.is_file():
+        metadata_text = metadata_path.read_text(encoding="utf-8")
+        metadata_role_mentions = sorted(role for role in roles if role in metadata_text)
+        if len(metadata_role_mentions) > 1:
+            errors.append(
+                "skills/subagent-orchestration/agents/openai.yaml must point to AGENTS.md "
+                "and agents/roles.md instead of duplicating the preauthorized role list"
+            )
+        metadata_normalized = " ".join(metadata_text.split())
+        for term in ("AGENTS.md", "agents/roles.md", "Work Context"):
+            if term not in metadata_normalized:
+                errors.append(f"skills/subagent-orchestration/agents/openai.yaml missing subagent metadata owner pointer {term!r}")
+    subagent_path = root / "skills" / "subagent-orchestration" / "SKILL.md"
+    if subagent_path.is_file():
+        normalized_text = " ".join(subagent_path.read_text(encoding="utf-8").split())
+        for term in (
+            "AGENTS.md` owns the explicit user preauthorization allowlist",
+            "agents/roles.md` owns harness role names and missions",
+            "durable Work Context",
+            "active wave packet path",
+        ):
+            if " ".join(term.split()) not in normalized_text:
+                errors.append(f"skills/subagent-orchestration/SKILL.md missing subagent context contract term {term!r}")
 
     return errors
 
@@ -999,6 +1041,16 @@ def _markdown_section(text: str, heading: str) -> str:
     return text[match.end() : match.end() + next_match.start()]
 
 
+def _markdown_subsection(text: str, heading: str) -> str:
+    match = re.search(rf"^###\s+{re.escape(heading)}\s*$", text, re.MULTILINE)
+    if not match:
+        return ""
+    next_match = re.search(r"^###\s+", text[match.end() :], re.MULTILINE)
+    if not next_match:
+        return text[match.end() :]
+    return text[match.end() : match.end() + next_match.start()]
+
+
 def _task_card_sections(text: str) -> list[tuple[str, str]]:
     task_plan = _markdown_section(text, "Task Plan")
     cards: list[tuple[str, str]] = []
@@ -1031,12 +1083,21 @@ def _validate_wave_packet(path: Path, root: Path) -> list[str]:
     for section in PACKET_REQUIRED_SECTIONS:
         if section not in headings:
             errors.append(f"{path.relative_to(root)} missing section {section!r}")
-    required_gates = _markdown_section(text, "Required Gates")
-    if "Required Gates" in headings:
-        if REQUIRED_GATES_HEADER not in required_gates:
-            errors.append(f"{path.relative_to(root)} Required Gates matrix missing expected header")
-        elif not _required_gates_has_data_row(required_gates):
-            errors.append(f"{path.relative_to(root)} Required Gates matrix missing data row")
+    work_context = _markdown_section(text, "Work Context")
+    if "Work Context" in headings:
+        for obsolete_section in ("Scope And Execution Posture", "Required Gates"):
+            if obsolete_section in headings:
+                errors.append(f"{path.relative_to(root)} contains obsolete top-level section {obsolete_section!r} after Work Context schema")
+        work_context_subsections = _heading_names(work_context, 3)
+        for subsection in WORK_CONTEXT_REQUIRED_SUBSECTIONS:
+            if subsection not in work_context_subsections:
+                errors.append(f"{path.relative_to(root)} Work Context missing subsection {subsection!r}")
+        required_gates = _markdown_subsection(work_context, "Required Gates")
+        if "Required Gates" in work_context_subsections:
+            if REQUIRED_GATES_HEADER not in required_gates:
+                errors.append(f"{path.relative_to(root)} Work Context Required Gates matrix missing expected header")
+            elif not _required_gates_has_data_row(required_gates):
+                errors.append(f"{path.relative_to(root)} Work Context Required Gates matrix missing data row")
 
     proof_plans: list[object] = []
     try:
@@ -1331,7 +1392,7 @@ def _required_gates_has_data_row(section: str) -> bool:
         cells = [cell.strip() for cell in stripped.strip("|").split("|")]
         unquoted_cells = [cell.removeprefix("`").removesuffix("`") for cell in cells]
         if (
-            len(cells) == 5
+            len(cells) == 6
             and all(cells)
             and not any(cell.startswith("<") and cell.endswith(">") for cell in unquoted_cells)
         ):
@@ -1430,6 +1491,15 @@ def _validate_role_boundary_contracts(root: Path) -> list[str]:
         for term in required_terms:
             if " ".join(term.split()) not in normalized_text:
                 errors.append(f"{relative_path} missing role boundary contract term {term!r}")
+    for relative_path, required_terms in ADAPTER_HANDOFF_CONTEXT_CONTRACTS.items():
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        normalized_text = " ".join(text.split())
+        for term in required_terms:
+            if " ".join(term.split()) not in normalized_text:
+                errors.append(f"{relative_path} missing adapter handoff context term {term!r}")
     return errors
 
 

@@ -40,6 +40,15 @@ Reject when:
 - touched-component integrity is missing, unacceptable, or deferred without
   accepted debt and backlog link
 
+
+Handoff context:
+- Non-trivial handoffs must include the durable Work Context or active wave
+  packet path.
+- Treat the binding objective, accepted reductions, proof rows/artifacts,
+  assumptions, risks, and stop conditions from that context as authoritative.
+- Reject or block handoffs that replace the Work Context with a narrow summary
+  or omit accepted reductions, assumptions, proof/artifacts, or stop conditions.
+
 Output contract:
 - verdict and findings, or explicit no-findings statement
 - reviewed scope, touched owner/component, highest inspected scope, integrity

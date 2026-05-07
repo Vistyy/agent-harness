@@ -4,35 +4,43 @@ Owns the durable packet schema for `wave-execution.md`.
 
 ## Sections
 
-- `Scope And Execution Posture`
-- `Required Gates`
+Required sections:
+
+- `Work Context`
 - `Task Plan`
 - `Proof Plan`
 - `Execution State`
-- `System-Boundary Architecture Disposition` when
-  `System-boundary trigger: triggered`
 
-## Scope And Posture
+Include `System-Boundary Architecture Disposition` when the Work Context names
+`System-boundary trigger: triggered`.
 
-Required: in/out scope, non-obvious constraints, system-boundary trigger,
-delegation posture, parent-only rationale, frozen decisions, and planning
-exceptions.
+## Work Context
 
-`implementer-eligible` is the default. `parent-only` needs a concrete reason:
-`packet-declared-parent-only`, `repeated-implementer-handback`,
-`tool-or-runtime-limit`, `shared-file-churn`, or `tiny-local-followup`.
+The Work Context is the single shared context capsule for parent and subagents.
+It replaces duplicated planning/gate prose and must appear before task cards.
 
-Planning exceptions need owner, reason, and review/removal condition.
+Required subsections:
 
-## Required Gates
-
-Required for material claims. The matrix names each claim's gate, owner,
-proof/artifacts, and blocking condition before execution.
-
-Rows must preserve the binding objective. Missing, rejected, blocked, stale, or
-narrower required gates block the claim. `not-applicable` needs a named reason.
-Do not use the matrix as a second proof plan; proof rows still carry exact
-commands, artifacts, and counterfactual probes.
+- `Binding Objective`: original objective, accepted reductions, residual gaps,
+  and newest-user-message checkpoint.
+- `Owner Skill Intake`: route, project overlay/docs read, owner skills read,
+  matched reference gates read, skipped references with reason, and open owner
+  gaps. For non-trivial work this includes `code-simplicity`.
+- `Scope And Owners`: in scope, out of scope, touched owner/component, owned
+  files/surfaces, public entrypoints, and owner boundaries.
+- `Decisions And Assumptions`: closed decisions, assumptions subagents may rely
+  on, and decisions still user-owned or blocked.
+- `Adequacy Challenge`: before-implementation verdict, highest inspected scope,
+  must-block signals, and reshape/stop/accepted-debt disposition.
+- `Required Gates`: compact rows with claim, owner, status, blocking condition,
+  proof row IDs, and review/runtime/design role when applicable. Do not repeat
+  exact proof commands here.
+- `Subagent Handoff Payload`: packet path, objective/reductions, task slice,
+  owned surfaces, assumptions, artifacts, proof rows, risks, and stop
+  conditions for non-trivial handoff.
+- `Stop Conditions`: objective mismatch, under-read owner skills, inadequate
+  touched owner, proof drift, unaccepted reduction/debt, stale route, or context
+  narrower than handoff/final claim.
 
 ## Task Cards
 
@@ -48,6 +56,7 @@ Do not invent extra task states. Nuance belongs in proof rows, blocker entries,
 or task evidence.
 
 Each `### <task_slug>` card states:
+
 - state
 - outcome
 - in scope / out of scope
@@ -59,8 +68,9 @@ Each `### <task_slug>` card states:
 - proof rows
 - deferred follow-up
 
-Task cards preserve the binding objective. Starting files, symbols, and
-implementation notes are hints, not required ceremony.
+Task cards own execution slices only. They do not restate the objective,
+accepted reductions, global gates, or full owner-skill intake. Starting files,
+symbols, and implementation notes are hints, not required ceremony.
 
 Material owner, proof, state-authority, runtime, compatibility, migration,
 public behavior, and forbidden-legacy-path choices are not implementer-local.
@@ -68,6 +78,7 @@ public behavior, and forbidden-legacy-path choices are not implementer-local.
 ## Proof Rows
 
 The `Proof Plan` JSON contains `proof_plan` rows with:
+
 - `proof_id`
 - `task_slug`
 - `anchor_ids`
@@ -81,7 +92,8 @@ The `Proof Plan` JSON contains `proof_plan` rows with:
 - `status`
 
 Every material claim needs exact proof and a counterfactual probe. No proof row
-may prove a smaller invented objective.
+may prove a smaller invented objective. Required Gates point to proof IDs
+instead of repeating proof details.
 
 Runtime rows carry the Runtime Claim Map in existing fields: `exact_proof`
 names entrypoint, target, action/flow, result, and simulation boundary;
@@ -89,15 +101,15 @@ names entrypoint, target, action/flow, result, and simulation boundary;
 
 ## System-Boundary Appendix
 
-When triggered, include why, planning disposition, stop rule, changed
-contracts, single owner, write/read-repair paths, forbidden bypasses, rejected
+When triggered, include why, planning disposition, stop rule, changed contracts,
+single owner, write/read-repair paths, forbidden bypasses, rejected
 alternatives, why scope is not artificially narrowed, and stable-to-extend
 expectation.
 
 ## Execution State
 
-Track decisions, blockers, technical debt, task evidence, and deferred
-follow-up.
+Track changes from the Work Context: new decisions, blockers, technical debt,
+task evidence, and deferred follow-up. Do not restate static context.
 
 Accepted touched-component debt must live here and link backlog detail with
 owner, affected files/surfaces, accepted must-block signals, risk, removal
@@ -105,6 +117,7 @@ condition, and explicit user acceptance.
 
 ## Trust
 
-An implementer may trust an `execution-ready` packet for closed decisions and
-owned scope. The implementer stops when scope is underfed, discovery leaks into
-execution, proof drifts, or a current-objective owner defect appears.
+An implementer may trust an `execution-ready` packet for closed decisions, Work
+Context, and owned scope. The implementer stops when scope is underfed,
+discovery leaks into execution, proof drifts, owner-skill intake is missing, or
+a current-objective owner defect appears.

@@ -24,8 +24,12 @@ Do not promote shallow breadth plans that simulate coverage.
 
 ## Gate
 
-Close or stop on scope, material decisions, touched owner/component integrity,
-proof allocation, and deferrals.
+Close or stop on owner-skill intake, scope, material decisions, adequacy,
+touched owner/component integrity, proof allocation, and deferrals.
+
+For non-trivial work, durable planning must record the route, project
+overlay/docs read, owner skills read, matched reference gates read, skipped
+references with reason, and open owner gaps. `code-simplicity` is required.
 
 Deferrals are valid only when unrelated to the current objective or explicitly
 accepted temporary debt with owner, risk, and removal condition.
@@ -45,8 +49,10 @@ Touched owner/component is the smallest owner whose contract, state, lifecycle,
 design, workflow, or proof the change touches. Expand only to shared authority
 required by the objective.
 
-Assess whether the owner is coherent enough to complete the objective. If it is
-not, fix the owner now or stop for explicit accepted debt.
+Assess whether the owner is coherent enough to complete the objective. Record
+the before-implementation adequacy verdict. If the owner or selected scope is
+inadequate, fix the owner now, reshape the plan, or stop for explicit accepted
+debt.
 
 ## Omission Sweep
 
@@ -75,6 +81,9 @@ Do not promote while:
   objective continuity, route scope, proof/review gates, and stop conditions
 - a broad objective is spread shallowly across multiple owners instead of
   following `work-routing` broad-objective semantics
+- owner-skill intake is missing or stale
+- before-implementation adequacy is missing, stale, or narrower than the
+  binding objective
 - touched-component integrity is `not assessed`
 - unacceptable touched-component integrity lacks accepted debt and backlog link
 - discovery work leaks into execution

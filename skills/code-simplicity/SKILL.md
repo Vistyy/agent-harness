@@ -1,12 +1,14 @@
 ---
 name: code-simplicity
-description: "Default simplicity gate for planning, design, architecture, implementation, tests, workflow, and review; requires touched-component integrity for non-trivial work."
+description: "Required gate for non-trivial planning, design, architecture, implementation, tests, workflow, review, proof, cleanup, handoff, and completion; use before shaping work when current-objective owner, adequacy, ceremony, duplicate authority, or shallow-breadth risk exists."
 ---
 
 # Code Simplicity
 
-Use by default for planning, design, architecture, implementation, tests,
-workflow, and review.
+Use by default for non-trivial planning, design, architecture,
+implementation, tests, workflow, review, proof, cleanup, handoff, and
+completion. Read this before shaping work when the current objective may touch
+owner boundaries, adequacy, ceremony, duplicate authority, or shallow breadth.
 
 ## Rule
 
@@ -49,6 +51,18 @@ Block or reshape when the plan:
 - narrows breadth, quality, runtime behavior, or review surface without
   accepted reduction
 - defers debt that belongs to the current objective or touched owner
+
+## Adequacy Challenge
+
+For non-trivial work, challenge adequacy before implementation and before
+completion. Name whether the selected scope repairs the touched
+owner/component enough to satisfy the binding objective. If it does not, reshape
+the work, route it into durable planning, stop as blocked, or record explicit
+accepted debt with owner, risk, removal condition, and backlog link.
+
+A diff summary, passing tests, role approval, or matching the packet is not an
+adequacy verdict. The verdict must use the touched owner/component and the
+original objective plus accepted reductions as the comparison target.
 
 ## Local Shape
 

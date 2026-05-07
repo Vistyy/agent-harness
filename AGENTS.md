@@ -16,12 +16,17 @@ Precedence:
   dump.
 - Start from the matching owner skill or project owner doc; read only what the
   current task needs.
+- For non-trivial work, read `code-simplicity` before shaping the approach,
+  handoff, review, proof, or completion claim.
 - Use installed harness automation when a command exists.
 
 ## Always-Loaded Guardrails
 
 - Do not replace the binding user objective with a convenient subset.
 - Do not patch around a current-objective owner defect and call it complete.
+- When the binding objective cannot be completed in the current route, route it
+  into durable planning or stop as blocked; a diff-sized success claim is
+  invalid.
 - For non-trivial work, `not assessed` touched-owner integrity is not
   approvable.
 - Final claims must stay within owner-selected proof, runtime evidence, and
@@ -54,8 +59,8 @@ Precedence:
   accepted exception.
 - Prefer the least complex complete correction. Delete, collapse, demote, or
   reuse before adding structure.
-- For non-trivial work, assess the touched owner/component, not only the diff.
-  `not assessed` is not approvable.
+- For non-trivial work, assess the touched owner/component and adequacy of the
+  selected scope, not only the diff. `not assessed` is not approvable.
 - Replace obsolete paths in the same change. Do not leave dead code, unused
   flags, obsolete fallbacks, or migration bridges unless a durable owner names
   the protected surface and removal condition.

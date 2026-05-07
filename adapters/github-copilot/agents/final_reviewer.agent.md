@@ -43,6 +43,15 @@ Constraints:
 - Cite exact `file/path:line` findings. Block material issues, weak proof, or
   premature active-state removal.
 
+
+Handoff context:
+- Non-trivial handoffs must include the durable Work Context or active wave
+  packet path.
+- Treat the binding objective, accepted reductions, proof rows/artifacts,
+  assumptions, risks, and stop conditions from that context as authoritative.
+- Reject or block handoffs that replace the Work Context with a narrow summary
+  or omit accepted reductions, assumptions, proof/artifacts, or stop conditions.
+
 Output contract:
 - Review Summary
 - Findings

@@ -8,16 +8,12 @@ description: "Use when subagents should be invoked or routed: delegation decisio
 Owns delegation defaults, role choice, handoff inputs, worker reuse, and
 active-worker handling.
 
+`../../AGENTS.md` owns the explicit user preauthorization allowlist.
 `../../agents/roles.md` owns harness role names and missions. This skill owns
 how those roles are invoked and handed work.
 
-The user explicitly authorizes use of the spawn/subagent tool for these
-harness-defined roles when this skill is in force:
-`explorer`, `check_runner`, `planning_critic`, `implementer`,
-`quality_guard`, `final_reviewer`, `runtime_evidence`, and `design_judge`.
-
-This preauthorization applies only to those named roles and only when the
-workflow calls for them.
+Preauthorization applies only to the roles named by `AGENTS.md` and only when
+the workflow calls for them.
 
 ## Rule
 
@@ -58,17 +54,20 @@ Slice scope is execution scope only. It is not the success claim. A handoff may
 narrow work; only the user or durable planning state may narrow success.
 
 Pass:
+- durable Work Context or active wave packet path for non-trivial work
 - original user objective
 - accepted scope reductions and residual gaps
 - exact role task
 - owned files/surfaces or read-only scope
+- assumptions the subagent may rely on
 - artifacts, proof rows, commands, screenshots, or logs to inspect
 - known risks and stop conditions
 
 Do not substitute a task label, packet summary, implementer summary, or narrow
 review prompt for the original objective.
 
-If a non-trivial handoff omits the binding objective or accepted reductions, or
+If a non-trivial handoff omits durable context, the binding objective,
+accepted reductions, assumptions, risks, proof rows/artifacts, or stop conditions, or
 cannot state how the slice preserves them, stop and return to planning.
 
 ## Implementer Rules

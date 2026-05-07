@@ -19,9 +19,28 @@ Owns route selection. Technical contracts stay with their owner skills.
 - The selected owner/problem is execution scope, not an accepted reduction.
 - The original objective remains binding; final wording may claim only completed
   scope unless durable state covers the rest.
-- Ask only for product priority, irreversible tradeoff, accepted reduction,
-  credentials/access, another user-owned decision, or requested audit/map.
+- For non-trivial work, route-selected owner skills, project overlay docs,
+  matched reference gates, and `code-simplicity` must be read before
+  implementation, handoff, review, proof, or completion; otherwise stop as
+  under-routed.
+- Ask or stop only at the `User-Owned Decision Boundary`.
 - Do not perform shallow breadth work for apparent coverage.
+
+## User-Owned Decision Boundary
+
+Implementation, design, architecture, test, cleanup, and proof choices inside
+the routed objective are agent-owned; asking the user to choose them is a
+routing failure unless the decision crosses this boundary.
+
+Ask or stop only for:
+
+- Product intent or priority.
+- Irreversible, destructive, or high-impact tradeoff.
+- Credential, tenant, secret, or external access.
+- Accepted scope reduction.
+- Accepted temporary debt.
+- Dependency, infrastructure, cost, or compatibility posture whose impact
+  exceeds the current owner.
 
 ## Objective Continuity
 

@@ -1,35 +1,71 @@
 # Wave <wave-id> Execution Packet
 
-## Scope And Execution Posture
+## Work Context
 
-- Original objective:
-  - `<user objective>`
-- Accepted reductions:
-  - `<none | explicit>`
-- Residual gaps:
-  - `<none | explicit>`
-- In-scope:
-  - `<task-slug>`
-- Out-of-scope:
-  - `<none | unrelated/accepted reductions>`
-- Non-obvious constraints:
-  - `<constraint | none>`
-- System-boundary trigger:
-  - `not-triggered`
-- Implementer delegation posture:
-  - `implementer-eligible`
-- Parent-only rationale:
-  - `none`
-- Frozen decisions:
-  - `<closed decision | none>`
-- Planning Exceptions:
-  - `none`
+### Binding Objective
 
-## Required Gates
+- original objective: `<user objective>`
+- accepted reductions: `<none | explicit>`
+- residual gaps: `<none | explicit>`
+- newest-user-message checkpoint: `<date/context>`
 
-| Claim | Required gate | Owner | Proof/artifacts | Blocks when |
-| --- | --- | --- | --- | --- |
-| `<claim>` | `<gate>` | `<owner>` | `<proof/artifacts>` | `<missing/rejected/blocked/stale/narrower than claim>` |
+### Owner Skill Intake
+
+- route: `<direct | planning-intake | wave execution>`
+- project overlay/docs read: `<paths | none>`
+- owner skills read: `<skills>`
+- matched reference gates read: `<references | none>`
+- skipped references with reason: `<none | entries>`
+- open owner gaps: `<none | entries>`
+
+### Scope And Owners
+
+- in scope: `<task-slug/surfaces>`
+- out of scope: `<none | unrelated/accepted reductions>`
+- touched owner/component: `<owner>`
+- owned files/surfaces: `<paths/surfaces>`
+- public entrypoints: `<entrypoints | none>`
+- owner boundaries: `<boundaries>`
+
+### Decisions And Assumptions
+
+- closed decisions: `<decisions | none>`
+- assumptions subagents may rely on: `<assumptions | none>`
+- user-owned or blocked decisions: `<none | entries>`
+
+### Adequacy Challenge
+
+- before-implementation verdict: `<adequate | inadequate | blocked>`
+- highest inspected scope: `<scope>`
+- must-block signals: `<none | entries>`
+- disposition: `<reshape | stop | accepted debt | adequate>`
+
+### Required Gates
+
+| Claim | Owner | Status | Blocks when | Proof rows | Role |
+| --- | --- | --- | --- | --- | --- |
+| `<claim>` | `<owner>` | `<planned | satisfied | blocked>` | `<condition>` | `P1` | `<role | none>` |
+
+### Subagent Handoff Payload
+
+- packet path: `docs-ai/current-work/<wave-id>/wave-execution.md`
+- objective/reductions: `<summary>`
+- task slice: `<task>`
+- owned surfaces: `<surfaces>`
+- assumptions: `<assumptions>`
+- artifacts/proof rows: `<artifacts/proof rows>`
+- risks: `<risks | none>`
+- stop conditions: `<conditions>`
+
+### Stop Conditions
+
+- objective mismatch
+- under-read owner skills
+- inadequate touched owner
+- proof drift
+- unaccepted reduction/debt
+- stale route
+- context narrower than handoff/final claim
 
 ## Task Plan
 

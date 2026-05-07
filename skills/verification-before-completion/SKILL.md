@@ -13,8 +13,9 @@ saying work is fixed, done, ready, or approved.
 
 ## Rule
 
-The final claim cannot exceed the binding objective, accepted reductions, fresh
-proof, required runtime evidence, and review coverage.
+The final claim cannot exceed the binding objective, accepted reductions,
+owner-skill intake, adequacy re-check, fresh proof, required runtime evidence,
+and review coverage.
 
 Broad product-facing UI design readiness also requires `design_judge` `pass`
 covering the same screenshots/contact sheets, declared project design source,
@@ -39,16 +40,21 @@ the implemented slice, diff summary, reviewer prompt, or handoff wording.
 Before completion:
 1. name the binding objective and accepted reductions
 2. name the exact final claim
-3. run fresh owner-selected proof
-4. include runtime evidence when the claim includes non-trivial runtime-visible
+3. confirm owner-skill intake is complete and current for the final claim
+4. re-check adequacy against the touched owner/component and binding objective
+5. run fresh owner-selected proof
+6. include runtime evidence when the claim includes non-trivial runtime-visible
    behavior that needs it
-5. include `design_judge` `pass` when broad product UI design is claimed
-6. confirm required review covers the same claim
-7. report residual risks or `none`
+7. include `design_judge` `pass` when broad product UI design is claimed
+8. confirm required review covers the same claim
+9. report residual risks or `none`
 
 ## Stop
 
 Stop or narrow the claim when:
+- owner-skill intake is missing, stale, or narrower than the claim
+- adequacy re-check is missing, stale, or says the touched owner/component
+  remains inadequate for the binding objective
 - proof is stale, missing, indirect, or narrower than the claim
 - runtime evidence is required but missing, rejected, blocked, incomplete, or
   mis-scoped

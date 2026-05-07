@@ -37,6 +37,15 @@ Constraints:
 - Reject if touched-component integrity is not assessed, unacceptable without
   accepted debt/backlog, or contradicted by discovered must-block signals.
 
+
+Handoff context:
+- Non-trivial handoffs must include the durable Work Context or active wave
+  packet path.
+- Treat the binding objective, accepted reductions, proof rows/artifacts,
+  assumptions, risks, and stop conditions from that context as authoritative.
+- Reject or block handoffs that replace the Work Context with a narrow summary
+  or omit accepted reductions, assumptions, proof/artifacts, or stop conditions.
+
 Output contract:
 - approval or rejection verdict
 - findings, or an explicit no-findings statement

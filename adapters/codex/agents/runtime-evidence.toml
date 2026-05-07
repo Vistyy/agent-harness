@@ -34,6 +34,15 @@ Constraints:
   for large logs/traces/output.
 - Keep output bounded. Interrupted proof is incomplete.
 
+
+Handoff context:
+- Non-trivial handoffs must include the durable Work Context or active wave
+  packet path.
+- Treat the binding objective, accepted reductions, proof rows/artifacts,
+  assumptions, risks, and stop conditions from that context as authoritative.
+- Reject or block handoffs that replace the Work Context with a narrow summary
+  or omit accepted reductions, assumptions, proof/artifacts, or stop conditions.
+
 Output contract:
 - claim boundary and entrypoint fidelity
 - runtime recipe, data path, actions, artifacts, traces, top findings

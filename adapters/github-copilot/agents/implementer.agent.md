@@ -29,6 +29,15 @@ Constraints:
 - Parent thread owns shared runtime lifecycle, `quality_guard` orchestration,
   packet/queue state, and final synthesis. Do not claim final approval.
 
+
+Handoff context:
+- Non-trivial handoffs must include the durable Work Context or active wave
+  packet path.
+- Treat the binding objective, accepted reductions, proof rows/artifacts,
+  assumptions, risks, and stop conditions from that context as authoritative.
+- Reject or block handoffs that replace the Work Context with a narrow summary
+  or omit accepted reductions, assumptions, proof/artifacts, or stop conditions.
+
 Output contract:
 - files changed
 - verification run and outcome
