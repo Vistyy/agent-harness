@@ -179,6 +179,23 @@ REVIEW_GOVERNANCE_REQUIRED_TERMS = (
     "missing, stale, blocked, rejected, or narrower",
     "does not decide the design verdict",
 )
+REVIEW_VERDICT_FILES = (
+    "skills/code-review/SKILL.md",
+    "skills/code-review/references/review-governance.md",
+    "adapters/codex/agents/quality-guard.toml",
+    "adapters/codex/agents/final-reviewer.toml",
+    "adapters/github-copilot/agents/quality_guard.agent.md",
+    "adapters/github-copilot/agents/final_reviewer.agent.md",
+)
+CODE_REVIEW_OUTPUT_REQUIRED_TERMS = (
+    "Binding objective",
+    "Accepted reductions",
+    "Approval boundary",
+    "Boundary sufficiency",
+    "Existing authority checked",
+    "Proof reviewed",
+    "Issue disposition",
+)
 DESIGN_CONTEXT_CONTRACT_REQUIRED_TERMS = (
     "project design source",
     "project design source requirements",
@@ -310,7 +327,7 @@ ADVISORY_NEGATION_RE = re.compile(
     re.IGNORECASE,
 )
 NON_BLOCKING_ALLOWED_RE = re.compile(
-    r"\b(?:outside|accepted debt|explicitly accepted debt|NON-BLOCKING is only)\b",
+    r"\b(?:outside|accepted temporary debt|explicitly accepted temporary debt|NON-BLOCKING is an observation category)\b",
     re.IGNORECASE,
 )
 REQUIRED_GATE_CONTEXT_RE = re.compile(
@@ -328,20 +345,22 @@ WEB_BROWSER_PROOF_FILES = (
 LIVE_VALIDATION_STALE_PHRASES = (
     "Delegate isolated runtime proof only when startup/teardown is deterministic and ownership is unambiguous.",
 )
-BACKLOG_REQUIRED_HEADINGS = ("metadata", "problem", "why this bucket", "suggested next step", "references")
-BACKLOG_REQUIRED_FIELDS = (
-    "impact",
-    "effort",
-    "queue bucket",
-    "suggested target wave",
-    "dependencies/prerequisites",
-    "smallest next slice",
-    "promotion/removal condition",
-    "owning durable doc",
-    "queue/backlog source",
-    "source wave/task",
-    "files/evidence",
+STALE_ACCEPTED_DEBT_PHRASES = (
+    "owner defect outside accepted debt",
 )
+BACKLOG_REQUIRED_HEADINGS = ("metadata", "problem", "why this bucket", "next action", "references")
+BACKLOG_REQUIRED_FIELDS = (
+    "status",
+    "owner",
+    "created",
+    "bucket",
+    "risk",
+    "removal condition",
+    "user acceptance",
+    "location",
+    "recommended fix",
+)
+BACKLOG_BUCKET_VALUES = ("discovered separate debt", "accepted temporary debt")
 BACKLOG_ENTRY_TITLE_PREFIX = "# Backlog Entry:"
 STAGED_REFERENCE_GATE_SKILLS = {
     "code-review",
@@ -1306,18 +1325,33 @@ def _normalize_heading(raw: str) -> str:
     return raw.strip().rstrip("#").strip().lower()
 
 
-def _has_backlog_field_value(text: str, field: str) -> bool:
+def _backlog_field_value(text: str, field: str) -> str | None:
     match = re.search(
         rf"^\s*-\s+{re.escape(field)}(?:\s+\([^)]+\))?\s*:(?P<inline>.*)$",
         text,
         re.IGNORECASE | re.MULTILINE,
     )
     if match is None:
-        return False
-    if match.group("inline").strip():
-        return True
+        return None
+    value = match.group("inline").strip()
+    if value:
+        return value.removeprefix("`").removesuffix("`").strip()
     following = [line for line in text[match.end() :].splitlines() if line.strip()]
-    return bool(following and following[0].startswith("  "))
+    if following and following[0].startswith("  "):
+        return following[0].strip().removeprefix("`").removesuffix("`").strip()
+    return None
+
+
+def _is_backlog_placeholder(value: str) -> bool:
+    stripped = value.strip()
+    return stripped.startswith("<") and stripped.endswith(">")
+
+
+def _has_backlog_field_value(text: str, field: str) -> bool:
+    value = _backlog_field_value(text, field)
+    if value is None:
+        return False
+    return bool(value) and not _is_backlog_placeholder(value)
 
 
 def _validate_backlog_detail_contract(root: Path) -> list[str]:
@@ -1337,6 +1371,37 @@ def _validate_backlog_detail_contract(root: Path) -> list[str]:
         for field in BACKLOG_REQUIRED_FIELDS:
             if not _has_backlog_field_value(text, field):
                 errors.append(f"{path.relative_to(root)} missing backlog field {field!r}")
+        bucket = (_backlog_field_value(text, "bucket") or "").lower()
+        if bucket and bucket not in BACKLOG_BUCKET_VALUES:
+            errors.append(f"{path.relative_to(root)} has invalid backlog bucket {bucket!r}")
+        if bucket == "accepted temporary debt":
+            user_acceptance = (_backlog_field_value(text, "user acceptance") or "").lower()
+            removal_condition = (_backlog_field_value(text, "removal condition") or "").lower()
+            if user_acceptance in {"", "none", "n/a", "na"} or _is_backlog_placeholder(user_acceptance):
+                errors.append(f"{path.relative_to(root)} accepted temporary debt missing user acceptance")
+            if removal_condition in {"", "none", "n/a", "na"} or _is_backlog_placeholder(removal_condition):
+                errors.append(f"{path.relative_to(root)} accepted temporary debt missing removal condition")
+    return errors
+
+
+def _validate_stale_accepted_debt_phrases(root: Path) -> list[str]:
+    errors: list[str] = []
+    scan_roots = [
+        root / "skills",
+        root / "adapters" / "codex" / "agents",
+        root / "adapters" / "github-copilot" / "agents",
+    ]
+    for scan_root in scan_roots:
+        if not scan_root.is_dir():
+            continue
+        for path in sorted(scan_root.rglob("*")):
+            if path.suffix not in {".md", ".toml"}:
+                continue
+            normalized_text = " ".join(path.read_text(encoding="utf-8").split()).lower()
+            for phrase in STALE_ACCEPTED_DEBT_PHRASES:
+                if phrase in normalized_text:
+                    errors.append(f"{path.relative_to(root)} contains stale accepted-debt wording")
+                    break
     return errors
 
 
@@ -1438,6 +1503,18 @@ def _validate_required_gate_advisory_drift(root: Path) -> list[str]:
 
 def _validate_review_role_contracts(root: Path) -> list[str]:
     errors: list[str] = []
+    for relative_path in REVIEW_VERDICT_FILES:
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            normalized_line = line.upper()
+            is_verdict_line = "OVERALL" in normalized_line or "VERDICT" in normalized_line
+            has_review_verdicts = "APPROVE" in normalized_line and "BLOCK" in normalized_line
+            if is_verdict_line and has_review_verdicts and "NON-BLOCKING" in normalized_line:
+                errors.append(f"{relative_path} uses stale NON-BLOCKING review verdict")
+                break
+
     review_governance = root / "skills" / "code-review" / "references" / "review-governance.md"
     if review_governance.is_file():
         text = review_governance.read_text(encoding="utf-8")
@@ -1448,6 +1525,13 @@ def _validate_review_role_contracts(root: Path) -> list[str]:
                     "skills/code-review/references/review-governance.md "
                     f"missing review governance contract term {term!r}"
                 )
+    code_review = root / "skills" / "code-review" / "SKILL.md"
+    if code_review.is_file():
+        text = code_review.read_text(encoding="utf-8")
+        normalized_text = " ".join(text.split())
+        for term in CODE_REVIEW_OUTPUT_REQUIRED_TERMS:
+            if " ".join(term.split()) not in normalized_text:
+                errors.append(f"skills/code-review/SKILL.md missing review output term {term!r}")
     for relative_path, required_terms in REVIEW_ROLE_CONTRACTS.items():
         path = root / relative_path
         if not path.is_file():
@@ -1569,6 +1653,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_live_validation_contracts(root))
     errors.extend(_validate_provider_prompt_contracts(root))
     errors.extend(_validate_required_gate_advisory_drift(root))
+    errors.extend(_validate_stale_accepted_debt_phrases(root))
     errors.extend(_validate_ui_approval_contract(root))
     errors.extend(_validate_review_role_contracts(root))
     errors.extend(_validate_role_boundary_contracts(root))

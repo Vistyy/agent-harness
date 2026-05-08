@@ -31,7 +31,7 @@ Required subsections:
 - `Decisions And Assumptions`: closed decisions, assumptions subagents may rely
   on, and decisions still user-owned or blocked.
 - `Adequacy Challenge`: before-implementation verdict, highest inspected scope,
-  must-block signals, and reshape/stop/accepted-debt disposition.
+  must-block signals, and reshape/stop/accepted temporary debt disposition.
 - `Required Gates`: compact rows with claim, owner, status, blocking condition,
   proof row IDs, and review/runtime/design role when applicable. Do not repeat
   exact proof commands here.
@@ -66,7 +66,7 @@ Each `### <task_slug>` card states:
 - allowed local implementer decisions
 - stop-and-handback triggers
 - proof rows
-- deferred follow-up
+- follow-up
 
 Task cards own execution slices only. They do not restate the objective,
 accepted reductions, global gates, or full owner-skill intake. Starting files,
@@ -109,11 +109,15 @@ expectation.
 ## Execution State
 
 Track changes from the Work Context: new decisions, blockers, technical debt,
-task evidence, and deferred follow-up. Do not restate static context.
+task evidence, and follow-up. Do not restate static context.
 
 Accepted touched-component debt must live here and link backlog detail with
 owner, affected files/surfaces, accepted must-block signals, risk, removal
 condition, and explicit user acceptance.
+
+Discovered separate debt must live here or in a backlog item with owner,
+location, risk, and recommended fix. It does not approve a current-scope
+blocker.
 
 ## Trust
 

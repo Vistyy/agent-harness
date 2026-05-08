@@ -38,7 +38,7 @@
 - before-implementation verdict: `<adequate | inadequate | blocked>`
 - highest inspected scope: `<scope>`
 - must-block signals: `<none | entries>`
-- disposition: `<reshape | stop | accepted debt | adequate>`
+- disposition: `<reshape | stop | accepted temporary debt | adequate>`
 
 ### Required Gates
 
@@ -82,7 +82,7 @@
 - Owned files and surfaces:
   - `<path-or-surface>`
 - Touched owner/component integrity:
-  - `<acceptable | unacceptable with accepted-debt backlog link>`
+  - `<acceptable | unacceptable with accepted-temporary-debt backlog link>`
 - Locked invariants:
   - `<invariants>`
 - Allowed local implementer decisions:
@@ -91,7 +91,7 @@
   - `<objective mismatch | discovery leakage | proof drift | owner defect>`
 - Proof rows:
   - `P1`
-- Deferred follow-up:
+- Follow-up:
   - `<none | backlog path>`
 
 ## Proof Plan
@@ -113,7 +113,7 @@
         "weaker_implementation": "<bad implementation or proof-shape substitution>",
         "failing_assertion_or_artifact": "<what would fail>"
       },
-      "status": "<planned | blocked | satisfied | narrowed-claim | deferred>"
+      "status": "<planned | blocked | satisfied | narrowed-claim | tracked>"
     }
   ]
 }
@@ -127,10 +127,11 @@
 | --- | --- | --- | --- |
 | `decision` | `<decision needed | none>` | `<recommended action>` | `<user | agent>` |
 
-### Technical Debt And Deferred Follow-Up
+### Technical Debt And Follow-Up
 
 - `none`
-- or `<backlog item with owner, affected files/surfaces, accepted must-block signals, risk, removal condition, and user acceptance>`
+- or `<discovered separate debt backlog item with owner, affected files/surfaces, risk, and recommended fix>`
+- or `<accepted temporary debt backlog item with owner, affected files/surfaces, accepted must-block signals, risk, removal condition, and user acceptance>`
 
 ## System-Boundary Architecture Disposition (conditional)
 

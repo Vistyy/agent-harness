@@ -46,7 +46,7 @@ Before completion:
 6. include runtime evidence when the claim includes non-trivial runtime-visible
    behavior that needs it
 7. include `design_judge` `pass` when broad product UI design is claimed
-8. confirm required review covers the same claim
+8. confirm required review is valid and covers the same claim
 9. report residual risks or `none`
 
 ## Stop
@@ -64,7 +64,7 @@ Stop or narrow the claim when:
   required runtime evidence
 - runtime evidence is offered as a substitute for broad product UI design
   approval
-- review rejected or did not cover the binding objective
+- review rejected, is invalid, or did not cover the binding objective
 - residual gaps belong to the current objective
 
 ## Completion Note

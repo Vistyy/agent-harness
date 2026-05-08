@@ -28,8 +28,9 @@ and project-overlay contracts.
 - Required harness gates are blocking. Use `pass`, `reject`, `blocked`, or
   `not-applicable`; do not make required rule, proof, review, runtime,
   architecture, owner-integrity, or validation failures advisory.
-- `NON-BLOCKING` is only for observations outside the binding objective or
-  explicitly accepted debt with owner, risk, and removal condition.
+- `NON-BLOCKING` is an observation category, not a code-review verdict. It is
+  valid only outside the binding objective or for explicitly accepted temporary
+  debt with owner, risk, and removal condition.
 - Keep `AGENTS.md` and skill bodies as maps/contracts, not manuals.
 - Frontmatter `description` owns ordinary trigger/routing text.
 - Skill bodies are post-selection contracts.

@@ -20,8 +20,8 @@ binding user objective and leaves the touched owner/component coherent.
 
 If the current objective touches a wrong owner, bad boundary, stale path,
 duplicated authority, patch-over workaround, or unnecessary ceremony, fixing
-that owner is in scope. Defer only unrelated nearby debt or explicitly accepted
-temporary debt with owner, risk, and removal condition.
+that owner is in scope. If direct repair is too large, route the owner-correct
+fix through `work-routing`; do not park current-scope debt.
 
 Prefer, in order:
 1. delete
@@ -35,12 +35,13 @@ Prefer, in order:
 Do not patch symptoms. If the defect, feedback, failed proof, or requested
 change belongs to the current objective or touched owner, fix that owner now.
 
-Defer only:
-- unrelated nearby debt
-- explicitly accepted temporary debt with owner, risk, and removal condition
+Separate discovered debt is tracked by `initiatives-workflow`. Accepted
+temporary debt inside the touched owner requires explicit user acceptance,
+owner, risk, removal condition, and backlog link.
 
-If fixing the owner is too large, risky, or blocked, stop and name the blocker.
-Do not apply a smaller patch that preserves the reason the work is wrong.
+If fixing the owner is too large, risky, or blocked, route or stop and name the
+blocker. Do not apply a smaller patch that preserves the reason the work is
+wrong.
 
 Block or reshape when the plan:
 - treats a symptom as the root problem
@@ -50,15 +51,16 @@ Block or reshape when the plan:
 - keeps optional workflow, proof, adapter, flag, or compatibility ceremony
 - narrows breadth, quality, runtime behavior, or review surface without
   accepted reduction
-- defers debt that belongs to the current objective or touched owner
+- backlogs debt that belongs to the current objective or touched owner
 
 ## Adequacy Challenge
 
 For non-trivial work, challenge adequacy before implementation and before
 completion. Name whether the selected scope repairs the touched
 owner/component enough to satisfy the binding objective. If it does not, reshape
-the work, route it into durable planning, stop as blocked, or record explicit
-accepted debt with owner, risk, removal condition, and backlog link.
+the work, route it into durable planning, or stop as blocked. Accepted
+temporary debt is user-owned and cannot make an inadequate current-scope owner
+look complete.
 
 A diff summary, passing tests, role approval, or matching the packet is not an
 adequacy verdict. The verdict must use the touched owner/component and the
@@ -96,4 +98,5 @@ Rules:
 - Existing bad shape is not grandfathered when the work touches, depends on,
   preserves, extends, or proves it.
 - `not assessed` touched-component integrity is never approvable.
-- Accepted debt requires explicit user acceptance and a backlog link.
+- Current-scope debt is fixed or routed; accepted temporary debt requires
+  explicit user acceptance and a backlog link.

@@ -10,6 +10,7 @@ Use owner skills: `review-governance.md`, `wave-packet-contract.md`,
 
 Outcome:
 - Approve or reject planning-gate and implementation chunks before they advance.
+- Follow `review-governance.md` for approval validity and issue disposition.
 
 Constraints:
 - You are the planning/implementation gate, not a coach optimizing for momentum.
@@ -34,7 +35,7 @@ Constraints:
 - Approval is invalid when highest inspected scope is narrower than the touched
   owner/component. State why inspected scope is sufficient.
 - Reject if touched-component integrity is not assessed, unacceptable without
-  accepted debt/backlog, or contradicted by discovered must-block signals.
+  accepted temporary debt, or contradicted by discovered must-block signals.
 
 
 Handoff context:
@@ -50,6 +51,7 @@ Output contract:
 - findings, or an explicit no-findings statement
 - scope reviewed, evidence consulted, touched owner/component, highest inspected
   scope
-- touched-component integrity, must-block signals, accepted-debt backlog link
+- touched-component integrity, must-block signals, accepted-temporary-debt
+  backlog link
 - plan alignment and remaining required work, or `none`
 """

@@ -5,12 +5,12 @@ description: "Use when the user asks for code review or when verified implementa
 
 # Code Review
 
-Separate full review with fresh context and breadth-first skepticism.
+Separate review with fresh context and breadth-first skepticism.
 
 Use `final_reviewer` by default for subagent-backed closeout review.
 
-Write terse. This skill keeps the isolated-review posture and report shape only.
-Owner docs and review gates carry the doctrine.
+Write terse. Review governance owns approval semantics, review modes, and issue
+disposition.
 
 ## Review Inputs
 
@@ -23,15 +23,14 @@ Owner docs and review gates carry the doctrine.
 
 - Use fresh isolated context. Do not inherit old clean impressions.
 - Treat `quality_guard` approvals as implementation-loop history.
-- Cite exact `file/path:line` for every finding.
-- Keep severity explicit and ordered.
 - Load the owner docs and review gates that the slice actually needs.
 - Review against the binding objective and accepted reductions, not only the
   parent's narrowed summary.
-- For non-trivial work, diff-only review is invalid. Assess touched-component
-  integrity through `code-simplicity`.
-- Pressure-test realistic failure modes, hidden assumptions, invalid or stale
-  inputs, retries/races, partial updates, unsafe defaults, and proof gaps.
+- For non-trivial work, assess touched-component integrity through
+  `code-simplicity`; diff-only approval is invalid.
+- Pressure-test correctness, proof, ownership, maintainability, runtime/design
+  gate coverage, stale paths, and existing authority.
+- Cite exact `file/path:line` for every finding.
 - Assume checks already ran unless user asked to run more.
 - No code edits.
 
@@ -40,7 +39,7 @@ Owner docs and review gates carry the doctrine.
 1. Resolve base branch, diff range, changed files, and task/wave anchors.
 2. Load only owner docs and gates needed for the slice.
 3. Try to falsify the claim against the binding objective and risky paths.
-4. Report every material finding.
+4. Report every concrete finding with disposition.
 
 ## Output
 
@@ -51,12 +50,19 @@ Owner docs and review gates carry the doctrine.
 - Changed files: `N`
 - Wave brief: `<path | none>`
 - Wave packet: `<path | none>`
+- Binding objective: `<objective>`
+- Accepted reductions: `<none | list>`
 - Breadth verdict: `<coverage sufficient | concentrated risk in ...>`
 - Touched owner/component: `<path/symbol/responsibility>`
+- Approval boundary: `<owner/component approved | none>`
+- Boundary sufficiency: `<why this boundary is enough | blocker>`
+- Existing authority checked: `<paths/symbols/queries | not applicable>`
 - Highest inspected scope: `<function | class | module | file | shared owner>`
 - Touched component integrity: `<acceptable | unacceptable | not assessed>`
 - Must-block signals: `<none | list>`
-- Accepted-debt backlog link: `<none | path>`
+- Proof reviewed: `<commands/artifacts | none>`
+- Accepted temporary debt backlog link: `<none | path>`
+- Issue disposition: `<none | fixed | routed | tracked discovered debt | accepted temporary debt | dropped>`
 
 ### Findings
 
@@ -65,20 +71,16 @@ Owner docs and review gates carry the doctrine.
    - Problem: `<what is wrong>`
    - Impact: `<what breaks>`
    - Fix: `<concrete fix>`
-   - Disposition: `Must-fix before merge` or `Follow-up (<durable artifact>)`
+   - Disposition: `<fixed | routed | tracked discovered debt | accepted temporary debt | dropped>`
 
 ### Verdict
 
-- Overall: `BLOCK | NON-BLOCKING | APPROVE`
+- Overall: `BLOCK | APPROVE`
 - Correctness: `<pass | blockers>`
 - Simplicity: `<pass | blockers>`
 - Proof: `<sufficient | gaps>`
 - Required `code-simplicity`: `<yes | no | not applicable>`
 - Top risks: `<max 3 bullets>`
-
-`NON-BLOCKING` is residual outside the binding completion claim. Never use it
-as softer approval for claim-required defects, proof gaps, runtime/design gate
-failures, or unresolved owner-contract violations.
 
 ### Open Questions
 

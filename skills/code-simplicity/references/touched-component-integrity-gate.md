@@ -14,7 +14,8 @@ shared owner/authority.
 
 Escalate when behavior depends on wider state, lifecycle, policy, proof,
 duplicate authority, or missing/weak modeling. Do not block on unrelated repo
-debt outside the touched owner or required shared authority.
+debt outside the touched owner or required shared authority; track concrete
+separate debt through the durable backlog owner.
 
 ## Must-Block Signals
 
@@ -55,14 +56,14 @@ The successor must be acceptable on its own. Do not approve because old
 complexity was removed, owners became fewer, tests pass, or the implementation
 matches the packet. If the successor has responsibility-overload, unclear
 internal boundaries, private-test choreography, duplicate authority, or another
-must-block signal, reshape before approval or record accepted debt with a
-backlog link.
+must-block signal, reshape before approval or record accepted temporary debt
+with a backlog link.
 
 ## Required Action
 
 - Planner: reshape before approval.
 - Implementer: stop and hand back if the approved task preserves or adds to an
-  unacceptable touched owner outside accepted debt.
+  unacceptable touched owner outside accepted temporary debt.
 - `quality_guard`: reject; approval with unacceptable or unassessed integrity is
   reviewer failure.
 - `final_reviewer`: block closeout.
@@ -79,9 +80,9 @@ Debt acceptance is valid only after presenting:
 - recommended reshape
 - proposed backlog path
 
-Blanket, prior, vague, or chat-only acceptance is invalid. Accepted debt needs a
-backlog item with owner, risk, and removal condition, and approval/closeout must
-link it.
+Blanket, prior, vague, or chat-only acceptance is invalid. Accepted debt inside
+the touched owner needs explicit user acceptance and a backlog item with owner,
+risk, and removal condition; approval/closeout must link it.
 
 ## Report
 
@@ -90,4 +91,4 @@ When this gate applies, state:
 - highest inspected scope
 - integrity: `acceptable`, `unacceptable`, or `not assessed`
 - must-block signals, or `none`
-- accepted-debt backlog link, or `none`
+- accepted temporary debt backlog link, or `none`

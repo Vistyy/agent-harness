@@ -19,4 +19,4 @@
 ## Promotion Requirement
 
 Promote only after `planning-intake`, `planning_critic`, and `quality_guard`
-close scope, decisions, proof, deferrals, and touched-owner integrity.
+close scope, decisions, proof, debt disposition, and touched-owner integrity.

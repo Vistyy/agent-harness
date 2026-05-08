@@ -1,117 +1,68 @@
 # Review Governance
 
-Owns approval boundaries, review modes, disposition, and review coverage.
-`../../verification-before-completion/SKILL.md` owns final completion claims.
+Owns code-review approval, review modes, issue disposition, and review
+coverage. `../../verification-before-completion/SKILL.md` owns final completion
+claims.
 
-## Core Rules
+## Approval Contract
 
-- Review skeptically. Try to disprove the claim.
-- Do not approve from politeness, momentum, effort, partial improvement, or
-  plausible acceptance. Approval means the binding claim survives review
-  against required evidence.
-- Required gates are blocking under `harness-governance`: missing evidence is
-  `blocked`; contradictory evidence inside the claim is `reject`.
-- Pressure-test realistic non-happy paths: hidden assumptions, invalid or stale
-  inputs, partial updates, retries/races, boundary misuse, unsafe defaults, and
-  proof that covers only the nominal path.
-- Binding objective = original user objective plus explicitly accepted
-  reductions. Task labels, packets, implementer summaries, and reviewer prompts
-  do not replace it.
-- Reject when implementation, proof, review request, or closeout satisfies a
-  smaller invented objective.
-- Reject mis-scoped review requests. A reviewer approves against the binding
-  objective, not the prompt they were handed. Missing binding objective or
-  accepted reductions is blocking for non-trivial review.
-- Reject shallow breadth implementation when the objective required owner-depth.
-  Touching many requested areas lightly is not completion evidence.
-- Reject patch-over fixes that preserve a current-objective owner defect.
-- Default unresolved material issues to blocking.
-- Enumerate material findings with exact `file/path:line` evidence.
-- Non-trivial review assesses the touched owner/component, not only the diff.
-- Touched owner/component is the smallest owner whose contract, state,
-  lifecycle, design, workflow, or proof the change touches; expand only to
-  required shared authority.
-- Approval is invalid when the highest inspected scope is narrower than that
-  owner. Name why the inspected scope is sufficient, or reject.
-- `not assessed` touched-component integrity is never valid on approval.
-- Accepted debt needs explicit user acceptance plus backlog owner, risk, and
-  removal condition.
-- `NON-BLOCKING` is only for residuals outside the binding claim.
+Review approval is binary: `APPROVE` or `BLOCK`.
+
+`APPROVE` means the binding objective, accepted reductions, touched
+owner/component, proof, and required gates survive skeptical inspection. Missing
+or vague approval evidence is `BLOCK`.
+
+For non-trivial review, approval is invalid unless the report names:
+- binding objective and accepted reductions
+- reviewed scope and approval boundary
+- why that boundary is sufficient
+- existing authority checked before approving new behavior
+- touched-owner integrity
+- proof reviewed
+- issue disposition, or `none`
+
+Review the binding objective, not task labels, packets, summaries, or narrow
+handoffs. Reject smaller invented objectives, shallow breadth, patch-over
+fixes, diff-only review, unassessed touched-owner integrity, and approval whose
+highest inspected scope is narrower than the approval boundary.
+
+## Issue Disposition
+
+Every concrete issue found during review is fixed, routed, tracked, or dropped.
+
+- current-scope blocker: fix directly or route through `work-routing`; never
+  ordinary backlog
+- small safe separate issue: fix when repair stays inside the current route and
+  proof burden
+- large, risky, or separately owned issue outside the approval boundary: track
+  as discovered separate debt through `initiatives-workflow`
+- accepted temporary debt inside the approval boundary: requires explicit user
+  acceptance, owner, risk, removal condition, and backlog link
+- taste, speculation, or unevidenced concern: drop
+
+Findings cite exact `file/path:line`, problem, impact, and required fix.
 
 ## Review Modes
 
-### Planning Gate `quality_guard`
+`quality_guard` applies this contract to planning readiness and implementation
+chunks. Reject when one more concrete fix, simplification, proof correction, or
+current-scope owner repair is required.
 
-Approves execution readiness only after discovery/planning closes scope,
-decisions, proof, deferrals, and touched-owner integrity.
+`final_reviewer` applies this contract to the whole changed slice after
+implementation and fresh verification. Earlier `quality_guard` approvals are
+history, not final approval.
 
-Required inputs:
-- binding objective, accepted reductions, residual gaps
-- plan/wave/packet anchor
-- proof plan
-- touched owner/component integrity
-- authority map when structural, hotspot, or state-authority work is in scope
-
-No explicit approval, no promotion.
-
-### In-Thread `quality_guard`
-
-Approves or rejects meaningful implementation chunks.
-
-Required inputs:
-- reviewed diff or scope
-- binding objective, accepted reductions, residual gaps
-- changed public surfaces
-- proof artifacts
-- touched owner/component integrity
-- explicit approve/reject ask
-
-Reject when one more material fix, simplification, proof correction, or
-current-objective owner repair is justified now.
-
-### Final Isolated Review `final_reviewer`
-
-Reviews the whole changed slice after implementation and fresh verification.
-
-Required inputs:
-- binding objective, accepted reductions, residual gaps
-- changed surfaces and base/diff range
-- proof artifacts and runtime evidence when applicable
-- `design_judge` report when broad product UI design readiness is claimed
-- in-thread `quality_guard` history
-- touched owner/component integrity
-
-Treat earlier approvals as history, not final approval. Reject if the handoff
-omits the binding objective or final wording exceeds proof/review scope.
-Reject mis-scoped handoffs that ask review to approve less than the binding
-objective without an accepted reduction.
-Reject UI readiness closeout when required `design_judge` coverage is missing,
-rejected, blocked, stale, or narrower than the final claim. Runtime evidence is
-required only when the final claim includes non-trivial runtime-visible behavior
-that needs it. Reviewers verify gate coverage; they do not replace runtime
-proof or product design judgment.
-
-For broad UI closeout, block missing, stale, blocked, rejected, or narrower
+Reviewers verify required runtime and design gate coverage; they do not replace
+runtime proof or product design judgment. Broad UI closeout requires
 `design_judge` coverage for the declared project design source, project design
-source requirements, and any project-local artifacts required by the claim.
-Final review verifies coverage; it does not decide the design verdict.
+source requirements, applicable project-local artifacts, and the same claim;
+block missing, stale, blocked, rejected, or narrower coverage. Final review
+verifies coverage and does not decide the design verdict.
 
-## Review Coverage For Completion
+## Completion Interface
 
-Review approval is an input to completion, not the completion gate.
+Review approval is evidence for completion, not completion itself.
 
-Review reports define:
-- reviewed scope
-- approval scope
-- proof and runtime evidence reviewed
-- residual risks
-
-## Report Minimum
-
-Approval or closeout reports name:
-- reviewed scope
-- verdict
-- touched owner/component and integrity
-- proof reviewed
-- final review status
-- residual risks or `none`
+Reports state reviewed scope, approval boundary, verdict, touched
+owner/component and integrity, proof reviewed, issue disposition, final review
+status when applicable, and residual risks or `none`.

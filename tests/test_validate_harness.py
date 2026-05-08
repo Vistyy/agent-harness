@@ -185,7 +185,7 @@ def valid_packet() -> str:
       - `parent-only`
     - Proof rows:
       - `P1`
-    - Deferred follow-up:
+    - Follow-up:
       - `none`
 
     ## Proof Plan
@@ -268,9 +268,15 @@ def test_validate_accepts_valid_backlog_detail(tmp_path: Path) -> None:
 
         ## Metadata
 
-        - Impact: `medium`
-        - Effort: `M`
-        - Queue bucket: `Deferred Backlog`
+        - Status: `open`
+        - Owner: `README.md`
+        - Created: `2026-05-09`
+        - Bucket: `discovered separate debt`
+        - Risk: `medium`
+        - Removal condition: `fixed or no longer relevant`
+        - User acceptance: `none`
+        - Location: `README.md`
+        - Recommended fix: define one narrow slice.
 
         ## Problem
 
@@ -280,19 +286,13 @@ def test_validate_accepts_valid_backlog_detail(tmp_path: Path) -> None:
 
         Example bucket reason.
 
-        ## Suggested Next Step
+        ## Next Action
 
-        - Suggested target wave (if known): none
-        - Dependencies/prerequisites: none
-        - Smallest next slice: define one narrow slice.
-        - Promotion/removal condition: promote or delete when no longer valid.
+        Define one narrow slice.
 
         ## References
 
-        - Owning durable doc: `README.md`
-        - Queue/backlog source: `docs-ai/current-work/delivery-map.md`
-        - Source wave/task: none
-        - Files/evidence: `README.md`
+        - `README.md`
         """,
     )
 
@@ -308,7 +308,7 @@ def test_validate_rejects_incomplete_backlog_detail(tmp_path: Path) -> None:
 
         ## Metadata
 
-        - Impact: `medium`
+        - Status: `open`
 
         ## Problem
 
@@ -318,8 +318,138 @@ def test_validate_rejects_incomplete_backlog_detail(tmp_path: Path) -> None:
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog field 'queue bucket'" in errors
+    assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog field 'bucket'" in errors
     assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog heading ## References" in errors
+
+
+def test_validate_rejects_invalid_backlog_bucket(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "docs-ai" / "current-work" / "backlog" / "harness__example__item.md",
+        """
+        # Backlog Entry: harness/example/item
+
+        ## Metadata
+
+        - Status: `open`
+        - Owner: `README.md`
+        - Created: `2026-05-09`
+        - Bucket: `later`
+        - Risk: `medium`
+        - Removal condition: `fixed or no longer relevant`
+        - User acceptance: `none`
+        - Location: `README.md`
+        - Recommended fix: define one narrow slice.
+
+        ## Problem
+
+        Example problem.
+
+        ## Why This Bucket
+
+        Example bucket reason.
+
+        ## Next Action
+
+        Define one narrow slice.
+
+        ## References
+
+        - `README.md`
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/backlog/harness__example__item.md has invalid backlog bucket 'later'" in errors
+
+
+def test_validate_rejects_accepted_temporary_debt_without_acceptance(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "docs-ai" / "current-work" / "backlog" / "harness__example__item.md",
+        """
+        # Backlog Entry: harness/example/item
+
+        ## Metadata
+
+        - Status: `open`
+        - Owner: `README.md`
+        - Created: `2026-05-09`
+        - Bucket: `accepted temporary debt`
+        - Risk: `medium`
+        - Removal condition: `none`
+        - User acceptance: `none`
+        - Location: `README.md`
+        - Recommended fix: define one narrow slice.
+
+        ## Problem
+
+        Example problem.
+
+        ## Why This Bucket
+
+        Example bucket reason.
+
+        ## Next Action
+
+        Define one narrow slice.
+
+        ## References
+
+        - `README.md`
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/backlog/harness__example__item.md accepted temporary debt missing user acceptance" in errors
+    assert "docs-ai/current-work/backlog/harness__example__item.md accepted temporary debt missing removal condition" in errors
+
+
+def test_validate_rejects_accepted_temporary_debt_placeholders(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "docs-ai" / "current-work" / "backlog" / "harness__example__item.md",
+        """
+        # Backlog Entry: harness/example/item
+
+        ## Metadata
+
+        - Status: `open`
+        - Owner: `README.md`
+        - Created: `2026-05-09`
+        - Bucket: `accepted temporary debt`
+        - Risk: `medium`
+        - Removal condition: `<condition | none>`
+        - User acceptance: `<required for accepted temporary debt | none>`
+        - Location: `README.md`
+        - Recommended fix: define one narrow slice.
+
+        ## Problem
+
+        Example problem.
+
+        ## Why This Bucket
+
+        Example bucket reason.
+
+        ## Next Action
+
+        Define one narrow slice.
+
+        ## References
+
+        - `README.md`
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog field 'removal condition'" in errors
+    assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog field 'user acceptance'" in errors
+    assert "docs-ai/current-work/backlog/harness__example__item.md accepted temporary debt missing user acceptance" in errors
+    assert "docs-ai/current-work/backlog/harness__example__item.md accepted temporary debt missing removal condition" in errors
 
 
 def test_validate_requires_openai_metadata_for_every_skill(tmp_path: Path) -> None:
@@ -911,6 +1041,53 @@ def test_validate_rejects_required_gate_non_blocking_drift(tmp_path: Path) -> No
     assert "skills/runtime-proof/SKILL.md must not classify required gate failures as non-blocking" in errors
 
 
+def test_validate_rejects_old_accepted_debt_non_blocking_allowance(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "runtime-proof" / "SKILL.md",
+        """
+        ---
+        name: runtime-proof
+        description: Test runtime proof skill.
+        ---
+
+        Runtime proof validates the binding objective, rejects mis-scoped
+        handoffs, reports entrypoint fidelity, and returns reject or blocked
+        when proof does not cover the runtime-visible claim. The tiny, local
+        exemption applies only when there is no public-behavior or
+        cross-boundary runtime risk. Runtime evidence is live-use validation.
+        It uses the app, service, API, or operator path through a faithful
+        entrypoint and verifies behavior beyond code inspection, tests, and
+        review approval.
+
+        Required runtime proof failures are non-blocking as accepted debt.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "skills/runtime-proof/SKILL.md must not classify required gate failures as non-blocking" in errors
+
+
+def test_validate_rejects_stale_accepted_debt_wording(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "initiatives-workflow" / "SKILL.md",
+        """
+        ---
+        name: initiatives-workflow
+        description: Test initiatives workflow skill.
+        ---
+
+        Stop on owner defect outside accepted debt.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "skills/initiatives-workflow/SKILL.md contains stale accepted-debt wording" in errors
+
+
 def test_validate_rejects_review_role_contract_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
@@ -1038,6 +1215,62 @@ def test_validate_rejects_missing_review_governance_project_artifact_coverage(tm
         "skills/code-review/references/review-governance.md missing review governance "
         "contract term 'project design source requirements'"
     ) in errors
+
+
+def test_validate_rejects_stale_non_blocking_review_verdict(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "final-reviewer.toml",
+        """
+        name = "final_reviewer"
+        description = "Final isolated closeout review after implementation and verification."
+
+        developer_instructions = '''
+        binding objective
+        accepted reductions
+        Diff-only approval is invalid
+        why it is sufficient
+        Do not perform planning-gate review
+        not final approval
+        project design source
+        project design source requirements
+        project-local artifacts
+        block missing, stale, blocked, rejected, or narrower
+        Overall: `BLOCK | NON-BLOCKING | APPROVE`
+        '''
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "adapters/codex/agents/final-reviewer.toml uses stale NON-BLOCKING review verdict" in errors
+
+
+def test_validate_rejects_missing_code_review_approval_evidence_fields(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "code-review" / "SKILL.md",
+        """
+        ---
+        name: code-review
+        description: Test code review skill.
+        ---
+
+        # Code Review
+
+        ## Output
+
+        - Base branch: `<name>`
+        - Touched owner/component: `<owner>`
+        - Overall: `BLOCK | APPROVE`
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "skills/code-review/SKILL.md missing review output term 'Approval boundary'" in errors
+    assert "skills/code-review/SKILL.md missing review output term 'Existing authority checked'" in errors
+    assert "skills/code-review/SKILL.md missing review output term 'Issue disposition'" in errors
 
 
 def test_validate_rejects_missing_ui_approval_context_terms(tmp_path: Path) -> None:
@@ -1299,7 +1532,7 @@ def test_validate_rejects_wave_task_card_missing_touched_integrity(tmp_path: Pat
           - `parent-only`
         - Proof rows:
           - `P1`
-        - Deferred follow-up:
+        - Follow-up:
           - `none`
 
         ## Proof Plan

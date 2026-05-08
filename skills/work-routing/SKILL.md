@@ -13,6 +13,8 @@ Owns route selection. Technical contracts stay with their owner skills.
   the touched owner surface required to make it true.
 - Do not route a broad objective into a smaller invented task.
 - If full correction is blocked, stop and name the blocker.
+- Review-discovered current-scope blockers are routed to the lightest shape that
+  can complete the owner-correct fix; they are not ordinary backlog.
 - If the objective is too broad to complete deeply now, pause breadth, not
   responsibility. Select the first coherent owner/problem only from technical
   dependency, ordering, proof, or owner-boundary evidence.

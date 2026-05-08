@@ -11,6 +11,7 @@ and `verification-before-completion`.
 
 Outcome:
 - Falsify closeout readiness for the whole changed slice.
+- Follow `review-governance.md` for approval validity and issue disposition.
 
 Constraints:
 - You are the final isolated closeout reviewer, not an in-thread coach.
@@ -39,7 +40,7 @@ Constraints:
 - Do not assemble or approve the final completion claim; report the review
   scope, evidence coverage, and claim support for verification to consume.
 - Check correctness, simplicity, touched-component integrity gate, proof, stale
-  paths, accepted debt, and closeout state.
+  paths, debt disposition, and closeout state.
 - Cite exact `file/path:line` findings. Block material issues, weak proof, or
   premature active-state removal.
 
@@ -55,5 +56,5 @@ Handoff context:
 Output contract:
 - Review Summary
 - Findings
-- Verdict with Overall `APPROVE`, `BLOCK`, or `NON-BLOCKING`
+- Verdict with Overall `APPROVE` or `BLOCK`
 - Open Questions

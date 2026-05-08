@@ -39,8 +39,8 @@ tracking, handoff, interruption, backlog/roadmap state, or multiple task cards.
   approves review coverage and verification approves the final claim.
 - Completed wave briefs are disposable after retained invariants are extracted
   to the owning durable surface or valid backlog.
-- Backlog entries are for valid deferrals only: unrelated nearby debt or
-  explicitly accepted temporary debt with owner, risk, and removal condition.
+- Backlog entries store discovered separate debt and explicitly accepted
+  temporary debt. They do not make current-scope blockers approvable.
 
 - `discovery-required`: decisions still open; no canonical packet.
 - `execution-ready`: planning gate approved; canonical packet exists.
@@ -58,8 +58,9 @@ Before execution:
 
 During execution:
 - execute task cards in dependency order
-- stop on discovery leakage, objective mismatch, owner defect outside accepted
-  debt, or materially stale packet assumptions
+- stop on discovery leakage, objective mismatch, owner defects that are not
+  fixed/routed or explicitly accepted as temporary debt, or materially stale
+  packet assumptions
 - run required proof and `quality_guard` after meaningful chunks
 
 Before closeout:

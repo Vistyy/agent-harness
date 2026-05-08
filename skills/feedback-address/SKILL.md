@@ -20,8 +20,10 @@ Before editing:
 - `surface fix`: owner contract is coherent; defect is local.
 - `owner fix`: feedback exposes ambiguous defaults, wrong owner, duplicate
   authority, stale path, hidden coupling, or current-objective patch-over.
-- `debt plus fix`: only unrelated nearby debt or explicitly accepted temporary
-  debt with owner, risk, and removal condition.
+- `track separate debt`: concrete issue outside the current approval boundary
+  that is too large, risky, or separately owned for the current route.
+- `accepted temporary debt`: user-owned exception inside the current approval
+  boundary with owner, risk, removal condition, and backlog link.
 - `no change`: stale, invalid, already addressed, or intentionally by design.
 
 Apply `../code-simplicity/SKILL.md` for owner-correct repair. Use
@@ -31,7 +33,7 @@ proof, public behavior, state authority, migration, or wave shape.
 ## Workflow Feedback
 
 Use the ledger only for workflow friction not fixed in the current change.
-Current-objective defects are fixed now, not parked here.
+Current-objective defects are fixed or routed, not parked here.
 
 Project observations go in `docs-ai/current-work/workflow-feedback-ledger.md`.
 If missing, create from `assets/workflow-feedback-ledger.md`.

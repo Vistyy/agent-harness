@@ -1,6 +1,6 @@
 ---
 name: planning-intake
-description: "Use to turn vague work into a wave plan or harden an existing wave to execution-ready status by closing scope, decisions, proof allocation, and deferrals."
+description: "Use to turn vague work into a wave plan or harden an existing wave to execution-ready status by closing scope, decisions, proof allocation, and debt disposition."
 ---
 
 # Planning Intake
@@ -25,14 +25,15 @@ Do not promote shallow breadth plans that simulate coverage.
 ## Gate
 
 Close or stop on owner-skill intake, scope, material decisions, adequacy,
-touched owner/component integrity, proof allocation, and deferrals.
+touched owner/component integrity, proof allocation, and debt disposition.
 
 For non-trivial work, durable planning must record the route, project
 overlay/docs read, owner skills read, matched reference gates read, skipped
 references with reason, and open owner gaps. `code-simplicity` is required.
 
-Deferrals are valid only when unrelated to the current objective or explicitly
-accepted temporary debt with owner, risk, and removal condition.
+Current-scope blockers are fixed or routed, not deferred. Discovered separate
+debt uses `initiatives-workflow`; accepted temporary debt is user-owned and
+requires owner, risk, removal condition, and backlog link.
 
 ## Decisions
 
@@ -62,7 +63,8 @@ Check that the plan did not drop:
 - owner/state authority and migrations
 - proof for each claimed surface
 - cleanup of obsolete paths in touched scope
-- valid deferrals and their durable home
+- current-scope blockers, discovered separate debt, and accepted temporary debt
+  disposition
 
 ## Proof Allocation
 
@@ -85,7 +87,8 @@ Do not promote while:
 - before-implementation adequacy is missing, stale, or narrower than the
   binding objective
 - touched-component integrity is `not assessed`
-- unacceptable touched-component integrity lacks accepted debt and backlog link
+- unacceptable touched-component integrity relies on accepted temporary debt
+  without explicit user acceptance and backlog link
 - discovery work leaks into execution
 - two competent implementers could choose materially different owners, proof,
   state authority, runtime, migration, compatibility, or public behavior
@@ -99,5 +102,5 @@ Non-trivial planning needs `planning_critic` before execution readiness and
 - `docs-ai/docs/initiatives/waves/<wave-id>.md`
 - `docs-ai/current-work/<wave-id>/wave-execution.draft.md` for review
 - `docs-ai/current-work/<wave-id>/wave-execution.md` only after promotion
-- `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md` for valid
-  deferrals
+- `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md` for
+  discovered separate debt or accepted temporary debt

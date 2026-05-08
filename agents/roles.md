@@ -14,7 +14,7 @@ policy.
 - `planning_critic`: hostile planning review before execution-ready wave
   promotion or non-trivial scope expansion.
 - `implementer`: one bounded approved wave task card.
-- `quality_guard`: planning-gate and in-thread implementation gate.
+- `quality_guard`: planning-gate and in-thread implementation review gate.
 - `final_reviewer`: final isolated closeout review after verification.
 - `runtime_evidence`: independent live-use verifier for non-trivial
   runtime-visible claims when tests/reviews could pass while the app or service
