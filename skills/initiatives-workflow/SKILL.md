@@ -61,7 +61,11 @@ During execution:
 - stop on discovery leakage, objective mismatch, owner defects that are not
   fixed/routed or explicitly accepted as temporary debt, or materially stale
   packet assumptions
-- run required proof and `quality_guard` after meaningful chunks
+- after each non-trivial implementation chunk, run required non-runtime proof and
+  `quality_guard` before runtime proof, design review, final review, closeout
+  cleanup, or the next non-trivial implementation chunk
+- pass `quality_guard` the packet path, binding objective, changed surfaces,
+  proof rows, commands run, touched-owner integrity verdict, and residual gaps
 
 Before closeout:
 - run wave-level verification and final isolated review
