@@ -1783,3 +1783,34 @@ def test_validate_enforces_wave_lifecycle_from_status_and_packet_existence(tmp_p
     assert "docs-ai/docs/initiatives/waves/discovery.md is discovery-required but canonical packet exists" in errors
     assert "docs-ai/docs/initiatives/waves/ready.md is execution-ready but canonical packet is missing" in errors
     assert "docs-ai/docs/initiatives/waves/done.md is done but current-work packet exists" in errors
+
+
+def test_validate_rejects_closed_wave_left_in_delivery_map(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "done-wave.md",
+        "# Wave done-wave\n\n**Status:** done\n",
+    )
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "retired-wave.md",
+        "# Wave retired-wave\n\n**Status:** retired\n",
+    )
+    write(
+        tmp_path / "docs-ai" / "current-work" / "delivery-map.md",
+        """
+        # Delivery Map (Waves + Backlog)
+
+        ## Wave Plan
+
+        ### Wave done-wave - Done Wave
+
+        - `initiative/feature/task`
+
+        - [retired](../docs/initiatives/waves/retired-wave.md)
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/delivery-map.md lists done wave done-wave" in errors
+    assert "docs-ai/current-work/delivery-map.md lists retired wave retired-wave" in errors

@@ -70,7 +70,12 @@ During execution:
 Before closeout:
 - run wave-level verification and final isolated review
 - ensure final claim does not exceed proof, runtime fidelity, or accepted scope
-- remove packet state only after closeout is actually approved
+- review the completed wave brief; extract retained value to the owning durable
+  surface or valid backlog, or state that no retained value remains
+- remove delivery-map state, packet state, and disposable completed wave briefs
+  only after closeout is actually approved
+- use validation for mechanical leftovers; do not replace retained-value review
+  with an automated classifier
 
 ## Assets
 

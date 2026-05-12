@@ -1197,10 +1197,20 @@ def _validate_wave_lifecycle(root: Path) -> list[str]:
             if child.is_dir() and ((child / "wave-execution.md").exists() or (child / "wave-execution.draft.md").exists()):
                 wave_ids.add(child.name)
     delivery_map = current_work / "delivery-map.md"
+    delivery_map_wave_ids: set[str] = set()
     if delivery_map.is_file():
         map_text = delivery_map.read_text(encoding="utf-8")
-        wave_ids.update(re.findall(r"docs-ai/docs/initiatives/waves/([A-Za-z0-9_-]+)\.md", map_text))
-        wave_ids.update(re.findall(r"docs-ai/current-work/([A-Za-z0-9_-]+)/wave-execution(?:\.draft)?\.md", map_text))
+        delivery_map_wave_ids.update(
+            re.findall(r"docs-ai/docs/initiatives/waves/([A-Za-z0-9_-]+)\.md", map_text)
+        )
+        delivery_map_wave_ids.update(
+            re.findall(r"\.\./docs/initiatives/waves/([A-Za-z0-9_-]+)\.md", map_text)
+        )
+        delivery_map_wave_ids.update(
+            re.findall(r"docs-ai/current-work/([A-Za-z0-9_-]+)/wave-execution(?:\.draft)?\.md", map_text)
+        )
+        delivery_map_wave_ids.update(re.findall(r"^###\s+Wave\s+([A-Za-z0-9_-]+)\b", map_text, re.MULTILINE))
+        wave_ids.update(delivery_map_wave_ids)
 
     for wave_id in sorted(wave_ids):
         brief_path = brief_dir / f"{wave_id}.md"
@@ -1220,6 +1230,8 @@ def _validate_wave_lifecycle(root: Path) -> list[str]:
             errors.append(f"{brief_path.relative_to(root)} is execution-ready but canonical packet is missing")
         if status in {"done", "retired"} and (canonical_packet.exists() or draft_packet.exists()):
             errors.append(f"{brief_path.relative_to(root)} is {status} but current-work packet exists")
+        if status in {"done", "retired"} and wave_id in delivery_map_wave_ids:
+            errors.append(f"docs-ai/current-work/delivery-map.md lists {status} wave {wave_id}")
     return errors
 
 
@@ -1899,6 +1911,7 @@ def run_self_test() -> list[str]:
             "invalid.md is discovery-required but canonical packet exists",
             "ready.md is execution-ready but canonical packet is missing",
             "done.md is done but current-work packet exists",
+            "delivery-map.md lists done wave done",
         )
         for marker in expected:
             if not any(marker in error for error in fixture_errors):
