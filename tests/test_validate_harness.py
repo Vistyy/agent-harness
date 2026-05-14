@@ -578,61 +578,31 @@ def test_validate_rejects_removed_harness_path_outside_archive(tmp_path: Path) -
     write(
         tmp_path / "README.md",
         """
-        See skills/adversarial-review/SKILL.md.
-        See skills/user-apps-design/references/atomic-design.md.
-        See skills/user-apps-design/references/parity-dimensions.md.
-        See skills/user-apps-design/references/ui-direction-workflow.md.
-        See skills/testing-best-practices/references/condition-based-waiting.md.
-        See skills/testing-best-practices/references/corpus-audit.md.
-        See skills/testing-best-practices/references/layer-selection.md.
-        See skills/testing-best-practices/references/proof-strength.md.
-        See skills/testing-best-practices/references/touched-test-gate.md.
-        See skills/initiatives-workflow/assets/wave-brief.example.md.
-        See skills/webapp-testing/examples/console_logging.py.
+        See skills/code-simplicity/SKILL.md.
+        See skills/system-boundary-architecture/SKILL.md.
+        See skills/system-boundary-architecture/references/web-boundaries.md.
+        See skills/verification-before-completion/SKILL.md.
+        See skills/planning-intake/SKILL.md.
+        See adapters/codex/agents/check-runner.toml.
+        See adapters/github-copilot/README.md.
+        See adapters/github-copilot/agents/quality_guard.agent.md.
         """,
     )
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "README.md references removed harness path skills/adversarial-review/SKILL.md" in errors
+    assert "README.md references removed harness path skills/code-simplicity/SKILL.md" in errors
+    assert "README.md references removed harness path skills/system-boundary-architecture/SKILL.md" in errors
     assert (
-        "README.md references removed harness path skills/user-apps-design/references/atomic-design.md"
+        "README.md references removed harness path skills/system-boundary-architecture/references/web-boundaries.md"
         in errors
     )
+    assert "README.md references removed harness path skills/verification-before-completion/SKILL.md" in errors
+    assert "README.md references removed harness path skills/planning-intake/SKILL.md" in errors
+    assert "README.md references removed harness path adapters/codex/agents/check-runner.toml" in errors
+    assert "README.md references removed harness path adapters/github-copilot/README.md" in errors
     assert (
-        "README.md references removed harness path skills/user-apps-design/references/parity-dimensions.md"
-        in errors
-    )
-    assert (
-        "README.md references removed harness path skills/user-apps-design/references/ui-direction-workflow.md"
-        in errors
-    )
-    assert (
-        "README.md references removed harness path skills/testing-best-practices/references/condition-based-waiting.md"
-        in errors
-    )
-    assert (
-        "README.md references removed harness path skills/testing-best-practices/references/corpus-audit.md"
-        in errors
-    )
-    assert (
-        "README.md references removed harness path skills/testing-best-practices/references/layer-selection.md"
-        in errors
-    )
-    assert (
-        "README.md references removed harness path skills/testing-best-practices/references/proof-strength.md"
-        in errors
-    )
-    assert (
-        "README.md references removed harness path skills/testing-best-practices/references/touched-test-gate.md"
-        in errors
-    )
-    assert (
-        "README.md references removed harness path skills/initiatives-workflow/assets/wave-brief.example.md"
-        in errors
-    )
-    assert (
-        "README.md references removed harness path skills/webapp-testing/examples/console_logging.py"
+        "README.md references removed harness path adapters/github-copilot/agents/quality_guard.agent.md"
         in errors
     )
 
@@ -670,24 +640,24 @@ def test_validate_rejects_removed_harness_path_in_closed_archive(tmp_path: Path)
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "docs-ai" / "current-work" / "closed-harness-audits-2026-04.md",
-        "Archived deletion: skills/adversarial-review/SKILL.md.\n",
+        "Archived deletion: skills/code-simplicity/SKILL.md.\n",
     )
 
     errors = validate_harness.validate(tmp_path)
 
     assert (
         "docs-ai/current-work/closed-harness-audits-2026-04.md references removed harness path "
-        "skills/adversarial-review/SKILL.md"
+        "skills/code-simplicity/SKILL.md"
     ) in errors
 
 
 def test_validate_rejects_removed_harness_path_in_other_tests(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    write(tmp_path / "tests" / "test_stale_path.md", "See skills/adversarial-review/SKILL.md.\n")
+    write(tmp_path / "tests" / "test_stale_path.md", "See skills/code-simplicity/SKILL.md.\n")
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "tests/test_stale_path.md references removed harness path skills/adversarial-review/SKILL.md" in errors
+    assert "tests/test_stale_path.md references removed harness path skills/code-simplicity/SKILL.md" in errors
 
 
 def test_validate_rejects_missing_relative_skill_path_reference(tmp_path: Path) -> None:
@@ -780,23 +750,6 @@ def test_validate_rejects_adapter_handoff_context_missing_readiness_claim(tmp_pa
         "adapters/codex/agents/quality-guard.toml missing adapter handoff context term 'readiness claim'"
         in errors
     )
-
-
-def test_validate_rejects_removed_subagent_topology_reference(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "README.md",
-        """
-        See skills/subagent-orchestration/references/coding-agent-topology.md.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "README.md references removed harness path "
-        "skills/subagent-orchestration/references/coding-agent-topology.md"
-    ) in errors
 
 
 def test_validate_rejects_binding_simplicity_lens_language(tmp_path: Path) -> None:

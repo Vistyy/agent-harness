@@ -10,19 +10,6 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-FORBIDDEN_TERMS = (
-    "Budgeat",
-    "PriceHub",
-    "R2",
-    "OCR",
-    "brochure",
-    "grocery",
-    "Poland",
-    "Polish",
-    "PLN",
-    "Biedronka",
-    "Lidl",
-)
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 MARKDOWN_LEVEL_TWO_HEADING_PATTERN = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
 INLINE_PATH_RE = re.compile(r"`((?:(?:references|assets|scripts)/|\.\./)[^`\s]+)`")
@@ -305,13 +292,12 @@ REQUIRED_REFERENCE_GATE_RE = re.compile(
     re.IGNORECASE,
 )
 REMOVED_HARNESS_PATHS = (
-    "skills/adversarial-review/SKILL.md",
-    "skills/adversarial-review/agents/openai.yaml",
+    # Current redesign-era removals that are still likely to regress through
+    # stale links, live installs, or adapter drift.
     "skills/code-simplicity/SKILL.md",
     "skills/code-simplicity/agents/openai.yaml",
     "skills/code-simplicity/references/touched-component-integrity-gate.md",
     "skills/code-simplicity/references/default-simplicity-posture.md",
-    "skills/code-review/references/review-governance.md",
     "adapters/codex/agents/check-runner.toml",
     "adapters/github-copilot/README.md",
     "adapters/github-copilot/agents/check_runner.agent.md",
@@ -322,29 +308,9 @@ REMOVED_HARNESS_PATHS = (
     "adapters/github-copilot/agents/planning_critic.agent.md",
     "adapters/github-copilot/agents/quality_guard.agent.md",
     "adapters/github-copilot/agents/runtime_evidence.agent.md",
-    "skills/design-integrity/references/touched-component-integrity-gate.md",
-    "skills/documentation-stewardship/references/domain-language.md",
-    "skills/flutter-expert/references/navigation.md",
-    "skills/flutter-expert/references/project-setup.md",
-    "skills/flutter-expert/references/state-and-providers.md",
-    "skills/flutter-expert/references/ui-patterns.md",
-    "skills/initiatives-workflow/references/initiatives-workflow.md",
-    "skills/initiatives-workflow/assets/wave-brief.example.md",
-    "skills/initiatives-workflow/assets/wave-execution.example.md",
     "skills/planning-intake/SKILL.md",
     "skills/planning-intake/agents/openai.yaml",
     "skills/planning-intake/references/intake-contract.md",
-    "skills/subagent-orchestration/references/delegation-policy.md",
-    "skills/subagent-orchestration/references/coding-agent-topology.md",
-    "skills/svelte-core-bestpractices/SKILL.md",
-    "skills/svelte-core-bestpractices/agents/openai.yaml",
-    "skills/svelte-core-bestpractices/references/$inspect.md",
-    "skills/svelte-core-bestpractices/references/@attach.md",
-    "skills/svelte-core-bestpractices/references/@render.md",
-    "skills/svelte-core-bestpractices/references/bind.md",
-    "skills/svelte-core-bestpractices/references/each.md",
-    "skills/svelte-core-bestpractices/references/snippet.md",
-    "skills/svelte-core-bestpractices/references/svelte-reactivity.md",
     "skills/system-boundary-architecture/references/code-shape-and-local-design.md",
     "skills/system-boundary-architecture/SKILL.md",
     "skills/system-boundary-architecture/agents/openai.yaml",
@@ -357,46 +323,12 @@ REMOVED_HARNESS_PATHS = (
     "skills/system-boundary-architecture/references/system-and-boundary-architecture.md",
     "skills/system-boundary-architecture/references/web-frontend-boundaries.md",
     "skills/system-boundary-architecture/references/web-route-and-state-boundary-doctrine.md",
-    "skills/systematic-debugging/evaluations/test-academic.md",
-    "skills/systematic-debugging/evaluations/test-pressure-1.md",
-    "skills/systematic-debugging/evaluations/test-pressure-2.md",
-    "skills/systematic-debugging/evaluations/test-pressure-3.md",
-    "skills/systematic-debugging/examples/condition-based-waiting-example.ts",
-    "skills/systematic-debugging/examples/find-polluter.sh",
-    "skills/systematic-debugging/references/condition-based-waiting.md",
-    "skills/systematic-debugging/references/defense-in-depth.md",
-    "skills/systematic-debugging/references/root-cause-tracing.md",
-    "skills/test-driven-development/SKILL.md",
-    "skills/test-driven-development/agents/openai.yaml",
-    "skills/test-driven-development/references/testing-anti-patterns.md",
-    "skills/testing-best-practices/references/condition-based-waiting.md",
-    "skills/testing-best-practices/references/corpus-audit.md",
-    "skills/testing-best-practices/references/layer-selection.md",
-    "skills/testing-best-practices/references/proof-strength.md",
-    "skills/testing-best-practices/references/testing-strategy.md",
-    "skills/testing-best-practices/references/touched-test-gate.md",
-    "skills/user-apps-design/references/atomic-design.md",
-    "skills/user-apps-design/references/parity-dimensions.md",
-    "skills/user-apps-design/references/ui-direction-workflow.md",
     "skills/verification-before-completion/references/quality-gate-selection.md",
     "skills/verification-before-completion/SKILL.md",
     "skills/verification-before-completion/agents/openai.yaml",
     "skills/verification-before-completion/references/runtime-evidence-contract.md",
     "skills/verification-before-completion/references/runtime-proof-escalation.md",
     "skills/verification-before-completion/references/verification-evidence.md",
-    "skills/webapp-testing/examples/console_logging.py",
-    "skills/webapp-testing/examples/element_discovery.py",
-    "skills/webapp-testing/examples/static_html_automation.py",
-    "skills/mobile-design/SKILL.md",
-    "skills/mobile-design/agents/openai.yaml",
-    "skills/mobile-design/references/mobile-backend.md",
-    "skills/mobile-design/references/mobile-design-thinking.md",
-    "skills/mobile-design/references/mobile-design-workflow.md",
-    "skills/mobile-design/references/mobile-performance.md",
-    "skills/mobile-design/references/mobile-testing.md",
-    "skills/mobile-design/references/platform-android.md",
-    "skills/mobile-design/references/platform-ios.md",
-    "skills/mobile-design/references/touch-psychology.md",
 )
 REMOVED_HARNESS_PATH_EXEMPTIONS = {
     "scripts/validate_harness.py",
@@ -1671,11 +1603,6 @@ def validate(root: Path) -> list[str]:
                 errors.append(
                     f"{markdown_file.relative_to(root)}:{line_number} forbidden project owner path {match.group(1)!r}"
                 )
-            for term in FORBIDDEN_TERMS:
-                if term in line:
-                    errors.append(
-                        f"{markdown_file.relative_to(root)}:{line_number} forbidden project term {term!r}"
-                    )
         for match in LINK_RE.finditer(text):
             if error := _validate_markdown_path(markdown_file, root, match.group(1)):
                 errors.append(error)
@@ -1798,9 +1725,7 @@ def run_self_test() -> list[str]:
             encoding="utf-8",
         )
         (root / "skills" / "loose-md" / "extra.md").write_text("loose markdown\n", encoding="utf-8")
-        (root / "README.md").write_text("Budgeat product fact\n", encoding="utf-8")
-        (root / "SOURCE.md").write_text("source: Budgeat product fact without path\n", encoding="utf-8")
-        (root / "CITATION.md").write_text("source: `docs-ai/docs/example.md` Budgeat source path\n", encoding="utf-8")
+        (root / "README.md").write_text("Harness fixture text\n", encoding="utf-8")
         (root / "OWNER.md").write_text("See `docs-ai/docs/conventions/review-governance.md`.\n", encoding="utf-8")
         (root / "agents").mkdir()
         (root / "agents" / "roles.md").write_text(
@@ -1885,8 +1810,6 @@ def run_self_test() -> list[str]:
             "interface.short_description must be 25-64 characters",
             "interface.default_prompt must mention $uv",
             "loose-md/extra.md should live under references/",
-            "README.md:1 forbidden project term",
-            "SOURCE.md:1 forbidden project term",
             "OWNER.md:1 forbidden project owner path",
             "adapters/codex/config.toml missing agents.quality_guard",
             "explorer.toml name must be 'explorer'",

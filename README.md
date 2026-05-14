@@ -9,6 +9,10 @@ Project-specific facts stay in each project overlay.
 
 ## Architecture
 
+Keep this section high-level. It should describe the harness shape and owner
+relationships, not restate skill bodies, adapter prompts, packet fields, or
+project-specific doctrine.
+
 The harness is a contract kernel, not a project playbook. It gives agents a
 small set of reusable owners and leaves product facts, runtime topology,
 roadmap, queue state, local commands, and exceptions in each project.
