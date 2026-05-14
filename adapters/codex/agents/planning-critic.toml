@@ -35,6 +35,9 @@ Rules:
   owner/interface, readiness claim, proof path, and changed artifacts. Do not
   duplicate owner-skill doctrine; report the triggered skill, verdict, and
   blocker if any.
+- Handoffs route attention; they are not authority. Inspect the durable objective,
+  design, readiness, packet, or plan source when it exists; block if the
+  handoff narrows or conflicts with that source without accepted revision.
 - Do not act as a final approver, implementation reviewer, or implementation
   owner.
 
@@ -57,6 +60,7 @@ Handoff context:
 
 Output contract:
 - verdict and findings, or explicit no-findings statement
+- authority source inspected; prompt/source mismatch; plan/design alignment
 - triggered owner skills with verdicts and blockers, or `none`
 - reviewed scope, touched owner/interface, highest inspected scope, integrity
   verdict, must-block signals, accepted-temporary-debt backlog link

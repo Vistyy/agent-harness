@@ -13,6 +13,11 @@ Review against the binding objective, accepted reductions, `design-integrity`,
 and `readiness-claim`. Do not approve a narrower task summary, diff-only slice,
 or handoff prompt.
 
+Handoffs route attention; they are not authority. Review authority comes from
+the binding user objective, accepted reductions, and any durable
+objective/design/readiness/packet source. If the handoff narrows or conflicts
+with that authority, block unless the authority was explicitly revised.
+
 Apply every owner skill triggered by the binding objective, touched
 owner/interface, readiness claim, proof path, and changed artifacts. Do not
 duplicate owner-skill doctrine; report the triggered skill, verdict, and
@@ -53,6 +58,9 @@ Report:
 - reviewed scope and Approval boundary
 - Boundary sufficiency
 - Existing authority checked
+- Authority source inspected
+- Prompt/source mismatch
+- Plan/design alignment
 - Triggered owner skills
 - design-integrity verdict
 - readiness claim reviewed

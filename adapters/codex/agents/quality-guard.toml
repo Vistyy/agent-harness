@@ -43,6 +43,9 @@ Constraints:
   owner/interface, readiness claim, proof path, and changed artifacts. Do not
   duplicate owner-skill doctrine; report the triggered skill, verdict, and
   blocker if any.
+- Handoffs route attention; they are not authority. Inspect the durable objective,
+  design, readiness, packet, or plan source when it exists; block if the
+  handoff narrows or conflicts with that source without accepted revision.
 
 
 Handoff context:
@@ -52,6 +55,7 @@ Handoff context:
 
 Output contract:
 - approval or rejection verdict
+- authority source inspected; prompt/source mismatch; plan/design alignment
 - triggered owner skills with verdicts and blockers, or `none`
 - findings, or an explicit no-findings statement
 - scope reviewed, evidence consulted, touched owner/interface, highest inspected

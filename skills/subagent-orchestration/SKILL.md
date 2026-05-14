@@ -78,6 +78,9 @@ slow, silent, timed out, or blocking local work.
 
 ## Handoff
 
+Handoffs route attention; they are not authority. Include authority sources
+when durable state exists, and do not narrow or replace them in the handoff.
+
 Pass:
 
 - active packet path when durable state exists

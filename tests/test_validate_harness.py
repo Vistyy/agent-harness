@@ -74,6 +74,10 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
                 "# Apply every owner skill triggered by the binding objective\n"
                 "# Do not duplicate owner-skill doctrine\n"
                 "# triggered skill, verdict, and blocker\n"
+                "# Handoffs route attention; they are not authority\n"
+                "# authority source inspected\n"
+                "# prompt/source mismatch\n"
+                "# plan/design alignment\n"
             )
         elif role == "explorer":
             codex_body = (
@@ -1056,6 +1060,42 @@ def test_validate_rejects_review_role_contract_drift(tmp_path: Path) -> None:
     assert (
         "adapters/codex/agents/quality-guard.toml missing review role contract term "
         "'why inspected scope is sufficient'"
+    ) in errors
+
+
+def test_validate_rejects_planning_critic_review_authority_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "planning-critic.toml",
+        (
+            'name = "planning_critic"\n'
+            "# design integrity gate\n"
+            "# Review non-trivial planning only\n"
+            "# Stay read-only and do not edit code or docs.\n"
+            "# Do not act as a final approver, implementation reviewer, or implementation owner.\n"
+            "# binding objective\n"
+            "# accepted reductions\n"
+            "# readiness claim\n"
+        ),
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/planning-critic.toml missing review authority term "
+        "'Handoffs route attention; they are not authority'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/planning-critic.toml missing review authority term "
+        "'authority source inspected'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/planning-critic.toml missing review authority term "
+        "'prompt/source mismatch'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/planning-critic.toml missing review authority term "
+        "'plan/design alignment'"
     ) in errors
 
 

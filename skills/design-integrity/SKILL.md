@@ -15,6 +15,11 @@ Small means no unnecessary owners, wrappers, gates, adapters, flags, or
 compatibility paths. Coherent means callers, tests, runtime proof, and future
 changes know which owner owns the state, lifecycle, policy, and side effects.
 
+For non-trivial owner/interface work, deletion, collapse, rewrite, or
+replacement is the default design move. Adding code, wrappers, compatibility
+paths, flags, or parallel systems requires justification against the simpler
+delete/rewrite option.
+
 ## Design Test
 
 For non-trivial work, answer:
@@ -29,6 +34,10 @@ For non-trivial work, answer:
 
 If the answers expose shallow ceremony, duplicate authority, hidden lifecycle,
 or proof that reaches behind the interface, reshape before execution.
+
+If implementation materially differs from the accepted design source, revise
+the implementation, revise the design source, or block. Do not silently approve
+a different shape.
 
 ## Interface Rules
 
@@ -63,6 +72,9 @@ Report:
 - test or proof path that must use private state/choreography
 - compatibility path without owner, protected surface, and removal condition
 - local patch that preserves the reason the owner is wrong
+- additive change that bypasses a simpler delete/rewrite option
+- implementation shape that differs from accepted design without revised
+  authority
 
 Stop or route when design integrity is unacceptable and the user has not
 explicitly accepted temporary debt.

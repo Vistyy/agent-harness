@@ -110,6 +110,12 @@ PROVIDER_PROMPT_FILES = (
     "adapters/codex/install.sh",
 )
 REVIEW_ROLE_CONTRACTS = {
+    "adapters/codex/agents/planning-critic.toml": (
+        "binding objective",
+        "accepted reductions",
+        "readiness claim",
+        "triggered owner skills with verdicts and blockers",
+    ),
     "adapters/codex/agents/quality-guard.toml": (
         "binding objective",
         "accepted reductions",
@@ -149,9 +155,18 @@ CODE_REVIEW_OUTPUT_REQUIRED_TERMS = (
     "Approval boundary",
     "Boundary sufficiency",
     "Existing authority checked",
+    "Authority source inspected",
+    "Prompt/source mismatch",
+    "Plan/design alignment",
     "Triggered owner skills",
     "Proof reviewed",
     "Issue disposition",
+)
+REVIEW_AUTHORITY_TERMS = (
+    "Handoffs route attention; they are not authority",
+    "authority source inspected",
+    "prompt/source mismatch",
+    "plan/design alignment",
 )
 REVIEW_TRIGGERED_OWNER_SKILL_TERMS = (
     "Apply every owner skill triggered by the binding objective",
@@ -743,6 +758,7 @@ def _validate_owner_only_doctrine(root: Path) -> list[str]:
         rel = path.relative_to(root).as_posix()
         text = path.read_text(encoding="utf-8")
         normalized_text = " ".join(text.split())
+        normalized_lower_text = normalized_text.lower()
         for phrase, owner in OWNER_ONLY_DOCTRINE.items():
             normalized_phrase = " ".join(phrase.split())
             if rel != owner and normalized_phrase in normalized_text:
@@ -838,6 +854,8 @@ def _validate_subagent_allowlist(root: Path, roles: set[str]) -> list[str]:
             "Active Subagents",
             "same `implementer` until `quality_guard` approves",
             "Do not spawn a new subagent with a rephrased version of the same task",
+            "Handoffs route attention; they are not authority",
+            "Include authority sources when durable state exists",
             "agents/roles.md` owns harness role names and missions",
             "active packet path",
         ):
@@ -1190,10 +1208,20 @@ def _validate_design_integrity_gate(root: Path) -> list[str]:
         if not path.is_file():
             continue
         text = path.read_text(encoding="utf-8")
+        normalized_text = " ".join(text.split())
         if re.search(r"\b[Ss]implicity lens\b", text):
             errors.append(f"{relative_path} must use design-integrity, not a simplicity lens")
         if "contract, state, lifecycle, or proof" in text:
             errors.append(f"{relative_path} has incomplete design-integrity definition; include design and workflow")
+        if relative_path == "skills/design-integrity/SKILL.md":
+            for term in (
+                "deletion, collapse, rewrite, or replacement is the default design move",
+                "requires justification against the simpler delete/rewrite option",
+                "If implementation materially differs from the accepted design source",
+                "Do not silently approve a different shape",
+            ):
+                if " ".join(term.split()) not in normalized_text:
+                    errors.append(f"{relative_path} missing design-integrity authority term {term!r}")
     for relative_path in DESIGN_INTEGRITY_AGENT_FILES:
         path = root / relative_path
         if not path.is_file():
@@ -1485,12 +1513,16 @@ def _validate_review_role_contracts(root: Path) -> list[str]:
             continue
         text = path.read_text(encoding="utf-8")
         normalized_text = " ".join(text.split())
+        normalized_lower_text = normalized_text.lower()
         for term in required_terms:
             if " ".join(term.split()) not in normalized_text:
                 errors.append(f"{relative_path} missing review role contract term {term!r}")
         for term in REVIEW_TRIGGERED_OWNER_SKILL_TERMS:
             if " ".join(term.split()) not in normalized_text:
                 errors.append(f"{relative_path} missing triggered owner skill review term {term!r}")
+        for term in REVIEW_AUTHORITY_TERMS:
+            if " ".join(term.lower().split()) not in normalized_lower_text:
+                errors.append(f"{relative_path} missing review authority term {term!r}")
         if "quality-guard" in relative_path or "quality_guard" in relative_path:
             if not QUALITY_GUARD_FINAL_APPROVAL_NEGATION_RE.search(text):
                 errors.append(f"{relative_path} missing quality_guard final-approval negation")
