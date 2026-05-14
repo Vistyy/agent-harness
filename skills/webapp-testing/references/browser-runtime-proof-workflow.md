@@ -1,18 +1,20 @@
 # Browser Runtime Proof Workflow
 
 Owns browser preflight, live operation, browser evidence, and reporting
-mechanics. Runtime verdict authority belongs to `../../runtime-proof/SKILL.md`.
+mechanics. Claim scope belongs to `../../readiness-claim/SKILL.md`; runtime
+evidence mechanics belong to `../../runtime-proof/SKILL.md`.
 
 ## Handoffs
 
-- Runtime claim map, entrypoint fidelity, verdict, and reviewed-evidence rules:
+- Claim scope and interface obligations: `../../readiness-claim/SKILL.md`
+- Entrypoint fidelity, verdict, and reviewed-evidence mechanics:
   `../../runtime-proof/SKILL.md`
 - Durable test versus one-shot proof: `../../testing-best-practices/SKILL.md`
-- Route or state ownership: `../../system-boundary-architecture/references/web-boundaries.md`
+- Route or state ownership: `../../design-integrity/references/web-boundaries.md`
 
 ## Preflight
 
-Add browser-specific claim-map inputs: exact flow, state, role, data, viewport,
+Add browser-specific handoff inputs: exact flow, state, role, data, viewport,
 UI behavior risks when claimed, material telemetry/trace IDs or `none`, and
 unproved browser/runtime boundaries or `none`.
 
@@ -42,8 +44,8 @@ When the runtime proof plan calls for `runtime_evidence`, pass the binding
 objective, accepted reductions, target flow, recipe, variants, constraints, and
 states to inspect. Do not pass prewritten conclusions.
 
-Use `check_runner` for large logs, traces, HTML dumps, console output, and
-network output.
+Summarize only the logs, traces, HTML dumps, console output, and network output
+the verdict relies on.
 
 ## Evidence
 

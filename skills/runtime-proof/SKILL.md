@@ -1,91 +1,59 @@
 ---
 name: runtime-proof
-description: "Use when a non-trivial runtime-visible claim needs live-use proof beyond tests/reviews; owns claim maps, entrypoint fidelity, verdicts, and blocking runtime findings."
+description: "Use for live-use runtime evidence mechanics, entrypoint fidelity, artifacts, and pass/reject/blocked verdicts after readiness-claim names the claim."
 ---
 
 # Runtime Proof
 
-Owns runtime evidence policy. Browser and mobile skills own platform mechanics.
-`../verification-before-completion/SKILL.md` owns final completion claim
-gating.
+Owns live-use validation mechanics. `../readiness-claim/SKILL.md` owns claim
+completeness and final scope. Browser and mobile skills own platform mechanics.
 
 ## Rule
 
-Runtime evidence is live-use validation. It uses the app, service, API, or
-operator path through a faithful entrypoint and verifies the claimed behavior
-actually works beyond code inspection, tests, and review approval.
+Runtime evidence uses the app, service, API, or operator path through a
+faithful entrypoint and reports whether observed behavior supports the handed
+readiness claim beyond code inspection, tests, and review approval.
 
-Runtime evidence proves the binding objective plus accepted reductions. A
-handoff for a smaller claim without accepted reduction is mis-scoped and
-returns `blocked`.
+This skill does not decide when runtime evidence is required. That requirement
+comes from `../readiness-claim/SKILL.md`, project overlays, or the active route.
 
-Runtime evidence is required for non-trivial runtime-visible behavior claims
-unless the claim is tiny, local, and has no public-behavior or cross-boundary runtime risk.
-Durable e2e tests may supply runtime artifacts only when they exercise the same
-claim through a faithful entrypoint and leave inspectable evidence.
+Runtime evidence is blocking when required. Return `reject`, `blocked`,
+incomplete, or mis-scoped evidence to `readiness-claim`; completion waits for
+fixed/re-proven evidence or an explicitly narrowed claim.
 
-Runtime evidence is blocking, not advisory. `reject`, `blocked`, incomplete,
-or mis-scoped proof blocks broad completion until fixed and re-proven or
-explicitly narrowed by the user.
+Visual-only UI design readiness does not require runtime evidence by default;
+`design_judge` owns product-grade visual approval.
 
-Visual-only UI design readiness does not require runtime evidence by default.
-Browser and mobile testing skills own screenshot/contact-sheet mechanics.
-Product-grade UI design approval requires `design_judge` `pass`.
+## Handoff
 
-Use `runtime_evidence` as an independent verifier only when a non-trivial live
-behavior claim needs it, such as auth/session, checkout/payment, destructive
-actions, mobile install/deep links/offline behavior, queues/sync,
-notifications, tenant/data-dependent flows, or release smoke checks.
+Name:
 
-## Runtime Claim Map
-
-Every runtime handoff names:
-- binding objective
-- accepted reductions
-- exact runtime claim
-- target entrypoint or recipe
-- affected surfaces, states, roles, data, devices, browsers, or viewports
-- UI behavior risks when the runtime claim includes them
+- binding objective and accepted reductions
+- readiness claim and obligations checked
+- entrypoint or recipe
+- affected states, roles, data, devices, browsers, or viewports
+- UI behavior risks, if claimed
 - unproved boundaries, or `none`
+
+Missing or narrower handoff returns `blocked`.
 
 ## Entrypoint Fidelity
 
-- `real-entrypoint`: actual user/operator path.
-- `scripted-entrypoint`: project-supported command that exercises the same
-  boundary.
-- `adjacent-component`: nearby component or mocked boundary only.
+- `real-entrypoint`: actual user/operator path
+- `scripted-entrypoint`: project-supported command exercising the same boundary
+- `adjacent-component`: nearby component or mocked boundary only
 - `artifact-only`: screenshot, build output, or static artifact without live
-  behavior.
+  behavior
 
-Broad readiness, end-to-end, redesign, or user-flow claims require
-`real-entrypoint` unless the claim is explicitly narrowed. Simulated or
-adjacent proof names the unproved boundary.
+Broad readiness and user-flow claims need `real-entrypoint` unless
+`readiness-claim` explicitly narrows the claim.
 
-## Verdicts
-
-- `pass`: observed runtime behavior satisfies the runtime claim map.
-- `reject`: observed behavior contradicts the runtime claim, public behavior,
-  or accepted quality bar.
-- `blocked`: recipe, data, environment, missing inputs, or mis-scoped handoff
-  prevents proof.
-
-## Evidence
-
-Evidence must be small enough to inspect and complete enough to prove the
-claim. Artifact minimalism never justifies claim shrinking.
+## Output
 
 Report claim boundary, entrypoint fidelity, recipe, actions, artifact paths,
-material logs/traces or `none observed`, verdict, and block impact.
+material logs/traces or `none observed`, verdict `pass | reject | blocked`,
+and block impact.
 
-When a runtime behavior claim includes UI behavior risk, evidence may include
-screenshots for hit testing, transitions, responsive state, or observed device
-behavior. Those screenshots do not approve product UI design.
-
-## Platform Owners
-
-- Use `../webapp-testing/SKILL.md` for browser proof mechanics, Playwright
-  vehicles, browser sessions, screenshots, and console/network handling.
-- Use `../mobileapp-testing/SKILL.md` for emulator/device mechanics, Dart MCP,
-  adb, widget trees, logs, screenshots, and device lifecycle.
-- Use `../testing-best-practices/SKILL.md` when deciding whether runtime proof
-  should become a durable persistent test.
+Use `../webapp-testing/SKILL.md`, `../mobileapp-testing/SKILL.md`, or
+`../testing-best-practices/SKILL.md` for browser, mobile, or persistent-test
+mechanics.

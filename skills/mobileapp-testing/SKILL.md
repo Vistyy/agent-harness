@@ -7,17 +7,18 @@ description: "Use for mobile runtime proof mechanics: emulator/device execution,
 
 Owns live mobile runtime proof mechanics with deterministic device evidence.
 
-Runtime verdicts route to `../runtime-proof/SKILL.md`. Use `runtime_evidence`
-only when the runtime proof plan requires an independent live-use verifier. Use
-Dart MCP first. Use adb only for install, launch, screenshot, recovery, or
-device lifecycle work.
+Claim scope routes to `../readiness-claim/SKILL.md`; runtime mechanics route to
+`../runtime-proof/SKILL.md`. Use `runtime_evidence` only when the runtime proof
+plan requires an independent live-use verifier. Use Dart MCP first. Use adb
+only for install, launch, screenshot, recovery, or device lifecycle work.
 
 Project overlays own service names, ports, device IDs, and host-specific
 recovery recipes.
 
-Does not own mobile design constraints or runtime verdict authority. Use
-`../runtime-proof/SKILL.md` for claim maps, entrypoint fidelity, blocking
-verdicts, and evidence-of-record rules.
+Does not own mobile design constraints or claim completeness. Use
+`../readiness-claim/SKILL.md` for claim scope and
+`../runtime-proof/SKILL.md` for entrypoint fidelity, blocking verdicts, and
+evidence-of-record mechanics.
 
 ## Required References
 

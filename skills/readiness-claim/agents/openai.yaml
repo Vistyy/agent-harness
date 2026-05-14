@@ -1,0 +1,4 @@
+interface:
+  display_name: "Readiness Claim"
+  short_description: "Check claim completeness and proof admissibility"
+  default_prompt: "Use $readiness-claim to name the claimed interface and decide whether proof, review, and runtime evidence can support the claim."

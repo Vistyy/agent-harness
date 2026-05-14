@@ -1,12 +1,14 @@
 # Mobile Runtime Proof Workflow
 
 Owns mobile stack setup, device targeting, interaction, recovery, and
-mobile-specific evidence. Runtime verdict authority belongs to
+mobile-specific evidence. Claim scope belongs to
+`../../readiness-claim/SKILL.md`; runtime evidence mechanics belong to
 `../../runtime-proof/SKILL.md`.
 
 ## Handoffs
 
-- Runtime claim map, entrypoint fidelity, verdict, and reviewed-evidence rules:
+- Claim scope and interface obligations: `../../readiness-claim/SKILL.md`
+- Entrypoint fidelity, verdict, and reviewed-evidence mechanics:
   `../../runtime-proof/SKILL.md`
 - Durable test versus one-shot proof: `../../testing-best-practices/SKILL.md`
 
@@ -22,7 +24,7 @@ alone, or an unlaunched build artifact.
 
 ## Preflight
 
-Add mobile-specific claim-map inputs: exact flow, platform, device/emulator,
+Add mobile-specific handoff inputs: exact flow, platform, device/emulator,
 role, data, state set, UI behavior risks when claimed, material
 permission/OS/lifecycle posture, telemetry/trace IDs or `none`, and unproved
 mobile/runtime boundaries or `none`.

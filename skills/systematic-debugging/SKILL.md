@@ -29,15 +29,18 @@ the failing layer is known.
 
 ## Handoffs
 
-- After root cause is known, apply `../code-simplicity/SKILL.md` for
+- `../feedback-address/SKILL.md` owns feedback disposition. Use this skill for
+  diagnosis, not for deciding whether a verified issue is current-scope,
+  separate debt, accepted temporary debt, or no change.
+- After root cause is known, apply `../design-integrity/SKILL.md` for
   owner-correct repair.
 - Read `../testing-best-practices/references/persistent-test-contract.md` when
   tests rely on arbitrary sleeps or fixed waits.
 - If the root cause is unresolved ownership, authority, contract, state,
   storage, or interface boundary, use
-  `../system-boundary-architecture/SKILL.md`.
-- If feedback caused the investigation, use `../feedback-address/SKILL.md` for
-  disposition first.
+  `../design-integrity/SKILL.md`.
+- If feedback caused the investigation, preserve its disposition when applying
+  the fix or route.
 
 ## Stop
 

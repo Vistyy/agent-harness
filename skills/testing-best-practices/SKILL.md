@@ -5,12 +5,12 @@ description: "Use for persistent test work: adding, editing, deleting, reviewing
 
 # Testing Best Practices
 
-Owns persistent-test admission, cleanup, layer choice, proof strength, and
+Owns persistent-test admission, cleanup, layer choice, test strength, and
 meaningful persistent red evidence.
 
-Does not own runtime verdicts, final completion claims, browser mechanics, or
-mobile mechanics. Use `../runtime-proof/SKILL.md`,
-`../verification-before-completion/SKILL.md`, `../webapp-testing/SKILL.md`, and
+Does not own runtime verdicts, readiness claims, final readiness scope,
+browser mechanics, or mobile mechanics. Use `../readiness-claim/SKILL.md`,
+`../runtime-proof/SKILL.md`, `../webapp-testing/SKILL.md`, and
 `../mobileapp-testing/SKILL.md` for those owners.
 
 ## Non-Negotiables
@@ -25,8 +25,9 @@ Rules:
 - never fake red evidence
 - never replace runtime proof with persistent tests
 - e2e tests are written by implementers when an approved task owns them; they
-  support runtime evidence only when they exercise the same claim through a
-  faithful entrypoint and leave inspectable artifacts
+  support runtime evidence only when `readiness-claim` accepts that they
+  exercise the same claim through a faithful entrypoint and leave inspectable
+  artifacts
 
 ## Reference Gates
 

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Code Simplicity"
-  short_description: "Apply the default simplicity gate"
-  default_prompt: "Use $code-simplicity as the default simplicity gate for this work."

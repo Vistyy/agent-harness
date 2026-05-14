@@ -6,7 +6,7 @@ posture. Runtime proof depth and verdict authority belong to
 
 ## Rule
 
-Choose the cheapest browser vehicle that honestly proves the runtime claim map.
+Choose the cheapest browser vehicle that honestly proves the runtime handoff.
 Reviewed artifacts are the evidence of record; diagnostics are triage support.
 
 ## Vehicles

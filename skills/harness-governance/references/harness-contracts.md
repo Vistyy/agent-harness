@@ -52,6 +52,6 @@ Reusable harness gates are blocking contracts, not advisory guidance.
 - `not-applicable`: the gate is outside the claim and the reason is named.
 
 Do not classify required rule, proof, review, runtime, architecture,
-owner-integrity, or validation failures as advisory. Non-blocking observations
+design-integrity, or validation failures as advisory. Non-blocking observations
 are not code-review verdicts and are valid only outside the binding objective or
 as accepted temporary debt with owner, risk, and removal condition.
