@@ -13,6 +13,11 @@ Review against the binding objective, accepted reductions, `design-integrity`,
 and `readiness-claim`. Do not approve a narrower task summary, diff-only slice,
 or handoff prompt.
 
+Apply every owner skill triggered by the binding objective, touched
+owner/interface, readiness claim, proof path, and changed artifacts. Do not
+duplicate owner-skill doctrine; report the triggered skill, verdict, and
+blocker if any.
+
 Approval is binary: `APPROVE` or `BLOCK`. Approval means no current-scope
 blocker remains and reviewed evidence can support the readiness claim.
 
@@ -48,6 +53,7 @@ Report:
 - reviewed scope and Approval boundary
 - Boundary sufficiency
 - Existing authority checked
+- Triggered owner skills
 - design-integrity verdict
 - readiness claim reviewed
 - Proof reviewed, including runtime/design evidence when applicable

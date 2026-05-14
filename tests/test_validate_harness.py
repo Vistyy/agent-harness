@@ -70,6 +70,10 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
                 "# Do not claim final approval.\n"
                 "# Diff-only approval is invalid\n"
                 "# why inspected scope is sufficient\n"
+                "# triggered owner skills with verdicts and blockers\n"
+                "# Apply every owner skill triggered by the binding objective\n"
+                "# Do not duplicate owner-skill doctrine\n"
+                "# triggered skill, verdict, and blocker\n"
             )
         elif role == "explorer":
             codex_body = (

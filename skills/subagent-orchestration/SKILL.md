@@ -37,11 +37,41 @@ unsafe split, or an active-worker/write-scope conflict.
 Default to `explorer` for non-trivial repository discovery when the parent can
 ask a bounded question instead of reading broad file sets locally.
 
+## Active Subagents
+
+For any active subagent domain, use one loop:
+
+1. Parent gives the smallest complete handoff.
+2. Subagent returns work, evidence, approval, rejection, or blocker.
+3. Parent integrates only enough to preserve objective, scope, state, and
+   routing.
+4. Follow-up issues return to the same role/domain subagent until approved,
+   explicitly blocked pending parent decision, or explicitly out of scope.
+
+Do not spawn a new subagent with a rephrased version of the same task to get a
+fresh answer. A replacement is valid only when the role/domain changes, the
+active subagent cannot continue, or independent fresh review is the point. A
+blocker by itself does not justify replacement; if the parent resolves the
+blocker and the role/domain is unchanged, return to the same subagent.
+
+For delegated implementation, the normal path is:
+
+`parent -> implementer -> parent intake -> quality_guard -> same implementer
+revision loop -> parent final synthesis`
+
+If `quality_guard` rejects a delegated implementation slice, send the findings
+back to the same `implementer` until `quality_guard` approves or the slice is
+blocked/out of scope. The parent may reshape scope or delegate fixes, but must
+not quietly patch around a rejected delegated slice and skip the loop.
+
+Never close, replace, or reclaim an active worker or write scope because it is
+slow, silent, timed out, or blocking local work.
+
 ## Roles
 
 - `explorer`: read-only repository discovery and context compression.
 - `planning_critic`, `quality_guard`, `final_reviewer`: review only.
-- `implementer`: one bounded approved implementation slice.
+- `implementer`: one bounded assigned implementation slice.
 - `runtime_evidence`: live-use behavior evidence under `readiness-claim` and
   `runtime-proof`.
 - `design_judge`: screenshot/contact-sheet visual-quality approval.
@@ -64,12 +94,3 @@ review prompt for the original objective.
 Stop when delegation would narrow the objective, split one owner across
 conflicting workers, require hidden material decisions, or preserve a
 current-objective owner defect.
-
-## Active Workers
-
-Reuse the same role/domain subagent for continuation, revision, or follow-up.
-Spawn a replacement only when role/domain changes or fresh independent review
-is required.
-
-Never close, replace, or reclaim an active worker or write scope because it is
-slow, silent, timed out, or blocking local work.

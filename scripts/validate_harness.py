@@ -115,6 +115,7 @@ REVIEW_ROLE_CONTRACTS = {
         "accepted reductions",
         "Diff-only approval is invalid",
         "why inspected scope is sufficient",
+        "triggered owner skills with verdicts and blockers",
     ),
     "adapters/codex/agents/final-reviewer.toml": (
         "binding objective",
@@ -127,6 +128,7 @@ REVIEW_ROLE_CONTRACTS = {
         "project design source requirements",
         "project-local artifacts",
         "block missing, stale, blocked, rejected, or narrower",
+        "Triggered owner skills",
     ),
 }
 REVIEW_GOVERNANCE_REQUIRED_TERMS = (
@@ -147,8 +149,14 @@ CODE_REVIEW_OUTPUT_REQUIRED_TERMS = (
     "Approval boundary",
     "Boundary sufficiency",
     "Existing authority checked",
+    "Triggered owner skills",
     "Proof reviewed",
     "Issue disposition",
+)
+REVIEW_TRIGGERED_OWNER_SKILL_TERMS = (
+    "Apply every owner skill triggered by the binding objective",
+    "Do not duplicate owner-skill doctrine",
+    "triggered skill, verdict, and blocker",
 )
 DESIGN_CONTEXT_CONTRACT_REQUIRED_TERMS = (
     "project design source",
@@ -174,7 +182,7 @@ ROLE_BOUNDARY_CONTRACTS = {
         "Do not edit code or take implementation ownership.",
     ),
     "adapters/codex/agents/implementer.toml": (
-        "one bounded approved implementation slice",
+        "one bounded assigned implementation slice",
         "direct-route slices",
         "Do not claim final approval.",
     ),
@@ -827,6 +835,9 @@ def _validate_subagent_allowlist(root: Path, roles: set[str]) -> list[str]:
             "standing user authorization",
             "Do not ask for additional delegation permission",
             "fresh-conversation authorization source",
+            "Active Subagents",
+            "same `implementer` until `quality_guard` approves",
+            "Do not spawn a new subagent with a rephrased version of the same task",
             "agents/roles.md` owns harness role names and missions",
             "active packet path",
         ):
@@ -1477,6 +1488,9 @@ def _validate_review_role_contracts(root: Path) -> list[str]:
         for term in required_terms:
             if " ".join(term.split()) not in normalized_text:
                 errors.append(f"{relative_path} missing review role contract term {term!r}")
+        for term in REVIEW_TRIGGERED_OWNER_SKILL_TERMS:
+            if " ".join(term.split()) not in normalized_text:
+                errors.append(f"{relative_path} missing triggered owner skill review term {term!r}")
         if "quality-guard" in relative_path or "quality_guard" in relative_path:
             if not QUALITY_GUARD_FINAL_APPROVAL_NEGATION_RE.search(text):
                 errors.append(f"{relative_path} missing quality_guard final-approval negation")

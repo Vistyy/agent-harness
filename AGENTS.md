@@ -89,8 +89,12 @@ Precedence:
 - This preauthorization applies only to those named roles and only when the
   workflow calls for them. Adapter/runtime hard limits, unsafe handoff, or lack
   of a bounded task are the skip reasons.
-- Reuse the same role/domain subagent for continuation or revision. Spawn a
-  replacement only for a different role/domain or intentionally fresh review.
+- Reuse the same role/domain subagent for every continuation, revision, or
+  follow-up until the work is approved, explicitly blocked pending parent
+  decision, or explicitly out of scope.
+  Do not spawn a replacement with a rephrased prompt to restart the same work.
+  Spawn a replacement only for a different role/domain or intentionally fresh
+  independent review.
 - Never close, replace, or reclaim an active worker or write scope because it is
   slow, silent, timed out, or blocking local work.
 
