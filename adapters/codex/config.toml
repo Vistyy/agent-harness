@@ -2,33 +2,29 @@
 multi_agent = true
 
 [agents.explorer]
-description = "Default read-only discovery worker for repo exploration, strict code-path mapping, and context compression. Prefer delegating non-trivial file search/reading to it so the parent thread can stay in orchestration mode; returns relevant files, symbols, call paths, open questions, and next probes without proposing fixes by default."
+description = "Default for bounded read-only repository discovery when the parent would otherwise read broad file sets, map call paths, or compress context. Standing AGENTS.md authorization applies; do not ask the user again. Give it a concrete question; it returns relevant files/symbols/relationships/open questions without proposing fixes by default."
 config_file = "agents/explorer.toml"
 
-[agents.check_runner]
-description = "Default worker for narrowed non-runtime verification and diagnostics triage. Prefer it for targeted tests, build checks, `just ... quality*` recipes, log/trace sweeps, and summarizing large outputs so the parent thread does not spend frontier-model budget on grunt work."
-config_file = "agents/check-runner.toml"
-
 [agents.planning_critic]
-description = "Hostile planning review before execution-ready promotion or non-trivial scope expansion; reviews wave plans, proof allocation, boundaries, and stop conditions, and returns approve/reject without implementing."
+description = "Hostile planning review before execution-ready promotion or non-trivial scope expansion. Standing AGENTS.md authorization applies; do not ask the user again. Reviews objective preservation, design integrity, readiness claim, and execution slices without implementing."
 config_file = "agents/planning-critic.toml"
 
 [agents.implementer]
-description = "Implementation worker for one bounded approved wave task card; edits only its owned files, respects parallel workers, and does not approve its own work."
+description = "Default for non-trivial bounded code/doc edits once objective, design interface, readiness claim, and owned scope are clear. Standing AGENTS.md authorization applies; do not ask the user again. Works for direct-route or wave slices; edits only owned files, verifies locally, and never approves its own work."
 config_file = "agents/implementer.toml"
 
 [agents.quality_guard]
-description = "In-thread quality gate for planning readiness and implementation chunks; reviews correctness, simplicity, owner integrity, and proof fit, and returns approve/reject without final closeout authority."
+description = "In-thread quality gate for planning readiness and implementation chunks. Standing AGENTS.md authorization applies; do not ask the user again. Reviews correctness, design integrity, and readiness-claim support without final closeout authority."
 config_file = "agents/quality-guard.toml"
 
 [agents.final_reviewer]
-description = "Use only for the final isolated closeout review after implementation and local verification; not for planning-gate or in-thread chunk review."
+description = "Use only for the final isolated closeout review after implementation and local verification. Standing AGENTS.md authorization applies; do not ask the user again. Not for planning-gate or in-thread chunk review."
 config_file = "agents/final-reviewer.toml"
 
 [agents.runtime_evidence]
-description = "Use only for non-trivial runtime-visible behavior claims when tests or reviews could pass while the app/service still fails; verifies faithful live behavior and artifacts, then returns pass/reject/blocked."
+description = "Use when readiness-claim requires independent live-use proof for non-trivial runtime-visible behavior. Standing AGENTS.md authorization applies; do not ask the user again. It exercises the app/service/API/operator path, records artifacts, and returns pass/reject/blocked for observed behavior only."
 config_file = "agents/runtime-evidence.toml"
 
 [agents.design_judge]
-description = "Use for broad product-facing UI visual-quality approval after screenshot/contact-sheet artifacts exist; rejects broken, incoherent, inaccessible, or non-shippable UI."
+description = "Use for broad product-facing UI visual-quality approval after screenshot/contact-sheet artifacts exist. Standing AGENTS.md authorization applies; do not ask the user again. Rejects broken, incoherent, inaccessible, or non-shippable UI."
 config_file = "agents/design-judge.toml"

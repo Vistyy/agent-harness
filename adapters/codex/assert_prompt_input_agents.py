@@ -64,8 +64,8 @@ def run_self_test() -> list[str]:
                             "// - explorer: {\n"
                             "//   Use for discovery.\n"
                             "// }\n"
-                            "// - check_runner: {\n"
-                            "//   Use for checks.\n"
+                            "// - implementer: {\n"
+                            "//   Use for implementation slices.\n"
                             "// }\n"
                             "// - quality_guard: {\n"
                             "//   Use for review.\n"
@@ -85,7 +85,7 @@ def run_self_test() -> list[str]:
         path = Path(temp_dir) / "prompt.json"
         path.write_text(json.dumps(prompt), encoding="utf-8")
         loaded = json.loads(path.read_text(encoding="utf-8"))
-        if missing_agents(loaded, ["check_runner"]):
+        if missing_agents(loaded, ["implementer"]):
             errors.append("self-test failed to load prompt JSON")
     return errors
 

@@ -12,8 +12,7 @@ The adapter owns:
   discovery.
 
 Live `$CODEX_HOME/config.toml` remains user-local; full apply merges the required
-role registry into it with a backup. Baseline install excludes prompts,
-Copilot, and Gemini homes.
+role registry into it with a backup. Baseline install excludes prompt files.
 
 ## Prompt Contract
 

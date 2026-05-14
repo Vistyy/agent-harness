@@ -6,14 +6,16 @@ named subagents.
 Codex adapter role sources live under `adapters/codex/agents/`.
 `skills/subagent-orchestration/SKILL.md` owns invocation, handoff, and reuse
 policy.
+`AGENTS.md` is the standing user authorization to use these roles in a fresh
+conversation. Agents must not wait for the user to mention subagents again when
+`subagent-orchestration` says to delegate.
 
 ## Roles
 
 - `explorer`: read-only repository discovery and context compression.
-- `check_runner`: targeted checks, logs, and diagnostics summary.
 - `planning_critic`: hostile planning review before execution-ready wave
   promotion or non-trivial scope expansion.
-- `implementer`: one bounded approved wave task card.
+- `implementer`: one bounded approved implementation slice.
 - `quality_guard`: planning-gate and in-thread implementation review gate.
 - `final_reviewer`: final isolated closeout review after verification.
 - `runtime_evidence`: independent live-use verifier for non-trivial
@@ -23,4 +25,4 @@ policy.
   product-facing UI claims.
 
 Adapter configs must preserve these role names unless a reviewed migration
-updates every consumer and proof row together.
+updates every consumer, validator, and live-install check together.

@@ -12,7 +12,7 @@ Usage: install.sh [--dry-run|--apply] [--stage-harness-governance] [--replace-co
 Installs Codex skills/agents and global AGENTS.md with individual symlinks.
 Full apply also merges the required Codex agent-role config into
 $CODEX_HOME/config.toml after writing a backup.
-Baseline excludes prompts, Copilot, and Gemini homes.
+Baseline excludes prompt files.
 Full apply also links the `agent-harness` CLI into
 ${AGENT_HARNESS_BIN_DIR:-$HOME/.local/bin} when not using staged install.
 EOF
@@ -230,7 +230,7 @@ collect_stale_symlink_prunes() {
 write_inventory() {
   local path="$1"
   {
-    for item in "$CODEX_HOME/config.toml" "$CODEX_HOME/AGENTS.md" "$CODEX_HOME/prompts" "$HOME/.copilot" "$HOME/.gemini" "$AGENTS_HOME" "$CLI_TARGET"; do
+    for item in "$CODEX_HOME/config.toml" "$CODEX_HOME/AGENTS.md" "$CODEX_HOME/prompts" "$AGENTS_HOME" "$CLI_TARGET"; do
       if [[ -e "$item" || -L "$item" ]]; then
         printf '%s\t%s\t%s\n' "$item" "$(stat -c '%F:%s' "$item")" "$(readlink "$item" || true)"
       else
@@ -306,12 +306,45 @@ def source_agent_blocks(raw: str) -> dict[str, str]:
     return blocks
 
 
+def replace_or_append_agent_block(raw: str, name: str, block: str) -> str:
+    pattern = re.compile(rf"^\[agents\.{re.escape(name)}\]\s*$", re.MULTILINE)
+    match = pattern.search(raw)
+    if match is None:
+        suffix = "\n" if raw and not raw.endswith("\n") else ""
+        return raw + suffix + "\n" + block
+
+    body_start = match.end()
+    next_match = re.search(r"^\[[^\]]+\]\s*$", raw[body_start:], re.MULTILINE)
+    body_end = body_start + next_match.start() if next_match else len(raw)
+    suffix = raw[body_end:].lstrip("\n")
+    replacement = raw[: match.start()].rstrip() + "\n\n" + block.strip() + "\n"
+    if suffix:
+        replacement += "\n" + suffix
+    return replacement
+
+
+def remove_agent_block(raw: str, name: str) -> str:
+    pattern = re.compile(rf"^\[agents\.{re.escape(name)}\]\s*$", re.MULTILINE)
+    match = pattern.search(raw)
+    if match is None:
+        return raw
+    body_start = match.end()
+    next_match = re.search(r"^\[[^\]]+\]\s*$", raw[body_start:], re.MULTILINE)
+    body_end = body_start + next_match.start() if next_match else len(raw)
+    suffix = raw[body_end:].lstrip("\n")
+    replacement = raw[: match.start()].rstrip()
+    if suffix:
+        replacement += "\n\n" + suffix
+    elif replacement:
+        replacement += "\n"
+    return replacement
+
+
 updated = ensure_features(text)
-existing_agents = set(re.findall(r"^\[agents\.([A-Za-z0-9_]+)\]\s*$", updated, re.MULTILINE))
-missing_blocks = [block for name, block in source_agent_blocks(source).items() if name not in existing_agents]
-if missing_blocks:
-    suffix = "\n" if updated and not updated.endswith("\n") else ""
-    updated = updated + suffix + "\n" + "\n".join(missing_blocks)
+for name in ("check_runner",):
+    updated = remove_agent_block(updated, name)
+for name, block in source_agent_blocks(source).items():
+    updated = replace_or_append_agent_block(updated, name, block)
 
 config_path.write_text(updated, encoding="utf-8")
 PY
@@ -430,8 +463,6 @@ else
   echo "config merge: $CONFIG_PATH <= $CONFIG_SOURCE"
 fi
 echo "excluded: $CODEX_HOME/prompts"
-echo "excluded: $HOME/.copilot"
-echo "excluded: $HOME/.gemini"
 if [[ "$STAGE_ONLY" != "true" && ":$PATH:" != *":$CLI_BIN_DIR:"* ]]; then
   echo "warning: $CLI_BIN_DIR is not on PATH; agent-harness CLI link will be installed there but may not be directly invokable" >&2
 fi

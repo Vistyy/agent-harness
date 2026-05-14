@@ -1,4 +1,4 @@
 interface:
   display_name: "Subagent Orchestration"
   short_description: "Delegate bounded work cleanly"
-  default_prompt: "Use $subagent-orchestration to invoke harness subagents authorized by AGENTS.md, using role names and missions from agents/roles.md, while preserving durable Work Context handoff inputs."
+  default_prompt: "Use $subagent-orchestration to invoke harness subagents authorized by AGENTS.md, using role names and missions from agents/roles.md, while preserving packet or handoff inputs."

@@ -29,17 +29,9 @@ wholesale replace live config.
 Baseline install must not mutate:
 
 - `$CODEX_HOME/prompts`
-- the user's Copilot home
-- the user's Gemini home
 
-Prompt, Copilot, and Gemini/Antigravity installation behavior is intentionally
-not preserved in this reusable baseline. Copilot can read project-local skill
-folders through editor configuration. Gemini support can be reintroduced later
-only through a concrete reviewed request.
-
-GitHub Copilot custom agent sources live under `adapters/github-copilot/agents/`.
-They are source assets only; this baseline keeps Copilot-home mutation out
-of scope.
+Prompt installation behavior is intentionally not preserved in this reusable
+baseline.
 
 Backups are rollback evidence. They do not authorize replacing unknown user
 content.
