@@ -49,37 +49,32 @@ OPENAI_ALLOWED_INTERFACE_KEYS = {
     "default_prompt",
 }
 PACKET_REQUIRED_SECTIONS = (
-    "Work Context",
-    "Task Plan",
-    "Proof Plan",
-    "Execution State",
+    "Objective",
+    "Design Integrity",
+    "Execution",
+    "Readiness Claim",
 )
-WORK_CONTEXT_REQUIRED_SUBSECTIONS = (
-    "Binding Objective",
-    "Owner Skill Intake",
-    "Scope And Owners",
-    "Decisions And Assumptions",
-    "Adequacy Challenge",
-    "Required Gates",
-    "Subagent Handoff Payload",
-    "Stop Conditions",
-)
-REQUIRED_GATES_HEADER = "| Claim | Owner | Status | Blocks when | Proof rows | Role |"
-PROOF_ROW_REQUIRED_KEYS = (
-    "proof_id",
-    "task_slug",
-    "anchor_ids",
-    "claim",
-    "material_variants",
-    "proof_classification",
-    "owner_layer",
-    "exact_proof",
-    "expected_evidence",
-    "counterfactual_regression_probe",
-    "status",
-)
-TASK_CARD_TOUCHED_INTEGRITY_FIELD = "- Touched owner/component integrity:"
+PACKET_REQUIRED_FIELDS = {
+    "Objective": (
+        "original objective",
+        "accepted reductions",
+    ),
+    "Design Integrity": (
+        "owner/interface",
+        "verdict",
+    ),
+    "Readiness Claim": (
+        "exact claim",
+        "claimed interface",
+        "required evidence",
+        "evidence status",
+        "unproved boundaries",
+        "residual risks",
+    ),
+}
 TASK_CARD_STATE_FIELD = "- State:"
+TASK_CARD_OWNED_SURFACES_FIELD = "- Owned surfaces:"
+TASK_CARD_CHECKS_FIELD = "- Checks/artifacts:"
 TASK_CARD_ALLOWED_STATES = {"blank", "done", "blocked"}
 WAVE_STATUSES = {"discovery-required", "execution-ready", "done", "retired"}
 # AGENTS.md and subagent-orchestration must keep explicit user authorization;
@@ -88,28 +83,22 @@ PREAUTHORIZED_SUBAGENT_SENTINEL = (
     "The user explicitly authorizes use of the spawn/subagent tool for these"
 )
 PREAUTHORIZED_SUBAGENT_END = "This preauthorization applies only to those named roles"
-SIMPLICITY_GATE_FILES = (
+REMOVED_CODEX_AGENT_NAMES = {"check_runner"}
+DESIGN_INTEGRITY_FILES = (
     "AGENTS.md",
-    "skills/code-simplicity/SKILL.md",
-    "skills/code-simplicity/references/touched-component-integrity-gate.md",
-    "skills/planning-intake/SKILL.md",
+    "skills/design-integrity/SKILL.md",
+    "skills/work-routing/SKILL.md",
     "skills/code-review/SKILL.md",
-    "skills/code-review/references/review-governance.md",
     "skills/initiatives-workflow/references/wave-packet-contract.md",
 )
-SIMPLICITY_GATE_AGENT_FILES = (
+DESIGN_INTEGRITY_AGENT_FILES = (
     "adapters/codex/agents/planning-critic.toml",
     "adapters/codex/agents/implementer.toml",
     "adapters/codex/agents/quality-guard.toml",
     "adapters/codex/agents/final-reviewer.toml",
-    "adapters/github-copilot/agents/planning_critic.agent.md",
-    "adapters/github-copilot/agents/implementer.agent.md",
-    "adapters/github-copilot/agents/quality_guard.agent.md",
-    "adapters/github-copilot/agents/final_reviewer.agent.md",
 )
 RUNTIME_EVIDENCE_ADAPTER_FILES = (
     "adapters/codex/agents/runtime-evidence.toml",
-    "adapters/github-copilot/agents/runtime_evidence.agent.md",
 )
 RUNTIME_EVIDENCE_ADAPTER_REQUIRED_TERMS = (
     "app, service, API, or operator path",
@@ -132,7 +121,6 @@ PROVIDER_PROMPT_FILES = (
     "adapters/codex/config.toml",
     "adapters/codex/install-scope.md",
     "adapters/codex/install.sh",
-    "adapters/github-copilot/README.md",
 )
 REVIEW_ROLE_CONTRACTS = {
     "adapters/codex/agents/quality-guard.toml": (
@@ -141,25 +129,7 @@ REVIEW_ROLE_CONTRACTS = {
         "Diff-only approval is invalid",
         "why inspected scope is sufficient",
     ),
-    "adapters/github-copilot/agents/quality_guard.agent.md": (
-        "binding objective",
-        "accepted reductions",
-        "Diff-only approval is invalid",
-        "why inspected scope is sufficient",
-    ),
     "adapters/codex/agents/final-reviewer.toml": (
-        "binding objective",
-        "accepted reductions",
-        "Diff-only approval is invalid",
-        "why it is sufficient",
-        "Do not perform planning-gate review",
-        "not final approval",
-        "project design source",
-        "project design source requirements",
-        "project-local artifacts",
-        "block missing, stale, blocked, rejected, or narrower",
-    ),
-    "adapters/github-copilot/agents/final_reviewer.agent.md": (
         "binding objective",
         "accepted reductions",
         "Diff-only approval is invalid",
@@ -181,11 +151,8 @@ REVIEW_GOVERNANCE_REQUIRED_TERMS = (
 )
 REVIEW_VERDICT_FILES = (
     "skills/code-review/SKILL.md",
-    "skills/code-review/references/review-governance.md",
     "adapters/codex/agents/quality-guard.toml",
     "adapters/codex/agents/final-reviewer.toml",
-    "adapters/github-copilot/agents/quality_guard.agent.md",
-    "adapters/github-copilot/agents/final_reviewer.agent.md",
 )
 CODE_REVIEW_OUTPUT_REQUIRED_TERMS = (
     "Binding objective",
@@ -219,36 +186,12 @@ ROLE_BOUNDARY_CONTRACTS = {
         "Stay read-only",
         "Do not edit code or take implementation ownership.",
     ),
-    "adapters/github-copilot/agents/explorer.agent.md": (
-        "Stay read-only",
-        "Do not edit code or take implementation ownership.",
-    ),
-    "adapters/codex/agents/check-runner.toml": (
-        "Run only the bounded verification or diagnostics commands",
-        "Do not edit code, take implementation ownership, or claim final approval",
-        "final diagnosis",
-    ),
-    "adapters/github-copilot/agents/check_runner.agent.md": (
-        "Run only the bounded verification or diagnostics commands",
-        "Do not edit code, take implementation ownership, or claim final approval",
-        "final diagnosis",
-    ),
     "adapters/codex/agents/implementer.toml": (
-        "one bounded approved wave task card",
-        "active `execution-ready` wave packet",
-        "Do not claim final approval.",
-    ),
-    "adapters/github-copilot/agents/implementer.agent.md": (
-        "one bounded approved wave task card",
-        "active `execution-ready` wave packet",
+        "one bounded approved implementation slice",
+        "direct-route slices",
         "Do not claim final approval.",
     ),
     "adapters/codex/agents/planning-critic.toml": (
-        "Review non-trivial planning only",
-        "Stay read-only and do not edit code or docs.",
-        "Do not act as a final approver, implementation reviewer, or implementation owner.",
-    ),
-    "adapters/github-copilot/agents/planning_critic.agent.md": (
         "Review non-trivial planning only",
         "Stay read-only and do not edit code or docs.",
         "Do not act as a final approver, implementation reviewer, or implementation owner.",
@@ -276,43 +219,14 @@ ROLE_BOUNDARY_CONTRACTS = {
         "Do not perform `runtime_evidence`, `quality_guard`, `final_reviewer`",
         "not live behavior or code quality",
     ),
-    "adapters/github-copilot/agents/design_judge.agent.md": (
-        "screenshot/contact-sheet",
-        "binding objective",
-        "accepted reductions",
-        "project design source",
-        "declared project design source",
-        "project design source requirements",
-        "Missing or contradictory declared project design source is `blocked`",
-        "accepted narrowed claim",
-        "run the app",
-        "review code",
-        "debug",
-        "prove runtime behavior",
-        "invent design criteria",
-        "materially weaker than the target",
-        "runtime-evidence-based",
-        "pass",
-        "reject",
-        "blocked",
-        "visual quality only",
-        "Do not perform `runtime_evidence`, `quality_guard`, `final_reviewer`",
-        "not live behavior or code quality",
-    ),
 }
 ADAPTER_HANDOFF_CONTEXT_CONTRACTS = {
-    "adapters/codex/agents/implementer.toml": ("Work Context", "active `execution-ready` wave packet", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
-    "adapters/github-copilot/agents/implementer.agent.md": ("Work Context", "active `execution-ready` wave packet", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
-    "adapters/codex/agents/planning-critic.toml": ("Work Context", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
-    "adapters/github-copilot/agents/planning_critic.agent.md": ("Work Context", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
-    "adapters/codex/agents/quality-guard.toml": ("Work Context", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
-    "adapters/github-copilot/agents/quality_guard.agent.md": ("Work Context", "binding objective", "accepted reductions", "proof rows", "assumptions", "risks", "stop conditions"),
-    "adapters/codex/agents/final-reviewer.toml": ("Work Context", "binding objective", "accepted reductions", "proof artifacts", "assumptions", "risks", "stop conditions"),
-    "adapters/github-copilot/agents/final_reviewer.agent.md": ("Work Context", "binding objective", "accepted reductions", "proof artifacts", "assumptions", "risks", "stop conditions"),
-    "adapters/codex/agents/runtime-evidence.toml": ("Work Context", "binding objective", "accepted reductions", "artifacts", "assumptions", "risks", "stop conditions"),
-    "adapters/github-copilot/agents/runtime_evidence.agent.md": ("Work Context", "binding objective", "accepted reductions", "artifacts", "assumptions", "risks", "stop conditions"),
-    "adapters/codex/agents/design-judge.toml": ("Work Context", "binding objective", "accepted reductions", "artifacts", "assumptions", "risks", "stop conditions"),
-    "adapters/github-copilot/agents/design_judge.agent.md": ("Work Context", "binding objective", "accepted reductions", "artifacts", "assumptions", "risks", "stop conditions"),
+    "adapters/codex/agents/implementer.toml": ("binding objective", "accepted reductions", "readiness claim", "owned scope"),
+    "adapters/codex/agents/planning-critic.toml": ("binding objective", "accepted reductions", "readiness claim"),
+    "adapters/codex/agents/quality-guard.toml": ("binding objective", "accepted reductions", "readiness claim"),
+    "adapters/codex/agents/final-reviewer.toml": ("binding objective", "accepted reductions", "proof artifacts"),
+    "adapters/codex/agents/runtime-evidence.toml": ("binding objective", "accepted reductions", "artifacts"),
+    "adapters/codex/agents/design-judge.toml": ("binding objective", "accepted reductions", "artifacts"),
 }
 REMOVED_WORKFLOW_SKILL_NAMES = (
     "executing-plans",
@@ -331,7 +245,7 @@ NON_BLOCKING_ALLOWED_RE = re.compile(
     re.IGNORECASE,
 )
 REQUIRED_GATE_CONTEXT_RE = re.compile(
-    r"\b(?:required|gate|proof|review|runtime|architecture|owner-integrity|validation|finding|evidence)\b",
+    r"\b(?:required|gate|proof|review|runtime|architecture|design-integrity|validation|finding|evidence)\b",
     re.IGNORECASE,
 )
 QUALITY_GUARD_FINAL_APPROVAL_NEGATION_RE = re.compile(r"\bDo not\b.*\bclaim final approval\b", re.IGNORECASE)
@@ -364,21 +278,18 @@ BACKLOG_BUCKET_VALUES = ("discovered separate debt", "accepted temporary debt")
 BACKLOG_ENTRY_TITLE_PREFIX = "# Backlog Entry:"
 STAGED_REFERENCE_GATE_SKILLS = {
     "code-review",
-    "code-simplicity",
+    "design-integrity",
     "documentation-stewardship",
     "feedback-address",
     "flutter-expert",
     "harness-governance",
     "initiatives-workflow",
-    "planning-intake",
     "svelte-code-writer",
     "subagent-orchestration",
-    "system-boundary-architecture",
     "systematic-debugging",
     "testing-best-practices",
     "runtime-proof",
     "user-apps-design",
-    "verification-before-completion",
     "webapp-testing",
     "mobileapp-testing",
     "work-routing",
@@ -396,7 +307,22 @@ REQUIRED_REFERENCE_GATE_RE = re.compile(
 REMOVED_HARNESS_PATHS = (
     "skills/adversarial-review/SKILL.md",
     "skills/adversarial-review/agents/openai.yaml",
+    "skills/code-simplicity/SKILL.md",
+    "skills/code-simplicity/agents/openai.yaml",
+    "skills/code-simplicity/references/touched-component-integrity-gate.md",
     "skills/code-simplicity/references/default-simplicity-posture.md",
+    "skills/code-review/references/review-governance.md",
+    "adapters/codex/agents/check-runner.toml",
+    "adapters/github-copilot/README.md",
+    "adapters/github-copilot/agents/check_runner.agent.md",
+    "adapters/github-copilot/agents/design_judge.agent.md",
+    "adapters/github-copilot/agents/explorer.agent.md",
+    "adapters/github-copilot/agents/final_reviewer.agent.md",
+    "adapters/github-copilot/agents/implementer.agent.md",
+    "adapters/github-copilot/agents/planning_critic.agent.md",
+    "adapters/github-copilot/agents/quality_guard.agent.md",
+    "adapters/github-copilot/agents/runtime_evidence.agent.md",
+    "skills/design-integrity/references/touched-component-integrity-gate.md",
     "skills/documentation-stewardship/references/domain-language.md",
     "skills/flutter-expert/references/navigation.md",
     "skills/flutter-expert/references/project-setup.md",
@@ -404,6 +330,9 @@ REMOVED_HARNESS_PATHS = (
     "skills/flutter-expert/references/ui-patterns.md",
     "skills/initiatives-workflow/references/initiatives-workflow.md",
     "skills/initiatives-workflow/assets/wave-brief.example.md",
+    "skills/initiatives-workflow/assets/wave-execution.example.md",
+    "skills/planning-intake/SKILL.md",
+    "skills/planning-intake/agents/openai.yaml",
     "skills/planning-intake/references/intake-contract.md",
     "skills/subagent-orchestration/references/delegation-policy.md",
     "skills/subagent-orchestration/references/coding-agent-topology.md",
@@ -417,6 +346,11 @@ REMOVED_HARNESS_PATHS = (
     "skills/svelte-core-bestpractices/references/snippet.md",
     "skills/svelte-core-bestpractices/references/svelte-reactivity.md",
     "skills/system-boundary-architecture/references/code-shape-and-local-design.md",
+    "skills/system-boundary-architecture/SKILL.md",
+    "skills/system-boundary-architecture/agents/openai.yaml",
+    "skills/system-boundary-architecture/references/mobile-client-boundaries.md",
+    "skills/system-boundary-architecture/references/python-service-boundaries.md",
+    "skills/system-boundary-architecture/references/web-boundaries.md",
     "skills/system-boundary-architecture/references/engineering-principles.md",
     "skills/system-boundary-architecture/references/migration-guardrails.md",
     "skills/system-boundary-architecture/references/python-service-and-boundary-doctrine.md",
@@ -445,6 +379,8 @@ REMOVED_HARNESS_PATHS = (
     "skills/user-apps-design/references/parity-dimensions.md",
     "skills/user-apps-design/references/ui-direction-workflow.md",
     "skills/verification-before-completion/references/quality-gate-selection.md",
+    "skills/verification-before-completion/SKILL.md",
+    "skills/verification-before-completion/agents/openai.yaml",
     "skills/verification-before-completion/references/runtime-evidence-contract.md",
     "skills/verification-before-completion/references/runtime-proof-escalation.md",
     "skills/verification-before-completion/references/verification-evidence.md",
@@ -471,7 +407,7 @@ OWNER_ONLY_DOCTRINE = {
     "Every durable concept has one owner.": "skills/documentation-stewardship/SKILL.md",
     "Runtime evidence is blocking, not advisory.": "skills/runtime-proof/SKILL.md",
     "Task labels, packets, implementer summaries, and reviewer prompts do not replace it.": (
-        "skills/code-review/references/review-governance.md"
+        "skills/code-review/SKILL.md"
     ),
     "`description` = trigger and routing contract.": "skills/harness-governance/references/skill-architecture.md",
     "references = mandatory purpose gates.": "skills/harness-governance/references/skill-architecture.md",
@@ -902,7 +838,7 @@ def _parse_roles_markdown(root: Path) -> tuple[set[str], list[str]]:
         return set(), ["agents/roles.md missing"]
     roles: set[str] = set()
     for line in roles_path.read_text(encoding="utf-8").splitlines():
-        match = re.match(r"- `([a-z0-9_]+)`:", line)
+        match = re.match(r"\s*- `([a-z0-9_]+)`:", line)
         if match:
             roles.add(match.group(1))
     if not roles:
@@ -948,7 +884,7 @@ def _validate_subagent_allowlist(root: Path, roles: set[str]) -> list[str]:
                 "and agents/roles.md instead of duplicating the preauthorized role list"
             )
         metadata_normalized = " ".join(metadata_text.split())
-        for term in ("AGENTS.md", "agents/roles.md", "Work Context"):
+        for term in ("AGENTS.md", "agents/roles.md", "packet"):
             if term not in metadata_normalized:
                 errors.append(f"skills/subagent-orchestration/agents/openai.yaml missing subagent metadata owner pointer {term!r}")
     subagent_path = root / "skills" / "subagent-orchestration" / "SKILL.md"
@@ -956,12 +892,27 @@ def _validate_subagent_allowlist(root: Path, roles: set[str]) -> list[str]:
         normalized_text = " ".join(subagent_path.read_text(encoding="utf-8").split())
         for term in (
             "AGENTS.md` owns the explicit user preauthorization allowlist",
+            "standing user authorization",
+            "Do not ask for additional delegation permission",
+            "fresh-conversation authorization source",
             "agents/roles.md` owns harness role names and missions",
-            "durable Work Context",
-            "active wave packet path",
+            "active packet path",
         ):
             if " ".join(term.split()) not in normalized_text:
                 errors.append(f"skills/subagent-orchestration/SKILL.md missing subagent context contract term {term!r}")
+    roles_path = root / "agents" / "roles.md"
+    if roles_path.is_file():
+        normalized_roles_text = " ".join(roles_path.read_text(encoding="utf-8").split())
+        for term in (
+            "standing user authorization",
+            "fresh conversation",
+            "must not wait for the user to mention subagents again",
+        ):
+            if term not in normalized_roles_text:
+                errors.append(f"agents/roles.md missing subagent authorization term {term!r}")
+        for stale_term in ("proof row", "proof rows"):
+            if stale_term in normalized_roles_text:
+                errors.append(f"agents/roles.md contains obsolete packet term {stale_term!r}")
 
     return errors
 
@@ -990,12 +941,9 @@ def _validate_role_parity(root: Path) -> list[str]:
         config_agents = {}
 
     codex_agent_dir = root / "adapters" / "codex" / "agents"
-    copilot_agent_dir = root / "adapters" / "github-copilot" / "agents"
     for role in sorted(roles):
         codex_filename = f"{role.replace('_', '-')}.toml"
-        copilot_filename = f"{role}.agent.md"
         codex_agent_path = codex_agent_dir / codex_filename
-        copilot_agent_path = copilot_agent_dir / copilot_filename
         if role not in config_agents:
             errors.append(f"adapters/codex/config.toml missing agents.{role}")
         else:
@@ -1008,6 +956,10 @@ def _validate_role_parity(root: Path) -> list[str]:
                     errors.append(
                         f"adapters/codex/config.toml agents.{role}.config_file must be {expected_config_file!r}"
                     )
+                description = str(block.get("description", ""))
+                for term in ("Standing AGENTS.md authorization applies", "do not ask the user again"):
+                    if term not in description:
+                        errors.append(f"adapters/codex/config.toml agents.{role}.description missing {term!r}")
         if not codex_agent_path.is_file():
             errors.append(f"missing Codex agent file {codex_agent_path.relative_to(root)}")
         else:
@@ -1015,12 +967,6 @@ def _validate_role_parity(root: Path) -> list[str]:
             errors.extend(agent_errors)
             if agent_toml and agent_toml.get("name") != role:
                 errors.append(f"{codex_agent_path.relative_to(root)} name must be {role!r}")
-        if not copilot_agent_path.is_file():
-            errors.append(f"missing Copilot agent file {copilot_agent_path.relative_to(root)}")
-        else:
-            text = copilot_agent_path.read_text(encoding="utf-8")
-            if not re.search(rf"^name:\s*{re.escape(role)}\s*$", text, re.MULTILINE):
-                errors.append(f"{copilot_agent_path.relative_to(root)} frontmatter name must be {role!r}")
 
     for role in sorted(set(config_agents) - roles):
         errors.append(f"adapters/codex/config.toml has unknown agents.{role}")
@@ -1028,10 +974,99 @@ def _validate_role_parity(root: Path) -> list[str]:
         role = path.stem.replace("-", "_")
         if role not in roles:
             errors.append(f"{path.relative_to(root)} has no matching agents/roles.md role")
-    for path in sorted(copilot_agent_dir.glob("*.agent.md")):
-        role = path.name.removesuffix(".agent.md")
-        if role not in roles:
-            errors.append(f"{path.relative_to(root)} has no matching agents/roles.md role")
+    return errors
+
+
+def _resolved_symlink_target(path: Path) -> Path:
+    target = path.readlink()
+    if not target.is_absolute():
+        target = path.parent / target
+    return target.resolve(strict=False)
+
+
+def _target_is_inside_root(target: Path, root: Path) -> bool:
+    try:
+        target.resolve(strict=False).relative_to(root.resolve())
+    except ValueError:
+        return False
+    return True
+
+
+def _validate_repo_codex_live_install(root: Path) -> list[str]:
+    errors: list[str] = []
+    codex_home = root / ".codex"
+    if not codex_home.is_dir():
+        return errors
+
+    def require_symlink(relative_path: str, expected_target: Path) -> None:
+        path = codex_home / relative_path
+        if not path.is_symlink():
+            errors.append(f".codex/{relative_path} is not a symlink to {expected_target.relative_to(root)}")
+            return
+        actual_target = _resolved_symlink_target(path)
+        if actual_target != expected_target.resolve(strict=False):
+            errors.append(
+                f".codex/{relative_path} points to {actual_target}, expected {expected_target.resolve(strict=False)}"
+            )
+
+    require_symlink("AGENTS.md", root / "AGENTS.md")
+
+    planned_skills = {
+        path.name: path
+        for path in sorted((root / "skills").iterdir())
+        if path.is_dir()
+    } if (root / "skills").is_dir() else {}
+    planned_agents = {
+        path.name: path
+        for path in sorted((root / "adapters" / "codex" / "agents").glob("*.toml"))
+    }
+
+    for name, source in planned_skills.items():
+        require_symlink(f"skills/{name}", source)
+    for name, source in planned_agents.items():
+        require_symlink(f"agents/{name}", source)
+
+    for directory_name, planned_names in (
+        ("skills", set(planned_skills)),
+        ("agents", set(planned_agents)),
+    ):
+        directory = codex_home / directory_name
+        if not directory.is_dir():
+            errors.append(f".codex/{directory_name} is missing")
+            continue
+        for path in sorted(directory.iterdir()):
+            if path.name == ".system" or not path.is_symlink():
+                continue
+            target = _resolved_symlink_target(path)
+            if _target_is_inside_root(target, root) and path.name not in planned_names:
+                errors.append(f"{path.relative_to(root)} is a stale harness symlink to {target}")
+
+    source_config_path = root / "adapters" / "codex" / "config.toml"
+    live_config_path = codex_home / "config.toml"
+    if source_config_path.is_file():
+        live_config, live_config_errors = (
+            _load_toml(live_config_path, root)
+            if live_config_path.is_file()
+            else ({}, [".codex/config.toml missing"])
+        )
+        source_config, source_config_errors = _load_toml(source_config_path, root)
+        errors.extend(live_config_errors)
+        errors.extend(source_config_errors)
+        source_agents = source_config.get("agents", {}) if isinstance(source_config, dict) else {}
+        live_agents = live_config.get("agents", {}) if isinstance(live_config, dict) else {}
+        if live_config and live_config.get("features", {}).get("multi_agent") is not True:
+            errors.append(".codex/config.toml missing [features] multi_agent = true")
+        if isinstance(source_agents, dict) and isinstance(live_agents, dict):
+            for agent_name in sorted(REMOVED_CODEX_AGENT_NAMES):
+                if agent_name in live_agents:
+                    errors.append(f".codex/config.toml contains removed agents.{agent_name} block")
+            for agent_name, source_block in source_agents.items():
+                live_block = live_agents.get(agent_name)
+                if live_block != source_block:
+                    errors.append(f".codex/config.toml missing or changed agents.{agent_name} block")
+        elif source_agents:
+            errors.append(".codex/config.toml missing [agents] table")
+
     return errors
 
 
@@ -1071,12 +1106,12 @@ def _markdown_subsection(text: str, heading: str) -> str:
 
 
 def _task_card_sections(text: str) -> list[tuple[str, str]]:
-    task_plan = _markdown_section(text, "Task Plan")
+    execution = _markdown_section(text, "Execution")
     cards: list[tuple[str, str]] = []
-    matches = list(re.finditer(r"^###\s+(.+?)\s*$", task_plan, re.MULTILINE))
+    matches = list(re.finditer(r"^###\s+(.+?)\s*$", execution, re.MULTILINE))
     for index, match in enumerate(matches):
-        end = matches[index + 1].start() if index + 1 < len(matches) else len(task_plan)
-        cards.append((match.group(1).strip(), task_plan[match.end() : end]))
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(execution)
+        cards.append((match.group(1).strip(), execution[match.end() : end]))
     return cards
 
 
@@ -1095,6 +1130,10 @@ def _task_card_field_value(task_body: str, field: str) -> str | None:
     return ""
 
 
+def _packet_field_present(section_body: str, field: str) -> bool:
+    return re.search(rf"(?m)^\s*-\s+{re.escape(field)}\s*:", section_body) is not None
+
+
 def _validate_wave_packet(path: Path, root: Path) -> list[str]:
     errors: list[str] = []
     text = path.read_text(encoding="utf-8")
@@ -1102,54 +1141,21 @@ def _validate_wave_packet(path: Path, root: Path) -> list[str]:
     for section in PACKET_REQUIRED_SECTIONS:
         if section not in headings:
             errors.append(f"{path.relative_to(root)} missing section {section!r}")
-    work_context = _markdown_section(text, "Work Context")
-    if "Work Context" in headings:
-        for obsolete_section in ("Scope And Execution Posture", "Required Gates"):
-            if obsolete_section in headings:
-                errors.append(f"{path.relative_to(root)} contains obsolete top-level section {obsolete_section!r} after Work Context schema")
-        work_context_subsections = _heading_names(work_context, 3)
-        for subsection in WORK_CONTEXT_REQUIRED_SUBSECTIONS:
-            if subsection not in work_context_subsections:
-                errors.append(f"{path.relative_to(root)} Work Context missing subsection {subsection!r}")
-        required_gates = _markdown_subsection(work_context, "Required Gates")
-        if "Required Gates" in work_context_subsections:
-            if REQUIRED_GATES_HEADER not in required_gates:
-                errors.append(f"{path.relative_to(root)} Work Context Required Gates matrix missing expected header")
-            elif not _required_gates_has_data_row(required_gates):
-                errors.append(f"{path.relative_to(root)} Work Context Required Gates matrix missing data row")
-
-    proof_plans: list[object] = []
+            continue
+        section_body = _markdown_section(text, section)
+        for field in PACKET_REQUIRED_FIELDS.get(section, ()):
+            if not _packet_field_present(section_body, field):
+                errors.append(f"{path.relative_to(root)} section {section!r} missing field {field!r}")
+    for obsolete_section in ("Work Context", "Task Plan", "Execution State", "Required Gates", "Proof Plan"):
+        if obsolete_section in headings:
+            errors.append(f"{path.relative_to(root)} contains obsolete top-level section {obsolete_section!r}")
     try:
-        proof_plans = _iter_json_fences(text)
+        _iter_json_fences(text)
     except json.JSONDecodeError as exc:
         errors.append(f"{path.relative_to(root)} invalid JSON proof fence: {exc}")
         return errors
 
-    proof_rows: list[object] = []
-    for value in proof_plans:
-        if isinstance(value, dict) and isinstance(value.get("proof_plan"), list):
-            proof_rows.extend(value["proof_plan"])
-    if not proof_rows:
-        errors.append(f"{path.relative_to(root)} missing proof_plan JSON rows")
-        return errors
-    for index, row in enumerate(proof_rows, start=1):
-        if not isinstance(row, dict):
-            errors.append(f"{path.relative_to(root)} proof_plan row {index} must be an object")
-            continue
-        for key in PROOF_ROW_REQUIRED_KEYS:
-            if key not in row:
-                errors.append(f"{path.relative_to(root)} proof_plan row {index} missing {key}")
-
     task_cards = _task_card_sections(text)
-    if not task_cards:
-        errors.append(f"{path.relative_to(root)} missing task cards")
-    task_card_by_title = {title.strip("`"): body for title, body in task_cards}
-    for index, row in enumerate(proof_rows, start=1):
-        if not isinstance(row, dict):
-            continue
-        task_slug = row.get("task_slug")
-        if isinstance(task_slug, str) and task_slug not in task_card_by_title:
-            errors.append(f"{path.relative_to(root)} proof_plan row {index} task_slug {task_slug!r} has no matching task card")
     for task_title, task_body in task_cards:
         state = _task_card_field_value(task_body, TASK_CARD_STATE_FIELD)
         if state is None:
@@ -1159,10 +1165,9 @@ def _validate_wave_packet(path: Path, root: Path) -> list[str]:
                 f"{path.relative_to(root)} task card {task_title!r} invalid state {state!r}; "
                 f"expected one of {sorted(TASK_CARD_ALLOWED_STATES)}"
             )
-        if TASK_CARD_TOUCHED_INTEGRITY_FIELD not in task_body:
-            errors.append(
-                f"{path.relative_to(root)} task card {task_title!r} missing touched owner/component integrity"
-            )
+        for field in (TASK_CARD_OWNED_SURFACES_FIELD, TASK_CARD_CHECKS_FIELD):
+            if field not in task_body:
+                errors.append(f"{path.relative_to(root)} task card {task_title!r} missing {field}")
     return errors
 
 
@@ -1235,26 +1240,26 @@ def _validate_wave_lifecycle(root: Path) -> list[str]:
     return errors
 
 
-def _validate_simplicity_gate(root: Path) -> list[str]:
+def _validate_design_integrity_gate(root: Path) -> list[str]:
     errors: list[str] = []
-    for relative_path in SIMPLICITY_GATE_FILES:
+    for relative_path in DESIGN_INTEGRITY_FILES:
         path = root / relative_path
         if not path.is_file():
             continue
         text = path.read_text(encoding="utf-8")
         if re.search(r"\b[Ss]implicity lens\b", text):
-            errors.append(f"{relative_path} must call code-simplicity a gate, not a lens")
+            errors.append(f"{relative_path} must use design-integrity, not a simplicity lens")
         if "contract, state, lifecycle, or proof" in text:
-            errors.append(f"{relative_path} has incomplete touched-owner definition; include design and workflow")
-    for relative_path in SIMPLICITY_GATE_AGENT_FILES:
+            errors.append(f"{relative_path} has incomplete design-integrity definition; include design and workflow")
+    for relative_path in DESIGN_INTEGRITY_AGENT_FILES:
         path = root / relative_path
         if not path.is_file():
             continue
         text = path.read_text(encoding="utf-8")
-        if "touched-component integrity" not in text.lower():
-            errors.append(f"{relative_path} missing touched-component integrity gate")
+        if "design integrity" not in text.lower():
+            errors.append(f"{relative_path} missing design-integrity gate")
         if "contract, state, lifecycle, or proof" in text:
-            errors.append(f"{relative_path} has incomplete touched-owner definition; include design and workflow")
+            errors.append(f"{relative_path} has incomplete design-integrity definition; include design and workflow")
     return errors
 
 
@@ -1292,10 +1297,6 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
             "beyond code inspection, tests, and review approval",
             "faithful entrypoint",
             "entrypoint fidelity",
-            "runtime-visible",
-            "tiny, local",
-            "public-behavior",
-            "cross-boundary runtime risk",
         )
         for term in required_terms:
             if term not in text:
@@ -1319,7 +1320,7 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
         root / "agents" / "roles.md",
         root / "skills" / "subagent-orchestration" / "SKILL.md",
         root / "skills" / "runtime-proof" / "SKILL.md",
-        root / "skills" / "verification-before-completion" / "SKILL.md",
+        root / "skills" / "readiness-claim" / "SKILL.md",
     ]
     for path in scan_files:
         if not path.is_file():
@@ -1401,7 +1402,6 @@ def _validate_stale_accepted_debt_phrases(root: Path) -> list[str]:
     scan_roots = [
         root / "skills",
         root / "adapters" / "codex" / "agents",
-        root / "adapters" / "github-copilot" / "agents",
     ]
     for scan_root in scan_roots:
         if not scan_root.is_dir():
@@ -1482,7 +1482,6 @@ def _validate_required_gate_advisory_drift(root: Path) -> list[str]:
     scan_roots = [
         root / "skills",
         root / "adapters" / "codex" / "agents",
-        root / "adapters" / "github-copilot" / "agents",
     ]
     for scan_root in scan_roots:
         if not scan_root.is_dir():
@@ -1527,16 +1526,6 @@ def _validate_review_role_contracts(root: Path) -> list[str]:
                 errors.append(f"{relative_path} uses stale NON-BLOCKING review verdict")
                 break
 
-    review_governance = root / "skills" / "code-review" / "references" / "review-governance.md"
-    if review_governance.is_file():
-        text = review_governance.read_text(encoding="utf-8")
-        normalized_text = " ".join(text.split())
-        for term in REVIEW_GOVERNANCE_REQUIRED_TERMS:
-            if " ".join(term.split()) not in normalized_text:
-                errors.append(
-                    "skills/code-review/references/review-governance.md "
-                    f"missing review governance contract term {term!r}"
-                )
     code_review = root / "skills" / "code-review" / "SKILL.md"
     if code_review.is_file():
         text = code_review.read_text(encoding="utf-8")
@@ -1544,6 +1533,9 @@ def _validate_review_role_contracts(root: Path) -> list[str]:
         for term in CODE_REVIEW_OUTPUT_REQUIRED_TERMS:
             if " ".join(term.split()) not in normalized_text:
                 errors.append(f"skills/code-review/SKILL.md missing review output term {term!r}")
+        for term in REVIEW_GOVERNANCE_REQUIRED_TERMS:
+            if " ".join(term.split()) not in normalized_text:
+                errors.append(f"skills/code-review/SKILL.md missing review governance contract term {term!r}")
     for relative_path, required_terms in REVIEW_ROLE_CONTRACTS.items():
         path = root / relative_path
         if not path.is_file():
@@ -1609,12 +1601,10 @@ def _validate_runtime_evidence_ui_default_contract(root: Path) -> list[str]:
     checked_files = (
         "skills/user-apps-design/SKILL.md",
         "skills/runtime-proof/SKILL.md",
-        "skills/verification-before-completion/SKILL.md",
-        "skills/code-review/references/review-governance.md",
+        "skills/readiness-claim/SKILL.md",
+        "skills/code-review/SKILL.md",
         "adapters/codex/agents/quality-guard.toml",
-        "adapters/github-copilot/agents/quality_guard.agent.md",
         "adapters/codex/agents/final-reviewer.toml",
-        "adapters/github-copilot/agents/final_reviewer.agent.md",
     )
     for relative_path in checked_files:
         path = root / relative_path
@@ -1659,9 +1649,10 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_owner_only_doctrine(root))
     errors.extend(_validate_agents_instruction_map(root))
     errors.extend(_validate_role_parity(root))
+    errors.extend(_validate_repo_codex_live_install(root))
     errors.extend(_validate_wave_lifecycle(root))
     errors.extend(_validate_backlog_detail_contract(root))
-    errors.extend(_validate_simplicity_gate(root))
+    errors.extend(_validate_design_integrity_gate(root))
     errors.extend(_validate_live_validation_contracts(root))
     errors.extend(_validate_provider_prompt_contracts(root))
     errors.extend(_validate_required_gate_advisory_drift(root))
@@ -1825,14 +1816,9 @@ def run_self_test() -> list[str]:
             'name = "wrong_name"\n',
             encoding="utf-8",
         )
-        (root / "adapters" / "github-copilot" / "agents").mkdir(parents=True)
-        (root / "adapters" / "github-copilot" / "agents" / "explorer.agent.md").write_text(
-            "---\nname: explorer\n---\n",
-            encoding="utf-8",
-        )
         invalid_packet = """# Wave invalid Execution Packet
 
-## Scope And Execution Posture
+## Work Context
 
 ## Task Plan
 
@@ -1905,9 +1891,7 @@ def run_self_test() -> list[str]:
             "adapters/codex/config.toml missing agents.quality_guard",
             "explorer.toml name must be 'explorer'",
             "missing Codex agent file adapters/codex/agents/quality-guard.toml",
-            "missing Copilot agent file adapters/github-copilot/agents/quality_guard.agent.md",
-            "wave-execution.md missing section 'Execution State'",
-            "proof_plan row 1 missing task_slug",
+            "wave-execution.md missing section 'Readiness Claim'",
             "invalid.md is discovery-required but canonical packet exists",
             "ready.md is execution-ready but canonical packet is missing",
             "done.md is done but current-work packet exists",

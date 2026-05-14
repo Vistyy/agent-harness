@@ -40,12 +40,24 @@ def add_skill(root: Path, name: str, metadata: bool = True) -> None:
 
 def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")) -> None:
     role_lines = "\n".join(f"- `{role}`: test role." for role in roles)
-    write(root / "agents" / "roles.md", f"# Agent Roles\n\n{role_lines}\n")
+    write(
+        root / "agents" / "roles.md",
+        f"""
+        # Agent Roles
+
+        `AGENTS.md` is the standing user authorization to use these roles in a
+        fresh conversation. Agents must not wait for the user to mention
+        subagents again when `subagent-orchestration` says to delegate.
+
+        {role_lines}
+        """,
+    )
     config_blocks = ["[features]", "multi_agent = true", ""]
     for role in roles:
         config_blocks.extend(
             [
                 f"[agents.{role}]",
+                f'description = "Test {role} role. Standing AGENTS.md authorization applies; do not ask the user again."',
                 f'config_file = "agents/{role.replace("_", "-")}.toml"',
                 "",
             ]
@@ -53,39 +65,23 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
         if role == "quality_guard":
             codex_body = (
                 f'name = "{role}"\n'
-                "# touched-component integrity gate\n"
-                "# Work Context\n# binding objective\n# accepted reductions\n# proof rows\n# assumptions\n# risks\n# stop conditions\n# final approval\n"
+                "# design integrity gate\n"
+                "# active `execution-ready` packet\n# binding objective\n# accepted reductions\n# readiness claim\n# artifacts\n# final approval\n"
                 "# Do not claim final approval.\n"
                 "# Diff-only approval is invalid\n"
                 "# why inspected scope is sufficient\n"
             )
-            copilot_body = (
-                f"---\nname: {role}\n---\n\n"
-                "Touched-component integrity gate. Work Context binding objective accepted reductions proof rows assumptions risks stop conditions final approval. "
-                "Do not claim final approval. Diff-only approval is invalid. "
-                "why inspected scope is sufficient.\n"
-            )
         elif role == "explorer":
             codex_body = (
                 f'name = "{role}"\n'
-                "# touched-component integrity gate\n"
+                "# design integrity gate\n"
                 "# Stay read-only\n# Do not edit code or take implementation ownership.\n"
             )
-            copilot_body = (
-                f"---\nname: {role}\n---\n\n"
-                "Touched-component integrity gate. Stay read-only. "
-                "Do not edit code or take implementation ownership.\n"
-            )
         else:
-            codex_body = f'name = "{role}"\n# touched-component integrity gate\n'
-            copilot_body = f"---\nname: {role}\n---\n\nTouched-component integrity gate.\n"
+            codex_body = f'name = "{role}"\n# design integrity gate\n'
         write(
             root / "adapters" / "codex" / "agents" / f"{role.replace('_', '-')}.toml",
             codex_body,
-        )
-        write(
-            root / "adapters" / "github-copilot" / "agents" / f"{role}.agent.md",
-            copilot_body,
         )
     write(root / "adapters" / "codex" / "config.toml", "\n".join(config_blocks))
 
@@ -94,126 +90,38 @@ def valid_packet() -> str:
     return """
     # Wave example Execution Packet
 
-    ## Work Context
-
-    ### Binding Objective
+    ## Objective
 
     - original objective: `Example objective.`
     - accepted reductions: `none`
     - residual gaps: `none`
-    - newest-user-message checkpoint: `current`
+    - checkpoint: `current`
 
-    ### Owner Skill Intake
+    ## Design Integrity
 
-    - route: `wave execution`
-    - project overlay/docs read: `none`
-    - owner skills read: `code-simplicity`
-    - matched reference gates read: `none`
-    - skipped references with reason: `none`
-    - open owner gaps: `none`
+    - owner/interface: `example`
+    - key decisions: `none`
+    - verdict: `acceptable`
+    - accepted temporary debt: `none`
 
-    ### Scope And Owners
-
-    - in scope: `example/task`
-    - out of scope: `none`
-    - touched owner/component: `example`
-    - owned files/surfaces: `example.md`
-    - public entrypoints: `none`
-    - owner boundaries: `none`
-
-    ### Decisions And Assumptions
-
-    - closed decisions: `none`
-    - assumptions subagents may rely on: `none`
-    - user-owned or blocked decisions: `none`
-
-    ### Adequacy Challenge
-
-    - before-implementation verdict: `adequate`
-    - highest inspected scope: `example`
-    - must-block signals: `none`
-    - disposition: `adequate`
-
-    ### Required Gates
-
-    | Claim | Owner | Status | Blocks when | Proof rows | Role |
-    | --- | --- | --- | --- | --- | --- |
-    | Example claim | test | planned | missing or failed | P1 | none |
-
-    ### Subagent Handoff Payload
-
-    - packet path: `docs-ai/current-work/example/wave-execution.md`
-    - objective/reductions: `Example objective.`
-    - task slice: `example/task`
-    - owned surfaces: `example.md`
-    - assumptions: `none`
-    - artifacts/proof rows: `P1`
-    - risks: `none`
-    - stop conditions: `none`
-
-    ### Stop Conditions
-
-    - objective mismatch
-    - under-read owner skills
-    - inadequate touched owner
-    - proof drift
-    - unaccepted reduction/debt
-    - stale route
-    - context narrower than handoff/final claim
-
-    ## Task Plan
+    ## Execution
 
     ### `example/task`
 
-    - State:
-      - `blank`
-    - Outcome:
-      - `Example outcome.`
-    - In scope:
-      - `Example scope.`
-    - Out of scope:
-      - `none`
-    - Owned files and surfaces:
-      - `example.md`
-    - Touched owner/component integrity:
-      - `acceptable`
-    - Locked invariants:
-      - `none`
-    - Allowed local implementer decisions:
-      - `parent-only`
-    - Stop-and-handback triggers:
-      - `parent-only`
-    - Proof rows:
-      - `P1`
-    - Follow-up:
-      - `none`
+    - State: `blank`
+    - Owned surfaces: `example.md`
+    - Checks/artifacts: `uv run python scripts/validate_harness.py`
 
-    ## Proof Plan
+    - blockers/decisions: `none`
 
-    ```json
-    {
-      "proof_plan": [
-        {
-          "proof_id": "P1",
-          "task_slug": "example/task",
-          "anchor_ids": ["A1"],
-          "claim": "Example claim.",
-          "material_variants": ["none"],
-          "proof_classification": "automated-suite-provable",
-          "owner_layer": "static-check",
-          "exact_proof": ["uv run python scripts/validate_harness.py"],
-          "expected_evidence": ["harness validation passed"],
-          "counterfactual_regression_probe": {
-            "weaker_implementation": "Missing validation.",
-            "failing_assertion_or_artifact": "validate_harness fails"
-          },
-          "status": "planned"
-        }
-      ]
-    }
-    ```
+    ## Readiness Claim
 
-    ## Execution State
+    - exact claim: `Example claim.`
+    - claimed interface: `example interface`
+    - required evidence: `uv run python scripts/validate_harness.py`
+    - evidence status: `planned`
+    - unproved boundaries: `none`
+    - residual risks: `none`
     """
 
 
@@ -253,10 +161,84 @@ def minimal_valid_root(root: Path) -> None:
     write(root / "README.md", "# Test\n")
 
 
+def add_repo_codex_live_install(root: Path) -> None:
+    write(
+        root / "AGENTS.md",
+        """
+        # Test Agents
+
+        Treat project-local `AGENTS.md` as a compact first-hop map.
+
+        ## Routing
+
+        - Test work: `test-skill`.
+        - Runtime proof: `runtime-proof`.
+
+        ## Subagent Policy
+
+        The user explicitly authorizes use of the spawn/subagent tool for these
+        harness-defined roles when this `AGENTS.md` is in force:
+        `explorer` and `quality_guard`.
+
+        This preauthorization applies only to those named roles.
+        """,
+    )
+    codex_home = root / ".codex"
+    (codex_home / "skills").mkdir(parents=True)
+    (codex_home / "agents").mkdir(parents=True)
+    (codex_home / "AGENTS.md").symlink_to(root / "AGENTS.md")
+    for skill_dir in sorted((root / "skills").iterdir()):
+        if skill_dir.is_dir():
+            (codex_home / "skills" / skill_dir.name).symlink_to(skill_dir)
+    for agent_file in sorted((root / "adapters" / "codex" / "agents").glob("*.toml")):
+        (codex_home / "agents" / agent_file.name).symlink_to(agent_file)
+    write(
+        codex_home / "config.toml",
+        (root / "adapters" / "codex" / "config.toml").read_text(encoding="utf-8"),
+    )
+
+
 def test_validate_accepts_minimal_valid_root(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
 
     assert validate_harness.validate(tmp_path) == []
+
+
+def test_validate_accepts_repo_codex_live_install(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_repo_codex_live_install(tmp_path)
+
+    assert validate_harness.validate(tmp_path) == []
+
+
+def test_validate_rejects_stale_repo_codex_live_install(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_repo_codex_live_install(tmp_path)
+    (tmp_path / ".codex" / "skills" / "code-simplicity").symlink_to(
+        tmp_path / "skills" / "code-simplicity"
+    )
+    quality_guard = tmp_path / ".codex" / "agents" / "quality-guard.toml"
+    quality_guard.unlink()
+    write(quality_guard, 'name = "quality_guard"\n')
+    config_path = tmp_path / ".codex" / "config.toml"
+    config_path.write_text(
+        config_path.read_text(encoding="utf-8").replace(
+            'description = "Test quality_guard role. Standing AGENTS.md authorization applies; do not ask the user again."',
+            'description = "Stale quality guard role. Standing AGENTS.md authorization applies; do not ask the user again."',
+        )
+        + '\n[agents.check_runner]\ndescription = "Removed check runner"\nconfig_file = "agents/check-runner.toml"\n',
+        encoding="utf-8",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        ".codex/agents/quality-guard.toml is not a symlink to "
+        "adapters/codex/agents/quality-guard.toml"
+    ) in errors
+    assert any(".codex/skills/code-simplicity is a stale harness symlink" in error for error in errors)
+    assert ".codex/config.toml missing or changed agents.quality_guard block" in errors
+    assert ".codex/config.toml contains removed agents.check_runner block" in errors
 
 
 def test_validate_accepts_valid_backlog_detail(tmp_path: Path) -> None:
@@ -567,26 +549,26 @@ def test_validate_rejects_optional_reference_wording(tmp_path: Path) -> None:
 
 def test_validate_rejects_non_gated_reference_row_in_staged_skill(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    add_skill(tmp_path, "code-review")
-    write(tmp_path / "skills" / "code-review" / "references" / "review-governance.md", "# Review Governance\n")
+    add_skill(tmp_path, "design-integrity")
+    write(tmp_path / "skills" / "design-integrity" / "references" / "web-boundaries.md", "# Web Boundaries\n")
     write(
-        tmp_path / "skills" / "code-review" / "SKILL.md",
+        tmp_path / "skills" / "design-integrity" / "SKILL.md",
         """
         ---
-        name: code-review
-        description: Use when reviewing code.
+        name: design-integrity
+        description: Use when reviewing design integrity.
         ---
 
-        # Code Review
+        # Design Integrity
 
-        - Shared review doctrine: `references/review-governance.md`
+        - Web boundary detail: `references/web-boundaries.md`
         """,
     )
 
     errors = validate_harness.validate(tmp_path)
 
     assert (
-        "skills/code-review/SKILL.md:8 has non-gated reference row in staged reference-gate skill; "
+        "skills/design-integrity/SKILL.md:8 has non-gated reference row in staged reference-gate skill; "
         "use `Read <reference> when/before/for ...`"
     ) in errors
 
@@ -729,6 +711,20 @@ def test_validate_rejects_role_parity_drift(tmp_path: Path) -> None:
     assert "missing Codex agent file adapters/codex/agents/quality-guard.toml" in errors
 
 
+def test_validate_rejects_obsolete_role_packet_proof_row_term(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    roles_path = tmp_path / "agents" / "roles.md"
+    roles_path.write_text(
+        roles_path.read_text(encoding="utf-8")
+        + "\nAdapter migrations update every consumer and proof row together.\n",
+        encoding="utf-8",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "agents/roles.md contains obsolete packet term 'proof row'" in errors
+
+
 def test_validate_rejects_preauthorized_subagent_allowlist_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
@@ -760,7 +756,7 @@ def test_validate_rejects_subagent_metadata_preauthorization_duplicate(tmp_path:
         interface:
           display_name: "Subagent Orchestration"
           short_description: "Delegate bounded work cleanly"
-          default_prompt: "Use $subagent-orchestration for explorer and quality_guard with durable Work Context from AGENTS.md and agents/roles.md."
+          default_prompt: "Use $subagent-orchestration for explorer and quality_guard with packet handoff inputs from AGENTS.md and agents/roles.md."
         """,
     )
 
@@ -772,15 +768,18 @@ def test_validate_rejects_subagent_metadata_preauthorization_duplicate(tmp_path:
     ) in errors
 
 
-def test_validate_rejects_adapter_handoff_context_missing_risks(tmp_path: Path) -> None:
+def test_validate_rejects_adapter_handoff_context_missing_readiness_claim(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     path = tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml"
-    text = path.read_text(encoding="utf-8").replace("# risks\n", "")
+    text = path.read_text(encoding="utf-8").replace("# readiness claim\n", "")
     path.write_text(text, encoding="utf-8")
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "adapters/codex/agents/quality-guard.toml missing adapter handoff context term 'risks'" in errors
+    assert (
+        "adapters/codex/agents/quality-guard.toml missing adapter handoff context term 'readiness claim'"
+        in errors
+    )
 
 
 def test_validate_rejects_removed_subagent_topology_reference(tmp_path: Path) -> None:
@@ -802,14 +801,14 @@ def test_validate_rejects_removed_subagent_topology_reference(tmp_path: Path) ->
 
 def test_validate_rejects_binding_simplicity_lens_language(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    write(tmp_path / "AGENTS.md", "Simplicity lens: use `code-simplicity`.\n")
+    write(tmp_path / "AGENTS.md", "Simplicity lens: use `design-integrity`.\n")
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "AGENTS.md must call code-simplicity a gate, not a lens" in errors
+    assert "AGENTS.md must use design-integrity, not a simplicity lens" in errors
 
 
-def test_validate_rejects_agent_missing_touched_component_gate(tmp_path: Path) -> None:
+def test_validate_rejects_agent_missing_design_integrity_gate(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml",
@@ -818,17 +817,17 @@ def test_validate_rejects_agent_missing_touched_component_gate(tmp_path: Path) -
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "adapters/codex/agents/quality-guard.toml missing touched-component integrity gate" in errors
+    assert "adapters/codex/agents/quality-guard.toml missing design-integrity gate" in errors
 
 
-def test_validate_rejects_incomplete_touched_owner_definition(tmp_path: Path) -> None:
+def test_validate_rejects_incomplete_design_integrity_definition(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    write(tmp_path / "skills" / "planning-intake" / "SKILL.md", "Touched owner uses contract, state, lifecycle, or proof.\n")
+    write(tmp_path / "skills" / "work-routing" / "SKILL.md", "Touched owner uses contract, state, lifecycle, or proof.\n")
 
     errors = validate_harness.validate(tmp_path)
 
     assert (
-        "skills/planning-intake/SKILL.md has incomplete touched-owner definition; include design and workflow"
+        "skills/work-routing/SKILL.md has incomplete design-integrity definition; include design and workflow"
         in errors
     )
 
@@ -915,13 +914,6 @@ def test_validate_requires_runtime_proof_trigger_owner(tmp_path: Path) -> None:
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "skills/runtime-proof/SKILL.md missing runtime proof policy term `runtime-visible`" in errors
-    assert "skills/runtime-proof/SKILL.md missing runtime proof policy term `tiny, local`" in errors
-    assert "skills/runtime-proof/SKILL.md missing runtime proof policy term `public-behavior`" in errors
-    assert (
-        "skills/runtime-proof/SKILL.md missing runtime proof policy term `cross-boundary runtime risk`"
-        in errors
-    )
     assert "skills/runtime-proof/SKILL.md missing runtime proof policy term `live-use validation`" in errors
     assert (
         "skills/runtime-proof/SKILL.md missing runtime proof policy term "
@@ -951,7 +943,7 @@ def test_broad_ui_design_does_not_require_runtime_evidence_by_default(tmp_path: 
         """
         name = "quality_guard"
         developer_instructions = \"\"\"
-        touched-component integrity gate
+        design integrity gate
         binding objective accepted reductions Diff-only approval is invalid
         why inspected scope is sufficient Do not claim final approval.
         For broad product UI work, verify required `runtime_evidence` and
@@ -972,17 +964,13 @@ def test_validate_rejects_provider_prompt_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "adapters" / "codex" / "README.md",
-        "Route full wave execution to wave-autopilot.\n",
-    )
-    write(
-        tmp_path / "adapters" / "github-copilot" / "README.md",
-        "Runtime findings are advisory.\n",
+        "Route full wave execution to wave-autopilot.\nRuntime findings are advisory.\n",
     )
 
     errors = validate_harness.validate(tmp_path)
 
     assert "adapters/codex/README.md references removed workflow skill 'wave-autopilot'" in errors
-    assert "adapters/github-copilot/README.md must not classify blocking evidence as advisory" in errors
+    assert "adapters/codex/README.md must not classify blocking evidence as advisory" in errors
 
 
 def test_validate_rejects_required_gate_advisory_drift(tmp_path: Path) -> None:
@@ -1094,7 +1082,7 @@ def test_validate_rejects_review_role_contract_drift(tmp_path: Path) -> None:
         tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml",
         (
             'name = "quality_guard"\n'
-            "# touched-component integrity gate\n"
+            "# design integrity gate\n"
             "# binding objective\n"
             "# accepted reductions\n"
             "# quality_guard may claim final approval\n"
@@ -1155,46 +1143,17 @@ def test_validate_rejects_final_reviewer_scope_contract_drift(tmp_path: Path) ->
     ) in errors
 
 
-def test_validate_rejects_copilot_final_reviewer_project_artifact_drift(tmp_path: Path) -> None:
+def test_validate_rejects_missing_code_review_project_artifact_coverage(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
-        tmp_path / "adapters" / "github-copilot" / "agents" / "final_reviewer.agent.md",
+        tmp_path / "skills" / "code-review" / "SKILL.md",
         """
         ---
-        name: final_reviewer
+        name: code-review
+        description: Review code.
         ---
 
-        binding objective. accepted reductions. Diff-only approval is invalid.
-        why it is sufficient. Do not perform planning-gate review. not final approval.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
-        "'project design source'"
-    ) in errors
-    assert (
-        "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
-        "'project design source requirements'"
-    ) in errors
-    assert (
-        "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
-        "'block missing, stale, blocked, rejected, or narrower'"
-    ) in errors
-    assert (
-        "adapters/github-copilot/agents/final_reviewer.agent.md missing review role contract term "
-        "'project-local artifacts'"
-    ) in errors
-
-
-def test_validate_rejects_missing_review_governance_project_artifact_coverage(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "code-review" / "references" / "review-governance.md",
-        """
-        # Review Governance
+        # Code Review
 
         Reject UI readiness closeout when `design_judge` is missing, rejected,
         blocked, stale, or narrower than the final claim.
@@ -1204,15 +1163,15 @@ def test_validate_rejects_missing_review_governance_project_artifact_coverage(tm
     errors = validate_harness.validate(tmp_path)
 
     assert (
-        "skills/code-review/references/review-governance.md missing review governance "
+        "skills/code-review/SKILL.md missing review governance "
         "contract term 'project design source'"
     ) in errors
     assert (
-        "skills/code-review/references/review-governance.md missing review governance "
+        "skills/code-review/SKILL.md missing review governance "
         "contract term 'missing, stale, blocked, rejected, or narrower'"
     ) in errors
     assert (
-        "skills/code-review/references/review-governance.md missing review governance "
+        "skills/code-review/SKILL.md missing review governance "
         "contract term 'project design source requirements'"
     ) in errors
 
@@ -1347,7 +1306,7 @@ def test_validate_rejects_role_boundary_contract_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "adapters" / "codex" / "agents" / "explorer.toml",
-        'name = "explorer"\n# touched-component integrity gate\n# Stay read-only\n',
+        'name = "explorer"\n# design integrity gate\n# Stay read-only\n',
     )
 
     errors = validate_harness.validate(tmp_path)
@@ -1394,47 +1353,6 @@ def test_validate_rejects_design_judge_contract_drift(tmp_path: Path) -> None:
     ) in errors
 
 
-def test_validate_rejects_copilot_design_judge_project_target_drift(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    add_roles(tmp_path, ("explorer", "quality_guard", "design_judge"))
-    write(
-        tmp_path / "adapters" / "github-copilot" / "agents" / "design_judge.agent.md",
-        """
-        ---
-        name: design_judge
-        ---
-
-        screenshot/contact-sheet. binding objective. accepted reductions.
-        visual goals. runtime-evidence-based. pass. reject. blocked.
-        Do not perform `runtime_evidence`, `quality_guard`, `final_reviewer`.
-        not live behavior or code quality.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
-        "'declared project design source'"
-    ) in errors
-    assert (
-        "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
-        "'accepted narrowed claim'"
-    ) in errors
-    assert (
-        "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
-        "'materially weaker than the target'"
-    ) in errors
-    assert (
-        "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
-        "'invent design criteria'"
-    ) in errors
-    assert (
-        "adapters/github-copilot/agents/design_judge.agent.md missing role boundary contract term "
-        "'visual quality only'"
-    ) in errors
-
-
 def test_validate_requires_microsoft_playwright_cli_anchor(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
@@ -1472,22 +1390,18 @@ def test_validate_rejects_stale_runtime_optional_helper_wording(tmp_path: Path) 
     )
 
 
-def test_validate_rejects_packet_missing_required_section_and_proof_field(tmp_path: Path) -> None:
+def test_validate_rejects_packet_missing_required_section(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md",
         """
         # Wave bad-wave Execution Packet
 
-        ## Scope And Execution Posture
+        ## Objective
 
-        ## Task Plan
+        ## Design Integrity
 
-        ## Proof Plan
-
-        ```json
-        {"proof_plan": [{"proof_id": "P1"}]}
-        ```
+        ## Execution
         """,
     )
     write(
@@ -1497,70 +1411,36 @@ def test_validate_rejects_packet_missing_required_section_and_proof_field(tmp_pa
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "docs-ai/current-work/bad-wave/wave-execution.md missing section 'Execution State'" in errors
-    assert "docs-ai/current-work/bad-wave/wave-execution.md proof_plan row 1 missing task_slug" in errors
+    assert "docs-ai/current-work/bad-wave/wave-execution.md missing section 'Readiness Claim'" in errors
 
 
-def test_validate_rejects_wave_task_card_missing_touched_integrity(tmp_path: Path) -> None:
+def test_validate_rejects_wave_task_card_missing_owned_surfaces_or_checks(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md",
         """
         # Wave bad-wave Execution Packet
 
-        ## Scope And Execution Posture
+        ## Objective
 
-        ## Task Plan
+        - original objective: `Example objective.`
+
+        ## Design Integrity
+
+        - owner/interface: `example`
+        - verdict: `acceptable`
+
+        ## Execution
 
         ### `example/task`
 
-        - State:
-          - `blank`
-        - Outcome:
-          - `Example outcome.`
-        - In scope:
-          - `Example scope.`
-        - Out of scope:
-          - `none`
-        - Owned files and surfaces:
-          - `example.md`
-        - Locked invariants:
-          - `none`
-        - Allowed local implementer decisions:
-          - `parent-only`
-        - Stop-and-handback triggers:
-          - `parent-only`
-        - Proof rows:
-          - `P1`
+        - State: `blank`
+
+        ## Readiness Claim
+
+        - exact claim: `Example claim.`
         - Follow-up:
           - `none`
-
-        ## Proof Plan
-
-        ```json
-        {
-          "proof_plan": [
-            {
-              "proof_id": "P1",
-              "task_slug": "example/task",
-              "anchor_ids": ["A1"],
-              "claim": "Example claim.",
-              "material_variants": ["none"],
-              "proof_classification": "automated-suite-provable",
-              "owner_layer": "static-check",
-              "exact_proof": ["uv run python scripts/validate_harness.py"],
-              "expected_evidence": ["harness validation passed"],
-              "counterfactual_regression_probe": {
-                "weaker_implementation": "Missing validation.",
-                "failing_assertion_or_artifact": "validate_harness fails"
-              },
-              "status": "planned"
-            }
-          ]
-        }
-        ```
-
-        ## Execution State
         """,
     )
     write(
@@ -1570,18 +1450,13 @@ def test_validate_rejects_wave_task_card_missing_touched_integrity(tmp_path: Pat
 
     errors = validate_harness.validate(tmp_path)
 
-    assert (
-        "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' missing touched owner/component integrity"
-        in errors
-    )
+    assert "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' missing - Owned surfaces:" in errors
+    assert "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' missing - Checks/artifacts:" in errors
 
 
 def test_validate_rejects_wave_task_card_missing_or_invalid_state(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    packet = valid_packet().replace(
-        "    - State:\n      - `blank`\n",
-        "",
-    )
+    packet = valid_packet().replace("    - State: `blank`\n", "")
     write(tmp_path / "docs-ai" / "current-work" / "missing-state" / "wave-execution.md", packet)
     write(
         tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "missing-state.md",
@@ -1604,55 +1479,25 @@ def test_validate_rejects_wave_task_card_missing_or_invalid_state(tmp_path: Path
     ) in errors
 
 
-def test_validate_rejects_wave_packet_with_proof_rows_but_no_task_cards(tmp_path: Path) -> None:
+def test_validate_rejects_wave_packet_missing_readiness_claim(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md",
-        """
-        # Wave bad-wave Execution Packet
+    packet = """
+    # Wave bad-wave Execution Packet
 
-        ## Scope And Execution Posture
+    ## Objective
 
-        ## Required Gates
+    - original objective: `Example objective.`
 
-        | Claim | Owner | Status | Blocks when | Proof rows | Role |
-        | --- | --- | --- | --- | --- |
-        | Example claim | test | planned | missing or failed | P1 | none |
+    ## Design Integrity
 
-        ## Task Plan
+    - owner/interface: `example`
+    - verdict: `acceptable`
 
-        | Task slug | State | Dependencies | Outcome summary | Proof rows |
-        | --- | --- | --- | --- | --- |
-        | `example/task` |  | `none` | `Example outcome.` | `P1` |
+    ## Execution
 
-        ## Proof Plan
-
-        ```json
-        {
-          "proof_plan": [
-            {
-              "proof_id": "P1",
-              "task_slug": "example/task",
-              "anchor_ids": ["A1"],
-              "claim": "Example claim.",
-              "material_variants": ["none"],
-              "proof_classification": "automated-suite-provable",
-              "owner_layer": "static-check",
-              "exact_proof": ["uv run python scripts/validate_harness.py"],
-              "expected_evidence": ["harness validation passed"],
-              "counterfactual_regression_probe": {
-                "weaker_implementation": "Missing validation.",
-                "failing_assertion_or_artifact": "validate_harness fails"
-              },
-              "status": "planned"
-            }
-          ]
-        }
-        ```
-
-        ## Execution State
-        """,
-    )
+    - blockers/decisions: `none`
+    """
+    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
     write(
         tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
         "# Wave bad-wave\n\n**Status:** execution-ready\n",
@@ -1660,93 +1505,14 @@ def test_validate_rejects_wave_packet_with_proof_rows_but_no_task_cards(tmp_path
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "docs-ai/current-work/bad-wave/wave-execution.md missing task cards" in errors
-    assert (
-        "docs-ai/current-work/bad-wave/wave-execution.md proof_plan row 1 task_slug 'example/task' has no matching task card"
-        in errors
-    )
+    assert "docs-ai/current-work/bad-wave/wave-execution.md missing section 'Readiness Claim'" in errors
 
 
-def test_validate_rejects_wave_packet_missing_work_context_required_gates_matrix(tmp_path: Path) -> None:
+def test_validate_rejects_wave_packet_missing_core_fields(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    packet = valid_packet().replace(
-        """
-    ### Required Gates
-
-    | Claim | Owner | Status | Blocks when | Proof rows | Role |
-    | --- | --- | --- | --- | --- | --- |
-    | Example claim | test | planned | missing or failed | P1 | none |
-
-""",
+    packet = valid_packet().replace("    - accepted reductions: `none`\n", "", 1).replace(
+        "    - evidence status: `planned`\n",
         "",
-    )
-    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
-        "# Wave bad-wave\n\n**Status:** execution-ready\n",
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "docs-ai/current-work/bad-wave/wave-execution.md Work Context missing subsection 'Required Gates'" in errors
-
-
-def test_validate_rejects_wave_packet_work_context_required_gates_bad_header(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    packet = valid_packet().replace(
-        "| Claim | Owner | Status | Blocks when | Proof rows | Role |",
-        "| Claim | Owner | Blocks when |",
-    )
-    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
-        "# Wave bad-wave\n\n**Status:** execution-ready\n",
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "docs-ai/current-work/bad-wave/wave-execution.md Work Context Required Gates matrix missing expected header" in errors
-
-
-def test_validate_rejects_wave_packet_work_context_required_gates_without_data_row(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    packet = valid_packet().replace(
-        "| Example claim | test | planned | missing or failed | P1 | none |\n",
-        "",
-    )
-    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
-        "# Wave bad-wave\n\n**Status:** execution-ready\n",
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "docs-ai/current-work/bad-wave/wave-execution.md Work Context Required Gates matrix missing data row" in errors
-
-
-def test_validate_rejects_wave_packet_work_context_required_gates_placeholder_row(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    packet = valid_packet().replace(
-        "| Example claim | test | planned | missing or failed | P1 | none |",
-        "| `<claim>` | `<owner>` | `<status>` | `<blocks>` | `<proof rows>` | `<role>` |",
-    )
-    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
-        "# Wave bad-wave\n\n**Status:** execution-ready\n",
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "docs-ai/current-work/bad-wave/wave-execution.md Work Context Required Gates matrix missing data row" in errors
-
-
-def test_validate_rejects_wave_packet_obsolete_top_level_ceremony(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    packet = valid_packet().replace(
-        "    ## Task Plan",
-        "    ## Scope And Execution Posture\n\n    old duplicate context\n\n    ## Required Gates\n\n    | Claim | Required gate | Owner | Proof/artifacts | Blocks when |\n    | --- | --- | --- | --- | --- |\n    | old | old | old | old | old |\n\n    ## Task Plan",
         1,
     )
     write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
@@ -1757,8 +1523,27 @@ def test_validate_rejects_wave_packet_obsolete_top_level_ceremony(tmp_path: Path
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "docs-ai/current-work/bad-wave/wave-execution.md contains obsolete top-level section 'Scope And Execution Posture' after Work Context schema" in errors
-    assert "docs-ai/current-work/bad-wave/wave-execution.md contains obsolete top-level section 'Required Gates' after Work Context schema" in errors
+    assert "docs-ai/current-work/bad-wave/wave-execution.md section 'Objective' missing field 'accepted reductions'" in errors
+    assert "docs-ai/current-work/bad-wave/wave-execution.md section 'Readiness Claim' missing field 'evidence status'" in errors
+
+
+def test_validate_rejects_wave_packet_obsolete_top_level_ceremony(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace(
+        "    ## Execution",
+        "    ## Work Context\n\n    old duplicate context\n\n    ## Required Gates\n\n    | Claim | Required gate | Owner | Proof/artifacts | Blocks when |\n    | --- | --- | --- | --- | --- |\n    | old | old | old | old | old |\n\n    ## Execution",
+        1,
+    )
+    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/bad-wave/wave-execution.md contains obsolete top-level section 'Work Context'" in errors
+    assert "docs-ai/current-work/bad-wave/wave-execution.md contains obsolete top-level section 'Required Gates'" in errors
 
 
 def test_validate_enforces_wave_lifecycle_from_status_and_packet_existence(tmp_path: Path) -> None:

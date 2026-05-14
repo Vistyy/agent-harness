@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import sys
+import tomllib
 from pathlib import Path
 
 
@@ -10,6 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 CODEX_HOME = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex"))
 SKILLS_HOME = CODEX_HOME / "skills"
 AGENTS_HOME = CODEX_HOME / "agents"
+SOURCE_CONFIG = ROOT / "adapters" / "codex" / "config.toml"
+LIVE_CONFIG = CODEX_HOME / "config.toml"
+REMOVED_AGENT_NAMES = {"check_runner"}
 
 
 def fail(message: str) -> None:
@@ -81,6 +85,27 @@ def assert_backup_manifest() -> None:
         fail("backup manifest missing pruned_symlinks list")
 
 
+def assert_config() -> None:
+    if not LIVE_CONFIG.is_file():
+        fail(f"{LIVE_CONFIG} is missing")
+    if not SOURCE_CONFIG.is_file():
+        fail(f"{SOURCE_CONFIG} is missing")
+
+    live = tomllib.loads(LIVE_CONFIG.read_text(encoding="utf-8"))
+    source = tomllib.loads(SOURCE_CONFIG.read_text(encoding="utf-8"))
+    if live.get("features", {}).get("multi_agent") is not True:
+        fail(f"{LIVE_CONFIG} missing [features] multi_agent = true")
+
+    source_agents = source.get("agents", {})
+    live_agents = live.get("agents", {})
+    for agent_name in REMOVED_AGENT_NAMES:
+        if agent_name in live_agents:
+            fail(f"{LIVE_CONFIG} contains removed agents.{agent_name}")
+    for agent_name, source_block in source_agents.items():
+        if live_agents.get(agent_name) != source_block:
+            fail(f"{LIVE_CONFIG} agents.{agent_name} does not match {SOURCE_CONFIG}")
+
+
 def main() -> int:
     skills = planned_skills()
     agents = planned_agents()
@@ -96,6 +121,7 @@ def main() -> int:
     if (SKILLS_HOME / ".system").exists() and not (SKILLS_HOME / ".system").is_dir():
         fail(f"{SKILLS_HOME / '.system'} is not a directory")
     assert_backup_manifest()
+    assert_config()
 
     print("codex live install check passed")
     return 0

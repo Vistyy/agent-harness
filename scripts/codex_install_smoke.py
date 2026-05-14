@@ -220,8 +220,18 @@ def main() -> int:
             if not fixtures[name].is_symlink():
                 fail(f"dry-run removed stale symlink {fixtures[name]}")
         assert_prune_fixtures_preserved(fixtures)
+        (codex_home / "config.toml").write_text(
+            '[features]\nmulti_agent = true\n\n'
+            '[agents.check_runner]\n'
+            'description = "Removed check runner"\n'
+            'config_file = "agents/check-runner.toml"\n',
+            encoding="utf-8",
+        )
         run_install(codex_home, bin_dir)
         assert_install(codex_home, bin_dir)
+        target_config = tomllib.loads((codex_home / "config.toml").read_text(encoding="utf-8"))
+        if "check_runner" in target_config.get("agents", {}):
+            fail("installer did not remove stale agents.check_runner block")
         assert_pruned(fixtures)
         assert_prune_fixtures_preserved(fixtures)
         assert_pruned_manifest(
