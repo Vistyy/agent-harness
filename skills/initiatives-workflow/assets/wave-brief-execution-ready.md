@@ -17,9 +17,11 @@
 
 - `<decision>: <owner/default>`
 
-## Proof Plan
+## Readiness Claim
 
-- `<claim>: <exact proof/artifact>`
+- exact claim: `<claim>`
+- claimed interface: `<workflow/module interface>`
+- required proof/evidence: `<exact proof/artifact>`
 
 ## Planning Gate
 

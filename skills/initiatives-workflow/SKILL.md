@@ -5,77 +5,55 @@ description: "Use for full wave execution or durable wave/backlog state: deliver
 
 # Initiatives Workflow
 
-Owns durable wave, packet, delivery-map, backlog state, and full wave
-execution. Planning, review, delegation, and verification doctrine stay with
-their owner skills.
+Owns durable wave, packet, delivery-map, and backlog state. It stores decisions;
+other skills own design, readiness, review, delegation, proof, and runtime
+doctrine.
 
-A wave may be one task. Use it when execution state must survive queue
-tracking, handoff, interruption, backlog/roadmap state, or multiple task cards.
+Use a wave only when state must survive queue tracking, handoff, interruption,
+resume, review, or multiple execution slices.
 
-## References
+## Reference
 
-- Read `references/wave-packet-contract.md` when packet, task-card, proof-row,
-  or execution-state schema matters.
+Read `references/wave-packet-contract.md` when creating or validating a packet.
 
-## Owned State
-
-- backlog to wave promotion
-- delivery-map updates
-- wave brief and packet maintenance
-- backlog/mobile-parity follow-up state
-- wave closeout cleanup
-- full execution of one `execution-ready` wave
-
-## Paths And Statuses
+## State
 
 - map: `docs-ai/current-work/delivery-map.md`
-- brief: `docs-ai/docs/initiatives/waves/<wave-id>.md`
+- brief: `docs-ai/docs/initiatives/waves/<wave-id>.md` when queue-visible
+  status is needed
+- packet: `docs-ai/current-work/<wave-id>/wave-execution.md`
 - draft packet: `docs-ai/current-work/<wave-id>/wave-execution.draft.md`
-- canonical packet: `docs-ai/current-work/<wave-id>/wave-execution.md`
 - backlog: `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md`
-- `discovery-required` waves may have `wave-execution.draft.md`.
-- Only `execution-ready` waves keep canonical `wave-execution.md`.
-- Closeout removes delivery-map state and packet only after final review
-  approves review coverage and verification approves the final claim.
-- Completed wave briefs are disposable after retained invariants are extracted
-  to the owning durable surface or valid backlog.
-- Backlog entries store discovered separate debt and explicitly accepted
-  temporary debt. They do not make current-scope blockers approvable.
 
-- `discovery-required`: decisions still open; no canonical packet.
-- `execution-ready`: planning gate approved; canonical packet exists.
-- `done`: verified and final-reviewed; current-work packet can be cleaned.
-- `retired`: intentionally closed without execution.
+Statuses: `discovery-required`, `execution-ready`, `done`, `retired`.
 
-## Execute A Wave
+Only `execution-ready` waves execute from canonical packets. Draft packets
+preserve planning state only.
+
+## Execute
 
 Before execution:
-- wave brief status is `execution-ready`
-- canonical `wave-execution.md` exists
-- packet satisfies the wave packet contract
-- durable brief and packet preserve original objective plus accepted reductions
-- planning gate records real `planning_critic` and `quality_guard` approval
+
+- packet satisfies the packet contract
+- objective, design integrity, execution slices, and readiness claim are closed
+- `planning_critic` and `quality_guard` approved non-trivial planning
 
 During execution:
-- execute task cards in dependency order
-- stop on discovery leakage, objective mismatch, owner defects that are not
-  fixed/routed or explicitly accepted as temporary debt, or materially stale
-  packet assumptions
-- after each non-trivial implementation chunk, run required non-runtime proof and
-  `quality_guard` before runtime proof, design review, final review, closeout
-  cleanup, or the next non-trivial implementation chunk
-- pass `quality_guard` the packet path, binding objective, changed surfaces,
-  proof rows, commands run, touched-owner integrity verdict, and residual gaps
 
-Before closeout:
-- run wave-level verification and final isolated review
-- ensure final claim does not exceed proof, runtime fidelity, or accepted scope
-- review the completed wave brief; extract retained value to the owning durable
-  surface or valid backlog, or state that no retained value remains
-- remove delivery-map state, packet state, and disposable completed wave briefs
-  only after closeout is actually approved
-- use validation for mechanical leftovers; do not replace retained-value review
-  with an automated classifier
+- execute slices in dependency order
+- update blockers, decisions, evidence, and follow-up in the packet
+- use `quality_guard` after each non-trivial implementation chunk
+
+Stop on objective drift, stale packet state, missing design/readiness state,
+discovery leakage, or current-scope owner defects not fixed/routed/accepted.
+
+## Closeout
+
+Close only after verification, final review, and `readiness-claim` support the
+final claim.
+
+Extract retained value to the owning durable surface or valid backlog. Then
+remove delivery-map state, packet state, and disposable briefs.
 
 ## Assets
 
@@ -83,11 +61,3 @@ Before closeout:
 - execution-ready brief: `assets/wave-brief-execution-ready.md`
 - packet: `assets/wave-execution.md`
 - backlog item: `assets/backlog-entry.md`
-
-## CLI
-
-```bash
-agent-harness wave bootstrap --repo-root <project-root> --wave <wave-id> --title "<title>"
-agent-harness wave refs --repo-root <project-root> --wave <wave-id>
-agent-harness wave cleanup --repo-root <project-root> --wave <wave-id>
-```

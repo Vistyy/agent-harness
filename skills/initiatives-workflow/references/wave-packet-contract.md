@@ -2,126 +2,62 @@
 
 Owns the durable packet schema for `wave-execution.md`.
 
-## Sections
+A packet exists only when work must survive queue tracking, handoff,
+interruption, resume, review, or multiple execution slices. It stores the
+minimum state needed to keep the objective, design, execution, and readiness
+claim aligned.
 
-Required sections:
+## Required Sections
 
-- `Work Context`
-- `Task Plan`
-- `Proof Plan`
-- `Execution State`
+- `Objective`
+- `Design Integrity`
+- `Execution`
+- `Readiness Claim`
 
-Include `System-Boundary Architecture Disposition` when the Work Context names
-`System-boundary trigger: triggered`.
+## Objective
 
-## Work Context
+Record original objective, accepted reductions, residual gaps, and any current
+user checkpoint that changes scope.
 
-The Work Context is the single shared context capsule for parent and subagents.
-It replaces duplicated planning/gate prose and must appear before task cards.
+No task slice may replace this objective. A narrower outcome needs an accepted
+reduction.
 
-Required subsections:
+## Design Integrity
 
-- `Binding Objective`: original objective, accepted reductions, residual gaps,
-  and newest-user-message checkpoint.
-- `Owner Skill Intake`: route, project overlay/docs read, owner skills read,
-  matched reference gates read, skipped references with reason, and open owner
-  gaps. For non-trivial work this includes `code-simplicity`.
-- `Scope And Owners`: in scope, out of scope, touched owner/component, owned
-  files/surfaces, public entrypoints, and owner boundaries.
-- `Decisions And Assumptions`: closed decisions, assumptions subagents may rely
-  on, and decisions still user-owned or blocked.
-- `Adequacy Challenge`: before-implementation verdict, highest inspected scope,
-  must-block signals, and reshape/stop/accepted temporary debt disposition.
-- `Required Gates`: compact rows with claim, owner, status, blocking condition,
-  proof row IDs, and review/runtime/design role when applicable. Do not repeat
-  exact proof commands here.
-- `Subagent Handoff Payload`: packet path, objective/reductions, task slice,
-  owned surfaces, assumptions, artifacts, proof rows, risks, and stop
-  conditions for non-trivial handoff.
-- `Stop Conditions`: objective mismatch, under-read owner skills, inadequate
-  touched owner, proof drift, unaccepted reduction/debt, stale route, or context
-  narrower than handoff/final claim.
+Record selected owner/interface, key decisions, design-integrity verdict,
+accepted temporary debt or `none`, and blocker status.
 
-## Task Cards
+Design doctrine belongs to `../../design-integrity/SKILL.md`; the packet only
+stores the decision.
 
-Task states are only `blank`, `done`, or `blocked`.
+## Execution
 
-- `blank`: task is not yet closed
-- `done`: scoped implementation, cleanup/removal, review gates, and proof rows
-  are satisfied
-- `blocked`: next required move depends on an external dependency or explicit
-  user action
+Record task slices, owned surfaces, dependencies, blockers, decisions, evidence,
+and follow-up.
 
-Do not invent extra task states. Nuance belongs in proof rows, blocker entries,
-or task evidence.
+Task cards are optional when one slice is enough. When used, each `### <task>`
+card needs only:
 
-Each `### <task_slug>` card states:
+- `State`: `blank`, `done`, or `blocked`
+- `Owned surfaces`
+- `Checks/artifacts`
 
-- state
-- outcome
-- in scope / out of scope
-- owned files and surfaces
-- `Touched owner/component integrity:`
-- locked invariants
-- allowed local implementer decisions
-- stop-and-handback triggers
-- proof rows
-- follow-up
+Add more fields only when they prevent real ambiguity.
 
-Task cards own execution slices only. They do not restate the objective,
-accepted reductions, global gates, or full owner-skill intake. Starting files,
-symbols, and implementation notes are hints, not required ceremony.
+## Readiness Claim
 
-Material owner, proof, state-authority, runtime, compatibility, migration,
-public behavior, and forbidden-legacy-path choices are not implementer-local.
+Record exact claim, claimed workflow/module interface, required evidence,
+evidence status, unproved boundaries, and residual risks.
 
-## Proof Rows
+Claim doctrine belongs to `../../readiness-claim/SKILL.md`; the packet only
+stores the current claim and evidence state.
 
-The `Proof Plan` JSON contains `proof_plan` rows with:
-
-- `proof_id`
-- `task_slug`
-- `anchor_ids`
-- `claim`
-- `material_variants`
-- `proof_classification`
-- `owner_layer`
-- `exact_proof`
-- `expected_evidence`
-- `counterfactual_regression_probe`
-- `status`
-
-Every material claim needs exact proof and a counterfactual probe. No proof row
-may prove a smaller invented objective. Required Gates point to proof IDs
-instead of repeating proof details.
-
-Runtime rows carry the Runtime Claim Map in existing fields: `exact_proof`
-names entrypoint, target, action/flow, result, and simulation boundary;
-`expected_evidence` ties to the same or downstream visible surface.
-
-## System-Boundary Appendix
-
-When triggered, include why, planning disposition, stop rule, changed contracts,
-single owner, write/read-repair paths, forbidden bypasses, rejected
-alternatives, why scope is not artificially narrowed, and stable-to-extend
-expectation.
-
-## Execution State
-
-Track changes from the Work Context: new decisions, blockers, technical debt,
-task evidence, and follow-up. Do not restate static context.
-
-Accepted touched-component debt must live here and link backlog detail with
-owner, affected files/surfaces, accepted must-block signals, risk, removal
-condition, and explicit user acceptance.
-
-Discovered separate debt must live here or in a backlog item with owner,
-location, risk, and recommended fix. It does not approve a current-scope
-blocker.
+No evidence may prove a smaller invented objective. If evidence crosses only
+part of the claimed interface, narrow or block the claim.
 
 ## Trust
 
-An implementer may trust an `execution-ready` packet for closed decisions, Work
-Context, and owned scope. The implementer stops when scope is underfed,
-discovery leaks into execution, proof drifts, owner-skill intake is missing, or
-a current-objective owner defect appears.
+An implementer may trust an `execution-ready` packet for closed objective,
+design, execution, and readiness state. Stop when the packet omits a material
+owner, claimed interface, blocker, dependency, or accepted reduction needed for
+the next step.

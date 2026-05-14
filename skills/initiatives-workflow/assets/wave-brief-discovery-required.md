@@ -10,7 +10,7 @@
 
 ## Planning Gaps
 
-- `<decision/proof/scope gap>`
+- `<decision/design/readiness/scope gap>`
 
 ## Starting Points
 
@@ -18,5 +18,5 @@
 
 ## Promotion Requirement
 
-Promote only after `planning-intake`, `planning_critic`, and `quality_guard`
-close scope, decisions, proof, debt disposition, and touched-owner integrity.
+Promote only after `work-routing`, `planning_critic`, and `quality_guard` close
+scope, decisions, design integrity, readiness claim, and debt disposition.
