@@ -90,6 +90,9 @@ slow, silent, timed out, or blocking local work.
 
 Handoffs route attention; they are not authority. Include authority sources
 when durable state exists, and do not narrow or replace them in the handoff.
+Preserve those authority sources through revision-review loops. Do not ask a
+reviewer to approve only previous corrections; ask them to review the latest
+changed surface against the authoritative claim.
 
 Pass:
 

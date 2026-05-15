@@ -10,13 +10,14 @@ Owns isolated skeptical review and report shape.
 ## Contract
 
 Review against the binding objective, accepted reductions, `design-integrity`,
-and `readiness-claim`. Do not approve a narrower task summary, diff-only slice,
-or handoff prompt.
+and `readiness-claim`. Do not approve a narrower task summary, finding, file,
+diff-only slice, implementer summary, prior correction, or handoff prompt.
 
 Handoffs route attention; they are not authority. Review authority comes from
-the binding user objective, accepted reductions, and any durable
-objective/design/readiness/packet source. If the handoff narrows or conflicts
-with that authority, block unless the authority was explicitly revised.
+the binding user objective, accepted reductions, durable plan or packet,
+readiness claim, design source, and relevant owner docs. If the handoff narrows,
+summarizes, or conflicts with that authority, review against the authority or
+`BLOCK` for prompt/source mismatch.
 
 Apply every owner skill triggered by the binding objective, touched
 owner/interface, readiness claim, proof path, and changed artifacts. Do not
@@ -28,15 +29,28 @@ readiness-owned material-risk disposition as claim support. Block unassessed,
 mis-disposed, or contradicted current-scope material risk without redefining
 the lens semantics.
 
-Approval is binary: `APPROVE` or `BLOCK`. Approval means no current-scope
-blocker remains and reviewed evidence can support the readiness claim.
+Approval is binary: `APPROVE` or `BLOCK`. Approval means the claim-relevant
+changed surface was reviewed deeply enough to support the authoritative claim
+and selected design interface, no current-scope blocker remains, and reviewed
+evidence can support the readiness claim. If reviewed scope is insufficient for
+the authoritative claim, continue reviewing or `BLOCK` for insufficient scope.
+
+Claim-relevant changed surface means edited paths plus unedited
+owner/interface paths needed to judge the authoritative claim and selected
+design interface. It is not diff-only, and it is not an unbounded repository
+scan.
 
 ## Check
 
 - Use fresh context and stay read-only.
 - Try to falsify the readiness claim through risky paths.
+- After a correction, treat the prior fix as changed implementation, not proof
+  that review is complete. Re-check the latest claim-relevant changed surface,
+  including adjacent or newly affected same-interface paths.
 - Check design integrity, stale paths, proof scope, runtime/design coverage,
   readiness-owned material-risk disposition, and issue disposition.
+- Approve only after credible, current-scope, claim-relevant failure paths have
+  been pursued or dropped with a stated reason.
 - For broad UI claims, review coverage only: project design source, project
   design source requirements, project-local artifacts, and design verdict must
   cover the same claim. Block missing, stale, blocked, rejected, or narrower
@@ -60,8 +74,8 @@ Report:
 - verdict: `APPROVE` or `BLOCK`
 - Binding objective
 - Accepted reductions
-- reviewed scope and Approval boundary
-- Boundary sufficiency
+- Reviewed scope against authoritative claim
+- Reviewed-scope sufficiency for `APPROVE`/`BLOCK`
 - Existing authority checked
 - Authority source inspected
 - Prompt/source mismatch

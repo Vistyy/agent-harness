@@ -263,8 +263,8 @@ REVIEW_VERDICT_FILES = (
 CODE_REVIEW_OUTPUT_REQUIRED_TERMS = (
     "Binding objective",
     "Accepted reductions",
-    "Approval boundary",
-    "Boundary sufficiency",
+    "Reviewed scope against authoritative claim",
+    "Reviewed-scope sufficiency for `APPROVE`/`BLOCK`",
     "Existing authority checked",
     "Authority source inspected",
     "Prompt/source mismatch",

@@ -1738,7 +1738,7 @@ def test_validate_rejects_stale_non_blocking_review_verdict(tmp_path: Path) -> N
     assert "adapters/codex/agents/final-reviewer.toml uses stale NON-BLOCKING review verdict" in errors
 
 
-def test_validate_rejects_missing_code_review_approval_evidence_fields(tmp_path: Path) -> None:
+def test_validate_rejects_missing_code_review_reviewed_scope_fields(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "skills" / "code-review" / "SKILL.md",
@@ -1760,7 +1760,10 @@ def test_validate_rejects_missing_code_review_approval_evidence_fields(tmp_path:
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "skills/code-review/SKILL.md missing review output term 'Approval boundary'" in errors
+    assert (
+        "skills/code-review/SKILL.md missing review output term "
+        "'Reviewed scope against authoritative claim'"
+    ) in errors
     assert "skills/code-review/SKILL.md missing review output term 'Existing authority checked'" in errors
     assert "skills/code-review/SKILL.md missing review output term 'Issue disposition'" in errors
 
