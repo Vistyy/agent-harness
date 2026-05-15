@@ -644,6 +644,134 @@ def test_validate_rejects_owner_only_doctrine_duplicates(tmp_path: Path) -> None
     ) in errors
 
 
+def test_validate_rejects_solution_correctness_duplicate_doctrine(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_skill(tmp_path, "design-integrity")
+    add_skill(tmp_path, "other-owner")
+    write(
+        tmp_path / "skills" / "design-integrity" / "SKILL.md",
+        """
+        ---
+        name: design-integrity
+        description: Test owner.
+        ---
+
+        Solution correctness
+        """,
+    )
+    write(
+        tmp_path / "skills" / "other-owner" / "SKILL.md",
+        """
+        ---
+        name: other-owner
+        description: Test duplicate owner.
+        ---
+
+        solution correctness
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/other-owner/SKILL.md duplicates owner-only doctrine 'solution correctness'; "
+        "owner is skills/design-integrity/SKILL.md"
+    ) in errors
+
+
+def test_validate_rejects_solution_correctness_duplicate_adapter_doctrine(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_skill(tmp_path, "design-integrity")
+    write(
+        tmp_path / "skills" / "design-integrity" / "SKILL.md",
+        """
+        ---
+        name: design-integrity
+        description: Test owner.
+        ---
+
+        solution correctness
+        """,
+    )
+    write(
+        tmp_path / "adapters" / "codex" / "README.md",
+        """
+        # Adapter
+
+        This adapter defines solution correctness for Codex.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/README.md duplicates owner-only doctrine 'solution correctness'; "
+        "owner is skills/design-integrity/SKILL.md"
+    ) in errors
+
+
+def test_validate_allows_solution_correctness_active_packet_and_validator(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_skill(tmp_path, "design-integrity")
+    write(
+        tmp_path / "skills" / "design-integrity" / "SKILL.md",
+        """
+        ---
+        name: design-integrity
+        description: Test owner.
+        ---
+
+        solution correctness
+        deletion, collapse, rewrite, or replacement is the default design move
+        requires justification against the simpler delete/rewrite option
+        If implementation materially differs from the accepted design source
+        Do not silently approve a different shape
+        """,
+    )
+    write(
+        tmp_path / "docs-ai" / "current-work" / "active-wave" / "wave-execution.md",
+        textwrap.dedent(valid_packet()).lstrip() + "\nsolution correctness\n",
+    )
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "active-wave.md",
+        "# Wave active-wave\n\n**Status:** execution-ready\n",
+    )
+    write(tmp_path / "scripts" / "validate_harness.py", "solution correctness\n")
+    write(tmp_path / "tests" / "test_validate_harness.py", "solution correctness\n")
+
+    assert validate_harness.validate(tmp_path) == []
+
+
+def test_validate_rejects_other_owner_only_doctrine_in_active_packet(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "documentation-stewardship" / "SKILL.md",
+        """
+        ---
+        name: documentation-stewardship
+        description: Test owner.
+        ---
+
+        Every durable rule has one owner.
+        """,
+    )
+    write(
+        tmp_path / "docs-ai" / "current-work" / "active-wave" / "wave-execution.md",
+        textwrap.dedent(valid_packet()).lstrip() + "\nEvery durable rule has one owner.\n",
+    )
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "active-wave.md",
+        "# Wave active-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "docs-ai/current-work/active-wave/wave-execution.md duplicates owner-only doctrine "
+        "'Every durable rule has one owner.'; owner is skills/documentation-stewardship/SKILL.md"
+    ) in errors
+
+
 def test_validate_rejects_removed_harness_path_in_closed_archive(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(

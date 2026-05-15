@@ -364,8 +364,22 @@ OWNER_ONLY_DOCTRINE = {
     "Task labels, packets, implementer summaries, and reviewer prompts do not replace it.": (
         "skills/code-review/SKILL.md"
     ),
+    "solution correctness": "skills/design-integrity/SKILL.md",
     "`description` = trigger and routing contract.": "skills/harness-governance/references/skill-architecture.md",
     "references = mandatory purpose gates.": "skills/harness-governance/references/skill-architecture.md",
+}
+OWNER_ONLY_DOCTRINE_EXEMPTIONS = {
+    "solution correctness": {
+        "scripts/validate_harness.py",
+        "tests/test_validate_harness.py",
+    },
+}
+SOLUTION_CORRECTNESS_SCAN_PREFIXES = (
+    "skills/",
+    "adapters/",
+)
+SOLUTION_CORRECTNESS_SCAN_FILES = {
+    "AGENTS.md",
 }
 
 
@@ -761,7 +775,25 @@ def _validate_owner_only_doctrine(root: Path) -> list[str]:
         normalized_lower_text = normalized_text.lower()
         for phrase, owner in OWNER_ONLY_DOCTRINE.items():
             normalized_phrase = " ".join(phrase.split())
-            if rel != owner and normalized_phrase in normalized_text:
+            exemptions = OWNER_ONLY_DOCTRINE_EXEMPTIONS.get(phrase, set())
+            is_active_packet = (
+                phrase == "solution correctness"
+                and rel.startswith("docs-ai/current-work/")
+                and rel.endswith("/wave-execution.md")
+            )
+            if phrase == "solution correctness":
+                is_scanned_counterexample = rel in SOLUTION_CORRECTNESS_SCAN_FILES or rel.startswith(
+                    SOLUTION_CORRECTNESS_SCAN_PREFIXES
+                )
+                if rel == owner and normalized_phrase not in normalized_lower_text:
+                    errors.append(f"{rel} missing owner-only doctrine {phrase!r}")
+                    continue
+                if not is_scanned_counterexample:
+                    continue
+                has_phrase = normalized_phrase in normalized_lower_text
+            else:
+                has_phrase = normalized_phrase in normalized_text
+            if rel != owner and rel not in exemptions and not is_active_packet and has_phrase:
                 errors.append(f"{rel} duplicates owner-only doctrine {phrase!r}; owner is {owner}")
     return errors
 

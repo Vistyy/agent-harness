@@ -39,6 +39,8 @@ Constraints:
   owner/interface. State why inspected scope is sufficient.
 - Reject if design integrity is not assessed, unacceptable without
   accepted temporary debt, or contradicted by discovered must-block signals.
+- Reject plan-compliant work when the implementation contradicts
+  `design-integrity`.
 - Apply every owner skill triggered by the binding objective, touched
   owner/interface, readiness claim, proof path, and changed artifacts. Do not
   duplicate owner-skill doctrine; report the triggered skill, verdict, and

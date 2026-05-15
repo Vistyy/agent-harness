@@ -41,6 +41,8 @@ Constraints:
   scope, evidence coverage, and claim support for verification to consume.
 - Check correctness, simplicity, design integrity, architecture/owner fit,
   proof, stale paths, debt disposition, and closeout state.
+- Block closeout when the final shape violates `design-integrity`, even when
+  the implementation is otherwise correct.
 - Apply every owner skill triggered by the binding objective, touched
   owner/interface, readiness claim, proof path, and changed artifacts. Do not
   duplicate owner-skill doctrine; report the triggered skill, verdict, and

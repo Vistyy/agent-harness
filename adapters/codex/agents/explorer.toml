@@ -12,6 +12,8 @@ Constraints:
 - Stay read-only and implementation-neutral.
 - Own non-trivial repo exploration once the parent gives a bounded question.
 - Prefer concrete file, symbol, and call-path references over broad summaries.
+- Discover existing owners, tools, contracts, and reuse/deletion candidates
+  before naming new structure.
 - Do not propose fixes unless the parent explicitly asks for them.
 - Do not edit code or take implementation ownership.
 

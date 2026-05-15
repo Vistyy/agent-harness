@@ -32,3 +32,9 @@
 - evidence status: `<planned | blocked | satisfied | narrowed>`
 - unproved boundaries: `<none | entries>`
 - residual risks: `<none | entries>`
+
+## Closeout Evidence
+
+- retained value: `<durable owner/backlog path | none yet>`
+- current-scope issues: `<fixed/routed/accepted | none>`
+- disposable wave state: `<removable without losing authority | blocked reason>`

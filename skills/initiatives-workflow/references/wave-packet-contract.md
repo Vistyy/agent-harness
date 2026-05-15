@@ -44,6 +44,15 @@ card needs only:
 
 Add more fields only when they prevent real ambiguity.
 
+## Closeout Evidence
+
+While the wave is active, record closeout evidence needed to support the final
+claim: retained value extracted to the durable owner or backlog, current-scope
+issues fixed/routed/accepted, and disposable wave state that can be removed.
+
+After closure, packet state is not successor authority. The durable owner,
+valid backlog item, and queue status must preserve all retained authority.
+
 ## Readiness Claim
 
 Record exact claim, claimed workflow/module interface, required evidence,

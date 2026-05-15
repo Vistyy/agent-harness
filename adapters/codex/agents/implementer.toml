@@ -22,6 +22,8 @@ Constraints:
 - Stop on underfed scope, discovery leakage, common-cause boundary flaws,
   unacceptable design integrity, proof drift, or decisions outside
   the declared envelope.
+- Stop on discovered duplicate authority or a simpler owner than the assigned
+  shape; return the blocker instead of implementing around it.
 - Run task-local verification and quality commands required by the readiness
   claim; fix in-scope failures caused by your changes or return an explicit
   blocker.

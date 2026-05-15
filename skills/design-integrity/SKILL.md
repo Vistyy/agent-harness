@@ -5,11 +5,14 @@ description: "Use when work needs design or architecture judgment: owner/interfa
 
 # Design Integrity
 
-Owns whether the work is shaped around the right owner and interface.
+Owns whether the work is shaped around the right owner and interface, including
+solution correctness.
 
 ## Contract
 
 Make the binding objective true through the smallest coherent interface.
+
+Correct implementation of an avoidably wrong solution shape is not approvable.
 
 Small means no unnecessary owners, wrappers, gates, adapters, flags, or
 compatibility paths. Coherent means callers, tests, runtime proof, and future
@@ -19,6 +22,10 @@ For non-trivial owner/interface work, deletion, collapse, rewrite, or
 replacement is the default design move. Adding code, wrappers, compatibility
 paths, flags, or parallel systems requires justification against the simpler
 delete/rewrite option.
+
+Large additive plans must prove the smallest deep owner, the simpler shape that
+was rejected, and why existing tools or contracts cannot absorb generic
+behavior.
 
 ## Design Test
 

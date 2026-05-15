@@ -49,11 +49,16 @@ discovery leakage, or current-scope owner defects not fixed/routed/accepted.
 
 ## Closeout
 
+Owns the smallest successor state for wave closure.
+
 Close only after verification, final review, and `readiness-claim` support the
 final claim.
 
-Extract retained value to the owning durable surface or valid backlog. Then
-remove delivery-map state, packet state, and disposable briefs.
+Extract retained value to the owning durable surface or valid backlog. Dispose
+of every current-scope issue discovered before close by fixing it, routing it to
+valid backlog, or recording accepted temporary debt. Then remove delivery-map
+state, packet state, and disposable briefs so no authority is lost when the
+wave-local state disappears.
 
 ## Assets
 
