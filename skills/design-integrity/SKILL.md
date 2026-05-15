@@ -23,9 +23,18 @@ replacement is the default design move. Adding code, wrappers, compatibility
 paths, flags, or parallel systems requires justification against the simpler
 delete/rewrite option.
 
-Large additive plans must prove the smallest deep owner, the simpler shape that
-was rejected, and why existing tools or contracts cannot absorb generic
-behavior.
+Before execution, challenge non-trivial work that adds or changes an owner,
+adapter, workflow, state authority, compatibility path, cross-boundary
+behavior, large implementation, or proof path behind a public interface:
+
+Is this the smallest coherent owner/interface that makes the objective true, or
+a parallel system that is locally convenient?
+
+Proceed only when the challenge identifies the owner, the simpler
+reuse/delete/collapse option considered, and why existing owners, tools, or
+contracts cannot absorb the behavior without making the boundary worse.
+Handwaving, template answers, or skipped simpler-shape pressure are
+unacceptable.
 
 ## Design Test
 

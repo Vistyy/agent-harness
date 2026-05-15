@@ -51,9 +51,9 @@ Reject when:
   hide behind "implementation detail"
 - design integrity is missing, unacceptable, or relies on accepted
   temporary debt without user acceptance and backlog link
-- additive plans do not cite `design-integrity` proof for the selected shape,
-  including smallest deep owner, rejected simpler shape, and why existing tools
-  or contracts cannot absorb generic behavior
+- the triggered `design-integrity` challenge is absent, handwavy, or fails to
+  rule out reuse, deletion, collapse, or an existing owner/tool/contract before
+  additive work
 
 
 Handoff context:

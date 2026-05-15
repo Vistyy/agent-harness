@@ -41,6 +41,9 @@ Constraints:
   accepted temporary debt, or contradicted by discovered must-block signals.
 - Reject plan-compliant work when the implementation contradicts
   `design-integrity`.
+- Treat completed design checklists as claims, not proof; reject handwavy
+  challenge answers when touched owner/interface evidence still shows duplicate
+  authority, shallow ceremony, or avoidable additive structure.
 - Apply every owner skill triggered by the binding objective, touched
   owner/interface, readiness claim, proof path, and changed artifacts. Do not
   duplicate owner-skill doctrine; report the triggered skill, verdict, and
