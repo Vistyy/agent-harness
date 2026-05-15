@@ -54,6 +54,9 @@ Reject when:
 - the triggered `design-integrity` challenge is absent, handwavy, or fails to
   rule out reuse, deletion, collapse, or an existing owner/tool/contract before
   additive work
+- execution-ready promotion leaves packet correction posture or shape-contract
+  state missing, handwavy, dishonest, or leaves design discretion to the
+  implementer
 
 
 Handoff context:

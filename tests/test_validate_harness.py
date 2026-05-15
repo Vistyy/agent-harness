@@ -117,6 +117,7 @@ def valid_packet() -> str:
     ### `example/task`
 
     - State: `blank`
+    - Correction posture: `none`
     - Owned surfaces: `example.md`
     - Checks/artifacts: `uv run python scripts/validate_harness.py`
 
@@ -1602,6 +1603,173 @@ def test_validate_rejects_wave_task_card_missing_or_invalid_state(tmp_path: Path
         "docs-ai/current-work/invalid-state/wave-execution.md task card '`example/task`' "
         "invalid state 'reviewing'; expected one of ['blank', 'blocked', 'done']"
     ) in errors
+
+
+def test_validate_rejects_execution_ready_packet_missing_correction_posture(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace("    - Correction posture: `none`\n", "")
+    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' missing correction posture" in errors
+
+
+def test_validate_rejects_execution_ready_packet_invalid_correction_posture(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace("    - Correction posture: `none`\n", "    - Correction posture: `branch`\n", 1)
+    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' "
+        "invalid correction posture 'branch'; expected one of ['add', 'collapse', 'deepen', 'delete', 'move', 'none', 'reuse']"
+    ) in errors
+
+
+def test_validate_rejects_execution_ready_packet_missing_shape_contract(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace("    - Correction posture: `none`\n", "    - Correction posture: `deepen`\n")
+    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' missing shape contract" in errors
+    assert (
+        "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' "
+        "missing shape contract field 'Owner/interface'"
+    ) in errors
+
+
+def test_validate_rejects_shape_contract_fields_outside_shape_contract_block(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace(
+        "    - Correction posture: `none`\n",
+        """
+        - Correction posture: `deepen`
+
+        - Shape contract:
+        - Owner/interface: packet task card.
+        - Target or rejected simpler path: deepen existing packet contract.
+        - Stop triggers: validator starts judging design truth.
+        - Proof surface: validator test.
+        """,
+    )
+    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' "
+        "missing shape contract field 'Owner/interface'"
+    ) in errors
+    assert (
+        "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' "
+        "missing shape contract field 'Proof surface'"
+    ) in errors
+
+
+def test_validate_accepts_execution_ready_packet_shape_contract(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace(
+        "    - Correction posture: `none`\n",
+        """
+        - Correction posture: `deepen`
+
+        - Shape contract:
+          - Owner/interface: packet task card.
+          - Target or rejected simpler path: deepen existing packet contract.
+          - Stop triggers: validator starts judging design truth.
+          - Proof surface: validator test.
+        """,
+    )
+    write(tmp_path / "docs-ai" / "current-work" / "good-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "good-wave.md",
+        "# Wave good-wave\n\n**Status:** execution-ready\n",
+    )
+
+    assert validate_harness.validate(tmp_path) == []
+
+
+def test_validate_rejects_add_posture_without_rejected_path_and_boundary_harm(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace(
+        "    - Correction posture: `none`\n",
+        """
+        - Correction posture: `add`
+
+        - Shape contract:
+          - Owner/interface: packet task card.
+          - Target or rejected simpler path: add a new packet branch.
+          - Stop triggers: validator starts judging design truth.
+          - Proof surface: validator test.
+        """,
+    )
+    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
+        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "docs-ai/current-work/bad-wave/wave-execution.md task card '`example/task`' add posture target/rejected path "
+        "must name a rejected non-add option and boundary harm"
+    ) in errors
+
+
+def test_validate_accepts_add_posture_with_rejected_path_and_boundary_harm(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace(
+        "    - Correction posture: `none`\n",
+        """
+        - Correction posture: `add`
+
+        - Shape contract:
+          - Owner/interface: packet task card.
+          - Target or rejected simpler path: rejected reuse because boundary harm would spread packet state.
+          - Stop triggers: validator starts judging design truth.
+          - Proof surface: validator test.
+        """,
+    )
+    write(tmp_path / "docs-ai" / "current-work" / "good-wave" / "wave-execution.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "good-wave.md",
+        "# Wave good-wave\n\n**Status:** execution-ready\n",
+    )
+
+    assert validate_harness.validate(tmp_path) == []
+
+
+def test_validate_skips_correction_posture_for_non_execution_ready_packets(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    packet = valid_packet().replace("    - Correction posture: `none`\n", "")
+    write(tmp_path / "docs-ai" / "current-work" / "draft-wave" / "wave-execution.draft.md", packet)
+    write(
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "draft-wave.md",
+        "# Wave draft-wave\n\n**Status:** discovery-required\n",
+    )
+
+    assert validate_harness.validate(tmp_path) == []
 
 
 def test_validate_rejects_wave_packet_missing_readiness_claim(tmp_path: Path) -> None:

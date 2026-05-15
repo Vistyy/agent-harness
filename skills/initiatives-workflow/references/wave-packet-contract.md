@@ -39,8 +39,22 @@ Task cards are optional when one slice is enough. When used, each `### <task>`
 card needs only:
 
 - `State`: `blank`, `done`, or `blocked`
+- `Correction posture`: `none`, `delete`, `reuse`, `collapse`, `move`,
+  `deepen`, or `add`
 - `Owned surfaces`
 - `Checks/artifacts`
+
+When `Correction posture` is not `none`, include one compact shape contract:
+
+- `Shape contract`
+- `Owner/interface`
+- `Target or rejected simpler path`
+- `Stop triggers`
+- `Proof surface`
+
+When `Correction posture` is `add`, `Target or rejected simpler path` names the
+rejected non-add option and boundary harm. The packet stores the claimed shape;
+`../../design-integrity/SKILL.md` owns whether it is true.
 
 Add more fields only when they prevent real ambiguity.
 

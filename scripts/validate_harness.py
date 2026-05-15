@@ -60,9 +60,18 @@ PACKET_REQUIRED_FIELDS = {
     ),
 }
 TASK_CARD_STATE_FIELD = "- State:"
+TASK_CARD_CORRECTION_POSTURE_FIELD = "- Correction posture:"
 TASK_CARD_OWNED_SURFACES_FIELD = "- Owned surfaces:"
 TASK_CARD_CHECKS_FIELD = "- Checks/artifacts:"
 TASK_CARD_ALLOWED_STATES = {"blank", "done", "blocked"}
+TASK_CARD_ALLOWED_CORRECTION_POSTURES = {"none", "delete", "reuse", "collapse", "move", "deepen", "add"}
+TASK_CARD_SHAPE_CONTRACT_FIELDS = (
+    "Owner/interface",
+    "Target or rejected simpler path",
+    "Stop triggers",
+    "Proof surface",
+)
+TASK_CARD_NON_ADD_CORRECTION_POSTURES = TASK_CARD_ALLOWED_CORRECTION_POSTURES - {"none", "add"}
 WAVE_STATUSES = {"discovery-required", "execution-ready", "done", "retired"}
 # AGENTS.md and subagent-orchestration must keep explicit user authorization;
 # otherwise adapter-level spawn rules can block required harness reviewers.
@@ -1111,7 +1120,7 @@ def _task_card_sections(text: str) -> list[tuple[str, str]]:
 def _task_card_field_value(task_body: str, field: str) -> str | None:
     field_name = field.removeprefix("- ").removesuffix(":")
     match = re.search(
-        rf"(?m)^-\s+{re.escape(field_name)}:[ \t]*(?:`([^`]+)`|([^\n`]*))?"
+        rf"(?m)^\s*-\s+{re.escape(field_name)}:[ \t]*(?:`([^`]+)`|([^\n`]*))?"
         rf"(?:\n\s+-\s*(?:`([^`]+)`|([^\n`]*)))?",
         task_body,
     )
@@ -1123,8 +1132,87 @@ def _task_card_field_value(task_body: str, field: str) -> str | None:
     return ""
 
 
+def _task_card_any_indent_field_value(task_body: str, field: str) -> str | None:
+    field_name = field.removeprefix("- ").removesuffix(":")
+    pattern = re.compile(
+        rf"(?m)^(?P<indent>\s*)-\s+{re.escape(field_name)}:[ \t]*(?P<inline>`([^`]+)`|[^\n`]*)"
+    )
+    match = pattern.search(task_body)
+    if not match:
+        return None
+    parts = [match.group("inline").strip().removeprefix("`").removesuffix("`").strip()]
+    following = task_body[match.end() :].splitlines()
+    for line in following:
+        if not line.strip():
+            continue
+        if re.match(r"^\s*-\s+\S.*:", line):
+            break
+        if line.startswith((" ", "\t")):
+            parts.append(line.strip())
+            continue
+        break
+    return " ".join(part for part in parts if part).strip()
+
+
+def _task_card_shape_contract_block(task_body: str) -> str | None:
+    match = re.search(r"(?m)^(?P<indent>\s*)-\s+Shape contract\s*:", task_body)
+    if not match:
+        return None
+    base_indent = len(match.group("indent").replace("\t", "    "))
+    block_lines: list[str] = []
+    for line in task_body[match.end() :].splitlines():
+        if not line.strip():
+            if block_lines:
+                block_lines.append(line)
+            continue
+        indent = len(line) - len(line.lstrip(" "))
+        if indent <= base_indent:
+            break
+        block_lines.append(line)
+    return "\n".join(block_lines)
+
+
 def _packet_field_present(section_body: str, field: str) -> bool:
     return re.search(rf"(?m)^\s*-\s+{re.escape(field)}\s*:", section_body) is not None
+
+
+def _validate_execution_ready_task_card_shape_contract(path: Path, root: Path) -> list[str]:
+    errors: list[str] = []
+    for task_title, task_body in _task_card_sections(path.read_text(encoding="utf-8")):
+        posture = _task_card_field_value(task_body, TASK_CARD_CORRECTION_POSTURE_FIELD)
+        if posture is None:
+            errors.append(f"{path.relative_to(root)} task card {task_title!r} missing correction posture")
+            continue
+        posture = posture.strip().removeprefix("`").removesuffix("`").strip()
+        if posture not in TASK_CARD_ALLOWED_CORRECTION_POSTURES:
+            errors.append(
+                f"{path.relative_to(root)} task card {task_title!r} invalid correction posture {posture!r}; "
+                f"expected one of {sorted(TASK_CARD_ALLOWED_CORRECTION_POSTURES)}"
+            )
+            continue
+        if posture == "none":
+            continue
+        shape_contract = _task_card_shape_contract_block(task_body)
+        if shape_contract is None:
+            errors.append(f"{path.relative_to(root)} task card {task_title!r} missing shape contract")
+        for field in TASK_CARD_SHAPE_CONTRACT_FIELDS:
+            value = None if shape_contract is None else _task_card_any_indent_field_value(shape_contract, field)
+            if value is None:
+                errors.append(f"{path.relative_to(root)} task card {task_title!r} missing shape contract field {field!r}")
+            elif not value:
+                errors.append(f"{path.relative_to(root)} task card {task_title!r} has empty shape contract field {field!r}")
+        if posture == "add":
+            target = "" if shape_contract is None else _task_card_any_indent_field_value(
+                shape_contract, "Target or rejected simpler path"
+            ) or ""
+            lowered_target = target.lower()
+            has_rejected_non_add = any(option in lowered_target for option in TASK_CARD_NON_ADD_CORRECTION_POSTURES)
+            if not has_rejected_non_add or "harm" not in lowered_target:
+                errors.append(
+                    f"{path.relative_to(root)} task card {task_title!r} add posture target/rejected path "
+                    "must name a rejected non-add option and boundary harm"
+                )
+    return errors
 
 
 def _validate_wave_packet(path: Path, root: Path) -> list[str]:
@@ -1226,6 +1314,8 @@ def _validate_wave_lifecycle(root: Path) -> list[str]:
             errors.append(f"{brief_path.relative_to(root)} is discovery-required but canonical packet exists")
         if status == "execution-ready" and not canonical_packet.exists():
             errors.append(f"{brief_path.relative_to(root)} is execution-ready but canonical packet is missing")
+        if status == "execution-ready" and canonical_packet.exists():
+            errors.extend(_validate_execution_ready_task_card_shape_contract(canonical_packet, root))
         if status in {"done", "retired"} and (canonical_packet.exists() or draft_packet.exists()):
             errors.append(f"{brief_path.relative_to(root)} is {status} but current-work packet exists")
         if status in {"done", "retired"} and wave_id in delivery_map_wave_ids:

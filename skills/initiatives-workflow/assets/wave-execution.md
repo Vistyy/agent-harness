@@ -19,8 +19,15 @@
 ### `<task-or-slice>`
 
 - State: `<blank | done | blocked>`
+- Correction posture: `<none | delete | reuse | collapse | move | deepen | add>`
 - Owned surfaces: `<paths/surfaces>`
 - Checks/artifacts: `<commands/artifacts>`
+
+- Shape contract:
+  - Owner/interface: `<owner/interface | omit when posture is none>`
+  - Target or rejected simpler path: `<target or rejected path | omit when posture is none>`
+  - Stop triggers: `<stop triggers | omit when posture is none>`
+  - Proof surface: `<proof surface | omit when posture is none>`
 
 - blockers/decisions: `<none | blocker/decision and owner>`
 
