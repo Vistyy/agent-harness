@@ -112,6 +112,65 @@ RUNTIME_EVIDENCE_ADAPTER_REQUIRED_TERMS = (
     "product-grade design approval",
     "Do not take over shared or ambiguous runtime coordination",
 )
+MATERIAL_RISK_OWNER_PATH = "skills/readiness-claim/references/material-risk-lenses.md"
+MATERIAL_RISK_OWNER_REQUIRED_TERMS = (
+    "security/privacy, data integrity, reliability, operability, observability/diagnosability, performance/cost, compatibility, and accessibility",
+    "`not-applicable`",
+    "`covered`",
+    "`blocked`",
+    "`separate debt`",
+    "`accepted temporary debt`",
+    "Planning does not mark future proof as `covered`",
+    "Narrowed claims map to `blocked`",
+    "explicitly approves the specific protected surface, owner, risk, and removal condition",
+    "Legal/licensing/compliance stays out of default scope",
+    "Splitting becomes valid only if",
+)
+MATERIAL_RISK_READINESS_REQUIRED_TERMS = (
+    "`references/material-risk-lenses.md`",
+    "Before proof, review, runtime evidence, handoff, or completion",
+    "material non-correctness risks",
+)
+MATERIAL_RISK_CONSUMER_CONTRACTS = {
+    "skills/work-routing/SKILL.md": (
+        "`../readiness-claim/SKILL.md`",
+        "material risks",
+        "required evidence",
+        "hidden design discretion",
+    ),
+    "skills/initiatives-workflow/references/wave-packet-contract.md": (
+        "`../../readiness-claim/SKILL.md`",
+        "material risks",
+        "required material-risk evidence",
+        "final disposition",
+    ),
+    "skills/code-review/SKILL.md": (
+        "`readiness-claim`",
+        "material risks",
+    ),
+}
+MATERIAL_RISK_ADAPTER_CONTRACTS = {
+    "adapters/codex/agents/implementer.toml": (
+        "material non-correctness risks",
+        "readiness-owned lens",
+    ),
+    "adapters/codex/agents/planning-critic.toml": (
+        "material non-correctness risks",
+        "readiness-owned lens",
+    ),
+    "adapters/codex/agents/quality-guard.toml": (
+        "material non-correctness risks",
+        "readiness-owned lens",
+    ),
+    "adapters/codex/agents/runtime-evidence.toml": (
+        "material non-correctness risks",
+        "readiness-owned lens",
+    ),
+    "adapters/codex/agents/final-reviewer.toml": (
+        "material non-correctness risks",
+        "readiness-owned lens",
+    ),
+}
 PROVIDER_PROMPT_FILES = (
     "adapters/codex/README.md",
     "adapters/codex/config.toml",
@@ -421,6 +480,10 @@ OWNER_ONLY_DOCTRINE = {
     "solution correctness": "skills/design-integrity/SKILL.md",
     "`description` = trigger and routing contract.": "skills/harness-governance/references/skill-architecture.md",
     "references = mandatory purpose gates.": "skills/harness-governance/references/skill-architecture.md",
+    (
+        "security/privacy, data integrity, reliability, operability, observability/diagnosability, "
+        "performance/cost, compatibility, and accessibility"
+    ): MATERIAL_RISK_OWNER_PATH,
 }
 OWNER_ONLY_DOCTRINE_EXEMPTIONS = {
     "solution correctness": {
@@ -831,7 +894,14 @@ def _validate_owner_only_doctrine(root: Path) -> list[str]:
             normalized_phrase = " ".join(phrase.split())
             exemptions = OWNER_ONLY_DOCTRINE_EXEMPTIONS.get(phrase, set())
             is_active_packet = (
-                phrase == "solution correctness"
+                phrase
+                in {
+                    "solution correctness",
+                    (
+                        "security/privacy, data integrity, reliability, operability, "
+                        "observability/diagnosability, performance/cost, compatibility, and accessibility"
+                    ),
+                }
                 and rel.startswith("docs-ai/current-work/")
                 and rel.endswith("/wave-execution.md")
             )
@@ -1472,6 +1542,46 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
     return errors
 
 
+def _validate_material_risk_lens_contracts(root: Path) -> list[str]:
+    errors: list[str] = []
+
+    owner_path = root / MATERIAL_RISK_OWNER_PATH
+    if not owner_path.is_file():
+        errors.append(f"{MATERIAL_RISK_OWNER_PATH} missing material-risk lens owner")
+    else:
+        normalized_text = " ".join(owner_path.read_text(encoding="utf-8").split()).casefold()
+        for term in MATERIAL_RISK_OWNER_REQUIRED_TERMS:
+            if " ".join(term.split()).casefold() not in normalized_text:
+                errors.append(f"{MATERIAL_RISK_OWNER_PATH} missing material-risk owner term {term!r}")
+
+    readiness_path = root / "skills" / "readiness-claim" / "SKILL.md"
+    if readiness_path.is_file():
+        normalized_text = " ".join(readiness_path.read_text(encoding="utf-8").split()).casefold()
+        for term in MATERIAL_RISK_READINESS_REQUIRED_TERMS:
+            if " ".join(term.split()).casefold() not in normalized_text:
+                errors.append(f"skills/readiness-claim/SKILL.md missing material-risk readiness term {term!r}")
+
+    for relative_path, required_terms in MATERIAL_RISK_CONSUMER_CONTRACTS.items():
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        normalized_text = " ".join(path.read_text(encoding="utf-8").split()).casefold()
+        for term in required_terms:
+            if " ".join(term.split()).casefold() not in normalized_text:
+                errors.append(f"{relative_path} missing material-risk consumer term {term!r}")
+
+    for relative_path, required_terms in MATERIAL_RISK_ADAPTER_CONTRACTS.items():
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        normalized_text = " ".join(path.read_text(encoding="utf-8").split()).casefold()
+        for term in required_terms:
+            if " ".join(term.split()).casefold() not in normalized_text:
+                errors.append(f"{relative_path} missing material-risk adapter term {term!r}")
+
+    return errors
+
+
 def _normalize_heading(raw: str) -> str:
     return raw.strip().rstrip("#").strip().lower()
 
@@ -1859,6 +1969,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_route_gate_contracts(root))
     errors.extend(_validate_design_integrity_gate(root))
     errors.extend(_validate_live_validation_contracts(root))
+    errors.extend(_validate_material_risk_lens_contracts(root))
     errors.extend(_validate_provider_prompt_contracts(root))
     errors.extend(_validate_required_gate_advisory_drift(root))
     errors.extend(_validate_stale_accepted_debt_phrases(root))

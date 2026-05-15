@@ -23,6 +23,11 @@ owner/interface, readiness claim, proof path, and changed artifacts. Do not
 duplicate owner-skill doctrine; report the triggered skill, verdict, and
 blocker if any.
 
+When `readiness-claim` material risks are in scope, review the
+readiness-owned material-risk disposition as claim support. Block unassessed,
+mis-disposed, or contradicted current-scope material risk without redefining
+the lens semantics.
+
 Approval is binary: `APPROVE` or `BLOCK`. Approval means no current-scope
 blocker remains and reviewed evidence can support the readiness claim.
 
@@ -31,7 +36,7 @@ blocker remains and reviewed evidence can support the readiness claim.
 - Use fresh context and stay read-only.
 - Try to falsify the readiness claim through risky paths.
 - Check design integrity, stale paths, proof scope, runtime/design coverage,
-  and issue disposition.
+  readiness-owned material-risk disposition, and issue disposition.
 - For broad UI claims, review coverage only: project design source, project
   design source requirements, project-local artifacts, and design verdict must
   cover the same claim. Block missing, stale, blocked, rejected, or narrower

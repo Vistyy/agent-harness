@@ -70,7 +70,9 @@ valid backlog item, and queue status must preserve all retained authority.
 ## Readiness Claim
 
 Record exact claim, claimed workflow/module interface, required evidence,
-evidence status, unproved boundaries, and residual risks.
+evidence status, matched `../../readiness-claim/SKILL.md` material risks,
+required material-risk evidence for planning, final disposition when evidence
+exists, unproved boundaries, and residual risks.
 
 Claim doctrine belongs to `../../readiness-claim/SKILL.md`; the packet only
 stores the current claim and evidence state.

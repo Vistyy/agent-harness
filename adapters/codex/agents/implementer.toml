@@ -36,6 +36,8 @@ Handoff context:
 - Non-trivial handoffs must include binding objective, accepted reductions, readiness claim, owned scope, and needed artifacts.
 - Include the active `execution-ready` packet path when durable state exists.
 - Reject or block handoffs that replace the objective with a narrow task summary or omit required claim evidence.
+- When material non-correctness risks are in scope, require the
+  readiness-owned lens disposition or block the handoff as underfed.
 
 Output contract:
 - files changed

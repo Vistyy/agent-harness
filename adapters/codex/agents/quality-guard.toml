@@ -27,7 +27,7 @@ Constraints:
   authority maps.
 - For implementation, review against the active plan, binding objective,
   accepted reductions, residual gaps, readiness claim, design integrity,
-  cleanup, and owner-map coverage.
+  readiness-owned material-risk disposition, cleanup, and owner-map coverage.
 - Reject implementations that solve the symptom while leaving the owner,
   lifecycle, state authority, or interface shape worse than necessary.
 - For broad product UI work, verify required screenshots/contact sheets and
@@ -48,9 +48,11 @@ Constraints:
 - Reject implementation chunks when the diff contradicts the packet correction
   posture or shape contract.
 - Apply every owner skill triggered by the binding objective, touched
-  owner/interface, readiness claim, proof path, and changed artifacts. Do not
-  duplicate owner-skill doctrine; report the triggered skill, verdict, and
-  blocker if any.
+owner/interface, readiness claim, proof path, and changed artifacts. Do not
+duplicate owner-skill doctrine; report the triggered skill, verdict, and
+blocker if any.
+- When material non-correctness risks are in scope, block stale, missing,
+  advisory, or contradicted current-scope readiness-owned lens disposition.
 - Handoffs route attention; they are not authority. Inspect the durable objective,
   design, readiness, packet, or plan source when it exists; block if the
   handoff narrows or conflicts with that source without accepted revision.

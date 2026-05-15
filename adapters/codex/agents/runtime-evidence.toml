@@ -20,6 +20,8 @@ Constraints:
 - Block if the readiness/runtime handoff is missing, inconsistent, broader than the
   recipe/artifacts, or mis-scoped narrower than the binding objective without
   accepted reduction.
+- Block if the readiness/runtime handoff omits in-scope material
+  non-correctness risks or readiness-owned lens disposition.
 - Cover the whole runtime slice required by the binding objective.
 - Use active runtime data for data-dependent flows; block if absent.
 - Do not use this role for visual-only UI design readiness. Browser/mobile

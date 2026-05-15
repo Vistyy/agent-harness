@@ -78,12 +78,21 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
                 "# authority source inspected\n"
                 "# prompt/source mismatch\n"
                 "# plan/design alignment\n"
+                "# material non-correctness risks\n"
+                "# readiness-owned lens\n"
             )
         elif role == "explorer":
             codex_body = (
                 f'name = "{role}"\n'
                 "# design integrity gate\n"
                 "# Stay read-only\n# Do not edit code or take implementation ownership.\n"
+            )
+        elif role in {"implementer", "planning_critic", "runtime_evidence", "final_reviewer"}:
+            codex_body = (
+                f'name = "{role}"\n'
+                "# design integrity gate\n"
+                "# material non-correctness risks\n"
+                "# readiness-owned lens\n"
             )
         else:
             codex_body = f'name = "{role}"\n# design integrity gate\n'
@@ -134,8 +143,54 @@ def valid_packet() -> str:
     """
 
 
+def add_material_risk_lens_contract(root: Path) -> None:
+    add_skill(root, "readiness-claim")
+    write(
+        root / "skills" / "readiness-claim" / "SKILL.md",
+        """
+        ---
+        name: readiness-claim
+        description: Test readiness claim skill.
+        ---
+
+        # Readiness Claim
+
+        Before proof, review, runtime evidence, handoff, or completion, load
+        `references/material-risk-lenses.md` when material
+        non-correctness risks may affect the claim.
+        """,
+    )
+    write(
+        root / "skills" / "readiness-claim" / "references" / "material-risk-lenses.md",
+        """
+        # Material Risk Lenses
+
+        The material-risk lens includes security/privacy, data integrity,
+        reliability, operability, observability/diagnosability,
+        performance/cost, compatibility, and accessibility.
+
+        Disposition labels are `not-applicable`, `covered`, `blocked`,
+        `separate debt`, and `accepted temporary debt`.
+
+        Planning does not mark future proof as `covered`.
+
+        Narrowed claims map to `blocked`.
+
+        Compatibility is strict: a compatibility path is blocked unless the
+        user explicitly approves the specific protected surface, owner, risk,
+        and removal condition.
+
+        Legal/licensing/compliance stays out of default scope.
+
+        Splitting becomes valid only if the reference grows beyond compact
+        readiness disposition.
+        """,
+    )
+
+
 def minimal_valid_root(root: Path) -> None:
     add_skill(root, "test-skill")
+    add_material_risk_lens_contract(root)
     write(
         root / "skills" / "runtime-proof" / "SKILL.md",
         """
@@ -708,6 +763,134 @@ def test_validate_rejects_solution_correctness_duplicate_adapter_doctrine(tmp_pa
     assert (
         "adapters/codex/README.md duplicates owner-only doctrine 'solution correctness'; "
         "owner is skills/design-integrity/SKILL.md"
+    ) in errors
+
+
+def test_validate_rejects_missing_material_risk_owner(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    (tmp_path / "skills" / "readiness-claim" / "references" / "material-risk-lenses.md").unlink()
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert "skills/readiness-claim/references/material-risk-lenses.md missing material-risk lens owner" in errors
+
+
+def test_validate_rejects_material_risk_owner_missing_strict_compatibility(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    owner = tmp_path / "skills" / "readiness-claim" / "references" / "material-risk-lenses.md"
+    owner.write_text(
+        owner.read_text(encoding="utf-8").replace(
+            "user explicitly approves the specific protected surface, owner, risk,\n"
+            "and removal condition",
+            "user accepts the compatibility path",
+        ),
+        encoding="utf-8",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/readiness-claim/references/material-risk-lenses.md missing material-risk owner term "
+        "'explicitly approves the specific protected surface, owner, risk, and removal condition'"
+    ) in errors
+
+
+def test_validate_rejects_readiness_claim_missing_material_risk_reference(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    readiness = tmp_path / "skills" / "readiness-claim" / "SKILL.md"
+    readiness.write_text(
+        readiness.read_text(encoding="utf-8").replace("`references/material-risk-lenses.md`", "`references/other.md`"),
+        encoding="utf-8",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/readiness-claim/SKILL.md missing material-risk readiness term "
+        "'`references/material-risk-lenses.md`'"
+    ) in errors
+
+
+def test_validate_rejects_duplicate_material_risk_lens_doctrine(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "code-review" / "SKILL.md",
+        """
+        ---
+        name: code-review
+        description: Test duplicate.
+        ---
+
+        security/privacy, data integrity, reliability, operability,
+        observability/diagnosability, performance/cost, compatibility, and
+        accessibility
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/code-review/SKILL.md duplicates owner-only doctrine "
+        "'security/privacy, data integrity, reliability, operability, observability/diagnosability, "
+        "performance/cost, compatibility, and accessibility'; owner is "
+        "skills/readiness-claim/references/material-risk-lenses.md"
+    ) in errors
+
+
+def test_validate_rejects_material_risk_consumer_pointer_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_skill(tmp_path, "work-routing")
+    write(
+        tmp_path / "skills" / "work-routing" / "SKILL.md",
+        """
+        ---
+        name: work-routing
+        description: Test route selection.
+        ---
+
+        # Work Routing
+
+        Route planning before implementation.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/work-routing/SKILL.md missing material-risk consumer term "
+        "'`../readiness-claim/SKILL.md`'"
+    ) in errors
+    assert "skills/work-routing/SKILL.md missing material-risk consumer term 'material risks'" in errors
+
+
+def test_validate_rejects_material_risk_adapter_pointer_drift(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_roles(tmp_path, ("explorer", "quality_guard", "implementer"))
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "implementer.toml",
+        """
+        name = "implementer"
+        # design integrity gate
+        # one bounded assigned implementation slice
+        # direct-route slices
+        # explicit route classification
+        # Do not claim final approval.
+        # binding objective
+        # accepted reductions
+        # readiness claim
+        # owned scope
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/implementer.toml missing material-risk adapter term "
+        "'material non-correctness risks'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/implementer.toml missing material-risk adapter term "
+        "'readiness-owned lens'"
     ) in errors
 
 

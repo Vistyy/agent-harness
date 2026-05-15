@@ -41,6 +41,14 @@ For a workflow claim, name:
 For a module claim, name the public interface, invariants, ordering, error
 modes, state authority, side effects, and exclusions.
 
+## Reference Gates
+
+- Read `references/material-risk-lenses.md` before non-trivial planning,
+  handoff, proof, runtime evidence, review, or completion claims when material
+  non-correctness risks can affect the binding objective, touched
+  owner/interface, proof path, runtime behavior, operator workflow, or approval
+  boundary.
+
 ## Proof Rule
 
 Proof counts only for the interface obligations it actually exercises.
@@ -68,9 +76,10 @@ Before proof, review, runtime evidence, handoff, or completion:
 1. state the exact claim
 2. state the claimed interface
 3. list material obligations and exclusions
-4. map proof/evidence to those obligations
-5. block or narrow any unproved obligation
-6. report residual risks or `none`
+4. apply any matched reference gate and record material-risk disposition
+5. map proof/evidence to those obligations
+6. block or narrow any unproved obligation
+7. report residual risks or `none`
 
 ## Escaped Defects
 

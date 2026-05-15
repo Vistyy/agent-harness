@@ -32,6 +32,9 @@ Rules:
   collapse.
 - Pressure-test touched owner/interface, readiness claim, proof, handoffs, and
   durable follow-up.
+- When material non-correctness risks are in scope, pressure-test the
+  readiness-owned lens disposition and block execution-ready promotion if
+  current-scope material risk is unassessed.
 - Apply every owner skill triggered by the binding objective, touched
   owner/interface, readiness claim, proof path, and changed artifacts. Do not
   duplicate owner-skill doctrine; report the triggered skill, verdict, and
@@ -50,6 +53,8 @@ Reject when:
 - scope is too broad for depth or too narrow to preserve the objective
 - material runtime, migration, compatibility, verification, or boundary choices
   hide behind "implementation detail"
+- current-scope material-risk lens disposition is missing, advisory, or weaker
+  than the readiness claim
 - design integrity is missing, unacceptable, or relies on accepted
   temporary debt without user acceptance and backlog link
 - the triggered `design-integrity` challenge is absent, handwavy, or fails to

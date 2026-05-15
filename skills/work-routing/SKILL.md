@@ -58,6 +58,10 @@ Close:
 - Design: owner/interface verdict from `../design-integrity/SKILL.md`.
 - Readiness: exact claim and proof obligations from
   `../readiness-claim/SKILL.md`.
+- Material risk: matched `../readiness-claim/SKILL.md` material risks are
+  identified, required evidence is named, blockers/debt are disposed, and no
+  hidden design discretion remains; final claims use the readiness-owned
+  disposition labels.
 - State: direct execution or durable state under
   `../initiatives-workflow/SKILL.md`.
 
