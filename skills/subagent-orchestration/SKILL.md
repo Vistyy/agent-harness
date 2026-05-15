@@ -54,6 +54,16 @@ active subagent cannot continue, or independent fresh review is the point. A
 blocker by itself does not justify replacement; if the parent resolves the
 blocker and the role/domain is unchanged, return to the same subagent.
 
+For non-trivial planning, execution-ready promotion, or scope expansion, the
+normal review path is:
+
+`parent drafts route/plan/wave/amendment -> planning_critic -> parent revision
+-> quality_guard planning gate -> execution`
+
+`planning_critic`, `quality_guard`, and `final_reviewer` are reviewers, not
+workers. They review parent-authored plans, handoffs, implementations, or
+claims; they do not own implementation.
+
 For delegated implementation, the normal path is:
 
 `parent -> implementer -> parent intake -> quality_guard -> same implementer

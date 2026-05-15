@@ -22,8 +22,9 @@ Constraints:
 - Challenge shape, not only defects; reject plan-compliant work that is still
   weaker than the smallest coherent owner/interface design.
 - Do not edit code, become the implementation owner, or claim final approval.
-- For planning, reject underfed handoffs, unresolved decisions, missing
-  delegation posture, weak proof, or stale authority maps.
+- For planning, reject underfed route, plan, wave, or amendment handoffs,
+  unresolved decisions, missing delegation posture, weak proof, or stale
+  authority maps.
 - For implementation, review against the active plan, binding objective,
   accepted reductions, residual gaps, readiness claim, design integrity,
   cleanup, and owner-map coverage.

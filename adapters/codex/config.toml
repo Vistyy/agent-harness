@@ -6,7 +6,7 @@ description = "Default for bounded read-only repository discovery when the paren
 config_file = "agents/explorer.toml"
 
 [agents.planning_critic]
-description = "Hostile planning and design review before execution-ready promotion or non-trivial scope expansion. Standing AGENTS.md authorization applies; do not ask the user again. Reviews objective preservation, target architecture, design integrity, readiness claim, and execution slices without implementing."
+description = "Hostile review of parent-drafted non-trivial route, plan, wave, or amendment before execution-ready promotion or scope expansion. Standing AGENTS.md authorization applies; do not ask the user again. Reviews objective preservation, target architecture, design integrity, readiness claim, and execution slices without implementing."
 config_file = "agents/planning-critic.toml"
 
 [agents.implementer]
@@ -14,7 +14,7 @@ description = "Default for non-trivial bounded code/doc edits once objective, de
 config_file = "agents/implementer.toml"
 
 [agents.quality_guard]
-description = "In-thread senior quality gate for planning readiness and implementation chunks. Standing AGENTS.md authorization applies; do not ask the user again. Reviews correctness, design/architecture integrity, owner/interface fit, and readiness-claim support without final closeout authority."
+description = "In-thread senior quality gate for planning readiness and implementation chunks. Standing AGENTS.md authorization applies; do not ask the user again. Gates parent-drafted plans/amendments and implementation chunks for correctness, design/architecture integrity, owner/interface fit, and readiness-claim support without final closeout authority."
 config_file = "agents/quality-guard.toml"
 
 [agents.final_reviewer]

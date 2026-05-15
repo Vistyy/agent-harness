@@ -118,6 +118,49 @@ PROVIDER_PROMPT_FILES = (
     "adapters/codex/install-scope.md",
     "adapters/codex/install.sh",
 )
+ROUTE_GATE_CONTRACTS = {
+    "skills/work-routing/SKILL.md": (
+        "Use for every requested change",
+        "Every requested change gets an explicit route",
+        "`direct` is a route decision, not the absence of routing",
+        "route classification",
+    ),
+    "skills/feedback-address/SKILL.md": (
+        "Before editing in any direct, planning, or wave route",
+        "amend the route, plan, or packet before code changes",
+        "local surface fix may stay in the current route",
+    ),
+    "skills/subagent-orchestration/SKILL.md": (
+        "parent drafts route/plan/wave/amendment",
+        "quality_guard planning gate",
+        "reviewers, not workers",
+    ),
+    "skills/initiatives-workflow/SKILL.md": (
+        "classify user checkpoints or feedback through `../feedback-address/SKILL.md`",
+        "amend packet objective, checkpoint, decisions, slices, readiness, or proof",
+    ),
+    "skills/initiatives-workflow/references/wave-packet-contract.md": (
+        "user checkpoint or plan amendment that changes scope",
+    ),
+    "skills/initiatives-workflow/assets/wave-execution.md": (
+        "latest user/context checkpoint or plan amendment changing scope",
+    ),
+    "agents/roles.md": (
+        "parent-drafted route, plan, wave, or amendment",
+    ),
+}
+CODEX_CONFIG_AGENT_ROUTE_TERMS = {
+    "planning_critic": (
+        "parent-drafted non-trivial route, plan, wave, or amendment",
+        "before execution-ready promotion or scope expansion",
+        "without implementing",
+    ),
+}
+WORK_ROUTING_DESCRIPTION_TERMS = (
+    "every requested change",
+    "explicit direct, planning, or wave execution route",
+    "before editing, handoff, proof, or review",
+)
 REVIEW_ROLE_CONTRACTS = {
     "adapters/codex/agents/planning-critic.toml": (
         "binding objective",
@@ -208,10 +251,12 @@ ROLE_BOUNDARY_CONTRACTS = {
     "adapters/codex/agents/implementer.toml": (
         "one bounded assigned implementation slice",
         "direct-route slices",
+        "explicit route classification",
         "Do not claim final approval.",
     ),
     "adapters/codex/agents/planning-critic.toml": (
         "Review non-trivial planning only",
+        "parent-drafted route, plan, wave, or amendment candidate",
         "Stay read-only and do not edit code or docs.",
         "Do not act as a final approver, implementation reviewer, or implementation owner.",
     ),
@@ -1539,7 +1584,66 @@ def _validate_provider_prompt_contracts(root: Path) -> list[str]:
             if ADVISORY_DRIFT_RE.search(line) and not ADVISORY_NEGATION_RE.search(line):
                 errors.append(f"{relative_path} must not classify blocking evidence as advisory")
                 break
+        if relative_path == "adapters/codex/config.toml":
+            errors.extend(_validate_codex_config_agent_route_terms(path, root, text))
     return errors
+
+
+def _validate_codex_config_agent_route_terms(path: Path, root: Path, text: str) -> list[str]:
+    errors: list[str] = []
+    data, toml_errors = _load_toml(path, root)
+    if toml_errors:
+        return toml_errors
+    agents = data.get("agents")
+    if not isinstance(agents, dict):
+        return errors
+    for agent_name, required_terms in CODEX_CONFIG_AGENT_ROUTE_TERMS.items():
+        block = agents.get(agent_name)
+        if not isinstance(block, dict):
+            continue
+        description = block.get("description")
+        description_text = description if isinstance(description, str) else ""
+        for term in required_terms:
+            if term not in description_text:
+                errors.append(f"{path.relative_to(root)} agents.{agent_name} missing route term {term!r}")
+    return errors
+
+
+def _validate_route_gate_contracts(root: Path) -> list[str]:
+    errors: list[str] = []
+    errors.extend(_validate_work_routing_frontmatter_trigger(root))
+    for relative_path, required_terms in ROUTE_GATE_CONTRACTS.items():
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        normalized_text = " ".join(path.read_text(encoding="utf-8").split())
+        if relative_path == "agents/roles.md" and "`planning_critic`" not in normalized_text:
+            continue
+        for term in required_terms:
+            if " ".join(term.split()) not in normalized_text:
+                errors.append(f"{relative_path} missing route gate contract term {term!r}")
+    return errors
+
+
+def _validate_work_routing_frontmatter_trigger(root: Path) -> list[str]:
+    relative_path = "skills/work-routing/SKILL.md"
+    path = root / relative_path
+    if not path.is_file():
+        return []
+    try:
+        raw, _body = _split_frontmatter(path.read_text(encoding="utf-8"))
+    except FrontmatterError:
+        return []
+    frontmatter, parse_errors = _parse_simple_mapping(raw)
+    if parse_errors:
+        return []
+    description = frontmatter.get("description")
+    description_text = description if isinstance(description, str) else ""
+    return [
+        f"{relative_path} frontmatter description missing route trigger term {term!r}"
+        for term in WORK_ROUTING_DESCRIPTION_TERMS
+        if term not in description_text
+    ]
 
 
 def _has_advisory_negation(lines: list[str], index: int) -> bool:
@@ -1752,6 +1856,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_repo_codex_live_install(root))
     errors.extend(_validate_wave_lifecycle(root))
     errors.extend(_validate_backlog_detail_contract(root))
+    errors.extend(_validate_route_gate_contracts(root))
     errors.extend(_validate_design_integrity_gate(root))
     errors.extend(_validate_live_validation_contracts(root))
     errors.extend(_validate_provider_prompt_contracts(root))

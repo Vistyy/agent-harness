@@ -41,6 +41,10 @@ Before execution:
 During execution:
 
 - execute slices in dependency order
+- classify user checkpoints or feedback through `../feedback-address/SKILL.md`
+  before code changes
+- amend packet objective, checkpoint, decisions, slices, readiness, or proof
+  before code when feedback changes wave shape
 - update blockers, decisions, evidence, and follow-up in the packet
 - use `quality_guard` after each non-trivial implementation chunk
 

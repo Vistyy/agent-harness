@@ -1,6 +1,6 @@
 ---
 name: work-routing
-description: "Use when choosing whether work should be direct, planning, or wave execution, and before promoting non-trivial planning to execution."
+description: "Use for every requested change to choose an explicit direct, planning, or wave execution route before editing, handoff, proof, or review; also use before promoting non-trivial planning to execution."
 ---
 
 # Work Routing
@@ -13,6 +13,9 @@ skills.
 
 Use the lightest route that can complete the binding objective through the
 right owner/interface.
+
+Every requested change gets an explicit route before editing, handoff, proof,
+or review. `direct` is a route decision, not the absence of routing.
 
 Do not replace a broad objective with a convenient slice. A slice is execution
 scope, not an accepted reduction.
@@ -40,9 +43,9 @@ the routed objective are agent-owned.
 
 ## Stop
 
-Stop or route to planning when objective continuity, design integrity,
-readiness claim, required proof/review/runtime evidence, or durable state is
-missing or stale.
+Stop or route to planning when route classification, objective continuity,
+design integrity, readiness claim, required proof/review/runtime evidence, or
+durable state is missing or stale.
 
 ## Planning Ready
 

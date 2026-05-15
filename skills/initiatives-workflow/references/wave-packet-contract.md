@@ -17,7 +17,7 @@ claim aligned.
 ## Objective
 
 Record original objective, accepted reductions, residual gaps, and any current
-user checkpoint that changes scope.
+user checkpoint or plan amendment that changes scope.
 
 No task slice may replace this objective. A narrower outcome needs an accepted
 reduction.

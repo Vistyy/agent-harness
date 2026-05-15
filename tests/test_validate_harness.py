@@ -1147,6 +1147,230 @@ def test_validate_rejects_old_accepted_debt_non_blocking_allowance(tmp_path: Pat
     assert "skills/runtime-proof/SKILL.md must not classify required gate failures as non-blocking" in errors
 
 
+def test_validate_rejects_missing_route_gate_contract_terms(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "AGENTS.md",
+        """
+        # Test Agents
+
+        ## Subagent Policy
+
+        The user explicitly authorizes use of the spawn/subagent tool for these
+        harness-defined roles when this `AGENTS.md` is in force:
+        `explorer` and `quality_guard`.
+
+        This preauthorization applies only to those named roles.
+        """,
+    )
+    write(
+        tmp_path / "skills" / "work-routing" / "SKILL.md",
+        """
+        ---
+        name: work-routing
+        description: Test route selection.
+        ---
+
+        # Work Routing
+
+        Use the lightest route.
+        """,
+    )
+    write(
+        tmp_path / "skills" / "feedback-address" / "SKILL.md",
+        """
+        ---
+        name: feedback-address
+        description: Test feedback.
+        ---
+
+        # Feedback Address
+
+        Classify feedback before editing.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/work-routing/SKILL.md frontmatter description missing route "
+        "trigger term 'every requested change'"
+    ) in errors
+    assert (
+        "skills/work-routing/SKILL.md missing route gate contract term "
+        "'Use for every requested change'"
+    ) in errors
+    assert (
+        "skills/work-routing/SKILL.md missing route gate contract term "
+        "'Every requested change gets an explicit route'"
+    ) in errors
+    assert (
+        "skills/feedback-address/SKILL.md missing route gate contract term "
+        "'amend the route, plan, or packet before code changes'"
+    ) in errors
+
+
+def test_validate_rejects_work_routing_trigger_only_in_body(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "work-routing" / "SKILL.md",
+        """
+        ---
+        name: work-routing
+        description: Use when choosing whether work is direct, planning, or wave execution.
+        ---
+
+        # Work Routing
+
+        Use for every requested change. Every requested change gets an explicit
+        route before editing, handoff, proof, or review. `direct` is a route
+        decision, not the absence of routing.
+
+        Stop when route classification is missing.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/work-routing/SKILL.md frontmatter description missing route "
+        "trigger term 'every requested change'"
+    ) in errors
+    assert (
+        "skills/work-routing/SKILL.md frontmatter description missing route "
+        "trigger term 'before editing, handoff, proof, or review'"
+    ) in errors
+
+
+def test_validate_rejects_missing_planning_review_loop_terms(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "subagent-orchestration" / "SKILL.md",
+        """
+        ---
+        name: subagent-orchestration
+        description: Test subagent routing.
+        ---
+
+        # Subagent Orchestration
+
+        `AGENTS.md` owns the explicit user preauthorization allowlist.
+        `agents/roles.md` owns harness role names and missions.
+        standing user authorization. Do not ask for additional delegation
+        permission. fresh-conversation authorization source.
+        Active Subagents. same `implementer` until `quality_guard` approves.
+        Do not spawn a new subagent with a rephrased version of the same task.
+        Handoffs route attention; they are not authority.
+        Include authority sources when durable state exists.
+        active packet path.
+        """,
+    )
+    write(
+        tmp_path / "agents" / "roles.md",
+        """
+        # Agent Roles
+
+        `AGENTS.md` is the standing user authorization to use these roles in a
+        fresh conversation. Agents must not wait for the user to mention
+        subagents again when `subagent-orchestration` says to delegate.
+
+        - `explorer`: read-only repository discovery and context compression.
+        - `planning_critic`: hostile planning review.
+        - `quality_guard`: planning-gate and in-thread implementation review gate.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/subagent-orchestration/SKILL.md missing route gate contract term "
+        "'parent drafts route/plan/wave/amendment'"
+    ) in errors
+    assert (
+        "skills/subagent-orchestration/SKILL.md missing route gate contract term "
+        "'reviewers, not workers'"
+    ) in errors
+    assert (
+        "agents/roles.md missing route gate contract term "
+        "'parent-drafted route, plan, wave, or amendment'"
+    ) in errors
+
+
+def test_validate_rejects_missing_wave_feedback_amendment_terms(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "initiatives-workflow" / "SKILL.md",
+        """
+        ---
+        name: initiatives-workflow
+        description: Test wave workflow.
+        ---
+
+        # Initiatives Workflow
+
+        During execution, update blockers and decisions.
+        """,
+    )
+    write(
+        tmp_path / "skills" / "initiatives-workflow" / "references" / "wave-packet-contract.md",
+        "# Wave Packet Contract\n\nRecord current user checkpoint.\n",
+    )
+    write(
+        tmp_path / "skills" / "initiatives-workflow" / "assets" / "wave-execution.md",
+        "# Wave Packet\n\n- checkpoint: `<current user/context checkpoint>`\n",
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/initiatives-workflow/SKILL.md missing route gate contract term "
+        "'classify user checkpoints or feedback through `../feedback-address/SKILL.md`'"
+    ) in errors
+    assert (
+        "skills/initiatives-workflow/references/wave-packet-contract.md "
+        "missing route gate contract term 'user checkpoint or plan amendment that changes scope'"
+    ) in errors
+    assert (
+        "skills/initiatives-workflow/assets/wave-execution.md missing route gate "
+        "contract term 'latest user/context checkpoint or plan amendment changing scope'"
+    ) in errors
+
+
+def test_validate_rejects_missing_adapter_route_terms(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "adapters" / "codex" / "config.toml",
+        """
+        [features]
+        multi_agent = true
+
+        [agents.planning_critic]
+        description = "Hostile planning review before execution-ready promotion."
+        config_file = "agents/planning-critic.toml"
+        """,
+    )
+    write(
+        tmp_path / "adapters" / "codex" / "agents" / "implementer.toml",
+        """
+        name = "implementer"
+        # one bounded assigned implementation slice
+        # direct-route slices
+        # Do not claim final approval.
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/config.toml agents.planning_critic missing route term "
+        "'parent-drafted non-trivial route, plan, wave, or amendment'"
+    ) in errors
+    assert (
+        "adapters/codex/agents/implementer.toml missing role boundary contract term "
+        "'explicit route classification'"
+    ) in errors
+
+
 def test_validate_rejects_stale_accepted_debt_wording(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(

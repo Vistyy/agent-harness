@@ -5,7 +5,7 @@
 - original objective: `<user objective>`
 - accepted reductions: `<none | explicit>`
 - residual gaps: `<none | explicit>`
-- checkpoint: `<current user/context checkpoint>`
+- checkpoint: `<latest user/context checkpoint or plan amendment changing scope>`
 
 ## Design Integrity
 

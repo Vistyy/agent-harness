@@ -13,8 +13,8 @@ conversation. Agents must not wait for the user to mention subagents again when
 ## Roles
 
 - `explorer`: read-only repository discovery and context compression.
-- `planning_critic`: hostile planning review before execution-ready wave
-  promotion or non-trivial scope expansion.
+- `planning_critic`: hostile review of parent-drafted route, plan, wave, or
+  amendment before execution-ready promotion or non-trivial scope expansion.
 - `implementer`: one bounded assigned implementation slice.
 - `quality_guard`: planning-gate and in-thread implementation review gate.
 - `final_reviewer`: final isolated closeout review after verification.
