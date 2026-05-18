@@ -39,7 +39,7 @@ Precedence:
 - Documentation ownership: `documentation-stewardship`.
 - Design, owner/interface adequacy, and integrity verdicts: `design-integrity`.
 - Planning readiness and route selection: `work-routing`.
-- Wave lifecycle, packet state, and durable execution: `initiatives-workflow`.
+- Durable wave/backlog context and closeout: `initiatives-workflow`.
 - Delegation and role boundaries: `subagent-orchestration`.
 - Feedback-caused edits: `feedback-address`.
 - End-user and mobile UI design: `user-apps-design`.
@@ -57,8 +57,10 @@ Precedence:
   integrity, safety, readiness claim, proof, review, or boundary rule. Name the
   conflict and recommend the compliant path before execution unless the harness
   permits an explicit accepted exception.
-- Prefer the least complex complete correction. Delete, collapse, demote, or
-  reuse before adding structure.
+- Optimize for the simplest correct end state, not the smallest local diff.
+  Use as much investigation, planning, implementation, deletion, rewrite,
+  review, and proof as needed to reach that end state. Delete, collapse,
+  demote, or reuse before adding structure.
 - For non-trivial work, assess the touched owner/interface and adequacy of the
   selected scope, not only the diff. `not assessed` is not approvable.
 - Replace obsolete paths in the same change. Do not leave dead code, unused

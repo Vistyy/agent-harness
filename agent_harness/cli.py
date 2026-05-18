@@ -36,7 +36,7 @@ def _build_parser() -> argparse.ArgumentParser:
     refs_parser.add_argument("--repo-root", type=Path, required=True, help="Target project repository root.")
     refs_parser.add_argument("--wave", required=True, help="Wave id.")
 
-    cleanup_parser = wave_subparsers.add_parser("cleanup", help="Delete a closed current-work wave packet directory.")
+    cleanup_parser = wave_subparsers.add_parser("cleanup", help="Delete a closed current-work wave context directory.")
     cleanup_parser.add_argument("--repo-root", type=Path, required=True, help="Target project repository root.")
     cleanup_parser.add_argument("--wave", required=True, help="Wave id.")
     cleanup_parser.add_argument("--execute", action="store_true", help="Delete after validation.")

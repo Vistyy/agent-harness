@@ -1,4 +1,4 @@
 interface:
   display_name: "Initiatives Workflow"
   short_description: "Execute waves and maintain durable wave state"
-  default_prompt: "Use $initiatives-workflow for full wave execution or durable wave, packet, delivery-map, backlog, and closeout state."
+  default_prompt: "Use $initiatives-workflow for durable wave context, delivery-map, backlog, and closeout state."

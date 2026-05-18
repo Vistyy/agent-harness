@@ -22,11 +22,11 @@ def fake_project(tmp_path: Path, wave: str = "example-wave") -> Path:
     write(project / "docs-ai" / "docs" / "initiatives" / "waves" / f"{wave}.md", "# Wave\n")
     write(
         project / "docs-ai" / "current-work" / wave / "wave-execution.md",
-        "# Packet\n",
+        "# Context Note\n",
     )
     write(
         project / "docs-ai" / "current-work" / "delivery-map.md",
-        f"Packet: docs-ai/docs/initiatives/waves/{wave}.md\n",
+        f"Context: docs-ai/docs/initiatives/waves/{wave}.md\n",
     )
     return project
 
@@ -169,7 +169,7 @@ def test_cleanup_rejects_file_current_work_root_without_traceback(tmp_path: Path
 def test_cleanup_rejects_symlink_current_work_root_and_deletes_nothing(tmp_path: Path) -> None:
     project = tmp_path / "project"
     target = tmp_path / "real-current-work"
-    write(target / "example-wave" / "wave-execution.md", "# Packet\n")
+    write(target / "example-wave" / "wave-execution.md", "# Context Note\n")
     (project / "docs-ai").mkdir(parents=True)
     (project / "docs-ai" / "current-work").symlink_to(target)
 
@@ -191,7 +191,7 @@ def test_cleanup_rejects_symlink_wave_dir_and_deletes_nothing(tmp_path: Path) ->
     project = fake_project(tmp_path)
     current_work = project / "docs-ai" / "current-work"
     real_wave = tmp_path / "real-wave"
-    write(real_wave / "wave-execution.md", "# Packet\n")
+    write(real_wave / "wave-execution.md", "# Context Note\n")
     symlink_wave = current_work / "linked-wave"
     symlink_wave.symlink_to(real_wave)
 
@@ -292,7 +292,15 @@ def test_wave_bootstrap_creates_discovery_required_brief(tmp_path: Path) -> None
     text = brief.read_text(encoding="utf-8")
     assert "# Wave new-wave-1 - New Wave" in text
     assert "**Status:** discovery-required" in text
+    assert "## Objective Boundary" in text
+    assert "- original objective: `<user objective>`" in text
+    assert "- accepted reductions: `<none | explicit>`" in text
+    assert "- residual gaps: `<none | explicit>`" in text
+    assert "## Planning Gaps" in text
+    assert "## Starting Points" in text
     assert "- `initiative/feature/task`" in text
+    assert "## Promotion Requirement" in text
+    assert "The brief preserves context; it is not authority over the user objective." in " ".join(text.split())
 
 
 def test_wave_bootstrap_refuses_overwrite_without_force(tmp_path: Path) -> None:

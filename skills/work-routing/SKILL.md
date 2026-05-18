@@ -5,32 +5,33 @@ description: "Use for every requested change to choose an explicit direct, plann
 
 # Work Routing
 
-Owns route selection and planning-readiness closure. Owner design, readiness,
-proof, review, runtime, test, and durable-state doctrine stay with their
-skills.
+Owns route choice. It does not own design, proof, review, runtime, test, or
+durable context doctrine.
 
 ## Rule
 
-Use the lightest route that can complete the binding objective through the
-right owner/interface.
+Use for every requested change. Route to the simplest correct end state for the
+binding objective, not to the smallest local diff.
 
-Every requested change gets an explicit route before editing, handoff, proof,
-or review. `direct` is a route decision, not the absence of routing.
+Every requested change gets an explicit route before editing, handoff, proof, or
+review. `direct` is a route decision, not the absence of routing.
 
 Do not replace a broad objective with a convenient slice. A slice is execution
 scope, not an accepted reduction.
 
 ## Routes
 
-- `direct`: small enough to complete in-thread without durable planning state.
-- `planning`: non-trivial work whose objective, design, readiness claim, or
-  execution state is not closed.
-- `wave execution`: execute an `execution-ready` packet when state must survive
-  queue tracking, handoff, interruption, resume, review, or multiple slices.
+- `direct`: use when the simplest correct end state is clear enough to execute
+  and review in-thread.
+- `planning`: use when the end state, owner/interface, ordering, material risks,
+  required evidence, or hidden design discretion must be decided before
+  execution.
+- `wave execution`: use only when durable context must survive queue tracking,
+  handoff, interruption, resume, review, or multiple slices.
 
-Use the heavier route when two competent implementers could choose materially
-different owners, interfaces, proof paths, runtime behavior, state authority,
-migration, compatibility, or public behavior.
+Use the heavier route when the lighter route would bias the work toward
+patching around the defect, preserving the wrong owner, or hiding a material
+decision in implementation.
 
 ## User Boundary
 
@@ -43,18 +44,20 @@ the routed objective are agent-owned.
 
 ## Stop
 
-Stop or route to planning when route classification, objective continuity,
-design integrity, readiness claim, required proof/review/runtime evidence, or
-durable state is missing or stale.
+Stop or route to planning when route classification, objective continuity, the
+simplest correct end state, design integrity, readiness claim, required
+proof/review/runtime evidence, or durable context is missing or stale.
 
 ## Planning Ready
 
-Planning is ready only when execution can start without material discovery or
-design discretion.
+Planning is ready only when execution can start without material discovery,
+hidden design discretion, or a likely simpler end state left unexplored.
 
 Close:
 
 - Objective: original objective, accepted reductions, residual gaps.
+- End state: the simplest correct final shape and rejected simpler/alternate
+  paths.
 - Design: owner/interface verdict from `../design-integrity/SKILL.md`.
 - Readiness: exact claim and proof obligations from
   `../readiness-claim/SKILL.md`.
@@ -62,14 +65,12 @@ Close:
   identified, required evidence is named, blockers/debt are disposed, and no
   hidden design discretion remains; final claims use the readiness-owned
   disposition labels.
-- State: direct execution or durable state under
-  `../initiatives-workflow/SKILL.md`.
+- State: direct execution or durable context under
+  `../initiatives-workflow/SKILL.md` when context must survive.
 
-Do not promote while objective, design, readiness, current-scope blocker,
-accepted temporary debt, discovery, or durable state is missing, stale, or
-narrower than the binding objective without accepted reduction.
+Do not promote while objective, end state, design, readiness, current-scope
+blocker, accepted temporary debt, discovery, or durable context is missing,
+stale, or narrower than the binding objective without accepted reduction.
 
-Non-trivial planning needs `planning_critic` and `quality_guard` approval before
-execution readiness.
-
-After routing, use the owner skill named by `AGENTS.md` or the project overlay.
+Non-trivial planning needs `planning_critic` and `quality_guard` challenge
+before execution readiness.

@@ -33,7 +33,7 @@ Constraints:
 
 Handoff context:
 - Non-trivial handoffs must include binding objective, accepted reductions, readiness claim, owned scope, and needed artifacts.
-- Include the active `execution-ready` packet path when durable state exists.
+- Include the active durable context path when durable state exists.
 - Reject or block handoffs that replace the objective with a narrow task summary or omit required claim evidence.
 
 Output:

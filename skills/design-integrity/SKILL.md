@@ -5,79 +5,48 @@ description: "Use when work needs design or architecture judgment: owner/interfa
 
 # Design Integrity
 
-Owns whether the work is shaped around the right owner and interface, including
-solution correctness.
+Owns whether the chosen end state and owner/interface make the binding
+objective true, including solution correctness.
 
 ## Contract
 
-Make the binding objective true through the smallest coherent interface.
+Optimize for the simplest correct end state, not the smallest local change.
+Make that end state true through the smallest coherent interface.
 
-Correct implementation of an avoidably wrong solution shape is not approvable.
+Correct implementation of an avoidably wrong final shape is not approvable.
 
-Small means no unnecessary owners, wrappers, gates, adapters, flags, or
-compatibility paths. Coherent means callers, tests, runtime proof, and future
-changes know which owner owns the state, lifecycle, policy, and side effects.
+Small means no unnecessary owners, wrappers, gates, adapters, flags,
+compatibility paths, generated artifacts, tests, docs, durable notes, or process
+surfaces. Coherent means callers, tests, runtime proof, and future changes know
+which owner owns state, lifecycle, policy, side effects, and failure modes.
 
-For non-trivial owner/interface work, deletion, collapse, rewrite, or
-replacement is the default design move. Adding code, wrappers, compatibility
-paths, flags, or parallel systems requires justification against the simpler
-delete/rewrite option.
+For non-trivial owner/interface work, including new functionality, deletion,
+collapse, rewrite, or replacement is the default design move. Reuse is equally
+preferred when an existing owner already fits. Adding code, wrappers,
+compatibility paths, flags, documents, tests, durable state, or parallel systems
+requires justification against the simpler delete/rewrite option and against
+reuse or collapse when those are available.
 
-Before execution, challenge non-trivial work that adds or changes an owner,
-adapter, workflow, state authority, compatibility path, cross-boundary
-behavior, large implementation, or proof path behind a public interface:
+## Challenge
 
-Is this the smallest coherent owner/interface that makes the objective true, or
-a parallel system that is locally convenient?
+Before execution or review of non-trivial work, answer:
 
-Proceed only when the challenge identifies the owner, the simpler
-reuse/delete/collapse option considered, and why existing owners, tools, or
-contracts cannot absorb the behavior without making the boundary worse.
-Handwaving, template answers, or skipped simpler-shape pressure are
-unacceptable.
+1. What simplest correct end state satisfies the binding objective?
+2. What owner/interface makes that end state true?
+3. What existing owner, tool, behavior, or contract can be reused, deleted,
+   collapsed, or deepened?
+4. What is being added, and why is it cheaper for the final system than the
+   non-additive path?
+5. Can callers, tests, readiness proof, and future work use the same public
+   interface?
 
-## Design Test
-
-For non-trivial work, answer:
-
-1. What owner/module/interface is supposed to make the objective true?
-2. What must callers know to use that interface correctly?
-3. Does the interface hide meaningful behavior, or does it mostly mirror its
-   implementation?
-4. If this owner were deleted, would complexity disappear or spread into
-   callers?
-5. Can tests and readiness proof use the same public interface as callers?
-
-If the answers expose shallow ceremony, duplicate authority, hidden lifecycle,
-or proof that reaches behind the interface, reshape before execution.
+If the answer exposes shallow ceremony, duplicate authority, hidden lifecycle,
+proof that reaches behind the interface, or additive work that mostly preserves
+the old shape, reshape before execution.
 
 If implementation materially differs from the accepted design source, revise
 the implementation, revise the design source, or block. Do not silently approve
 a different shape.
-
-## Interface Rules
-
-- An interface includes types, invariants, ordering, error modes, config,
-  lifecycle, side effects, and performance expectations.
-- The interface is the test surface.
-- Prefer depth: more useful behavior behind less caller knowledge.
-- Prefer locality: change, bugs, knowledge, and proof concentrated in one
-  owner.
-- Add a seam or adapter only when behavior genuinely varies across it.
-- Delete, collapse, or deepen shallow modules before adding another layer.
-
-## Integrity Verdict
-
-Report:
-
-- binding objective and accepted reductions
-- touched owner/interface
-- highest inspected scope
-- verdict: `acceptable`, `unacceptable`, or `blocked`
-- must-block signals or `none`
-- accepted temporary debt backlog link or `none`
-
-`not assessed` is never approvable for non-trivial work.
 
 ## Must-Block Signals
 
@@ -89,11 +58,27 @@ Report:
 - compatibility path without owner, protected surface, and removal condition
 - local patch that preserves the reason the owner is wrong
 - additive change that bypasses a simpler delete/rewrite option
+- additive feature work that skips reuse/collapse pressure because the request
+  asks for new behavior
 - implementation shape that differs from accepted design without revised
   authority
 
 Stop or route when design integrity is unacceptable and the user has not
 explicitly accepted temporary debt.
+
+## Verdict
+
+Report:
+
+- binding objective and accepted reductions
+- simplest correct end state
+- touched owner/interface
+- highest inspected scope
+- verdict: `acceptable`, `unacceptable`, or `blocked`
+- must-block signals or `none`
+- accepted temporary debt backlog link or `none`
+
+`not assessed` is never approvable for non-trivial work.
 
 ## References
 

@@ -13,21 +13,16 @@
 - in scope: `<surfaces>`
 - out of scope: `<only unrelated or accepted reductions>`
 
-## Closed Decisions
+## End State
 
-- `<decision>: <owner/default>`
+- simplest correct end state: `<target shape>`
+- next action: `<execute | review | proof | blocked>`
+- blockers: `<none | blocker and owner>`
 
-## Readiness Claim
-
-- exact claim: `<claim>`
-- claimed interface: `<workflow/module interface>`
-- required proof/evidence: `<exact proof/artifact>`
-
-## Planning Gate
-
-- planning_critic: `<APPROVE summary/date>`
-- quality_guard: `<APPROVE summary/date>`
-
-## Packet
+## Active Context
 
 - `docs-ai/current-work/<wave-id>/wave-execution.md`
+
+Execution-ready means the durable context is usable, not that the plan remains
+correct. Reassess against the binding objective and simplest correct end state
+before executing.

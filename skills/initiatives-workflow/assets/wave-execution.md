@@ -1,13 +1,18 @@
-# Wave <wave-id> Execution Packet
+# Wave <wave-id> Context Note
 
 ## Objective
 
 - original objective: `<user objective>`
 - accepted reductions: `<none | explicit>`
 - residual gaps: `<none | explicit>`
-- checkpoint: `<latest user/context checkpoint or plan amendment changing scope>`
+- checkpoint: `<latest user/context checkpoint changing scope>`
 
-## Design Integrity
+## End State
+
+- simplest correct end state: `<target shape>`
+- rejected alternatives: `<none | alternatives and why rejected>`
+
+## Design
 
 - owner/interface: `<owner/module/interface>`
 - key decisions: `<decisions | none>`
@@ -16,22 +21,15 @@
 
 ## Execution
 
-### `<task-or-slice>`
-
-- State: `<blank | done | blocked>`
-- Correction posture: `<none | delete | reuse | collapse | move | deepen | add>`
-- Owned surfaces: `<paths/surfaces>`
-- Checks/artifacts: `<commands/artifacts>`
-
-- Shape contract:
-  - Owner/interface: `<owner/interface | omit when posture is none>`
-  - Target or rejected simpler path: `<target or rejected path | omit when posture is none>`
-  - Stop triggers: `<stop triggers | omit when posture is none>`
-  - Proof surface: `<proof surface | omit when posture is none>`
-
+- current slice: `<what changes now>`
+- owned surfaces: `<paths/surfaces>`
+- order/dependencies: `<what must precede this and why | none>`
+- stop conditions: `<signals to stop/amend/escalate>`
+- evidence/checks: `<commands/artifacts and claim covered>`
 - blockers/decisions: `<none | blocker/decision and owner>`
+- follow-up: `<none | durable backlog path>`
 
-## Readiness Claim
+## Readiness
 
 - exact claim: `<claim>`
 - claimed interface: `<workflow/module interface>`
@@ -40,8 +38,8 @@
 - unproved boundaries: `<none | entries>`
 - residual risks: `<none | entries>`
 
-## Closeout Evidence
+## Closeout
 
 - retained value: `<durable owner/backlog path | none yet>`
 - current-scope issues: `<fixed/routed/accepted | none>`
-- disposable wave state: `<removable without losing authority | blocked reason>`
+- context state: `<remove | mark done | supersede | keep active with reason>`

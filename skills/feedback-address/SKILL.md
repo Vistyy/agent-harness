@@ -31,8 +31,9 @@ Apply `../design-integrity/SKILL.md` for owner-correct repair. Use
 public behavior, state authority, migration, or wave shape.
 
 When feedback changes objective, design, readiness, proof, execution slices, or
-durable state, amend the route, plan, or packet before code changes. A local
-surface fix may stay in the current route only when that route remains valid.
+durable state, amend the route, plan, or durable context before code changes. A
+local surface fix may stay in the current route only when that route remains
+valid.
 
 Use `../systematic-debugging/SKILL.md` for root-cause diagnosis. This skill
 owns disposition of feedback after the claim is understood; it does not replace

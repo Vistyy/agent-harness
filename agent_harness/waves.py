@@ -43,7 +43,7 @@ class CleanupTarget:
 @dataclass(frozen=True, slots=True)
 class BootstrapResult:
     brief_path: Path
-    packet_path: Path | None
+    context_path: Path | None
 
 
 def validate_wave_id(wave: str) -> None:
@@ -184,33 +184,26 @@ def _render_discovery_brief(*, wave: str, title: str, tasks: list[str]) -> str:
 
 **Status:** discovery-required
 
-## Problem
+## Objective Boundary
 
-<why this wave exists and what current weakness it addresses>
+- original objective: `<user objective>`
+- accepted reductions: `<none | explicit>`
+- residual gaps: `<none | explicit>`
 
-## Objective
+## Planning Gaps
 
-<what changes when this wave succeeds>
+- `<decision/design/readiness/scope gap>`
 
-## In Scope
+## Starting Points
 
 {task_lines}
 
-## Out Of Scope
+## Promotion Requirement
 
-- `<explicitly deferred scope>`
-
-## Constraints / Non-Goals
-
-- `<constraint>`
-
-## Risks / Dependencies
-
-- `<dependency or risk with disposition>`
-
-## References
-
-- `<owner doc / prior wave / key code path>`
+Promote only when `work-routing` has a clear route, the simplest correct end
+state is known enough to execute, design/readiness blockers are disposed, and
+any required reviewer challenge for non-trivial planning is resolved. The brief
+preserves context; it is not authority over the user objective.
 """
 
 
@@ -234,7 +227,7 @@ def bootstrap_wave_docs(
     _ensure_writable(brief_path, force=force)
     brief_body = _render_discovery_brief(wave=wave, title=title, tasks=_default_tasks(tasks))
     brief_path.write_text(brief_body, encoding="utf-8")
-    return BootstrapResult(brief_path=brief_path, packet_path=None)
+    return BootstrapResult(brief_path=brief_path, context_path=None)
 
 
 def command_wave_refs(

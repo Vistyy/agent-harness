@@ -35,43 +35,6 @@ OPENAI_ALLOWED_INTERFACE_KEYS = {
     "brand_color",
     "default_prompt",
 }
-PACKET_REQUIRED_SECTIONS = (
-    "Objective",
-    "Design Integrity",
-    "Execution",
-    "Readiness Claim",
-)
-PACKET_REQUIRED_FIELDS = {
-    "Objective": (
-        "original objective",
-        "accepted reductions",
-    ),
-    "Design Integrity": (
-        "owner/interface",
-        "verdict",
-    ),
-    "Readiness Claim": (
-        "exact claim",
-        "claimed interface",
-        "required evidence",
-        "evidence status",
-        "unproved boundaries",
-        "residual risks",
-    ),
-}
-TASK_CARD_STATE_FIELD = "- State:"
-TASK_CARD_CORRECTION_POSTURE_FIELD = "- Correction posture:"
-TASK_CARD_OWNED_SURFACES_FIELD = "- Owned surfaces:"
-TASK_CARD_CHECKS_FIELD = "- Checks/artifacts:"
-TASK_CARD_ALLOWED_STATES = {"blank", "done", "blocked"}
-TASK_CARD_ALLOWED_CORRECTION_POSTURES = {"none", "delete", "reuse", "collapse", "move", "deepen", "add"}
-TASK_CARD_SHAPE_CONTRACT_FIELDS = (
-    "Owner/interface",
-    "Target or rejected simpler path",
-    "Stop triggers",
-    "Proof surface",
-)
-TASK_CARD_NON_ADD_CORRECTION_POSTURES = TASK_CARD_ALLOWED_CORRECTION_POSTURES - {"none", "add"}
 WAVE_STATUSES = {"discovery-required", "execution-ready", "done", "retired"}
 # AGENTS.md and subagent-orchestration must keep explicit user authorization;
 # otherwise adapter-level spawn rules can block required harness reviewers.
@@ -80,224 +43,10 @@ PREAUTHORIZED_SUBAGENT_SENTINEL = (
 )
 PREAUTHORIZED_SUBAGENT_END = "This preauthorization applies only to those named roles"
 REMOVED_CODEX_AGENT_NAMES = {"check_runner"}
-DESIGN_INTEGRITY_FILES = (
-    "AGENTS.md",
-    "skills/design-integrity/SKILL.md",
-    "skills/work-routing/SKILL.md",
-    "skills/code-review/SKILL.md",
-    "skills/initiatives-workflow/references/wave-packet-contract.md",
-)
-DESIGN_INTEGRITY_AGENT_FILES = (
-    "adapters/codex/agents/planning-critic.toml",
-    "adapters/codex/agents/implementer.toml",
-    "adapters/codex/agents/quality-guard.toml",
-    "adapters/codex/agents/final-reviewer.toml",
-)
 RUNTIME_EVIDENCE_ADAPTER_FILES = (
     "adapters/codex/agents/runtime-evidence.toml",
 )
-RUNTIME_EVIDENCE_ADAPTER_REQUIRED_TERMS = (
-    "app, service, API, or operator path",
-    "binding objective",
-    "accepted reductions",
-    "Handoff text cannot override this role",
-    "mis-scoped",
-    "entrypoint fidelity",
-    "reject",
-    "blocked",
-    "blocking",
-    "accept tests/reviews as proof",
-    "not overall code quality",
-    "Do not use this role for visual-only UI design readiness",
-    "product-grade design approval",
-    "Do not take over shared or ambiguous runtime coordination",
-)
 MATERIAL_RISK_OWNER_PATH = "skills/readiness-claim/references/material-risk-lenses.md"
-MATERIAL_RISK_OWNER_REQUIRED_TERMS = (
-    "security/privacy, data integrity, reliability, operability, observability/diagnosability, performance/cost, compatibility, and accessibility",
-    "`not-applicable`",
-    "`covered`",
-    "`blocked`",
-    "`separate debt`",
-    "`accepted temporary debt`",
-    "Planning does not mark future proof as `covered`",
-    "Narrowed claims map to `blocked`",
-    "explicitly approves the specific protected surface, owner, risk, and removal condition",
-    "Legal/licensing/compliance stays out of default scope",
-    "Splitting becomes valid only if",
-)
-MATERIAL_RISK_READINESS_REQUIRED_TERMS = (
-    "`references/material-risk-lenses.md`",
-    "Before proof, review, runtime evidence, handoff, or completion",
-    "material non-correctness risks",
-)
-MATERIAL_RISK_CONSUMER_CONTRACTS = {
-    "skills/work-routing/SKILL.md": (
-        "`../readiness-claim/SKILL.md`",
-        "material risks",
-        "required evidence",
-        "hidden design discretion",
-    ),
-    "skills/initiatives-workflow/references/wave-packet-contract.md": (
-        "`../../readiness-claim/SKILL.md`",
-        "material risks",
-        "required material-risk evidence",
-        "final disposition",
-    ),
-    "skills/code-review/SKILL.md": (
-        "`readiness-claim`",
-        "material risks",
-    ),
-}
-MATERIAL_RISK_ADAPTER_CONTRACTS = {
-    "adapters/codex/agents/implementer.toml": (
-        "material non-correctness risks",
-        "readiness-owned lens",
-    ),
-    "adapters/codex/agents/planning-critic.toml": (
-        "material non-correctness risks",
-        "readiness-owned lens",
-    ),
-    "adapters/codex/agents/quality-guard.toml": (
-        "material non-correctness risks",
-        "readiness-owned lens",
-    ),
-    "adapters/codex/agents/runtime-evidence.toml": (
-        "material non-correctness risks",
-        "readiness-owned lens",
-    ),
-    "adapters/codex/agents/final-reviewer.toml": (
-        "material non-correctness risks",
-        "readiness-owned lens",
-    ),
-}
-PROVIDER_PROMPT_FILES = (
-    "adapters/codex/README.md",
-    "adapters/codex/config.toml",
-    "adapters/codex/install-scope.md",
-    "adapters/codex/install.sh",
-)
-ROUTE_GATE_CONTRACTS = {
-    "skills/work-routing/SKILL.md": (
-        "Use for every requested change",
-        "Every requested change gets an explicit route",
-        "`direct` is a route decision, not the absence of routing",
-        "route classification",
-    ),
-    "skills/feedback-address/SKILL.md": (
-        "Before editing in any direct, planning, or wave route",
-        "amend the route, plan, or packet before code changes",
-        "local surface fix may stay in the current route",
-    ),
-    "skills/subagent-orchestration/SKILL.md": (
-        "parent drafts route/plan/wave/amendment",
-        "quality_guard planning gate",
-        "reviewers, not workers",
-    ),
-    "skills/initiatives-workflow/SKILL.md": (
-        "classify user checkpoints or feedback through `../feedback-address/SKILL.md`",
-        "amend packet objective, checkpoint, decisions, slices, readiness, or proof",
-    ),
-    "skills/initiatives-workflow/references/wave-packet-contract.md": (
-        "user checkpoint or plan amendment that changes scope",
-    ),
-    "skills/initiatives-workflow/assets/wave-execution.md": (
-        "latest user/context checkpoint or plan amendment changing scope",
-    ),
-    "agents/roles.md": (
-        "parent-drafted route, plan, wave, or amendment",
-    ),
-}
-CODEX_CONFIG_AGENT_ROUTE_TERMS = {
-    "planning_critic": (
-        "parent-drafted non-trivial route, plan, wave, or amendment",
-        "before execution-ready promotion or scope expansion",
-        "without implementing",
-    ),
-}
-WORK_ROUTING_DESCRIPTION_TERMS = (
-    "every requested change",
-    "explicit direct, planning, or wave execution route",
-    "before editing, handoff, proof, or review",
-)
-REVIEW_ROLE_CONTRACTS = {
-    "adapters/codex/agents/planning-critic.toml": (
-        "binding objective",
-        "accepted reductions",
-        "readiness claim",
-        "triggered owner skills with verdicts and blockers",
-    ),
-    "adapters/codex/agents/quality-guard.toml": (
-        "binding objective",
-        "accepted reductions",
-        "Diff-only approval is invalid",
-        "why inspected scope is sufficient",
-        "triggered owner skills with verdicts and blockers",
-    ),
-    "adapters/codex/agents/final-reviewer.toml": (
-        "binding objective",
-        "accepted reductions",
-        "Diff-only approval is invalid",
-        "why it is sufficient",
-        "Do not perform planning-gate review",
-        "not final approval",
-        "project design source",
-        "project design source requirements",
-        "project-local artifacts",
-        "block missing, stale, blocked, rejected, or narrower",
-        "Triggered owner skills",
-    ),
-}
-REVIEW_GOVERNANCE_REQUIRED_TERMS = (
-    "project design source",
-    "project design source requirements",
-    "project-local artifacts",
-    "missing, stale, blocked, rejected, or narrower",
-    "does not decide the design verdict",
-)
-REVIEW_VERDICT_FILES = (
-    "skills/code-review/SKILL.md",
-    "adapters/codex/agents/quality-guard.toml",
-    "adapters/codex/agents/final-reviewer.toml",
-)
-CODE_REVIEW_OUTPUT_REQUIRED_TERMS = (
-    "Binding objective",
-    "Accepted reductions",
-    "Reviewed scope against authoritative claim",
-    "Reviewed-scope sufficiency for `APPROVE`/`BLOCK`",
-    "Existing authority checked",
-    "Authority source inspected",
-    "Prompt/source mismatch",
-    "Plan/design alignment",
-    "Triggered owner skills",
-    "Proof reviewed",
-    "Issue disposition",
-)
-REVIEW_AUTHORITY_TERMS = (
-    "Handoffs route attention; they are not authority",
-    "authority source inspected",
-    "prompt/source mismatch",
-    "plan/design alignment",
-)
-REVIEW_TRIGGERED_OWNER_SKILL_TERMS = (
-    "Apply every owner skill triggered by the binding objective",
-    "Do not duplicate owner-skill doctrine",
-    "triggered skill, verdict, and blocker",
-)
-DESIGN_CONTEXT_CONTRACT_REQUIRED_TERMS = (
-    "project design source",
-    "project design source requirements",
-    "declared project design source",
-    "project-local artifacts",
-    "screenshot/contact-sheet",
-    "Missing project design source blocks",
-    "claim is explicitly narrowed",
-)
-UI_APPROVAL_BOUNDARY_REQUIRED_TERMS = (
-    "Runtime evidence",
-    "do not approve visual quality",
-    "does not decide live behavior or code quality",
-)
 # Exact adapter-role terms protect one concrete counterexample each: reviewers
 # claiming another role's authority, support roles editing, implementers
 # executing without approved state, or runtime evidence reviewing code quality.
@@ -308,16 +57,14 @@ ROLE_BOUNDARY_CONTRACTS = {
         "Do not edit code or take implementation ownership.",
     ),
     "adapters/codex/agents/implementer.toml": (
-        "one bounded assigned implementation slice",
-        "direct-route slices",
+        "one bounded assigned slice",
         "explicit route classification",
-        "Do not claim final approval.",
+        "final approver",
     ),
     "adapters/codex/agents/planning-critic.toml": (
-        "Review non-trivial planning only",
-        "parent-drafted route, plan, wave, or amendment candidate",
-        "Stay read-only and do not edit code or docs.",
-        "Do not act as a final approver, implementation reviewer, or implementation owner.",
+        "Stay read-only",
+        "do not implement",
+        "strategy reviewer",
     ),
     "adapters/codex/agents/design-judge.toml": (
         "screenshot/contact-sheet",
@@ -356,24 +103,6 @@ REMOVED_WORKFLOW_SKILL_NAMES = (
     "wave-autopilot",
     "workflow-feedback",
     "writing-plans",
-)
-ADVISORY_DRIFT_RE = re.compile(r"\badvisory\b", re.IGNORECASE)
-NON_BLOCKING_DRIFT_RE = re.compile(r"\bnon-blocking\b", re.IGNORECASE)
-ADVISORY_NEGATION_RE = re.compile(
-    r"\b(?:must not|do not|not classify|not treat|never|not advisory)\b",
-    re.IGNORECASE,
-)
-NON_BLOCKING_ALLOWED_RE = re.compile(
-    r"\b(?:outside|accepted temporary debt|explicitly accepted temporary debt|NON-BLOCKING is an observation category)\b",
-    re.IGNORECASE,
-)
-REQUIRED_GATE_CONTEXT_RE = re.compile(
-    r"\b(?:required|gate|proof|review|runtime|architecture|design-integrity|validation|finding|evidence)\b",
-    re.IGNORECASE,
-)
-QUALITY_GUARD_FINAL_APPROVAL_NEGATION_RE = re.compile(r"\bDo not\b.*\bclaim final approval\b", re.IGNORECASE)
-RUNTIME_PROOF_POLICY_FILES = (
-    "skills/runtime-proof/SKILL.md",
 )
 WEB_BROWSER_PROOF_FILES = (
     "skills/webapp-testing/references/browser-runtime-proof-workflow.md",
@@ -474,7 +203,7 @@ OWNER_ONLY_DOCTRINE = {
     "Every durable rule has one owner.": "skills/documentation-stewardship/SKILL.md",
     "Every durable concept has one owner.": "skills/documentation-stewardship/SKILL.md",
     "Runtime evidence is blocking, not advisory.": "skills/runtime-proof/SKILL.md",
-    "Task labels, packets, implementer summaries, and reviewer prompts do not replace it.": (
+    "Task labels, context notes, implementer summaries, and reviewer prompts do not replace it.": (
         "skills/code-review/SKILL.md"
     ),
     "solution correctness": "skills/design-integrity/SKILL.md",
@@ -893,7 +622,7 @@ def _validate_owner_only_doctrine(root: Path) -> list[str]:
         for phrase, owner in OWNER_ONLY_DOCTRINE.items():
             normalized_phrase = " ".join(phrase.split())
             exemptions = OWNER_ONLY_DOCTRINE_EXEMPTIONS.get(phrase, set())
-            is_active_packet = (
+            is_active_context_note = (
                 phrase
                 in {
                     "solution correctness",
@@ -917,7 +646,7 @@ def _validate_owner_only_doctrine(root: Path) -> list[str]:
                 has_phrase = normalized_phrase in normalized_lower_text
             else:
                 has_phrase = normalized_phrase in normalized_text
-            if rel != owner and rel not in exemptions and not is_active_packet and has_phrase:
+            if rel != owner and rel not in exemptions and not is_active_context_note and has_phrase:
                 errors.append(f"{rel} duplicates owner-only doctrine {phrase!r}; owner is {owner}")
     return errors
 
@@ -996,24 +725,19 @@ def _validate_subagent_allowlist(root: Path, roles: set[str]) -> list[str]:
                 "and agents/roles.md instead of duplicating the preauthorized role list"
             )
         metadata_normalized = " ".join(metadata_text.split())
-        for term in ("AGENTS.md", "agents/roles.md", "packet"):
+        for term in ("AGENTS.md", "agents/roles.md", "durable context"):
             if term not in metadata_normalized:
                 errors.append(f"skills/subagent-orchestration/agents/openai.yaml missing subagent metadata owner pointer {term!r}")
     subagent_path = root / "skills" / "subagent-orchestration" / "SKILL.md"
     if subagent_path.is_file():
         normalized_text = " ".join(subagent_path.read_text(encoding="utf-8").split())
         for term in (
-            "AGENTS.md` owns the explicit user preauthorization allowlist",
             "standing user authorization",
-            "Do not ask for additional delegation permission",
-            "fresh-conversation authorization source",
-            "Active Subagents",
-            "same `implementer` until `quality_guard` approves",
-            "Do not spawn a new subagent with a rephrased version of the same task",
-            "Handoffs route attention; they are not authority",
-            "Include authority sources when durable state exists",
-            "agents/roles.md` owns harness role names and missions",
-            "active packet path",
+            "simplest correct end state",
+            "Handoffs preserve context",
+            "Do not spawn a replacement with a rephrased version of the same task",
+            "active durable context path",
+            "agents/roles.md` owns role names and missions",
         ):
             if " ".join(term.split()) not in normalized_text:
                 errors.append(f"skills/subagent-orchestration/SKILL.md missing subagent context contract term {term!r}")
@@ -1029,7 +753,7 @@ def _validate_subagent_allowlist(root: Path, roles: set[str]) -> list[str]:
                 errors.append(f"agents/roles.md missing subagent authorization term {term!r}")
         for stale_term in ("proof row", "proof rows"):
             if stale_term in normalized_roles_text:
-                errors.append(f"agents/roles.md contains obsolete packet term {stale_term!r}")
+                errors.append(f"agents/roles.md contains obsolete proof-row term {stale_term!r}")
 
     return errors
 
@@ -1222,126 +946,10 @@ def _markdown_subsection(text: str, heading: str) -> str:
     return text[match.end() : match.end() + next_match.start()]
 
 
-def _task_card_sections(text: str) -> list[tuple[str, str]]:
-    execution = _markdown_section(text, "Execution")
-    cards: list[tuple[str, str]] = []
-    matches = list(re.finditer(r"^###\s+(.+?)\s*$", execution, re.MULTILINE))
-    for index, match in enumerate(matches):
-        end = matches[index + 1].start() if index + 1 < len(matches) else len(execution)
-        cards.append((match.group(1).strip(), execution[match.end() : end]))
-    return cards
-
-
-def _task_card_field_value(task_body: str, field: str) -> str | None:
-    field_name = field.removeprefix("- ").removesuffix(":")
-    match = re.search(
-        rf"(?m)^\s*-\s+{re.escape(field_name)}:[ \t]*(?:`([^`]+)`|([^\n`]*))?"
-        rf"(?:\n\s+-\s*(?:`([^`]+)`|([^\n`]*)))?",
-        task_body,
-    )
-    if not match:
-        return None
-    for group in match.groups():
-        if group is not None and group.strip():
-            return group.strip()
-    return ""
-
-
-def _task_card_any_indent_field_value(task_body: str, field: str) -> str | None:
-    field_name = field.removeprefix("- ").removesuffix(":")
-    pattern = re.compile(
-        rf"(?m)^(?P<indent>\s*)-\s+{re.escape(field_name)}:[ \t]*(?P<inline>`([^`]+)`|[^\n`]*)"
-    )
-    match = pattern.search(task_body)
-    if not match:
-        return None
-    parts = [match.group("inline").strip().removeprefix("`").removesuffix("`").strip()]
-    following = task_body[match.end() :].splitlines()
-    for line in following:
-        if not line.strip():
-            continue
-        if re.match(r"^\s*-\s+\S.*:", line):
-            break
-        if line.startswith((" ", "\t")):
-            parts.append(line.strip())
-            continue
-        break
-    return " ".join(part for part in parts if part).strip()
-
-
-def _task_card_shape_contract_block(task_body: str) -> str | None:
-    match = re.search(r"(?m)^(?P<indent>\s*)-\s+Shape contract\s*:", task_body)
-    if not match:
-        return None
-    base_indent = len(match.group("indent").replace("\t", "    "))
-    block_lines: list[str] = []
-    for line in task_body[match.end() :].splitlines():
-        if not line.strip():
-            if block_lines:
-                block_lines.append(line)
-            continue
-        indent = len(line) - len(line.lstrip(" "))
-        if indent <= base_indent:
-            break
-        block_lines.append(line)
-    return "\n".join(block_lines)
-
-
-def _packet_field_present(section_body: str, field: str) -> bool:
-    return re.search(rf"(?m)^\s*-\s+{re.escape(field)}\s*:", section_body) is not None
-
-
-def _validate_execution_ready_task_card_shape_contract(path: Path, root: Path) -> list[str]:
-    errors: list[str] = []
-    for task_title, task_body in _task_card_sections(path.read_text(encoding="utf-8")):
-        posture = _task_card_field_value(task_body, TASK_CARD_CORRECTION_POSTURE_FIELD)
-        if posture is None:
-            errors.append(f"{path.relative_to(root)} task card {task_title!r} missing correction posture")
-            continue
-        posture = posture.strip().removeprefix("`").removesuffix("`").strip()
-        if posture not in TASK_CARD_ALLOWED_CORRECTION_POSTURES:
-            errors.append(
-                f"{path.relative_to(root)} task card {task_title!r} invalid correction posture {posture!r}; "
-                f"expected one of {sorted(TASK_CARD_ALLOWED_CORRECTION_POSTURES)}"
-            )
-            continue
-        if posture == "none":
-            continue
-        shape_contract = _task_card_shape_contract_block(task_body)
-        if shape_contract is None:
-            errors.append(f"{path.relative_to(root)} task card {task_title!r} missing shape contract")
-        for field in TASK_CARD_SHAPE_CONTRACT_FIELDS:
-            value = None if shape_contract is None else _task_card_any_indent_field_value(shape_contract, field)
-            if value is None:
-                errors.append(f"{path.relative_to(root)} task card {task_title!r} missing shape contract field {field!r}")
-            elif not value:
-                errors.append(f"{path.relative_to(root)} task card {task_title!r} has empty shape contract field {field!r}")
-        if posture == "add":
-            target = "" if shape_contract is None else _task_card_any_indent_field_value(
-                shape_contract, "Target or rejected simpler path"
-            ) or ""
-            lowered_target = target.lower()
-            has_rejected_non_add = any(option in lowered_target for option in TASK_CARD_NON_ADD_CORRECTION_POSTURES)
-            if not has_rejected_non_add or "harm" not in lowered_target:
-                errors.append(
-                    f"{path.relative_to(root)} task card {task_title!r} add posture target/rejected path "
-                    "must name a rejected non-add option and boundary harm"
-                )
-    return errors
-
-
-def _validate_wave_packet(path: Path, root: Path) -> list[str]:
+def _validate_context_note(path: Path, root: Path) -> list[str]:
     errors: list[str] = []
     text = path.read_text(encoding="utf-8")
     headings = _heading_names(text, 2)
-    for section in PACKET_REQUIRED_SECTIONS:
-        if section not in headings:
-            errors.append(f"{path.relative_to(root)} missing section {section!r}")
-            continue
-        section_body = _markdown_section(text, section)
-        for field in PACKET_REQUIRED_FIELDS.get(section, ()):
-            if not _packet_field_present(section_body, field):
-                errors.append(f"{path.relative_to(root)} section {section!r} missing field {field!r}")
     for obsolete_section in ("Work Context", "Task Plan", "Execution State", "Required Gates", "Proof Plan"):
         if obsolete_section in headings:
             errors.append(f"{path.relative_to(root)} contains obsolete top-level section {obsolete_section!r}")
@@ -1350,20 +958,6 @@ def _validate_wave_packet(path: Path, root: Path) -> list[str]:
     except json.JSONDecodeError as exc:
         errors.append(f"{path.relative_to(root)} invalid JSON proof fence: {exc}")
         return errors
-
-    task_cards = _task_card_sections(text)
-    for task_title, task_body in task_cards:
-        state = _task_card_field_value(task_body, TASK_CARD_STATE_FIELD)
-        if state is None:
-            errors.append(f"{path.relative_to(root)} task card {task_title!r} missing state")
-        elif state not in TASK_CARD_ALLOWED_STATES:
-            errors.append(
-                f"{path.relative_to(root)} task card {task_title!r} invalid state {state!r}; "
-                f"expected one of {sorted(TASK_CARD_ALLOWED_STATES)}"
-            )
-        for field in (TASK_CARD_OWNED_SURFACES_FIELD, TASK_CARD_CHECKS_FIELD):
-            if field not in task_body:
-                errors.append(f"{path.relative_to(root)} task card {task_title!r} missing {field}")
     return errors
 
 
@@ -1383,10 +977,10 @@ def _validate_wave_lifecycle(root: Path) -> list[str]:
     docs_ai = root / "docs-ai"
     if not docs_ai.exists():
         return errors
-    for packet_path in sorted((root / "docs-ai" / "current-work").glob("*/wave-execution*.md")):
-        if packet_path.name not in {"wave-execution.md", "wave-execution.draft.md"}:
+    for context_path in sorted((root / "docs-ai" / "current-work").glob("*/wave-execution*.md")):
+        if context_path.name not in {"wave-execution.md", "wave-execution.draft.md"}:
             continue
-        errors.extend(_validate_wave_packet(packet_path, root))
+        errors.extend(_validate_context_note(context_path, root))
 
     wave_ids: set[str] = set()
     brief_dir = root / "docs-ai" / "docs" / "initiatives" / "waves"
@@ -1395,7 +989,11 @@ def _validate_wave_lifecycle(root: Path) -> list[str]:
     current_work = root / "docs-ai" / "current-work"
     if current_work.is_dir():
         for child in current_work.iterdir():
-            if child.is_dir() and ((child / "wave-execution.md").exists() or (child / "wave-execution.draft.md").exists()):
+            if child.is_dir() and (
+                (child / "wave-execution.md").exists()
+                or (child / "wave-execution.draft.md").exists()
+                or (child / "delivery-brief.md").exists()
+            ):
                 wave_ids.add(child.name)
     delivery_map = current_work / "delivery-map.md"
     delivery_map_wave_ids: set[str] = set()
@@ -1415,59 +1013,29 @@ def _validate_wave_lifecycle(root: Path) -> list[str]:
 
     for wave_id in sorted(wave_ids):
         brief_path = brief_dir / f"{wave_id}.md"
-        canonical_packet = current_work / wave_id / "wave-execution.md"
-        draft_packet = current_work / wave_id / "wave-execution.draft.md"
+        canonical_context = current_work / wave_id / "wave-execution.md"
+        draft_context = current_work / wave_id / "wave-execution.draft.md"
+        delivery_brief = current_work / wave_id / "delivery-brief.md"
         if not brief_path.is_file():
-            if canonical_packet.exists() or draft_packet.exists():
-                errors.append(f"docs-ai/current-work/{wave_id} has packet but missing durable wave brief")
+            if canonical_context.exists() or draft_context.exists() or delivery_brief.exists():
+                errors.append(f"docs-ai/current-work/{wave_id} has active durable context but missing durable wave brief")
             continue
         status, status_error = _wave_status(brief_path, root)
         if status_error:
             errors.append(status_error)
             continue
-        if status == "discovery-required" and canonical_packet.exists():
-            errors.append(f"{brief_path.relative_to(root)} is discovery-required but canonical packet exists")
-        if status == "execution-ready" and not canonical_packet.exists():
-            errors.append(f"{brief_path.relative_to(root)} is execution-ready but canonical packet is missing")
-        if status == "execution-ready" and canonical_packet.exists():
-            errors.extend(_validate_execution_ready_task_card_shape_contract(canonical_packet, root))
-        if status in {"done", "retired"} and (canonical_packet.exists() or draft_packet.exists()):
-            errors.append(f"{brief_path.relative_to(root)} is {status} but current-work packet exists")
+        if status == "discovery-required" and canonical_context.exists():
+            errors.append(f"{brief_path.relative_to(root)} is discovery-required but canonical context note exists")
+        if status == "execution-ready" and not canonical_context.exists():
+            errors.append(f"{brief_path.relative_to(root)} is execution-ready but canonical context note is missing")
+        if delivery_brief.exists() and not canonical_context.exists():
+            errors.append(f"docs-ai/current-work/{wave_id}/delivery-brief.md exists without active canonical context note")
+        if status in {"done", "retired"} and (canonical_context.exists() or draft_context.exists()):
+            errors.append(f"{brief_path.relative_to(root)} is {status} but current-work context note exists")
+        if status in {"done", "retired"} and delivery_brief.exists():
+            errors.append(f"{brief_path.relative_to(root)} is {status} but current-work delivery brief exists")
         if status in {"done", "retired"} and wave_id in delivery_map_wave_ids:
             errors.append(f"docs-ai/current-work/delivery-map.md lists {status} wave {wave_id}")
-    return errors
-
-
-def _validate_design_integrity_gate(root: Path) -> list[str]:
-    errors: list[str] = []
-    for relative_path in DESIGN_INTEGRITY_FILES:
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        text = path.read_text(encoding="utf-8")
-        normalized_text = " ".join(text.split())
-        if re.search(r"\b[Ss]implicity lens\b", text):
-            errors.append(f"{relative_path} must use design-integrity, not a simplicity lens")
-        if "contract, state, lifecycle, or proof" in text:
-            errors.append(f"{relative_path} has incomplete design-integrity definition; include design and workflow")
-        if relative_path == "skills/design-integrity/SKILL.md":
-            for term in (
-                "deletion, collapse, rewrite, or replacement is the default design move",
-                "requires justification against the simpler delete/rewrite option",
-                "If implementation materially differs from the accepted design source",
-                "Do not silently approve a different shape",
-            ):
-                if " ".join(term.split()) not in normalized_text:
-                    errors.append(f"{relative_path} missing design-integrity authority term {term!r}")
-    for relative_path in DESIGN_INTEGRITY_AGENT_FILES:
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        text = path.read_text(encoding="utf-8")
-        if "design integrity" not in text.lower():
-            errors.append(f"{relative_path} missing design-integrity gate")
-        if "contract, state, lifecycle, or proof" in text:
-            errors.append(f"{relative_path} has incomplete design-integrity definition; include design and workflow")
     return errors
 
 
@@ -1481,34 +1049,6 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
         text = path.read_text(encoding="utf-8")
         if "docs-ai/docs/" in text:
             errors.append(f"{relative_path} must not hard-code project-local docs-ai/docs/ paths")
-        for term in RUNTIME_EVIDENCE_ADAPTER_REQUIRED_TERMS:
-            if term not in text:
-                errors.append(f"{relative_path} missing runtime evidence adapter term {term!r}")
-        for line in text.splitlines():
-            if ADVISORY_DRIFT_RE.search(line) and not ADVISORY_NEGATION_RE.search(line):
-                errors.append(f"{relative_path} must not classify runtime evidence findings as advisory")
-                break
-
-    for relative_path in RUNTIME_PROOF_POLICY_FILES:
-        path = root / relative_path
-        if not path.is_file():
-            errors.append(f"{relative_path} missing runtime proof policy owner")
-            continue
-        text = path.read_text(encoding="utf-8")
-        required_terms = (
-            "binding objective",
-            "mis-scoped",
-            "reject",
-            "blocked",
-            "live-use validation",
-            "operator path",
-            "beyond code inspection, tests, and review approval",
-            "faithful entrypoint",
-            "entrypoint fidelity",
-        )
-        for term in required_terms:
-            if term not in text:
-                errors.append(f"{relative_path} missing runtime proof policy term `{term}`")
 
     web_texts: list[str] = []
     for relative_path in WEB_BROWSER_PROOF_FILES:
@@ -1538,46 +1078,6 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
         for phrase in LIVE_VALIDATION_STALE_PHRASES:
             if " ".join(phrase.split()) in normalized_text:
                 errors.append(f"{path.relative_to(root)} contains stale optional-helper runtime proof wording")
-
-    return errors
-
-
-def _validate_material_risk_lens_contracts(root: Path) -> list[str]:
-    errors: list[str] = []
-
-    owner_path = root / MATERIAL_RISK_OWNER_PATH
-    if not owner_path.is_file():
-        errors.append(f"{MATERIAL_RISK_OWNER_PATH} missing material-risk lens owner")
-    else:
-        normalized_text = " ".join(owner_path.read_text(encoding="utf-8").split()).casefold()
-        for term in MATERIAL_RISK_OWNER_REQUIRED_TERMS:
-            if " ".join(term.split()).casefold() not in normalized_text:
-                errors.append(f"{MATERIAL_RISK_OWNER_PATH} missing material-risk owner term {term!r}")
-
-    readiness_path = root / "skills" / "readiness-claim" / "SKILL.md"
-    if readiness_path.is_file():
-        normalized_text = " ".join(readiness_path.read_text(encoding="utf-8").split()).casefold()
-        for term in MATERIAL_RISK_READINESS_REQUIRED_TERMS:
-            if " ".join(term.split()).casefold() not in normalized_text:
-                errors.append(f"skills/readiness-claim/SKILL.md missing material-risk readiness term {term!r}")
-
-    for relative_path, required_terms in MATERIAL_RISK_CONSUMER_CONTRACTS.items():
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        normalized_text = " ".join(path.read_text(encoding="utf-8").split()).casefold()
-        for term in required_terms:
-            if " ".join(term.split()).casefold() not in normalized_text:
-                errors.append(f"{relative_path} missing material-risk consumer term {term!r}")
-
-    for relative_path, required_terms in MATERIAL_RISK_ADAPTER_CONTRACTS.items():
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        normalized_text = " ".join(path.read_text(encoding="utf-8").split()).casefold()
-        for term in required_terms:
-            if " ".join(term.split()).casefold() not in normalized_text:
-                errors.append(f"{relative_path} missing material-risk adapter term {term!r}")
 
     return errors
 
@@ -1680,208 +1180,6 @@ def write_openai_metadata_report(root: Path, report_path: Path) -> list[str]:
     return errors
 
 
-def _validate_provider_prompt_contracts(root: Path) -> list[str]:
-    errors: list[str] = []
-    for relative_path in PROVIDER_PROMPT_FILES:
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        text = path.read_text(encoding="utf-8")
-        for skill_name in REMOVED_WORKFLOW_SKILL_NAMES:
-            if skill_name in text:
-                errors.append(f"{relative_path} references removed workflow skill {skill_name!r}")
-        for line in text.splitlines():
-            if ADVISORY_DRIFT_RE.search(line) and not ADVISORY_NEGATION_RE.search(line):
-                errors.append(f"{relative_path} must not classify blocking evidence as advisory")
-                break
-        if relative_path == "adapters/codex/config.toml":
-            errors.extend(_validate_codex_config_agent_route_terms(path, root, text))
-    return errors
-
-
-def _validate_codex_config_agent_route_terms(path: Path, root: Path, text: str) -> list[str]:
-    errors: list[str] = []
-    data, toml_errors = _load_toml(path, root)
-    if toml_errors:
-        return toml_errors
-    agents = data.get("agents")
-    if not isinstance(agents, dict):
-        return errors
-    for agent_name, required_terms in CODEX_CONFIG_AGENT_ROUTE_TERMS.items():
-        block = agents.get(agent_name)
-        if not isinstance(block, dict):
-            continue
-        description = block.get("description")
-        description_text = description if isinstance(description, str) else ""
-        for term in required_terms:
-            if term not in description_text:
-                errors.append(f"{path.relative_to(root)} agents.{agent_name} missing route term {term!r}")
-    return errors
-
-
-def _validate_route_gate_contracts(root: Path) -> list[str]:
-    errors: list[str] = []
-    errors.extend(_validate_work_routing_frontmatter_trigger(root))
-    for relative_path, required_terms in ROUTE_GATE_CONTRACTS.items():
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        normalized_text = " ".join(path.read_text(encoding="utf-8").split())
-        if relative_path == "agents/roles.md" and "`planning_critic`" not in normalized_text:
-            continue
-        for term in required_terms:
-            if " ".join(term.split()) not in normalized_text:
-                errors.append(f"{relative_path} missing route gate contract term {term!r}")
-    return errors
-
-
-def _validate_work_routing_frontmatter_trigger(root: Path) -> list[str]:
-    relative_path = "skills/work-routing/SKILL.md"
-    path = root / relative_path
-    if not path.is_file():
-        return []
-    try:
-        raw, _body = _split_frontmatter(path.read_text(encoding="utf-8"))
-    except FrontmatterError:
-        return []
-    frontmatter, parse_errors = _parse_simple_mapping(raw)
-    if parse_errors:
-        return []
-    description = frontmatter.get("description")
-    description_text = description if isinstance(description, str) else ""
-    return [
-        f"{relative_path} frontmatter description missing route trigger term {term!r}"
-        for term in WORK_ROUTING_DESCRIPTION_TERMS
-        if term not in description_text
-    ]
-
-
-def _has_advisory_negation(lines: list[str], index: int) -> bool:
-    window = " ".join(lines[max(0, index - 1) : min(len(lines), index + 2)])
-    return ADVISORY_NEGATION_RE.search(window) is not None
-
-
-def _has_non_blocking_allowance(lines: list[str], index: int) -> bool:
-    window = " ".join(lines[max(0, index - 1) : min(len(lines), index + 2)])
-    return NON_BLOCKING_ALLOWED_RE.search(window) is not None
-
-
-def _required_gates_has_data_row(section: str) -> bool:
-    for line in section.splitlines():
-        stripped = line.strip()
-        if not stripped.startswith("|") or not stripped.endswith("|"):
-            continue
-        if stripped == REQUIRED_GATES_HEADER or re.fullmatch(r"\|(?:\s*-+\s*\|)+", stripped):
-            continue
-        cells = [cell.strip() for cell in stripped.strip("|").split("|")]
-        unquoted_cells = [cell.removeprefix("`").removesuffix("`") for cell in cells]
-        if (
-            len(cells) == 6
-            and all(cells)
-            and not any(cell.startswith("<") and cell.endswith(">") for cell in unquoted_cells)
-        ):
-            return True
-    return False
-
-
-def _validate_required_gate_advisory_drift(root: Path) -> list[str]:
-    errors: list[str] = []
-    scan_roots = [
-        root / "skills",
-        root / "adapters" / "codex" / "agents",
-    ]
-    for scan_root in scan_roots:
-        if not scan_root.is_dir():
-            continue
-        for path in sorted(scan_root.rglob("*")):
-            if path.suffix not in {".md", ".toml"}:
-                continue
-            relative_path = str(path.relative_to(root))
-            lines = path.read_text(encoding="utf-8").splitlines()
-            for index, line in enumerate(lines):
-                if not ADVISORY_DRIFT_RE.search(line):
-                    continue
-                if not REQUIRED_GATE_CONTEXT_RE.search(line):
-                    continue
-                if _has_advisory_negation(lines, index):
-                    continue
-                errors.append(f"{relative_path} must not classify required gate failures as advisory")
-                break
-            for index, line in enumerate(lines):
-                if not NON_BLOCKING_DRIFT_RE.search(line):
-                    continue
-                if not REQUIRED_GATE_CONTEXT_RE.search(line):
-                    continue
-                if _has_non_blocking_allowance(lines, index):
-                    continue
-                errors.append(f"{relative_path} must not classify required gate failures as non-blocking")
-                break
-    return errors
-
-
-def _validate_review_role_contracts(root: Path) -> list[str]:
-    errors: list[str] = []
-    for relative_path in REVIEW_VERDICT_FILES:
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        for line in path.read_text(encoding="utf-8").splitlines():
-            normalized_line = line.upper()
-            is_verdict_line = "OVERALL" in normalized_line or "VERDICT" in normalized_line
-            has_review_verdicts = "APPROVE" in normalized_line and "BLOCK" in normalized_line
-            if is_verdict_line and has_review_verdicts and "NON-BLOCKING" in normalized_line:
-                errors.append(f"{relative_path} uses stale NON-BLOCKING review verdict")
-                break
-
-    code_review = root / "skills" / "code-review" / "SKILL.md"
-    if code_review.is_file():
-        text = code_review.read_text(encoding="utf-8")
-        normalized_text = " ".join(text.split())
-        for term in CODE_REVIEW_OUTPUT_REQUIRED_TERMS:
-            if " ".join(term.split()) not in normalized_text:
-                errors.append(f"skills/code-review/SKILL.md missing review output term {term!r}")
-        for term in REVIEW_GOVERNANCE_REQUIRED_TERMS:
-            if " ".join(term.split()) not in normalized_text:
-                errors.append(f"skills/code-review/SKILL.md missing review governance contract term {term!r}")
-    for relative_path, required_terms in REVIEW_ROLE_CONTRACTS.items():
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        text = path.read_text(encoding="utf-8")
-        normalized_text = " ".join(text.split())
-        normalized_lower_text = normalized_text.lower()
-        for term in required_terms:
-            if " ".join(term.split()) not in normalized_text:
-                errors.append(f"{relative_path} missing review role contract term {term!r}")
-        for term in REVIEW_TRIGGERED_OWNER_SKILL_TERMS:
-            if " ".join(term.split()) not in normalized_text:
-                errors.append(f"{relative_path} missing triggered owner skill review term {term!r}")
-        for term in REVIEW_AUTHORITY_TERMS:
-            if " ".join(term.lower().split()) not in normalized_lower_text:
-                errors.append(f"{relative_path} missing review authority term {term!r}")
-        if "quality-guard" in relative_path or "quality_guard" in relative_path:
-            if not QUALITY_GUARD_FINAL_APPROVAL_NEGATION_RE.search(text):
-                errors.append(f"{relative_path} missing quality_guard final-approval negation")
-    return errors
-
-
-def _validate_ui_approval_contract(root: Path) -> list[str]:
-    errors: list[str] = []
-    relative_path = "skills/user-apps-design/SKILL.md"
-    path = root / relative_path
-    if not path.is_file():
-        return errors
-    text = path.read_text(encoding="utf-8")
-    normalized_text = " ".join(text.split())
-    for term in DESIGN_CONTEXT_CONTRACT_REQUIRED_TERMS:
-        if " ".join(term.split()) not in normalized_text:
-            errors.append(f"{relative_path} missing UI approval context term {term!r}")
-    for term in UI_APPROVAL_BOUNDARY_REQUIRED_TERMS:
-        if " ".join(term.split()) not in normalized_text:
-            errors.append(f"{relative_path} missing UI approval boundary term {term!r}")
-    return errors
-
-
 def _validate_role_boundary_contracts(root: Path) -> list[str]:
     errors: list[str] = []
     for relative_path, required_terms in ROLE_BOUNDARY_CONTRACTS.items():
@@ -1966,15 +1264,8 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_repo_codex_live_install(root))
     errors.extend(_validate_wave_lifecycle(root))
     errors.extend(_validate_backlog_detail_contract(root))
-    errors.extend(_validate_route_gate_contracts(root))
-    errors.extend(_validate_design_integrity_gate(root))
     errors.extend(_validate_live_validation_contracts(root))
-    errors.extend(_validate_material_risk_lens_contracts(root))
-    errors.extend(_validate_provider_prompt_contracts(root))
-    errors.extend(_validate_required_gate_advisory_drift(root))
     errors.extend(_validate_stale_accepted_debt_phrases(root))
-    errors.extend(_validate_ui_approval_contract(root))
-    errors.extend(_validate_review_role_contracts(root))
     errors.extend(_validate_role_boundary_contracts(root))
     errors.extend(_validate_runtime_evidence_ui_default_contract(root))
 
@@ -2125,7 +1416,7 @@ def run_self_test() -> list[str]:
             'name = "wrong_name"\n',
             encoding="utf-8",
         )
-        invalid_packet = """# Wave invalid Execution Packet
+        invalid_context = """# Wave invalid Context Note
 
 ## Work Context
 
@@ -2140,7 +1431,7 @@ def run_self_test() -> list[str]:
         (root / "docs-ai" / "docs" / "initiatives" / "waves").mkdir(parents=True)
         (root / "docs-ai" / "current-work" / "invalid").mkdir(parents=True)
         (root / "docs-ai" / "current-work" / "invalid" / "wave-execution.md").write_text(
-            invalid_packet,
+            invalid_context,
             encoding="utf-8",
         )
         (root / "docs-ai" / "docs" / "initiatives" / "waves" / "invalid.md").write_text(
@@ -2157,7 +1448,7 @@ def run_self_test() -> list[str]:
         )
         (root / "docs-ai" / "current-work" / "done").mkdir(parents=True)
         (root / "docs-ai" / "current-work" / "done" / "wave-execution.draft.md").write_text(
-            invalid_packet,
+            invalid_context,
             encoding="utf-8",
         )
         (root / "docs-ai" / "current-work" / "delivery-map.md").write_text(
@@ -2198,10 +1489,10 @@ def run_self_test() -> list[str]:
             "adapters/codex/config.toml missing agents.quality_guard",
             "explorer.toml name must be 'explorer'",
             "missing Codex agent file adapters/codex/agents/quality-guard.toml",
-            "wave-execution.md missing section 'Readiness Claim'",
-            "invalid.md is discovery-required but canonical packet exists",
-            "ready.md is execution-ready but canonical packet is missing",
-            "done.md is done but current-work packet exists",
+            "wave-execution.md contains obsolete top-level section 'Work Context'",
+            "invalid.md is discovery-required but canonical context note exists",
+            "ready.md is execution-ready but canonical context note is missing",
+            "done.md is done but current-work context note exists",
             "delivery-map.md lists done wave done",
         )
         for marker in expected:
