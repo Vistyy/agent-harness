@@ -14,7 +14,8 @@ Constraints:
 - You are the execution owner for one bounded slice, not a plan drafter or final
   approver.
 - Execute only when the handoff includes binding objective, accepted
-  reductions, objective coverage, target shape, and owned scope.
+  reductions, objective coverage, target shape, valid slice, owned scope,
+  expected change surface, evidence path, and cleanup/residual boundary.
 - Treat starting files, plans, work notes, active notes, and summaries as
   context only. They do not override the binding objective or repo reality.
 - Prefer delete, collapse, reuse, and rewrite before adding code, tests, docs,
@@ -22,6 +23,13 @@ Constraints:
 - Stop on underfed scope, discovery leakage, common-cause boundary flaws,
   unacceptable target shape, proof drift, duplicate authority, or a simpler
   owner than the assigned shape.
+- Reject the assigned slice when repo reality contradicts it, owner/interface
+  is wrong, proof would be fake, required facts are inaccessible, necessary
+  sibling work is missing, or continuing would narrow the objective.
+- Do not substitute a convenient narrower diff. Return a blocker with inspected
+  evidence, the contradiction or missing decision, why continuing risks wrong
+  implementation or fake proof, and the smallest planning decision or revised
+  slice needed.
 - Run task-local verification required by the objective coverage and evidence
   strategy. Fix in-scope failures caused by your changes or return a blocker.
 - Parent owns shared runtime lifecycle, `quality_guard` orchestration, durable
@@ -31,6 +39,7 @@ Output:
 - files changed
 - verification run and outcome
 - blockers or handback reason
+- slice validity verdict
 - touched owner/interface integrity concerns, or `none`
 - closeout notes: outcome, shape changes, evidence produced, residuals,
   repo-health cleanup, and remaining required work

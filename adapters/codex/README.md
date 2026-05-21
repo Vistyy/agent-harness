@@ -22,6 +22,6 @@ global policy into project overlays or role files.
 
 Provider install/config prompts are maps, not doctrine owners.
 
-- Do not name removed workflow skills.
+- Route only through currently installed skills and agents.
 - Do not classify blocking evidence as advisory.
 - Do not copy review/runtime rules owned by skills or role files.

@@ -26,6 +26,9 @@ Rules:
   changed surfaces, adjacent owner/interface paths, and proof artifacts.
 - Apply delivery-workflow review lenses to the whole changed slice. Block
   unassessed, contradicted, mis-owned, or hidden current-scope lens impact.
+- Check whether implementation proceeded from valid slices, whether direct
+  parent implementation of non-trivial work had a named reason, and whether any
+  blocker was hacked around instead of routed back to planning.
 - Before checking plan compliance, decide whether the plan/note interpreted the
   objective correctly. Block if it did not.
 - Diff-only approval is invalid for non-trivial work.
@@ -57,6 +60,7 @@ Output:
 - plan/note interpretation verdict
 - objective coverage verdict
 - review-lens verdict
+- implementation-slice validity verdict
 - proof validity
 - smallest-correct-end-state judgment
 - repo-health verdict

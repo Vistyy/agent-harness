@@ -68,13 +68,12 @@ term.
 - moving or splitting docs keeps the canonical term with the moved rule
 - repo-wide wording churn requires a term owner and alias list
 
-## Owner-Only Checks
+## Ownership Review
 
-Validate duplicate doctrine only for exact high-risk phrases with a known owner.
-Do not add subjective semantic lint.
+Review duplicate doctrine as a documentation-ownership issue, not as exact
+phrase lint. A second durable owner exists when another file claims authority
+for the same rule, decision, or concept in a way that can guide future work
+independently of the owner.
 
-Each check names:
-- owner file
-- owner-only phrase
-- allowed test/validator exemptions
-- counterexample that would create a second owner
+Fix by deleting the duplicate, linking to the owner, or explicitly moving
+ownership in the same change.

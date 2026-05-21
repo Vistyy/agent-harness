@@ -52,8 +52,9 @@ backlog notes, packets, plans, or summaries as authority.
 ## Backlog
 
 Backlog files preserve work that should not be lost. They are not promises that
-the next implementation shape is known. Keep problem, why it remains visible,
-suggested next discovery move, references, and removal condition.
+the next implementation shape is known. Keep problem, owner, bucket, affected
+surface, and suggested next discovery move. Accepted temporary debt also needs
+explicit user acceptance and removal condition.
 
 Current-scope cleanup cannot be dumped into backlog unless the user accepts a
 reduction or the work is genuinely separate from the active objective.

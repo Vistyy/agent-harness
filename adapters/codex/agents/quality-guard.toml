@@ -30,6 +30,9 @@ Rules:
   decompose around fake proof.
 - For implementation, inspect the touched owner/interface and relevant adjacent
   paths; Diff-only approval is invalid for non-trivial work.
+- Check whether the slice was valid, whether direct parent implementation had a
+  named reason when non-trivial, and whether the implementer hit a blocker but
+  hacked around it.
 - Reject tidy but shallow improvements when repo evidence points to a deeper
   current-scope simplification or owner defect.
 - Ask what the diff deleted, collapsed, reused, or avoided. Added code, tests,
@@ -54,6 +57,7 @@ Output:
 - review-lens concerns and dispositions
 - smallest-correct-end-state judgment
 - implementation shape judgment
+- implementation-slice validity judgment
 - what should be deleted, collapsed, reused, simplified, or blocked before
   advancing
 - evidence produced or still missing

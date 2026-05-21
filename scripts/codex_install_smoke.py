@@ -150,20 +150,22 @@ def seed_prune_fixtures(codex_home: Path, external_root: Path) -> dict[str, Path
     agents.mkdir(parents=True, exist_ok=True)
     external_root.mkdir(parents=True, exist_ok=True)
 
-    stale_skill = skills / "old-workflow-skill"
-    stale_relative_skill = skills / "old-relative-workflow-skill"
-    stale_root_skill = skills / "old-root-skill"
-    stale_agent = agents / "old-agent.toml"
+    unplanned_skill = skills / "unplanned-skill"
+    unplanned_relative_skill = skills / "unplanned-relative-skill"
+    unplanned_root_skill = skills / "unplanned-root-skill"
+    unplanned_agent = agents / "unplanned-agent.toml"
     external_link = skills / "external-skill"
     outside_dotdot_link = skills / "outside-dotdot-skill"
     regular_file = skills / "user-file"
     directory = skills / "user-dir"
     system_dir = skills / ".system"
 
-    stale_skill.symlink_to(ROOT / "skills" / "wave-autopilot")
-    stale_relative_skill.symlink_to(os.path.relpath(ROOT / "skills" / "wave-autopilot", stale_relative_skill.parent))
-    stale_root_skill.symlink_to(ROOT)
-    stale_agent.symlink_to(ROOT / "adapters" / "codex" / "agents" / "old-agent.toml")
+    unplanned_skill.symlink_to(ROOT / "skills" / "delivery-workflow")
+    unplanned_relative_skill.symlink_to(
+        os.path.relpath(ROOT / "skills" / "delivery-workflow", unplanned_relative_skill.parent)
+    )
+    unplanned_root_skill.symlink_to(ROOT)
+    unplanned_agent.symlink_to(ROOT / "adapters" / "codex" / "agents" / "final-reviewer.toml")
     external_link.symlink_to(external_root / "external-skill")
     outside_dotdot_link.symlink_to(ROOT / ".." / "external" / "outside-skill")
     regular_file.write_text("user content\n", encoding="utf-8")
@@ -171,10 +173,10 @@ def seed_prune_fixtures(codex_home: Path, external_root: Path) -> dict[str, Path
     system_dir.mkdir()
 
     return {
-        "stale_skill": stale_skill,
-        "stale_relative_skill": stale_relative_skill,
-        "stale_root_skill": stale_root_skill,
-        "stale_agent": stale_agent,
+        "unplanned_skill": unplanned_skill,
+        "unplanned_relative_skill": unplanned_relative_skill,
+        "unplanned_root_skill": unplanned_root_skill,
+        "unplanned_agent": unplanned_agent,
         "external_link": external_link,
         "outside_dotdot_link": outside_dotdot_link,
         "regular_file": regular_file,
@@ -191,10 +193,10 @@ def assert_prune_fixtures_preserved(fixtures: dict[str, Path]) -> None:
 
 
 def assert_pruned(fixtures: dict[str, Path]) -> None:
-    for name in ("stale_skill", "stale_relative_skill", "stale_root_skill", "stale_agent"):
+    for name in ("unplanned_skill", "unplanned_relative_skill", "unplanned_root_skill", "unplanned_agent"):
         path = fixtures[name]
         if path.exists() or path.is_symlink():
-            fail(f"installer did not prune stale symlink {path}")
+            fail(f"installer did not prune unplanned symlink {path}")
 
 
 def assert_install(codex_home: Path, bin_dir: Path) -> None:
@@ -228,33 +230,33 @@ def main() -> int:
         external_root = Path(temp_dir) / "external"
         fixtures = seed_prune_fixtures(codex_home, external_root)
         dry_run = run_dry_run(codex_home, bin_dir)
-        for name in ("stale_skill", "stale_relative_skill", "stale_root_skill", "stale_agent"):
+        for name in ("unplanned_skill", "unplanned_relative_skill", "unplanned_root_skill", "unplanned_agent"):
             if str(fixtures[name]) not in dry_run.stdout:
                 fail(f"dry-run did not report planned prune for {fixtures[name]}")
             if not fixtures[name].is_symlink():
-                fail(f"dry-run removed stale symlink {fixtures[name]}")
+                fail(f"dry-run removed unplanned symlink {fixtures[name]}")
         assert_prune_fixtures_preserved(fixtures)
         (codex_home / "config.toml").write_text(
             '[features]\nmulti_agent = true\n\n'
-            '[agents.check_runner]\n'
-            'description = "Removed check runner"\n'
-            'config_file = "agents/check-runner.toml"\n',
+            '[agents.user_agent]\n'
+            'description = "User-owned agent"\n'
+            'config_file = "agents/user-agent.toml"\n',
             encoding="utf-8",
         )
         run_install(codex_home, bin_dir)
         assert_install(codex_home, bin_dir)
         target_config = tomllib.loads((codex_home / "config.toml").read_text(encoding="utf-8"))
-        if "check_runner" in target_config.get("agents", {}):
-            fail("installer did not remove stale agents.check_runner block")
+        if "user_agent" not in target_config.get("agents", {}):
+            fail("installer did not preserve user-owned agents.user_agent block")
         assert_pruned(fixtures)
         assert_prune_fixtures_preserved(fixtures)
         assert_pruned_manifest(
             codex_home,
             {
-                fixtures["stale_skill"],
-                fixtures["stale_relative_skill"],
-                fixtures["stale_root_skill"],
-                fixtures["stale_agent"],
+                fixtures["unplanned_skill"],
+                fixtures["unplanned_relative_skill"],
+                fixtures["unplanned_root_skill"],
+                fixtures["unplanned_agent"],
             },
         )
         run_install(codex_home, bin_dir)
@@ -277,13 +279,13 @@ def main() -> int:
         shutil.rmtree(conflict_codex_home)
         stage_codex_home = Path(temp_dir) / "stage-codex-home"
         stage_bin_dir = Path(temp_dir) / "stage-bin"
-        stage_stale = stage_codex_home / "skills" / "old-stage-skill"
-        stage_stale.parent.mkdir(parents=True, exist_ok=True)
-        stage_stale.symlink_to(ROOT / "skills" / "wave-autopilot")
+        stage_unplanned = stage_codex_home / "skills" / "unplanned-stage-skill"
+        stage_unplanned.parent.mkdir(parents=True, exist_ok=True)
+        stage_unplanned.symlink_to(ROOT / "skills" / "delivery-workflow")
         run_install(stage_codex_home, stage_bin_dir, "--stage-harness-governance")
         assert_stage_only(stage_codex_home, stage_bin_dir)
-        if not stage_stale.is_symlink():
-            fail("stage-only install pruned a stale symlink")
+        if not stage_unplanned.is_symlink():
+            fail("stage-only install pruned an unplanned symlink")
     print("codex install smoke passed")
     return 0
 

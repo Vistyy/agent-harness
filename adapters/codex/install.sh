@@ -206,7 +206,7 @@ is_planned_basename() {
   return 1
 }
 
-collect_stale_symlink_prunes() {
+collect_unplanned_symlink_prunes() {
   PRUNES=()
   if [[ "$STAGE_ONLY" == "true" ]]; then
     return
@@ -370,8 +370,6 @@ def remove_agent_block(raw: str, name: str) -> str:
 
 
 updated = ensure_features(text)
-for name in ("check_runner",):
-    updated = remove_agent_block(updated, name)
 for name, block in source_agent_blocks(source).items():
     updated = replace_or_append_agent_block(updated, name, block)
 
@@ -540,9 +538,9 @@ else
   done < <(planned_cli)
 fi
 
-collect_stale_symlink_prunes
+collect_unplanned_symlink_prunes
 
-echo "planned stale symlink prunes:"
+echo "planned unplanned symlink prunes:"
 if [[ "${#PRUNES[@]}" -eq 0 ]]; then
   echo "none"
 else

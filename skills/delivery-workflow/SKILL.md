@@ -20,10 +20,10 @@ current objective and repo reality; it does not authorize direct execution.
 ## Flow
 
 For non-trivial work: discover repo reality, define end-to-end objective
-coverage, choose the simplest coherent target shape, decompose from that shape,
-apply review lenses, get adversarial planning review, implement slices, prove
-real behavior, get final repo-health review, then close honestly and update
-memory.
+coverage, choose the simplest coherent target shape, decompose into valid
+implementation slices, apply review lenses, get adversarial planning review,
+implement valid slices, prove real behavior, get final repo-health review, then
+close honestly and update memory.
 
 Small, local work may run in-thread without a durable note, but the same
 objective, evidence, and repo-health judgment still applies.
@@ -39,6 +39,31 @@ removal, observability, tests/runtime proof, docs/memory, and residual work.
 If a slice is narrow, state how it moves the larger coverage model forward.
 Coverage gaps are blockers unless explicitly deferred, tracked, and not needed
 for the current branch claim.
+
+## Implementation Slices
+
+Any agent editing files for non-trivial work is acting as implementer, including
+the parent thread. Implementation may proceed only from a valid slice.
+
+A valid slice has objective contribution, accepted reductions, selected
+owner/interface, target shape, expected change surface, evidence path,
+cleanup/residual boundary, and no hidden design decision left to the
+implementer.
+
+Decompose into the smallest coherent slices that can be implemented and
+verified honestly. A slice is too large when review cannot isolate its outcome
+or it leaves multiple hidden decisions. A slice is too small when it cannot
+prove meaningful progress toward the larger objective.
+
+Invalid slices are blockers, not implementation challenges. Stop and route back
+to planning when repo reality contradicts the slice, the owner/interface is
+wrong, proof would be fake, required facts are inaccessible, necessary sibling
+work is missing, or continuing would narrow the objective.
+
+Do not substitute a convenient narrower diff and call it complete. Blockers must
+name inspected evidence, the contradiction or missing decision, why continuing
+risks wrong implementation or fake proof, and the smallest planning decision or
+revised slice needed.
 
 ## Target Shape
 
@@ -96,8 +121,9 @@ reality, owner docs, current code/runtime topology, active note as hypothesis,
 and parent/implementer summary last.
 
 Planning review uses review lenses and blocks if the note misinterprets the
-objective, hides design decisions, decomposes around fake proof, or leaves
-current-scope lifecycle, cleanup, lens, or proof obligations uncovered.
+objective, hides design decisions, decomposes around fake proof, creates invalid
+slices, or leaves current-scope lifecycle, cleanup, lens, or proof obligations
+uncovered.
 
 Final review uses the same lenses on the whole changed slice and blocks if the
 repo is not coherent for the objective: obsolete paths remain, owners are

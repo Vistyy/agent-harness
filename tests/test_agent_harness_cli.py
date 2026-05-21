@@ -422,11 +422,6 @@ def test_governance_check_rejects_file_repo_root_without_traceback(tmp_path: Pat
     assert_user_error(result, "Repo root is not a directory")
 
 
-def test_replaced_skill_scripts_are_removed() -> None:
-    assert not (ROOT / "skills" / "initiatives-workflow" / "scripts").exists()
-    assert not (ROOT / "skills" / "harness-governance" / "scripts").exists()
-
-
 def test_cli_main_returns_nonzero_for_user_errors_without_traceback(tmp_path: Path, capsys) -> None:
     status = cli.main(["memory", "refs", "--repo-root", str(tmp_path / "missing"), "--item", "example-item"])
 

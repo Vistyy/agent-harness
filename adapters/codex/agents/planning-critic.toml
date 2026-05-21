@@ -27,6 +27,9 @@ Rules:
 - Inspect enough repo reality to avoid being trapped by the parent note.
 - Use review lenses to falsify objective interpretation, target shape,
   decomposition, proof strategy, and current-scope residuals.
+- Reject decompositions whose slices are too broad, too small to prove progress,
+  missing necessary siblings, or impossible to implement without hidden design
+  decisions.
 - Reject if a proof could pass while the requested behavior is absent.
 - Reject locally coherent plans that preserve the wrong owner, fake a runtime
   path, add avoidable surface, protect ceremony, or leave the real defect
@@ -48,6 +51,7 @@ Output:
 - prompt/source mismatch, or `none`
 - plan/note interpretation verdict
 - objective coverage gaps
+- implementation-slice validity gaps
 - simplest correct end state
 - owner/interface judgment
 - what should be deleted, collapsed, reused, rewritten, or avoided

@@ -13,7 +13,6 @@ SKILLS_HOME = CODEX_HOME / "skills"
 AGENTS_HOME = CODEX_HOME / "agents"
 SOURCE_CONFIG = ROOT / "adapters" / "codex" / "config.toml"
 LIVE_CONFIG = CODEX_HOME / "config.toml"
-REMOVED_AGENT_NAMES = {"check_runner"}
 
 
 def fail(message: str) -> None:
@@ -61,7 +60,7 @@ def target_is_inside_repo(target: Path) -> bool:
     return True
 
 
-def assert_no_stale_harness_symlinks(directory: Path, planned_names: set[str]) -> None:
+def assert_no_unplanned_harness_symlinks(directory: Path, planned_names: set[str]) -> None:
     if not directory.exists():
         fail(f"{directory} is missing")
     for path in sorted(directory.iterdir()):
@@ -71,7 +70,7 @@ def assert_no_stale_harness_symlinks(directory: Path, planned_names: set[str]) -
             continue
         target = resolved_symlink_target(path)
         if target_is_inside_repo(target) and path.name not in planned_names:
-            fail(f"{path} is a stale harness symlink to {target}")
+            fail(f"{path} is an unplanned harness symlink to {target}")
 
 
 def assert_backup_manifest() -> None:
@@ -98,9 +97,6 @@ def assert_config() -> None:
 
     source_agents = source.get("agents", {})
     live_agents = live.get("agents", {})
-    for agent_name in REMOVED_AGENT_NAMES:
-        if agent_name in live_agents:
-            fail(f"{LIVE_CONFIG} contains removed agents.{agent_name}")
     for agent_name, source_block in source_agents.items():
         if live_agents.get(agent_name) != source_block:
             fail(f"{LIVE_CONFIG} agents.{agent_name} does not match {SOURCE_CONFIG}")
@@ -116,8 +112,8 @@ def main() -> int:
     for name, source in agents.items():
         assert_symlink(AGENTS_HOME / name, source)
 
-    assert_no_stale_harness_symlinks(SKILLS_HOME, set(skills))
-    assert_no_stale_harness_symlinks(AGENTS_HOME, set(agents))
+    assert_no_unplanned_harness_symlinks(SKILLS_HOME, set(skills))
+    assert_no_unplanned_harness_symlinks(AGENTS_HOME, set(agents))
     if (SKILLS_HOME / ".system").exists() and not (SKILLS_HOME / ".system").is_dir():
         fail(f"{SKILLS_HOME / '.system'} is not a directory")
     assert_backup_manifest()

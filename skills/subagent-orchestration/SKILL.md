@@ -42,6 +42,12 @@ coverage, target shape, owner/interface, evidence strategy, and owned scope are
 clear enough to hand off. A durable note is not required for a small in-thread
 implementation slice.
 
+Parent direct implementation of non-trivial work needs a named reason, such as
+tight coupling to immediate local investigation, ambiguous write ownership,
+adapter/runtime limits, or a slice small enough that delegation adds no value.
+Direct parent implementation remains bound by `../delivery-workflow/SKILL.md`
+implementation-slice and blocker rules.
+
 Default to `quality_guard` while non-trivial shape or implementation is still
 cheap to change.
 
@@ -90,6 +96,8 @@ Pass:
 - binding objective, accepted reductions, residual gaps
 - objective coverage, target shape, and rejected alternatives
 - design owner/interface
+- valid slice, expected change surface, and cleanup/residual boundary for
+  implementation handoffs
 - evidence strategy and required proof artifacts
 - role task and owned/read-only scope
 - active durable context path when it exists

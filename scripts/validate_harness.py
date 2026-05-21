@@ -13,7 +13,6 @@ ROOT = Path(__file__).resolve().parents[1]
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 MARKDOWN_LEVEL_TWO_HEADING_PATTERN = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
 INLINE_PATH_RE = re.compile(r"`((?:(?:references|assets|scripts)/|\.\./)[^`\s]+)`")
-FORBIDDEN_PROJECT_OWNER_PATH_RE = re.compile(r"`(docs-ai/docs/conventions/[^`]+)`")
 SKILL_TOKEN_RE = re.compile(r"(?<![A-Za-z0-9_-])\$([a-z][a-z0-9]*(?:-[a-z0-9]+)*)(?![A-Za-z0-9_-])")
 BACKTICK_SKILL_REF_RE = re.compile(
     r"\b(?:use|load|apply|invoke|route(?:s|d)?|delegate(?:s|d)?)"
@@ -35,252 +34,19 @@ OPENAI_ALLOWED_INTERFACE_KEYS = {
     "brand_color",
     "default_prompt",
 }
-# AGENTS.md and subagent-orchestration must keep explicit user authorization;
-# otherwise adapter-level spawn rules can block required harness reviewers.
-PREAUTHORIZED_SUBAGENT_SENTINEL = (
-    "The user explicitly authorizes use of the spawn/subagent tool for these"
-)
-PREAUTHORIZED_SUBAGENT_END = "This preauthorization applies only to those named roles"
-REMOVED_CODEX_AGENT_NAMES = {"check_runner"}
-RUNTIME_EVIDENCE_ADAPTER_FILES = (
-    "adapters/codex/agents/runtime-evidence.toml",
-)
-REVIEW_LENSES_OWNER_PATH = "skills/delivery-workflow/references/review-lenses.md"
-# Exact adapter-role terms protect one concrete counterexample each: reviewers
-# claiming another role's authority, support roles editing, implementers
-# executing without approved state, or runtime evidence reviewing code quality.
-# Keep these checks narrow; do not turn them into subjective prompt-style lint.
-ROLE_BOUNDARY_CONTRACTS = {
-    "adapters/codex/agents/explorer.toml": (
-        "Stay read-only",
-        "Do not edit code or take implementation ownership.",
-    ),
-    "adapters/codex/agents/implementer.toml": (
-        "one bounded assigned slice",
-        "objective coverage",
-        "final approver",
-    ),
-    "adapters/codex/agents/planning-critic.toml": (
-        "Stay read-only",
-        "do not implement",
-        "strategy reviewer",
-        "Parent handoff is orientation, not authority",
-        "delivery-workflow review lenses",
-        "Use review lenses to falsify",
-        "prompt/source mismatch",
-    ),
-    "adapters/codex/agents/quality-guard.toml": (
-        "Parent handoff is orientation, not authority",
-        "delivery-workflow review lenses",
-        "same delivery-workflow review lenses as final review",
-        "prompt/source mismatch",
-    ),
-    "adapters/codex/agents/final-reviewer.toml": (
-        "Parent handoff is orientation, not authority",
-        "delivery-workflow review lenses",
-        "Apply delivery-workflow review lenses",
-        "prompt/source mismatch",
-    ),
-    "adapters/codex/agents/design-judge.toml": (
-        "screenshot/contact-sheet",
-        "binding objective",
-        "accepted reductions",
-        "project design source",
-        "declared project design source",
-        "project design source requirements",
-        "Missing or contradictory declared project design source is `blocked`",
-        "accepted narrowed claim",
-        "run the app",
-        "review code",
-        "debug",
-        "prove runtime behavior",
-        "invent design criteria",
-        "materially weaker than the target",
-        "runtime-evidence-based",
-        "pass",
-        "reject",
-        "blocked",
-        "visual quality only",
-        "Do not perform `runtime_evidence`, `quality_guard`, `final_reviewer`",
-        "not live behavior or code quality",
-    ),
-}
-ADAPTER_HANDOFF_CONTEXT_CONTRACTS = {
-    "adapters/codex/agents/implementer.toml": ("binding objective", "accepted reductions", "objective coverage", "owned scope"),
-    "adapters/codex/agents/planning-critic.toml": ("binding objective", "accepted reductions", "objective coverage"),
-    "adapters/codex/agents/quality-guard.toml": ("binding objective", "accepted reductions", "objective coverage"),
-    "adapters/codex/agents/final-reviewer.toml": (
-        "binding objective",
-        "accepted reductions",
-        "objective coverage",
-        "owned scope",
-        "proof artifacts",
-    ),
-    "adapters/codex/agents/runtime-evidence.toml": ("binding objective", "accepted reductions", "artifacts"),
-    "adapters/codex/agents/design-judge.toml": ("binding objective", "accepted reductions", "artifacts"),
-}
-REMOVED_WORKFLOW_SKILL_NAMES = (
-    "design-integrity",
-    "readiness-claim",
-    "work-routing",
-    "executing-plans",
-    "wave-autopilot",
-    "workflow-feedback",
-    "writing-plans",
-)
-WEB_BROWSER_PROOF_FILES = (
-    "skills/webapp-testing/references/browser-runtime-proof-workflow.md",
-    "skills/webapp-testing/references/browser-proof-layering-contract.md",
-)
-LIVE_VALIDATION_STALE_PHRASES = (
-    "Delegate isolated runtime proof only when startup/teardown is deterministic and ownership is unambiguous.",
-)
-STALE_ACCEPTED_DEBT_PHRASES = (
-    "owner defect outside accepted debt",
-)
-BACKLOG_REQUIRED_HEADINGS = ("metadata", "problem", "why this bucket", "next action", "references")
+BACKLOG_REQUIRED_HEADINGS = ("metadata", "problem", "next action")
 BACKLOG_REQUIRED_FIELDS = (
     "status",
     "owner",
-    "created",
     "bucket",
-    "risk",
-    "removal condition",
-    "user acceptance",
     "location",
-    "recommended fix",
 )
 BACKLOG_BUCKET_VALUES = ("discovered separate debt", "accepted temporary debt")
 BACKLOG_ENTRY_TITLE_PREFIX = "# Backlog Entry:"
-STAGED_REFERENCE_GATE_SKILLS = {
-    "code-review",
-    "delivery-workflow",
-    "documentation-stewardship",
-    "feedback-address",
-    "flutter-expert",
-    "harness-governance",
-    "initiatives-workflow",
-    "svelte-code-writer",
-    "subagent-orchestration",
-    "systematic-debugging",
-    "testing-best-practices",
-    "runtime-proof",
-    "user-apps-design",
-    "webapp-testing",
-    "mobileapp-testing",
-}
-DEFERRED_REFERENCE_GATE_SKILL_GROUPS = {}
-SKILL_BODY_TRIGGER_PATTERNS = (
-    (re.compile(r"^##\s+Use\s+(?:When|For)\b", re.IGNORECASE | re.MULTILINE), "body-level trigger heading"),
-    (re.compile(r"\bUse this skill when\b", re.IGNORECASE), "body-level trigger phrase"),
-)
-SKILL_REFERENCE_PATH_RE = re.compile(r"`(?:\.\./[^`]*?/)?references/[^`\s]+\.md`")
-REQUIRED_REFERENCE_GATE_RE = re.compile(
-    r"^\s*-?\s*Read\s+`(?:\.\./[^`]*?/)?references/[^`\s]+\.md`.*\b(?:when|before|for)\b",
-    re.IGNORECASE,
-)
-REMOVED_HARNESS_PATHS = (
-    # Current redesign-era removals that are still likely to regress through
-    # stale links, live installs, or adapter drift.
-    "skills/code-simplicity/SKILL.md",
-    "skills/code-simplicity/agents/openai.yaml",
-    "skills/code-simplicity/references/touched-component-integrity-gate.md",
-    "skills/code-simplicity/references/default-simplicity-posture.md",
-    "adapters/codex/agents/check-runner.toml",
-    "adapters/github-copilot/README.md",
-    "adapters/github-copilot/agents/check_runner.agent.md",
-    "adapters/github-copilot/agents/design_judge.agent.md",
-    "adapters/github-copilot/agents/explorer.agent.md",
-    "adapters/github-copilot/agents/final_reviewer.agent.md",
-    "adapters/github-copilot/agents/implementer.agent.md",
-    "adapters/github-copilot/agents/planning_critic.agent.md",
-    "adapters/github-copilot/agents/quality_guard.agent.md",
-    "adapters/github-copilot/agents/runtime_evidence.agent.md",
-    "skills/planning-intake/SKILL.md",
-    "skills/planning-intake/agents/openai.yaml",
-    "skills/planning-intake/references/intake-contract.md",
-    "skills/system-boundary-architecture/references/code-shape-and-local-design.md",
-    "skills/system-boundary-architecture/SKILL.md",
-    "skills/system-boundary-architecture/agents/openai.yaml",
-    "skills/system-boundary-architecture/references/mobile-client-boundaries.md",
-    "skills/system-boundary-architecture/references/python-service-boundaries.md",
-    "skills/system-boundary-architecture/references/web-boundaries.md",
-    "skills/system-boundary-architecture/references/engineering-principles.md",
-    "skills/system-boundary-architecture/references/migration-guardrails.md",
-    "skills/system-boundary-architecture/references/python-service-and-boundary-doctrine.md",
-    "skills/system-boundary-architecture/references/system-and-boundary-architecture.md",
-    "skills/system-boundary-architecture/references/web-frontend-boundaries.md",
-    "skills/system-boundary-architecture/references/web-route-and-state-boundary-doctrine.md",
-    "skills/verification-before-completion/references/quality-gate-selection.md",
-    "skills/verification-before-completion/SKILL.md",
-    "skills/verification-before-completion/agents/openai.yaml",
-    "skills/verification-before-completion/references/runtime-evidence-contract.md",
-    "skills/verification-before-completion/references/runtime-proof-escalation.md",
-    "skills/verification-before-completion/references/verification-evidence.md",
-    "agent_harness/waves.py",
-    "skills/design-integrity/SKILL.md",
-    "skills/design-integrity/agents/openai.yaml",
-    "skills/design-integrity/references/mobile-client-boundaries.md",
-    "skills/design-integrity/references/python-service-boundaries.md",
-    "skills/design-integrity/references/web-boundaries.md",
-    "skills/readiness-claim/SKILL.md",
-    "skills/readiness-claim/agents/openai.yaml",
-    "skills/readiness-claim/assets/delivery-brief.md",
-    "skills/readiness-claim/references/material-risk-lenses.md",
-    "skills/delivery-workflow/references/material-risk-lenses.md",
-    "skills/work-routing/SKILL.md",
-    "skills/work-routing/agents/openai.yaml",
-    "skills/initiatives-workflow/assets/wave-brief-discovery-required.md",
-    "skills/initiatives-workflow/assets/wave-brief-execution-ready.md",
-    "skills/initiatives-workflow/assets/wave-execution.md",
-)
-REMOVED_HARNESS_PATH_EXEMPTIONS = {
-    "scripts/validate_harness.py",
-    "tests/test_validate_harness.py",
-}
-OWNER_ONLY_DOCTRINE = {
-    "Every durable rule has one owner.": "skills/documentation-stewardship/SKILL.md",
-    "Every durable concept has one owner.": "skills/documentation-stewardship/SKILL.md",
-    "Runtime evidence is blocking, not advisory.": "skills/runtime-proof/SKILL.md",
-    "Task labels, context notes, implementer summaries, and reviewer prompts do not replace it.": (
-        "skills/code-review/SKILL.md"
-    ),
-    "solution correctness": "skills/delivery-workflow/SKILL.md",
-    "`description` = trigger and routing contract.": "skills/harness-governance/references/skill-architecture.md",
-    "references = mandatory purpose gates.": "skills/harness-governance/references/skill-architecture.md",
-    (
-        "security/privacy, data integrity, reliability, operability, observability/diagnosability, "
-        "performance/cost, compatibility, and accessibility"
-    ): REVIEW_LENSES_OWNER_PATH,
-    (
-        "simplicity, cohesion/ownership, testability/provability, evolvability, maintainability/readability, "
-        "migration/cleanup, slice integrity, and dependency/tooling fit"
-    ): REVIEW_LENSES_OWNER_PATH,
-}
-OWNER_ONLY_DOCTRINE_EXEMPTIONS = {
-    "solution correctness": {
-        "scripts/validate_harness.py",
-        "tests/test_validate_harness.py",
-    },
-}
-SOLUTION_CORRECTNESS_SCAN_PREFIXES = (
-    "skills/",
-    "adapters/",
-)
-SOLUTION_CORRECTNESS_SCAN_FILES = {
-    "AGENTS.md",
-}
 
 
 class FrontmatterError(ValueError):
     pass
-
-
-def _is_source_path_citation(line: str) -> bool:
-    lowered = line.lower()
-    if "source:" not in lowered and "source material:" not in lowered:
-        return False
-    return bool(re.search(r"`[^`]+(?:/[^`]+)+`", line))
 
 
 def _iter_markdown(root: Path) -> list[Path]:
@@ -578,123 +344,8 @@ def _validate_skill_references(root: Path) -> list[str]:
             for match in SKILL_PATH_RE.finditer(line):
                 raw_path = match.group(1)
                 skill_name = match.group(2)
-                if _is_removed_path_scan_exempt(path, root) and raw_path in REMOVED_HARNESS_PATHS:
-                    continue
                 if skill_name not in skill_names:
                     errors.append(f"{rel}:{line_number} references missing skill path {raw_path}")
-    return errors
-
-
-def _iter_non_fenced_lines(text: str, start_line: int = 1) -> list[tuple[int, str]]:
-    lines: list[tuple[int, str]] = []
-    in_fence = False
-    for line_number, line in enumerate(text.splitlines(), start=start_line):
-        if line.strip().startswith("```"):
-            in_fence = not in_fence
-            continue
-        if not in_fence:
-            lines.append((line_number, line))
-    return lines
-
-
-def _validate_skill_body_contracts(root: Path) -> list[str]:
-    errors: list[str] = []
-    for skill_dir in _iter_skill_dirs(root):
-        skill_file = skill_dir / "SKILL.md"
-        if not skill_file.is_file():
-            continue
-        rel = skill_file.relative_to(root)
-        text = skill_file.read_text(encoding="utf-8")
-        try:
-            _frontmatter, body = _split_frontmatter(text)
-        except FrontmatterError:
-            continue
-        body_start_line = text[: text.index(body)].count("\n") + 1
-        for pattern, label in SKILL_BODY_TRIGGER_PATTERNS:
-            if pattern.search(body):
-                errors.append(f"{rel} contains {label}; ordinary trigger text belongs in frontmatter description")
-        if re.search(r"\boptional references?\b", body, re.IGNORECASE):
-            errors.append(f"{rel} contains Optional Reference wording; references are mandatory purpose gates")
-
-        if skill_dir.name not in STAGED_REFERENCE_GATE_SKILLS:
-            continue
-        for line_number, line in _iter_non_fenced_lines(body, body_start_line):
-            if not SKILL_REFERENCE_PATH_RE.search(line):
-                continue
-            if REQUIRED_REFERENCE_GATE_RE.search(line):
-                continue
-            errors.append(
-                f"{rel}:{line_number} has non-gated reference row in staged reference-gate skill; "
-                "use `Read <reference> when/before/for ...`"
-            )
-    return errors
-
-
-def _is_removed_path_scan_exempt(path: Path, root: Path) -> bool:
-    rel = path.relative_to(root).as_posix()
-    return rel in REMOVED_HARNESS_PATH_EXEMPTIONS
-
-
-def _validate_removed_harness_paths(root: Path) -> list[str]:
-    errors: list[str] = []
-    for path in sorted(root.rglob("*")):
-        if (
-            not path.is_file()
-            or path.suffix not in {".md", ".yaml", ".yml", ".toml", ".txt"}
-            or ".git" in path.parts
-            or _is_removed_path_scan_exempt(path, root)
-        ):
-            continue
-        text = path.read_text(encoding="utf-8")
-        rel = path.relative_to(root)
-        for removed_path in REMOVED_HARNESS_PATHS:
-            if removed_path in text:
-                errors.append(f"{rel} references removed harness path {removed_path}")
-    return errors
-
-
-def _validate_owner_only_doctrine(root: Path) -> list[str]:
-    errors: list[str] = []
-    for path in sorted(root.rglob("*")):
-        if not path.is_file() or path.suffix not in {".md", ".yaml", ".yml", ".toml", ".txt"} or ".git" in path.parts:
-            continue
-        rel = path.relative_to(root).as_posix()
-        text = path.read_text(encoding="utf-8")
-        normalized_text = " ".join(text.split())
-        normalized_lower_text = normalized_text.lower()
-        for phrase, owner in OWNER_ONLY_DOCTRINE.items():
-            normalized_phrase = " ".join(phrase.split())
-            exemptions = OWNER_ONLY_DOCTRINE_EXEMPTIONS.get(phrase, set())
-            is_active_context_note = (
-                phrase
-                in {
-                    "solution correctness",
-                    (
-                        "security/privacy, data integrity, reliability, operability, "
-                        "observability/diagnosability, performance/cost, compatibility, and accessibility"
-                    ),
-                    (
-                        "simplicity, cohesion/ownership, testability/provability, evolvability, "
-                        "maintainability/readability, migration/cleanup, slice integrity, and dependency/tooling fit"
-                    ),
-                }
-                and rel.startswith("docs-ai/current-work/")
-                and rel.endswith("/active-work-note.md")
-            )
-            if phrase == "solution correctness":
-                is_scanned_counterexample = rel in SOLUTION_CORRECTNESS_SCAN_FILES or rel.startswith(
-                    SOLUTION_CORRECTNESS_SCAN_PREFIXES
-                )
-                if rel == owner and normalized_phrase not in normalized_lower_text:
-                    errors.append(f"{rel} missing owner-only doctrine {phrase!r}")
-                    continue
-                if not is_scanned_counterexample:
-                    continue
-                has_phrase = normalized_phrase in normalized_lower_text
-            else:
-                has_phrase = normalized_phrase in normalized_text
-            if rel != owner and rel not in exemptions and not is_active_context_note and has_phrase:
-                errors.append(f"{rel} duplicates owner-only doctrine {phrase!r}; owner is {owner}")
     return errors
 
 
@@ -704,8 +355,6 @@ def _validate_agents_instruction_map(root: Path) -> list[str]:
     if not path.is_file():
         return errors
     text = path.read_text(encoding="utf-8")
-    if "compact first-hop map" not in text:
-        errors.append("AGENTS.md must describe project overlays as a compact first-hop map")
     routing = _markdown_section(text, "Routing")
     if not routing:
         errors.append("AGENTS.md missing ## Routing skill map")
@@ -713,9 +362,7 @@ def _validate_agents_instruction_map(root: Path) -> list[str]:
     skill_names = {_skill_name(skill_dir) for skill_dir in _iter_skill_dirs(root)}
     for match in BACKTICKED_SKILL_NAME_RE.finditer(routing):
         skill_name = match.group(1)
-        if skill_name in REMOVED_WORKFLOW_SKILL_NAMES:
-            errors.append(f"AGENTS.md routes to removed workflow skill {skill_name!r}")
-        elif skill_name not in skill_names:
+        if skill_name not in skill_names:
             errors.append(f"AGENTS.md routes to missing skill {skill_name!r}")
     return errors
 
@@ -734,77 +381,6 @@ def _parse_roles_markdown(root: Path) -> tuple[set[str], list[str]]:
     return roles, []
 
 
-def _extract_preauthorized_roles(path: Path, root: Path) -> tuple[set[str], list[str]]:
-    text = path.read_text(encoding="utf-8")
-    if PREAUTHORIZED_SUBAGENT_SENTINEL not in text:
-        return set(), [f"{path.relative_to(root)} missing named preauthorized subagent allowlist"]
-    start = text.index(PREAUTHORIZED_SUBAGENT_SENTINEL)
-    end = text.find(PREAUTHORIZED_SUBAGENT_END, start)
-    if end == -1:
-        return set(), [f"{path.relative_to(root)} missing preauthorized subagent boundary text"]
-    block = text[start:end]
-    roles = set(re.findall(r"`([a-z0-9_]+)`", block))
-    if not roles:
-        return roles, [f"{path.relative_to(root)} preauthorized subagent allowlist is empty"]
-    return roles, []
-
-
-def _validate_subagent_allowlist(root: Path, roles: set[str]) -> list[str]:
-    errors: list[str] = []
-    if not roles:
-        return errors
-    agents_path = root / "AGENTS.md"
-    if agents_path.is_file():
-        preauthorized, source_errors = _extract_preauthorized_roles(agents_path, root)
-        errors.extend(source_errors)
-        if preauthorized and preauthorized != roles:
-            errors.append(
-                f"AGENTS.md preauthorized subagents {sorted(preauthorized)} "
-                f"do not match agents/roles.md roles {sorted(roles)}"
-            )
-    metadata_path = root / "skills" / "subagent-orchestration" / "agents" / "openai.yaml"
-    if metadata_path.is_file():
-        metadata_text = metadata_path.read_text(encoding="utf-8")
-        metadata_role_mentions = sorted(role for role in roles if role in metadata_text)
-        if len(metadata_role_mentions) > 1:
-            errors.append(
-                "skills/subagent-orchestration/agents/openai.yaml must point to AGENTS.md "
-                "and agents/roles.md instead of duplicating the preauthorized role list"
-            )
-        metadata_normalized = " ".join(metadata_text.split())
-        for term in ("AGENTS.md", "agents/roles.md", "durable context"):
-            if term not in metadata_normalized:
-                errors.append(f"skills/subagent-orchestration/agents/openai.yaml missing subagent metadata owner pointer {term!r}")
-    subagent_path = root / "skills" / "subagent-orchestration" / "SKILL.md"
-    if subagent_path.is_file():
-        normalized_text = " ".join(subagent_path.read_text(encoding="utf-8").split())
-        for term in (
-            "standing user authorization",
-            "simplest correct end state",
-            "Handoffs preserve context",
-            "Do not spawn a replacement with a rephrased version of the same task",
-            "active durable context path",
-            "agents/roles.md` owns role names and missions",
-        ):
-            if " ".join(term.split()) not in normalized_text:
-                errors.append(f"skills/subagent-orchestration/SKILL.md missing subagent context contract term {term!r}")
-    roles_path = root / "agents" / "roles.md"
-    if roles_path.is_file():
-        normalized_roles_text = " ".join(roles_path.read_text(encoding="utf-8").split())
-        for term in (
-            "standing user authorization",
-            "fresh conversation",
-            "must not wait for the user to mention subagents again",
-        ):
-            if term not in normalized_roles_text:
-                errors.append(f"agents/roles.md missing subagent authorization term {term!r}")
-        for stale_term in ("proof row", "proof rows"):
-            if stale_term in normalized_roles_text:
-                errors.append(f"agents/roles.md contains obsolete proof-row term {stale_term!r}")
-
-    return errors
-
-
 def _load_toml(path: Path, root: Path) -> tuple[dict[str, object], list[str]]:
     try:
         return tomllib.loads(path.read_text(encoding="utf-8")), []
@@ -818,7 +394,6 @@ def _validate_role_parity(root: Path) -> list[str]:
     errors.extend(role_errors)
     if not roles:
         return errors
-    errors.extend(_validate_subagent_allowlist(root, roles))
 
     config_path = root / "adapters" / "codex" / "config.toml"
     config, config_errors = _load_toml(config_path, root) if config_path.is_file() else ({}, ["adapters/codex/config.toml missing"])
@@ -844,10 +419,6 @@ def _validate_role_parity(root: Path) -> list[str]:
                     errors.append(
                         f"adapters/codex/config.toml agents.{role}.config_file must be {expected_config_file!r}"
                     )
-                description = str(block.get("description", ""))
-                for term in ("Standing AGENTS.md authorization applies", "do not ask the user again"):
-                    if term not in description:
-                        errors.append(f"adapters/codex/config.toml agents.{role}.description missing {term!r}")
         if not codex_agent_path.is_file():
             errors.append(f"missing Codex agent file {codex_agent_path.relative_to(root)}")
         else:
@@ -927,7 +498,7 @@ def _validate_repo_codex_live_install(root: Path) -> list[str]:
                 continue
             target = _resolved_symlink_target(path)
             if _target_is_inside_root(target, root) and path.name not in planned_names:
-                errors.append(f"{path.relative_to(root)} is a stale harness symlink to {target}")
+                errors.append(f"{path.relative_to(root)} is an unplanned harness symlink to {target}")
 
     source_config_path = root / "adapters" / "codex" / "config.toml"
     live_config_path = codex_home / "config.toml"
@@ -945,9 +516,8 @@ def _validate_repo_codex_live_install(root: Path) -> list[str]:
         if live_config and live_config.get("features", {}).get("multi_agent") is not True:
             errors.append(".codex/config.toml missing [features] multi_agent = true")
         if isinstance(source_agents, dict) and isinstance(live_agents, dict):
-            for agent_name in sorted(REMOVED_CODEX_AGENT_NAMES):
-                if agent_name in live_agents:
-                    errors.append(f".codex/config.toml contains removed agents.{agent_name} block")
+            for agent_name in sorted(set(live_agents) - set(source_agents)):
+                errors.append(f".codex/config.toml contains unknown agents.{agent_name} block")
             for agent_name, source_block in source_agents.items():
                 live_block = live_agents.get(agent_name)
                 if live_block != source_block:
@@ -956,14 +526,6 @@ def _validate_repo_codex_live_install(root: Path) -> list[str]:
             errors.append(".codex/config.toml missing [agents] table")
 
     return errors
-
-
-def _heading_names(text: str, level: int) -> set[str]:
-    prefix = "#" * level
-    return {
-        match.group(1).strip()
-        for match in re.finditer(rf"^{re.escape(prefix)}\s+(.+?)\s*$", text, re.MULTILINE)
-    }
 
 
 def _iter_json_fences(text: str) -> list[object]:
@@ -983,33 +545,9 @@ def _markdown_section(text: str, heading: str) -> str:
     return text[match.end() : match.end() + next_match.start()]
 
 
-def _markdown_subsection(text: str, heading: str) -> str:
-    match = re.search(rf"^###\s+{re.escape(heading)}\s*$", text, re.MULTILINE)
-    if not match:
-        return ""
-    next_match = re.search(r"^###\s+", text[match.end() :], re.MULTILINE)
-    if not next_match:
-        return text[match.end() :]
-    return text[match.end() : match.end() + next_match.start()]
-
-
 def _validate_context_note(path: Path, root: Path) -> list[str]:
     errors: list[str] = []
     text = path.read_text(encoding="utf-8")
-    headings = _heading_names(text, 2)
-    for obsolete_section in (
-        "Work Context",
-        "Task Plan",
-        "Execution State",
-        "Required Gates",
-        "Proof Plan",
-        "Design Integrity",
-        "Readiness Claim",
-        "Wave Execution",
-        "Execution Gate",
-    ):
-        if obsolete_section in headings:
-            errors.append(f"{path.relative_to(root)} contains obsolete top-level section {obsolete_section!r}")
     try:
         _iter_json_fences(text)
     except json.JSONDecodeError as exc:
@@ -1027,63 +565,6 @@ def _validate_memory_lifecycle(root: Path) -> list[str]:
         if context_path.name not in {"active-work-note.md", "active-work-note.draft.md"}:
             continue
         errors.extend(_validate_context_note(context_path, root))
-
-    delivery_map = root / "docs-ai" / "current-work" / "delivery-map.md"
-    if delivery_map.is_file():
-        map_text = delivery_map.read_text(encoding="utf-8")
-        normalized_map = " ".join(map_text.split()).lower()
-        for stale_phrase in (
-            "execution gate",
-            "source of truth",
-            "implementation-ready",
-            "starting-point",
-            "work note brief",
-        ):
-            if stale_phrase in normalized_map:
-                errors.append(f"docs-ai/current-work/delivery-map.md contains stale status/authority phrase {stale_phrase!r}")
-
-    return errors
-
-
-def _validate_live_validation_contracts(root: Path) -> list[str]:
-    errors: list[str] = []
-
-    for relative_path in RUNTIME_EVIDENCE_ADAPTER_FILES:
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        text = path.read_text(encoding="utf-8")
-        if "docs-ai/docs/" in text:
-            errors.append(f"{relative_path} must not hard-code project-local docs-ai/docs/ paths")
-
-    web_texts: list[str] = []
-    for relative_path in WEB_BROWSER_PROOF_FILES:
-        path = root / relative_path
-        if path.is_file():
-            web_texts.append(path.read_text(encoding="utf-8"))
-    if web_texts:
-        combined = "\n".join(web_texts)
-        if "microsoft/playwright-cli" not in combined or "@playwright/cli" not in combined:
-            errors.append(
-                "skills/webapp-testing browser proof docs must identify Microsoft playwright-cli "
-                "(`microsoft/playwright-cli`, `@playwright/cli`) as the one-shot channel"
-            )
-
-    scan_files = [
-        root / "AGENTS.md",
-        root / "agents" / "roles.md",
-        root / "skills" / "subagent-orchestration" / "SKILL.md",
-        root / "skills" / "runtime-proof" / "SKILL.md",
-        root / "skills" / "delivery-workflow" / "SKILL.md",
-    ]
-    for path in scan_files:
-        if not path.is_file():
-            continue
-        text = path.read_text(encoding="utf-8")
-        normalized_text = " ".join(text.split())
-        for phrase in LIVE_VALIDATION_STALE_PHRASES:
-            if " ".join(phrase.split()) in normalized_text:
-                errors.append(f"{path.relative_to(root)} contains stale optional-helper runtime proof wording")
 
     return errors
 
@@ -1151,26 +632,6 @@ def _validate_backlog_detail_contract(root: Path) -> list[str]:
     return errors
 
 
-def _validate_stale_accepted_debt_phrases(root: Path) -> list[str]:
-    errors: list[str] = []
-    scan_roots = [
-        root / "skills",
-        root / "adapters" / "codex" / "agents",
-    ]
-    for scan_root in scan_roots:
-        if not scan_root.is_dir():
-            continue
-        for path in sorted(scan_root.rglob("*")):
-            if path.suffix not in {".md", ".toml"}:
-                continue
-            normalized_text = " ".join(path.read_text(encoding="utf-8").split()).lower()
-            for phrase in STALE_ACCEPTED_DEBT_PHRASES:
-                if phrase in normalized_text:
-                    errors.append(f"{path.relative_to(root)} contains stale accepted-debt wording")
-                    break
-    return errors
-
-
 def write_openai_metadata_report(root: Path, report_path: Path) -> list[str]:
     rows, errors = _openai_metadata_rows(root)
     lines = ["skill\tpath\tdisplay_name\tshort_description\tdefault_prompt"]
@@ -1183,59 +644,6 @@ def write_openai_metadata_report(root: Path, report_path: Path) -> list[str]:
         )
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    return errors
-
-
-def _validate_role_boundary_contracts(root: Path) -> list[str]:
-    errors: list[str] = []
-    for relative_path, required_terms in ROLE_BOUNDARY_CONTRACTS.items():
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        text = path.read_text(encoding="utf-8")
-        normalized_text = " ".join(text.split())
-        for term in required_terms:
-            if " ".join(term.split()) not in normalized_text:
-                errors.append(f"{relative_path} missing role boundary contract term {term!r}")
-    for relative_path, required_terms in ADAPTER_HANDOFF_CONTEXT_CONTRACTS.items():
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        text = path.read_text(encoding="utf-8")
-        normalized_text = " ".join(text.split())
-        for term in required_terms:
-            if " ".join(term.split()) not in normalized_text:
-                errors.append(f"{relative_path} missing adapter handoff context term {term!r}")
-    return errors
-
-
-def _validate_runtime_evidence_ui_default_contract(root: Path) -> list[str]:
-    errors: list[str] = []
-    stale_patterns = (
-        "required `runtime_evidence` and `design_judge`",
-        "matching `runtime_evidence` and `design_judge`",
-        "runtime evidence or `design_judge` is missing",
-    )
-    checked_files = (
-        "skills/user-apps-design/SKILL.md",
-        "skills/runtime-proof/SKILL.md",
-        "skills/delivery-workflow/SKILL.md",
-        "skills/code-review/SKILL.md",
-        "adapters/codex/agents/quality-guard.toml",
-        "adapters/codex/agents/final-reviewer.toml",
-    )
-    for relative_path in checked_files:
-        path = root / relative_path
-        if not path.is_file():
-            continue
-        text = path.read_text(encoding="utf-8")
-        normalized_text = " ".join(text.split())
-        for pattern in stale_patterns:
-            if pattern in normalized_text:
-                errors.append(
-                    f"{relative_path} must not require runtime_evidence by default for broad UI design readiness"
-                )
-                break
     return errors
 
 
@@ -1262,37 +670,20 @@ def validate(root: Path) -> list[str]:
     _rows, openai_errors = _openai_metadata_rows(root)
     errors.extend(openai_errors)
     errors.extend(_validate_skill_references(root))
-    errors.extend(_validate_skill_body_contracts(root))
-    errors.extend(_validate_removed_harness_paths(root))
-    errors.extend(_validate_owner_only_doctrine(root))
     errors.extend(_validate_agents_instruction_map(root))
     errors.extend(_validate_role_parity(root))
     errors.extend(_validate_repo_codex_live_install(root))
     errors.extend(_validate_memory_lifecycle(root))
     errors.extend(_validate_backlog_detail_contract(root))
-    errors.extend(_validate_live_validation_contracts(root))
-    errors.extend(_validate_stale_accepted_debt_phrases(root))
-    errors.extend(_validate_role_boundary_contracts(root))
-    errors.extend(_validate_runtime_evidence_ui_default_contract(root))
 
     for markdown_file in _iter_markdown(root):
         text = markdown_file.read_text(encoding="utf-8")
-        for line_number, line in enumerate(text.splitlines(), start=1):
-            if _is_source_path_citation(line):
-                continue
-            for match in FORBIDDEN_PROJECT_OWNER_PATH_RE.finditer(line):
-                errors.append(
-                    f"{markdown_file.relative_to(root)}:{line_number} forbidden project owner path {match.group(1)!r}"
-                )
         for match in LINK_RE.finditer(text):
             if error := _validate_markdown_path(markdown_file, root, match.group(1)):
                 errors.append(error)
         for match in INLINE_PATH_RE.finditer(text):
             if error := _validate_markdown_path(markdown_file, root, match.group(1)):
                 errors.append(error)
-
-    if (root / "docs").exists():
-        errors.append("plugin-level docs/ directory is not allowed")
 
     return errors
 
@@ -1407,7 +798,6 @@ def run_self_test() -> list[str]:
         )
         (root / "skills" / "loose-md" / "extra.md").write_text("loose markdown\n", encoding="utf-8")
         (root / "README.md").write_text("Harness fixture text\n", encoding="utf-8")
-        (root / "OWNER.md").write_text("See `docs-ai/docs/conventions/review-governance.md`.\n", encoding="utf-8")
         (root / "agents").mkdir()
         (root / "agents" / "roles.md").write_text(
             "# Agent Roles\n\n- `explorer`: read-only discovery.\n- `quality_guard`: quality review.\n",
@@ -1424,14 +814,8 @@ def run_self_test() -> list[str]:
         )
         invalid_context = """# Work Note invalid Context Note
 
-## Work Context
-
-## Task Plan
-
-## Proof Plan
-
 ```json
-{"proof_plan": [{"proof_id": "P1"}]}
+{"proof_plan": [}
 ```
 """
         (root / "docs-ai" / "docs" / "initiatives" / "work-notes").mkdir(parents=True)
@@ -1441,15 +825,15 @@ def run_self_test() -> list[str]:
             encoding="utf-8",
         )
         (root / "docs-ai" / "docs" / "initiatives" / "work-notes" / "invalid.md").write_text(
-            "# Work Note invalid\n\nState: starting-point\n",
+            "# Work Note invalid\n",
             encoding="utf-8",
         )
         (root / "docs-ai" / "docs" / "initiatives" / "work-notes" / "ready.md").write_text(
-            "# Work Note ready\n\nState: implementation-ready\n",
+            "# Work Note ready\n",
             encoding="utf-8",
         )
         (root / "docs-ai" / "docs" / "initiatives" / "work-notes" / "done.md").write_text(
-            "# Work Note done\n\nState: done\n",
+            "# Work Note done\n",
             encoding="utf-8",
         )
         (root / "docs-ai" / "current-work" / "done").mkdir(parents=True)
@@ -1491,11 +875,10 @@ def run_self_test() -> list[str]:
             "interface.short_description must be 25-64 characters",
             "interface.default_prompt must mention $uv",
             "loose-md/extra.md should live under references/",
-            "OWNER.md:1 forbidden project owner path",
+            "invalid JSON proof fence",
             "adapters/codex/config.toml missing agents.quality_guard",
             "explorer.toml name must be 'explorer'",
             "missing Codex agent file adapters/codex/agents/quality-guard.toml",
-            "active-work-note.md contains obsolete top-level section 'Work Context'",
         )
         for marker in expected:
             if not any(marker in error for error in fixture_errors):

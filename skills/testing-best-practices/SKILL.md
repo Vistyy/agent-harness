@@ -20,6 +20,8 @@ Persistent tests protect durable boundaries, not ceremony.
 Rules:
 - choose the cheapest honest persistent layer
 - assert public behavior or a narrow durable contract
+- assert current positive behavior or structure; negative assertions are valid
+  only for current closed sets, schemas, manifests, or public API contracts
 - require changed durable boundary plus named weaker implementation
 - delete, shrink, or rewrite bad touched tests
 - never fake red evidence

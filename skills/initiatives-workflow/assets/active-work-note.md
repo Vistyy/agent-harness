@@ -37,7 +37,11 @@ repo reality contradicts it.
 
 ## Decomposition
 
-- `<slice>`
+- `<valid slice: contribution, owner/interface, change surface, evidence path,
+  cleanup/residual boundary>`
+- blocker/escape hatch: `<none | inspected evidence, contradiction or missing
+  decision, why continuing risks wrong implementation or fake proof, smallest
+  planning decision or revised slice needed>`
 
 ## Evidence And Review
 

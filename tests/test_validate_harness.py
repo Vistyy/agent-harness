@@ -62,70 +62,7 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
                 "",
             ]
         )
-        if role == "quality_guard":
-            codex_body = (
-                f'name = "{role}"\n'
-                "# delivery workflow gate\n"
-                "# active durable context\n# binding objective\n# accepted reductions\n# objective coverage\n# artifacts\n# final approval\n"
-                "# Do not claim final approval.\n"
-                "# Diff-only approval is invalid\n"
-                "# why inspected scope is sufficient\n"
-                "# triggered owner skills with verdicts and blockers\n"
-                "# Apply every owner skill triggered by the binding objective\n"
-                "# Do not duplicate owner-skill doctrine\n"
-                "# triggered skill, verdict, and blocker\n"
-                "# Handoffs route attention; they are not authority\n"
-                "# context, not authority\n"
-                "# authority source inspected\n"
-                "# prompt/source mismatch\n"
-                "# Parent handoff is orientation, not authority\n"
-                "# same delivery-workflow review lenses as final review\n"
-                "# plan/objective alignment\n"
-                "# review lenses\n"
-                "# delivery-workflow review-lens concerns\n"
-                "# closeout notes\n"
-            )
-        elif role == "explorer":
-            codex_body = (
-                f'name = "{role}"\n'
-                "# delivery workflow gate\n"
-                "# Stay read-only\n# Do not edit code or take implementation ownership.\n"
-            )
-        elif role in {"implementer", "planning_critic", "runtime_evidence", "final_reviewer"}:
-            role_extra = ""
-            if role == "planning_critic":
-                role_extra = (
-                    "# Stay read-only\n"
-                    "# do not implement\n"
-                    "# strategy reviewer\n"
-                    "# Parent handoff is orientation, not authority\n"
-                    "# delivery-workflow review lenses\n"
-                    "# Use review lenses to falsify\n"
-                    "# prompt/source mismatch\n"
-                )
-            elif role == "final_reviewer":
-                role_extra = (
-                    "# Parent handoff is orientation, not authority\n"
-                    "# delivery-workflow review lenses\n"
-                    "# Apply delivery-workflow review lenses\n"
-                    "# prompt/source mismatch\n"
-                    "# binding objective\n"
-                    "# accepted reductions\n"
-                    "# owned scope\n"
-                    "# proof artifacts\n"
-                )
-            codex_body = (
-                f'name = "{role}"\n'
-                "# delivery workflow gate\n"
-                f"{role_extra}"
-                "# review lenses\n"
-                "# delivery-workflow review-lens concerns\n"
-                "# objective coverage\n"
-                "# closeout notes\n"
-                "# context, not authority\n"
-            )
-        else:
-            codex_body = f'name = "{role}"\n# delivery workflow gate\n'
+        codex_body = f'name = "{role}"\n'
         write(
             root / "adapters" / "codex" / "agents" / f"{role.replace('_', '-')}.toml",
             codex_body,
@@ -306,11 +243,11 @@ def test_validate_accepts_repo_codex_live_install(tmp_path: Path) -> None:
     assert validate_harness.validate(tmp_path) == []
 
 
-def test_validate_rejects_stale_repo_codex_live_install(tmp_path: Path) -> None:
+def test_validate_rejects_drifted_repo_codex_live_install(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     add_repo_codex_live_install(tmp_path)
-    (tmp_path / ".codex" / "skills" / "code-simplicity").symlink_to(
-        tmp_path / "skills" / "code-simplicity"
+    (tmp_path / ".codex" / "skills" / "extra-skill").symlink_to(
+        tmp_path / "skills" / "extra-skill"
     )
     quality_guard = tmp_path / ".codex" / "agents" / "quality-guard.toml"
     quality_guard.unlink()
@@ -321,7 +258,7 @@ def test_validate_rejects_stale_repo_codex_live_install(tmp_path: Path) -> None:
             'description = "Test quality_guard role. Standing AGENTS.md authorization applies; do not ask the user again."',
             'description = "Stale quality guard role. Standing AGENTS.md authorization applies; do not ask the user again."',
         )
-        + '\n[agents.check_runner]\ndescription = "Removed check runner"\nconfig_file = "agents/check-runner.toml"\n',
+        + '\n[agents.extra_agent]\ndescription = "Extra agent"\nconfig_file = "agents/extra-agent.toml"\n',
         encoding="utf-8",
     )
 
@@ -331,9 +268,9 @@ def test_validate_rejects_stale_repo_codex_live_install(tmp_path: Path) -> None:
         ".codex/agents/quality-guard.toml is not a symlink to "
         "adapters/codex/agents/quality-guard.toml"
     ) in errors
-    assert any(".codex/skills/code-simplicity is a stale harness symlink" in error for error in errors)
+    assert any(".codex/skills/extra-skill is an unplanned harness symlink" in error for error in errors)
     assert ".codex/config.toml missing or changed agents.quality_guard block" in errors
-    assert ".codex/config.toml contains removed agents.check_runner block" in errors
+    assert ".codex/config.toml contains unknown agents.extra_agent block" in errors
 
 
 def test_validate_accepts_valid_backlog_detail(tmp_path: Path) -> None:
@@ -347,29 +284,16 @@ def test_validate_accepts_valid_backlog_detail(tmp_path: Path) -> None:
 
         - Status: `open`
         - Owner: `README.md`
-        - Created: `2026-05-09`
         - Bucket: `discovered separate debt`
-        - Risk: `medium`
-        - Removal condition: `fixed or no longer relevant`
-        - User acceptance: `none`
         - Location: `README.md`
-        - Recommended fix: define one narrow slice.
 
         ## Problem
 
         Example problem.
 
-        ## Why This Bucket
-
-        Example bucket reason.
-
         ## Next Action
 
         Define one narrow slice.
-
-        ## References
-
-        - `README.md`
         """,
     )
 
@@ -396,7 +320,7 @@ def test_validate_rejects_incomplete_backlog_detail(tmp_path: Path) -> None:
     errors = validate_harness.validate(tmp_path)
 
     assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog field 'bucket'" in errors
-    assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog heading ## References" in errors
+    assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog heading ## Next Action" in errors
 
 
 def test_validate_rejects_invalid_backlog_bucket(tmp_path: Path) -> None:
@@ -410,29 +334,16 @@ def test_validate_rejects_invalid_backlog_bucket(tmp_path: Path) -> None:
 
         - Status: `open`
         - Owner: `README.md`
-        - Created: `2026-05-09`
         - Bucket: `later`
-        - Risk: `medium`
-        - Removal condition: `fixed or no longer relevant`
-        - User acceptance: `none`
         - Location: `README.md`
-        - Recommended fix: define one narrow slice.
 
         ## Problem
 
         Example problem.
 
-        ## Why This Bucket
-
-        Example bucket reason.
-
         ## Next Action
 
         Define one narrow slice.
-
-        ## References
-
-        - `README.md`
         """,
     )
 
@@ -452,29 +363,18 @@ def test_validate_rejects_accepted_temporary_debt_without_acceptance(tmp_path: P
 
         - Status: `open`
         - Owner: `README.md`
-        - Created: `2026-05-09`
         - Bucket: `accepted temporary debt`
-        - Risk: `medium`
         - Removal condition: `none`
         - User acceptance: `none`
         - Location: `README.md`
-        - Recommended fix: define one narrow slice.
 
         ## Problem
 
         Example problem.
 
-        ## Why This Bucket
-
-        Example bucket reason.
-
         ## Next Action
 
         Define one narrow slice.
-
-        ## References
-
-        - `README.md`
         """,
     )
 
@@ -495,36 +395,23 @@ def test_validate_rejects_accepted_temporary_debt_placeholders(tmp_path: Path) -
 
         - Status: `open`
         - Owner: `README.md`
-        - Created: `2026-05-09`
         - Bucket: `accepted temporary debt`
-        - Risk: `medium`
         - Removal condition: `<condition | none>`
         - User acceptance: `<required for accepted temporary debt | none>`
         - Location: `README.md`
-        - Recommended fix: define one narrow slice.
 
         ## Problem
 
         Example problem.
 
-        ## Why This Bucket
-
-        Example bucket reason.
-
         ## Next Action
 
         Define one narrow slice.
-
-        ## References
-
-        - `README.md`
         """,
     )
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog field 'removal condition'" in errors
-    assert "docs-ai/current-work/backlog/harness__example__item.md missing backlog field 'user acceptance'" in errors
     assert "docs-ai/current-work/backlog/harness__example__item.md accepted temporary debt missing user acceptance" in errors
     assert "docs-ai/current-work/backlog/harness__example__item.md accepted temporary debt missing removal condition" in errors
 
@@ -583,7 +470,6 @@ def test_validate_rejects_agents_route_map_drift(tmp_path: Path) -> None:
 
         ## Routing
 
-        - Full work note execution: `wave-autopilot`.
         - Missing route: `missing-skill`.
         - Runtime proof policy: `runtime-proof`.
         """,
@@ -591,378 +477,7 @@ def test_validate_rejects_agents_route_map_drift(tmp_path: Path) -> None:
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "AGENTS.md routes to removed workflow skill 'wave-autopilot'" in errors
     assert "AGENTS.md routes to missing skill 'missing-skill'" in errors
-
-
-def test_validate_rejects_skill_body_trigger_text(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "test-skill" / "SKILL.md",
-        """
-        ---
-        name: test-skill
-        description: Test skill trigger belongs here.
-        ---
-
-        # Test Skill
-
-        ## Use When
-
-        - bad body trigger
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "skills/test-skill/SKILL.md contains body-level trigger heading; ordinary trigger text belongs in frontmatter description"
-        in errors
-    )
-
-
-def test_validate_rejects_optional_reference_wording(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "test-skill" / "SKILL.md",
-        """
-        ---
-        name: test-skill
-        description: Test skill trigger belongs here.
-        ---
-
-        # Test Skill
-
-        ## Optional Reference
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "skills/test-skill/SKILL.md contains Optional Reference wording; references are mandatory purpose gates" in errors
-
-
-def test_validate_rejects_non_gated_reference_row_in_staged_skill(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    add_skill(tmp_path, "delivery-workflow")
-    write(tmp_path / "skills" / "delivery-workflow" / "references" / "web-boundaries.md", "# Web Boundaries\n")
-    write(
-        tmp_path / "skills" / "delivery-workflow" / "SKILL.md",
-        """
-        ---
-        name: delivery-workflow
-        description: Use when reviewing objective coverage.
-        ---
-
-        # Delivery Workflow
-
-        - Web boundary detail: `references/web-boundaries.md`
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "skills/delivery-workflow/SKILL.md:8 has non-gated reference row in staged reference-gate skill; "
-        "use `Read <reference> when/before/for ...`"
-    ) in errors
-
-
-def test_validate_rejects_removed_harness_path_outside_archive(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "README.md",
-        """
-        See skills/code-simplicity/SKILL.md.
-        See skills/system-boundary-architecture/SKILL.md.
-        See skills/system-boundary-architecture/references/web-boundaries.md.
-        See skills/verification-before-completion/SKILL.md.
-        See skills/planning-intake/SKILL.md.
-        See adapters/codex/agents/check-runner.toml.
-        See adapters/github-copilot/README.md.
-        See adapters/github-copilot/agents/quality_guard.agent.md.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "README.md references removed harness path skills/code-simplicity/SKILL.md" in errors
-    assert "README.md references removed harness path skills/system-boundary-architecture/SKILL.md" in errors
-    assert (
-        "README.md references removed harness path skills/system-boundary-architecture/references/web-boundaries.md"
-        in errors
-    )
-    assert "README.md references removed harness path skills/verification-before-completion/SKILL.md" in errors
-    assert "README.md references removed harness path skills/planning-intake/SKILL.md" in errors
-    assert "README.md references removed harness path adapters/codex/agents/check-runner.toml" in errors
-    assert "README.md references removed harness path adapters/github-copilot/README.md" in errors
-    assert (
-        "README.md references removed harness path adapters/github-copilot/agents/quality_guard.agent.md"
-        in errors
-    )
-
-
-def test_validate_rejects_owner_only_doctrine_duplicates(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "documentation-stewardship" / "SKILL.md",
-        """
-        ---
-        name: documentation-stewardship
-        description: Test owner.
-        ---
-
-        Every durable rule has one owner.
-        """,
-    )
-    write(
-        tmp_path / "README.md",
-        """
-        Every durable rule has
-        one owner.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "README.md duplicates owner-only doctrine 'Every durable rule has one owner.'; "
-        "owner is skills/documentation-stewardship/SKILL.md"
-    ) in errors
-
-
-def test_validate_rejects_solution_correctness_duplicate_doctrine(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    add_skill(tmp_path, "delivery-workflow")
-    add_skill(tmp_path, "other-owner")
-    write(
-        tmp_path / "skills" / "delivery-workflow" / "SKILL.md",
-        """
-        ---
-        name: delivery-workflow
-        description: Test owner.
-        ---
-
-        Solution correctness
-        """,
-    )
-    write(
-        tmp_path / "skills" / "other-owner" / "SKILL.md",
-        """
-        ---
-        name: other-owner
-        description: Test duplicate owner.
-        ---
-
-        solution correctness
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "skills/other-owner/SKILL.md duplicates owner-only doctrine 'solution correctness'; "
-        "owner is skills/delivery-workflow/SKILL.md"
-    ) in errors
-
-
-def test_validate_rejects_solution_correctness_duplicate_adapter_doctrine(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    add_skill(tmp_path, "delivery-workflow")
-    write(
-        tmp_path / "skills" / "delivery-workflow" / "SKILL.md",
-        """
-        ---
-        name: delivery-workflow
-        description: Test owner.
-        ---
-
-        solution correctness
-        """,
-    )
-    write(
-        tmp_path / "adapters" / "codex" / "README.md",
-        """
-        # Adapter
-
-        This adapter defines solution correctness for Codex.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/codex/README.md duplicates owner-only doctrine 'solution correctness'; "
-        "owner is skills/delivery-workflow/SKILL.md"
-    ) in errors
-
-
-def test_validate_rejects_duplicate_review_lens_doctrine(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "code-review" / "SKILL.md",
-        """
-        ---
-        name: code-review
-        description: Test duplicate.
-        ---
-
-        security/privacy, data integrity, reliability, operability,
-        observability/diagnosability, performance/cost, compatibility, and
-        accessibility
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "skills/code-review/SKILL.md duplicates owner-only doctrine "
-        "'security/privacy, data integrity, reliability, operability, observability/diagnosability, "
-        "performance/cost, compatibility, and accessibility'; owner is "
-        "skills/delivery-workflow/references/review-lenses.md"
-    ) in errors
-
-
-def test_validate_rejects_duplicate_engineering_quality_lens_doctrine(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "code-review" / "SKILL.md",
-        """
-        ---
-        name: code-review
-        description: Test duplicate.
-        ---
-
-        simplicity, cohesion/ownership, testability/provability, evolvability,
-        maintainability/readability, migration/cleanup, slice integrity, and
-        dependency/tooling fit
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "skills/code-review/SKILL.md duplicates owner-only doctrine "
-        "'simplicity, cohesion/ownership, testability/provability, evolvability, "
-        "maintainability/readability, migration/cleanup, slice integrity, and dependency/tooling fit'; "
-        "owner is skills/delivery-workflow/references/review-lenses.md"
-    ) in errors
-
-
-def test_validate_rejects_implementer_role_boundary_drift(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    add_roles(tmp_path, ("explorer", "quality_guard", "implementer"))
-    write(
-        tmp_path / "adapters" / "codex" / "agents" / "implementer.toml",
-        """
-        name = "implementer"
-        # delivery workflow gate
-        # one bounded assigned implementation slice
-        # direct-route slices
-        # objective coverage
-        # Do not claim final approval.
-        # binding objective
-        # accepted reductions
-        # owned scope
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/codex/agents/implementer.toml missing role boundary contract term "
-        "'one bounded assigned slice'"
-    ) in errors
-    assert (
-        "adapters/codex/agents/implementer.toml missing role boundary contract term "
-        "'final approver'"
-    ) in errors
-
-
-def test_validate_allows_solution_correctness_active_context_note_and_validator(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    add_skill(tmp_path, "delivery-workflow")
-    write(
-        tmp_path / "skills" / "delivery-workflow" / "SKILL.md",
-        """
-        ---
-        name: delivery-workflow
-        description: Test owner.
-        ---
-
-        solution correctness
-        deletion, collapse, rewrite, or replacement is the default design move
-        requires justification against the simpler delete/rewrite option
-        If implementation materially differs from the accepted design source
-        Do not silently approve a different shape
-        """,
-    )
-    write(
-        tmp_path / "docs-ai" / "current-work" / "active-note" / "active-work-note.md",
-        textwrap.dedent(valid_context_note()).lstrip() + "\nsolution correctness\n",
-    )
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "work-notes" / "active-note.md",
-        "# Work Note active-note\n\nState: implementation-ready\n",
-    )
-    write(tmp_path / "scripts" / "validate_harness.py", "solution correctness\n")
-    write(tmp_path / "tests" / "test_validate_harness.py", "solution correctness\n")
-
-    assert validate_harness.validate(tmp_path) == []
-
-
-def test_validate_rejects_other_owner_only_doctrine_in_active_context_note(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "documentation-stewardship" / "SKILL.md",
-        """
-        ---
-        name: documentation-stewardship
-        description: Test owner.
-        ---
-
-        Every durable rule has one owner.
-        """,
-    )
-    write(
-        tmp_path / "docs-ai" / "current-work" / "active-note" / "active-work-note.md",
-        textwrap.dedent(valid_context_note()).lstrip() + "\nEvery durable rule has one owner.\n",
-    )
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "work-notes" / "active-note.md",
-        "# Work Note active-note\n\nState: implementation-ready\n",
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "docs-ai/current-work/active-note/active-work-note.md duplicates owner-only doctrine "
-        "'Every durable rule has one owner.'; owner is skills/documentation-stewardship/SKILL.md"
-    ) in errors
-
-
-def test_validate_rejects_removed_harness_path_in_closed_archive(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "docs-ai" / "current-work" / "closed-harness-audits-2026-04.md",
-        "Archived deletion: skills/code-simplicity/SKILL.md.\n",
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "docs-ai/current-work/closed-harness-audits-2026-04.md references removed harness path "
-        "skills/code-simplicity/SKILL.md"
-    ) in errors
-
-
-def test_validate_rejects_removed_harness_path_in_other_tests(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(tmp_path / "tests" / "test_stale_path.md", "See skills/code-simplicity/SKILL.md.\n")
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "tests/test_stale_path.md references removed harness path skills/code-simplicity/SKILL.md" in errors
 
 
 def test_validate_rejects_missing_relative_skill_path_reference(tmp_path: Path) -> None:
@@ -985,320 +500,3 @@ def test_validate_rejects_role_parity_drift(tmp_path: Path) -> None:
 
     assert "missing Codex agent file adapters/codex/agents/quality-guard.toml" in errors
 
-
-def test_validate_rejects_obsolete_role_proof_row_term(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    roles_path = tmp_path / "agents" / "roles.md"
-    roles_path.write_text(
-        roles_path.read_text(encoding="utf-8")
-        + "\nAdapter migrations update every consumer and proof row together.\n",
-        encoding="utf-8",
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "agents/roles.md contains obsolete proof-row term 'proof row'" in errors
-
-
-def test_validate_rejects_preauthorized_subagent_allowlist_drift(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "AGENTS.md",
-        """
-        ## Subagent Policy
-
-        - The user explicitly authorizes use of the spawn/subagent tool for these
-          harness-defined roles when this `AGENTS.md` is in force:
-          `explorer`.
-        - This preauthorization applies only to those named roles and only when the
-          workflow calls for them.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "AGENTS.md preauthorized subagents ['explorer'] do not match agents/roles.md roles "
-        "['explorer', 'quality_guard']"
-    ) in errors
-
-
-def test_validate_rejects_subagent_metadata_preauthorization_duplicate(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "subagent-orchestration" / "agents" / "openai.yaml",
-        """
-        interface:
-          display_name: "Subagent Orchestration"
-          short_description: "Delegate bounded work cleanly"
-          default_prompt: "Use $subagent-orchestration for explorer and quality_guard with handoff inputs from AGENTS.md and agents/roles.md."
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "skills/subagent-orchestration/agents/openai.yaml must point to AGENTS.md "
-        "and agents/roles.md instead of duplicating the preauthorized role list"
-    ) in errors
-
-
-def test_validate_rejects_adapter_handoff_context_missing_objective_coverage(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    path = tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml"
-    text = path.read_text(encoding="utf-8").replace("# objective coverage\n", "")
-    path.write_text(text, encoding="utf-8")
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/codex/agents/quality-guard.toml missing adapter handoff context term 'objective coverage'"
-        in errors
-    )
-
-
-def test_validate_rejects_quality_guard_missing_parent_handoff_authority(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    path = tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml"
-    text = path.read_text(encoding="utf-8").replace("# Parent handoff is orientation, not authority\n", "")
-    path.write_text(text, encoding="utf-8")
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/codex/agents/quality-guard.toml missing role boundary contract term "
-        "'Parent handoff is orientation, not authority'"
-    ) in errors
-
-
-def test_validate_rejects_final_reviewer_missing_review_lenses(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    add_roles(tmp_path, ("explorer", "quality_guard", "final_reviewer"))
-    path = tmp_path / "adapters" / "codex" / "agents" / "final-reviewer.toml"
-    text = path.read_text(encoding="utf-8").replace("# Apply delivery-workflow review lenses\n", "")
-    path.write_text(text, encoding="utf-8")
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/codex/agents/final-reviewer.toml missing role boundary contract term "
-        "'Apply delivery-workflow review lenses'"
-    ) in errors
-
-
-def test_validate_rejects_final_reviewer_handoff_missing_owned_scope(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    add_roles(tmp_path, ("explorer", "quality_guard", "final_reviewer"))
-    path = tmp_path / "adapters" / "codex" / "agents" / "final-reviewer.toml"
-    text = path.read_text(encoding="utf-8").replace("# owned scope\n", "")
-    path.write_text(text, encoding="utf-8")
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/codex/agents/final-reviewer.toml missing adapter handoff context term 'owned scope'"
-        in errors
-    )
-
-
-def test_validate_rejects_runtime_evidence_project_doc_leakage(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "adapters" / "codex" / "agents" / "runtime-evidence.toml",
-        'name = "runtime_evidence"\nSee docs-ai/docs/project.md.\n',
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/codex/agents/runtime-evidence.toml must not hard-code project-local docs-ai/docs/ paths"
-        in errors
-    )
-
-
-def test_broad_ui_design_does_not_require_runtime_evidence_by_default(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml",
-        """
-        name = "quality_guard"
-        developer_instructions = \"\"\"
-        delivery workflow gate
-        binding objective accepted reductions Diff-only approval is invalid
-        why inspected scope is sufficient Do not claim final approval.
-        For broad product UI work, verify required `runtime_evidence` and
-        `design_judge` reports exist, are fresh, and cover the claim.
-        \"\"\"
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/codex/agents/quality-guard.toml must not require runtime_evidence "
-        "by default for broad UI design readiness"
-    ) in errors
-
-
-def test_validate_rejects_stale_accepted_debt_wording(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "initiatives-workflow" / "SKILL.md",
-        """
-        ---
-        name: initiatives-workflow
-        description: Test initiatives workflow skill.
-        ---
-
-        Stop on owner defect outside accepted debt.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "skills/initiatives-workflow/SKILL.md contains stale accepted-debt wording" in errors
-
-
-def test_validate_rejects_role_boundary_contract_drift(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "adapters" / "codex" / "agents" / "explorer.toml",
-        'name = "explorer"\n# delivery workflow gate\n# Stay read-only\n',
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/codex/agents/explorer.toml missing role boundary contract term "
-        "'Do not edit code or take implementation ownership.'"
-    ) in errors
-
-
-def test_validate_rejects_design_judge_contract_drift(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    add_roles(tmp_path, ("explorer", "quality_guard", "design_judge"))
-    write(
-        tmp_path / "adapters" / "codex" / "agents" / "design-judge.toml",
-        'name = "design_judge"\n# screenshot/contact-sheet\n',
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
-        "'runtime-evidence-based'"
-    ) in errors
-    assert (
-        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
-        "'not live behavior or code quality'"
-    ) in errors
-    assert (
-        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
-        "'declared project design source'"
-    ) in errors
-    assert (
-        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
-        "'materially weaker than the target'"
-    ) in errors
-    assert (
-        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
-        "'invent design criteria'"
-    ) in errors
-    assert (
-        "adapters/codex/agents/design-judge.toml missing role boundary contract term "
-        "'visual quality only'"
-    ) in errors
-
-
-def test_validate_requires_microsoft_playwright_cli_anchor(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "webapp-testing" / "references" / "browser-runtime-proof-workflow.md",
-        "Use a browser CLI.\n",
-    )
-    write(
-        tmp_path / "skills" / "webapp-testing" / "references" / "browser-proof-layering-contract.md",
-        "One-shot browser proof.\n",
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "skills/webapp-testing browser proof docs must identify Microsoft playwright-cli "
-        "(`microsoft/playwright-cli`, `@playwright/cli`) as the one-shot channel"
-    ) in errors
-
-
-def test_validate_rejects_stale_runtime_optional_helper_wording(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "skills" / "subagent-orchestration" / "SKILL.md",
-        """
-        Delegate isolated runtime proof only when startup/teardown is
-        deterministic and ownership is unambiguous.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "skills/subagent-orchestration/SKILL.md contains stale optional-helper runtime proof wording"
-        in errors
-    )
-
-
-def test_validate_rejects_context_note_obsolete_top_level_ceremony(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    context_note = valid_context_note().replace(
-        "    ## Evidence And Review",
-        "    ## Work Context\n\n    old duplicate context\n\n    ## Required Gates\n\n    | Claim | Required gate | Owner | Proof/artifacts | Blocks when |\n    | --- | --- | --- | --- | --- |\n    | old | old | old | old | old |\n\n    ## Evidence And Review",
-        1,
-    )
-    write(tmp_path / "docs-ai" / "current-work" / "bad-note" / "active-work-note.md", context_note)
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "work-notes" / "bad-note.md",
-        "# Work Note bad-note\n\nState: implementation-ready\n",
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "docs-ai/current-work/bad-note/active-work-note.md contains obsolete top-level section 'Work Context'" in errors
-    assert "docs-ai/current-work/bad-note/active-work-note.md contains obsolete top-level section 'Required Gates'" in errors
-
-
-def test_validate_rejects_removed_authority_sections_in_active_notes(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    context_note = valid_context_note().replace(
-        "    ## Target Shape",
-        "    ## Design Integrity\n\n    - verdict: `old`\n\n    ## Readiness Claim\n\n    - exact claim: `old`\n\n    ## Target Shape",
-        1,
-    )
-    write(tmp_path / "docs-ai" / "current-work" / "bad-note" / "active-work-note.md", context_note)
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "docs-ai/current-work/bad-note/active-work-note.md contains obsolete top-level section 'Design Integrity'" in errors
-    assert "docs-ai/current-work/bad-note/active-work-note.md contains obsolete top-level section 'Readiness Claim'" in errors
-
-
-def test_validate_rejects_stale_delivery_map_status_authority_phrases(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "docs-ai" / "current-work" / "delivery-map.md",
-        """
-        # Delivery Map 
-
-        Brief status is the execution gate for implementation-ready work.
-        """,
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert (
-        "docs-ai/current-work/delivery-map.md contains stale status/authority phrase "
-        "'execution gate'"
-    ) in errors
-    assert (
-        "docs-ai/current-work/delivery-map.md contains stale status/authority phrase "
-        "'implementation-ready'"
-    ) in errors

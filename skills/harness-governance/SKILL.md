@@ -41,8 +41,9 @@ and project-overlay contracts.
   pointers plus local load, input, output, or stop consequences.
 - Closed work notes are not durable doctrine. After extraction to the real
   owner or valid backlog, durable docs must not depend on closed work notes.
-- Enforce duplicate doctrine with exact owner-only checks only when the phrase
-  has one durable owner and a concrete counterexample.
+- Treat duplicate doctrine as a review concern. Do not add exact-phrase
+  validators for documentation ownership; use positive current structure and
+  reviewer judgment instead.
 - Delete, collapse, demote, or reuse before adding harness structure.
 - Exceptions need an owner, protected surface, and removal condition.
 

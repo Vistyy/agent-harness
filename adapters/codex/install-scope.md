@@ -8,7 +8,7 @@ The baseline Codex adapter installs only individual symlinks:
 
 It never replaces whole directories.
 
-Full install prunes stale harness-owned symlinks directly under
+Full install prunes unplanned harness-owned symlinks directly under
 `$CODEX_HOME/skills` and `$CODEX_HOME/agents` when the link target is inside
 this harness repo and the basename is outside the current planned install set.
 It does not prune during `--stage-harness-governance`.
