@@ -35,7 +35,6 @@ OPENAI_ALLOWED_INTERFACE_KEYS = {
     "brand_color",
     "default_prompt",
 }
-WAVE_STATUSES = {"discovery-required", "execution-ready", "done", "retired"}
 # AGENTS.md and subagent-orchestration must keep explicit user authorization;
 # otherwise adapter-level spawn rules can block required harness reviewers.
 PREAUTHORIZED_SUBAGENT_SENTINEL = (
@@ -46,7 +45,7 @@ REMOVED_CODEX_AGENT_NAMES = {"check_runner"}
 RUNTIME_EVIDENCE_ADAPTER_FILES = (
     "adapters/codex/agents/runtime-evidence.toml",
 )
-MATERIAL_RISK_OWNER_PATH = "skills/readiness-claim/references/material-risk-lenses.md"
+REVIEW_LENSES_OWNER_PATH = "skills/delivery-workflow/references/review-lenses.md"
 # Exact adapter-role terms protect one concrete counterexample each: reviewers
 # claiming another role's authority, support roles editing, implementers
 # executing without approved state, or runtime evidence reviewing code quality.
@@ -58,13 +57,29 @@ ROLE_BOUNDARY_CONTRACTS = {
     ),
     "adapters/codex/agents/implementer.toml": (
         "one bounded assigned slice",
-        "explicit route classification",
+        "objective coverage",
         "final approver",
     ),
     "adapters/codex/agents/planning-critic.toml": (
         "Stay read-only",
         "do not implement",
         "strategy reviewer",
+        "Parent handoff is orientation, not authority",
+        "delivery-workflow review lenses",
+        "Use review lenses to falsify",
+        "prompt/source mismatch",
+    ),
+    "adapters/codex/agents/quality-guard.toml": (
+        "Parent handoff is orientation, not authority",
+        "delivery-workflow review lenses",
+        "same delivery-workflow review lenses as final review",
+        "prompt/source mismatch",
+    ),
+    "adapters/codex/agents/final-reviewer.toml": (
+        "Parent handoff is orientation, not authority",
+        "delivery-workflow review lenses",
+        "Apply delivery-workflow review lenses",
+        "prompt/source mismatch",
     ),
     "adapters/codex/agents/design-judge.toml": (
         "screenshot/contact-sheet",
@@ -91,14 +106,23 @@ ROLE_BOUNDARY_CONTRACTS = {
     ),
 }
 ADAPTER_HANDOFF_CONTEXT_CONTRACTS = {
-    "adapters/codex/agents/implementer.toml": ("binding objective", "accepted reductions", "readiness claim", "owned scope"),
-    "adapters/codex/agents/planning-critic.toml": ("binding objective", "accepted reductions", "readiness claim"),
-    "adapters/codex/agents/quality-guard.toml": ("binding objective", "accepted reductions", "readiness claim"),
-    "adapters/codex/agents/final-reviewer.toml": ("binding objective", "accepted reductions", "proof artifacts"),
+    "adapters/codex/agents/implementer.toml": ("binding objective", "accepted reductions", "objective coverage", "owned scope"),
+    "adapters/codex/agents/planning-critic.toml": ("binding objective", "accepted reductions", "objective coverage"),
+    "adapters/codex/agents/quality-guard.toml": ("binding objective", "accepted reductions", "objective coverage"),
+    "adapters/codex/agents/final-reviewer.toml": (
+        "binding objective",
+        "accepted reductions",
+        "objective coverage",
+        "owned scope",
+        "proof artifacts",
+    ),
     "adapters/codex/agents/runtime-evidence.toml": ("binding objective", "accepted reductions", "artifacts"),
     "adapters/codex/agents/design-judge.toml": ("binding objective", "accepted reductions", "artifacts"),
 }
 REMOVED_WORKFLOW_SKILL_NAMES = (
+    "design-integrity",
+    "readiness-claim",
+    "work-routing",
     "executing-plans",
     "wave-autopilot",
     "workflow-feedback",
@@ -130,7 +154,7 @@ BACKLOG_BUCKET_VALUES = ("discovered separate debt", "accepted temporary debt")
 BACKLOG_ENTRY_TITLE_PREFIX = "# Backlog Entry:"
 STAGED_REFERENCE_GATE_SKILLS = {
     "code-review",
-    "design-integrity",
+    "delivery-workflow",
     "documentation-stewardship",
     "feedback-address",
     "flutter-expert",
@@ -144,7 +168,6 @@ STAGED_REFERENCE_GATE_SKILLS = {
     "user-apps-design",
     "webapp-testing",
     "mobileapp-testing",
-    "work-routing",
 }
 DEFERRED_REFERENCE_GATE_SKILL_GROUPS = {}
 SKILL_BODY_TRIGGER_PATTERNS = (
@@ -194,6 +217,22 @@ REMOVED_HARNESS_PATHS = (
     "skills/verification-before-completion/references/runtime-evidence-contract.md",
     "skills/verification-before-completion/references/runtime-proof-escalation.md",
     "skills/verification-before-completion/references/verification-evidence.md",
+    "agent_harness/waves.py",
+    "skills/design-integrity/SKILL.md",
+    "skills/design-integrity/agents/openai.yaml",
+    "skills/design-integrity/references/mobile-client-boundaries.md",
+    "skills/design-integrity/references/python-service-boundaries.md",
+    "skills/design-integrity/references/web-boundaries.md",
+    "skills/readiness-claim/SKILL.md",
+    "skills/readiness-claim/agents/openai.yaml",
+    "skills/readiness-claim/assets/delivery-brief.md",
+    "skills/readiness-claim/references/material-risk-lenses.md",
+    "skills/delivery-workflow/references/material-risk-lenses.md",
+    "skills/work-routing/SKILL.md",
+    "skills/work-routing/agents/openai.yaml",
+    "skills/initiatives-workflow/assets/wave-brief-discovery-required.md",
+    "skills/initiatives-workflow/assets/wave-brief-execution-ready.md",
+    "skills/initiatives-workflow/assets/wave-execution.md",
 )
 REMOVED_HARNESS_PATH_EXEMPTIONS = {
     "scripts/validate_harness.py",
@@ -206,13 +245,17 @@ OWNER_ONLY_DOCTRINE = {
     "Task labels, context notes, implementer summaries, and reviewer prompts do not replace it.": (
         "skills/code-review/SKILL.md"
     ),
-    "solution correctness": "skills/design-integrity/SKILL.md",
+    "solution correctness": "skills/delivery-workflow/SKILL.md",
     "`description` = trigger and routing contract.": "skills/harness-governance/references/skill-architecture.md",
     "references = mandatory purpose gates.": "skills/harness-governance/references/skill-architecture.md",
     (
         "security/privacy, data integrity, reliability, operability, observability/diagnosability, "
         "performance/cost, compatibility, and accessibility"
-    ): MATERIAL_RISK_OWNER_PATH,
+    ): REVIEW_LENSES_OWNER_PATH,
+    (
+        "simplicity, cohesion/ownership, testability/provability, evolvability, maintainability/readability, "
+        "migration/cleanup, slice integrity, and dependency/tooling fit"
+    ): REVIEW_LENSES_OWNER_PATH,
 }
 OWNER_ONLY_DOCTRINE_EXEMPTIONS = {
     "solution correctness": {
@@ -630,9 +673,13 @@ def _validate_owner_only_doctrine(root: Path) -> list[str]:
                         "security/privacy, data integrity, reliability, operability, "
                         "observability/diagnosability, performance/cost, compatibility, and accessibility"
                     ),
+                    (
+                        "simplicity, cohesion/ownership, testability/provability, evolvability, "
+                        "maintainability/readability, migration/cleanup, slice integrity, and dependency/tooling fit"
+                    ),
                 }
                 and rel.startswith("docs-ai/current-work/")
-                and rel.endswith("/wave-execution.md")
+                and rel.endswith("/active-work-note.md")
             )
             if phrase == "solution correctness":
                 is_scanned_counterexample = rel in SOLUTION_CORRECTNESS_SCAN_FILES or rel.startswith(
@@ -950,7 +997,17 @@ def _validate_context_note(path: Path, root: Path) -> list[str]:
     errors: list[str] = []
     text = path.read_text(encoding="utf-8")
     headings = _heading_names(text, 2)
-    for obsolete_section in ("Work Context", "Task Plan", "Execution State", "Required Gates", "Proof Plan"):
+    for obsolete_section in (
+        "Work Context",
+        "Task Plan",
+        "Execution State",
+        "Required Gates",
+        "Proof Plan",
+        "Design Integrity",
+        "Readiness Claim",
+        "Wave Execution",
+        "Execution Gate",
+    ):
         if obsolete_section in headings:
             errors.append(f"{path.relative_to(root)} contains obsolete top-level section {obsolete_section!r}")
     try:
@@ -961,81 +1018,30 @@ def _validate_context_note(path: Path, root: Path) -> list[str]:
     return errors
 
 
-def _wave_status(brief_path: Path, root: Path) -> tuple[str | None, str | None]:
-    text = brief_path.read_text(encoding="utf-8")
-    match = re.search(r"^\*\*Status:\*\*\s*([a-z-]+)\s*$", text, re.MULTILINE)
-    if not match:
-        return None, f"{brief_path.relative_to(root)} missing **Status:**"
-    status = match.group(1)
-    if status not in WAVE_STATUSES:
-        return status, f"{brief_path.relative_to(root)} invalid status {status!r}"
-    return status, None
-
-
-def _validate_wave_lifecycle(root: Path) -> list[str]:
+def _validate_memory_lifecycle(root: Path) -> list[str]:
     errors: list[str] = []
     docs_ai = root / "docs-ai"
     if not docs_ai.exists():
         return errors
-    for context_path in sorted((root / "docs-ai" / "current-work").glob("*/wave-execution*.md")):
-        if context_path.name not in {"wave-execution.md", "wave-execution.draft.md"}:
+    for context_path in sorted((root / "docs-ai" / "current-work").glob("*/active-work-note*.md")):
+        if context_path.name not in {"active-work-note.md", "active-work-note.draft.md"}:
             continue
         errors.extend(_validate_context_note(context_path, root))
 
-    wave_ids: set[str] = set()
-    brief_dir = root / "docs-ai" / "docs" / "initiatives" / "waves"
-    if brief_dir.is_dir():
-        wave_ids.update(path.stem for path in brief_dir.glob("*.md"))
-    current_work = root / "docs-ai" / "current-work"
-    if current_work.is_dir():
-        for child in current_work.iterdir():
-            if child.is_dir() and (
-                (child / "wave-execution.md").exists()
-                or (child / "wave-execution.draft.md").exists()
-                or (child / "delivery-brief.md").exists()
-            ):
-                wave_ids.add(child.name)
-    delivery_map = current_work / "delivery-map.md"
-    delivery_map_wave_ids: set[str] = set()
+    delivery_map = root / "docs-ai" / "current-work" / "delivery-map.md"
     if delivery_map.is_file():
         map_text = delivery_map.read_text(encoding="utf-8")
-        delivery_map_wave_ids.update(
-            re.findall(r"docs-ai/docs/initiatives/waves/([A-Za-z0-9_-]+)\.md", map_text)
-        )
-        delivery_map_wave_ids.update(
-            re.findall(r"\.\./docs/initiatives/waves/([A-Za-z0-9_-]+)\.md", map_text)
-        )
-        delivery_map_wave_ids.update(
-            re.findall(r"docs-ai/current-work/([A-Za-z0-9_-]+)/wave-execution(?:\.draft)?\.md", map_text)
-        )
-        delivery_map_wave_ids.update(re.findall(r"^###\s+Wave\s+([A-Za-z0-9_-]+)\b", map_text, re.MULTILINE))
-        wave_ids.update(delivery_map_wave_ids)
+        normalized_map = " ".join(map_text.split()).lower()
+        for stale_phrase in (
+            "execution gate",
+            "source of truth",
+            "implementation-ready",
+            "starting-point",
+            "work note brief",
+        ):
+            if stale_phrase in normalized_map:
+                errors.append(f"docs-ai/current-work/delivery-map.md contains stale status/authority phrase {stale_phrase!r}")
 
-    for wave_id in sorted(wave_ids):
-        brief_path = brief_dir / f"{wave_id}.md"
-        canonical_context = current_work / wave_id / "wave-execution.md"
-        draft_context = current_work / wave_id / "wave-execution.draft.md"
-        delivery_brief = current_work / wave_id / "delivery-brief.md"
-        if not brief_path.is_file():
-            if canonical_context.exists() or draft_context.exists() or delivery_brief.exists():
-                errors.append(f"docs-ai/current-work/{wave_id} has active durable context but missing durable wave brief")
-            continue
-        status, status_error = _wave_status(brief_path, root)
-        if status_error:
-            errors.append(status_error)
-            continue
-        if status == "discovery-required" and canonical_context.exists():
-            errors.append(f"{brief_path.relative_to(root)} is discovery-required but canonical context note exists")
-        if status == "execution-ready" and not canonical_context.exists():
-            errors.append(f"{brief_path.relative_to(root)} is execution-ready but canonical context note is missing")
-        if delivery_brief.exists() and not canonical_context.exists():
-            errors.append(f"docs-ai/current-work/{wave_id}/delivery-brief.md exists without active canonical context note")
-        if status in {"done", "retired"} and (canonical_context.exists() or draft_context.exists()):
-            errors.append(f"{brief_path.relative_to(root)} is {status} but current-work context note exists")
-        if status in {"done", "retired"} and delivery_brief.exists():
-            errors.append(f"{brief_path.relative_to(root)} is {status} but current-work delivery brief exists")
-        if status in {"done", "retired"} and wave_id in delivery_map_wave_ids:
-            errors.append(f"docs-ai/current-work/delivery-map.md lists {status} wave {wave_id}")
     return errors
 
 
@@ -1068,7 +1074,7 @@ def _validate_live_validation_contracts(root: Path) -> list[str]:
         root / "agents" / "roles.md",
         root / "skills" / "subagent-orchestration" / "SKILL.md",
         root / "skills" / "runtime-proof" / "SKILL.md",
-        root / "skills" / "readiness-claim" / "SKILL.md",
+        root / "skills" / "delivery-workflow" / "SKILL.md",
     ]
     for path in scan_files:
         if not path.is_file():
@@ -1213,7 +1219,7 @@ def _validate_runtime_evidence_ui_default_contract(root: Path) -> list[str]:
     checked_files = (
         "skills/user-apps-design/SKILL.md",
         "skills/runtime-proof/SKILL.md",
-        "skills/readiness-claim/SKILL.md",
+        "skills/delivery-workflow/SKILL.md",
         "skills/code-review/SKILL.md",
         "adapters/codex/agents/quality-guard.toml",
         "adapters/codex/agents/final-reviewer.toml",
@@ -1262,7 +1268,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(_validate_agents_instruction_map(root))
     errors.extend(_validate_role_parity(root))
     errors.extend(_validate_repo_codex_live_install(root))
-    errors.extend(_validate_wave_lifecycle(root))
+    errors.extend(_validate_memory_lifecycle(root))
     errors.extend(_validate_backlog_detail_contract(root))
     errors.extend(_validate_live_validation_contracts(root))
     errors.extend(_validate_stale_accepted_debt_phrases(root))
@@ -1416,7 +1422,7 @@ def run_self_test() -> list[str]:
             'name = "wrong_name"\n',
             encoding="utf-8",
         )
-        invalid_context = """# Wave invalid Context Note
+        invalid_context = """# Work Note invalid Context Note
 
 ## Work Context
 
@@ -1428,37 +1434,37 @@ def run_self_test() -> list[str]:
 {"proof_plan": [{"proof_id": "P1"}]}
 ```
 """
-        (root / "docs-ai" / "docs" / "initiatives" / "waves").mkdir(parents=True)
+        (root / "docs-ai" / "docs" / "initiatives" / "work-notes").mkdir(parents=True)
         (root / "docs-ai" / "current-work" / "invalid").mkdir(parents=True)
-        (root / "docs-ai" / "current-work" / "invalid" / "wave-execution.md").write_text(
+        (root / "docs-ai" / "current-work" / "invalid" / "active-work-note.md").write_text(
             invalid_context,
             encoding="utf-8",
         )
-        (root / "docs-ai" / "docs" / "initiatives" / "waves" / "invalid.md").write_text(
-            "# Wave invalid\n\n**Status:** discovery-required\n",
+        (root / "docs-ai" / "docs" / "initiatives" / "work-notes" / "invalid.md").write_text(
+            "# Work Note invalid\n\nState: starting-point\n",
             encoding="utf-8",
         )
-        (root / "docs-ai" / "docs" / "initiatives" / "waves" / "ready.md").write_text(
-            "# Wave ready\n\n**Status:** execution-ready\n",
+        (root / "docs-ai" / "docs" / "initiatives" / "work-notes" / "ready.md").write_text(
+            "# Work Note ready\n\nState: implementation-ready\n",
             encoding="utf-8",
         )
-        (root / "docs-ai" / "docs" / "initiatives" / "waves" / "done.md").write_text(
-            "# Wave done\n\n**Status:** done\n",
+        (root / "docs-ai" / "docs" / "initiatives" / "work-notes" / "done.md").write_text(
+            "# Work Note done\n\nState: done\n",
             encoding="utf-8",
         )
         (root / "docs-ai" / "current-work" / "done").mkdir(parents=True)
-        (root / "docs-ai" / "current-work" / "done" / "wave-execution.draft.md").write_text(
+        (root / "docs-ai" / "current-work" / "done" / "active-work-note.draft.md").write_text(
             invalid_context,
             encoding="utf-8",
         )
         (root / "docs-ai" / "current-work" / "delivery-map.md").write_text(
             "\n".join(
                 [
-                    "# Delivery Map (Waves + Backlog)",
+                    "# Delivery Map",
                     "",
-                    "- [invalid](../docs/initiatives/waves/invalid.md)",
-                    "- [ready](../docs/initiatives/waves/ready.md)",
-                    "- [done](../docs/initiatives/waves/done.md)",
+                    "- [invalid](../docs/initiatives/work-notes/invalid.md)",
+                    "- [ready](../docs/initiatives/work-notes/ready.md)",
+                    "- [done](../docs/initiatives/work-notes/done.md)",
                     "",
                 ]
             ),
@@ -1489,11 +1495,7 @@ def run_self_test() -> list[str]:
             "adapters/codex/config.toml missing agents.quality_guard",
             "explorer.toml name must be 'explorer'",
             "missing Codex agent file adapters/codex/agents/quality-guard.toml",
-            "wave-execution.md contains obsolete top-level section 'Work Context'",
-            "invalid.md is discovery-required but canonical context note exists",
-            "ready.md is execution-ready but canonical context note is missing",
-            "done.md is done but current-work context note exists",
-            "delivery-map.md lists done wave done",
+            "active-work-note.md contains obsolete top-level section 'Work Context'",
         )
         for marker in expected:
             if not any(marker in error for error in fixture_errors):

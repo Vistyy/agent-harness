@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -129,6 +130,19 @@ def assert_pruned_manifest(codex_home: Path, expected_targets: set[Path]) -> Non
             fail(f"backup manifest missing pruned symlink {target}")
 
 
+def assert_replaced_target_backups(codex_home: Path, expected_targets: set[Path]) -> None:
+    manifest_dir = latest_manifest_dir(codex_home)
+    conflicts_dir = manifest_dir / "conflicts"
+    manifest = manifest_dir / "backup-manifest.json"
+    text = manifest.read_text(encoding="utf-8")
+    for target in sorted(expected_targets):
+        if str(target) not in text:
+            fail(f"backup manifest missing replaced target {target}")
+        backup_name = re.sub(r"[^A-Za-z0-9._-]+", "_", str(target).strip("/"))
+        if not (conflicts_dir / backup_name).exists():
+            fail(f"replaced target backup missing {conflicts_dir / backup_name}")
+
+
 def seed_prune_fixtures(codex_home: Path, external_root: Path) -> dict[str, Path]:
     skills = codex_home / "skills"
     agents = codex_home / "agents"
@@ -246,6 +260,21 @@ def main() -> int:
         run_install(codex_home, bin_dir)
         assert_install(codex_home, bin_dir)
         shutil.rmtree(codex_home)
+        conflict_codex_home = Path(temp_dir) / "conflict-codex-home"
+        conflict_bin_dir = Path(temp_dir) / "conflict-bin"
+        conflicting_agents = conflict_codex_home / "AGENTS.md"
+        conflicting_skill = conflict_codex_home / "skills" / "uv"
+        conflicting_agents.parent.mkdir(parents=True, exist_ok=True)
+        conflicting_skill.mkdir(parents=True, exist_ok=True)
+        conflicting_agents.write_text("old global instructions\n", encoding="utf-8")
+        (conflicting_skill / "SKILL.md").write_text("# Old uv skill\n", encoding="utf-8")
+        dry_replace = run_dry_run(conflict_codex_home, conflict_bin_dir, "--replace-conflicting-targets")
+        if "planned conflicting target backups:" not in dry_replace.stdout:
+            fail("dry-run did not report planned conflicting target backups")
+        run_install(conflict_codex_home, conflict_bin_dir, "--replace-conflicting-targets")
+        assert_install(conflict_codex_home, conflict_bin_dir)
+        assert_replaced_target_backups(conflict_codex_home, {conflicting_agents, conflicting_skill})
+        shutil.rmtree(conflict_codex_home)
         stage_codex_home = Path(temp_dir) / "stage-codex-home"
         stage_bin_dir = Path(temp_dir) / "stage-bin"
         stage_stale = stage_codex_home / "skills" / "old-stage-skill"

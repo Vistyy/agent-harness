@@ -10,19 +10,19 @@ description = "Strategy reviewer before non-trivial execution or scope expansion
 config_file = "agents/planning-critic.toml"
 
 [agents.implementer]
-description = "Default for non-trivial bounded code/doc edits once objective, design interface, readiness claim, and owned scope are clear. Standing AGENTS.md authorization applies; do not ask the user again. Works for direct-route or wave slices; edits only owned files, verifies locally, and never approves its own work."
+description = "Default for non-trivial bounded code/doc edits once objective coverage, target shape, evidence strategy, and owned scope are clear. Standing AGENTS.md authorization applies; do not ask the user again. Edits only owned files, verifies locally, and never approves its own work."
 config_file = "agents/implementer.toml"
 
 [agents.quality_guard]
-description = "In-thread planning and implementation reviewer. Standing AGENTS.md authorization applies; do not ask the user again. Challenges current work against the binding objective, owner/interface fit, simplest correct end state, and readiness-claim support without final closeout authority."
+description = "In-thread planning and implementation reviewer. Standing AGENTS.md authorization applies; do not ask the user again. Challenges current work against the binding objective, objective coverage, owner/interface fit, proof validity, and target shape without final closeout authority."
 config_file = "agents/quality-guard.toml"
 
 [agents.final_reviewer]
-description = "Use only for final isolated closeout review after implementation and local verification. Standing AGENTS.md authorization applies; do not ask the user again. Judges merge readiness for the whole changed slice against the binding objective, simplest correct shape, stale paths, proof coverage, and delivery-brief support."
+description = "Use only for final isolated closeout review after implementation and local verification. Standing AGENTS.md authorization applies; do not ask the user again. Judges merge readiness for the whole changed slice against the binding objective, objective coverage, stale paths, proof validity, and repo health."
 config_file = "agents/final-reviewer.toml"
 
 [agents.runtime_evidence]
-description = "Use when readiness-claim requires independent live-use proof for non-trivial runtime-visible behavior. Standing AGENTS.md authorization applies; do not ask the user again. It exercises the app/service/API/operator path, records artifacts, and returns pass/reject/blocked for observed behavior only."
+description = "Use when delivery-workflow requires independent live-use proof for non-trivial runtime-visible behavior. Standing AGENTS.md authorization applies; do not ask the user again. It exercises the app/service/API/operator path, records artifacts, and returns pass/reject/blocked for observed behavior only."
 config_file = "agents/runtime-evidence.toml"
 
 [agents.design_judge]

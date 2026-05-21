@@ -1,0 +1,4 @@
+interface:
+  display_name: "Delivery Workflow"
+  short_description: "Carry objectives from discovery to PR-ready"
+  default_prompt: "Use $delivery-workflow for non-trivial work from objective or delivery-map memory through discovery, shape, implementation, evidence, review, and closeout."

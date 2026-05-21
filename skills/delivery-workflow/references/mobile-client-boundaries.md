@@ -1,11 +1,9 @@
 # Mobile Client Boundaries
 
-Use only when the touched owner is a mobile client/backend contract.
-
-## Rules
+Use when the touched owner is a mobile client/backend contract.
 
 Mobile reliability belongs at explicit interfaces, not inside UI screens or
-runtime proof scripts.
+runtime proof tooling.
 
 Name the owner for any changed:
 

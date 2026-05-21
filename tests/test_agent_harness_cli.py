@@ -17,16 +17,16 @@ def write(path: Path, text: str = "") -> None:
     path.write_text(textwrap.dedent(text).lstrip(), encoding="utf-8")
 
 
-def fake_project(tmp_path: Path, wave: str = "example-wave") -> Path:
+def fake_project(tmp_path: Path, item: str = "example-item") -> Path:
     project = tmp_path / "project"
-    write(project / "docs-ai" / "docs" / "initiatives" / "waves" / f"{wave}.md", "# Wave\n")
+    write(project / "docs-ai" / "docs" / "initiatives" / "work-notes" / f"{item}.md", "# Work Note\n")
     write(
-        project / "docs-ai" / "current-work" / wave / "wave-execution.md",
+        project / "docs-ai" / "current-work" / item / "active-work-note.md",
         "# Context Note\n",
     )
     write(
         project / "docs-ai" / "current-work" / "delivery-map.md",
-        f"Context: docs-ai/docs/initiatives/waves/{wave}.md\n",
+        f"Context: docs-ai/docs/initiatives/work-notes/{item}.md\n",
     )
     return project
 
@@ -51,38 +51,52 @@ def assert_user_error(result: subprocess.CompletedProcess[str], expected: str) -
     assert "Traceback" not in result.stderr
 
 
-def test_refs_reports_non_wave_references_from_target_repo(tmp_path: Path) -> None:
+def test_refs_reports_non_work_note_references_from_target_repo(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
 
-    result = run_cli(["wave", "refs", "--repo-root", str(project), "--wave", "example-wave"])
+    result = run_cli(["memory", "refs", "--repo-root", str(project), "--item", "example-item"])
 
     assert result.returncode == 0
-    assert "wave: example-wave" in result.stdout
-    assert "target: docs-ai/docs/initiatives/waves/example-wave.md" in result.stdout
-    assert "non_wave_refs: 1" in result.stdout
+    assert "item: example-item" in result.stdout
+    assert "target: docs-ai/docs/initiatives/work-notes/example-item.md" in result.stdout
+    assert "non_note_refs: 1" in result.stdout
     assert "delivery-map.md:1" in result.stdout
+
+
+def test_refs_ignores_cache_files(tmp_path: Path) -> None:
+    project = fake_project(tmp_path)
+    write(
+        project / "__pycache__" / "cached.pyc",
+        "docs-ai/docs/initiatives/work-notes/example-item.md\n",
+    )
+
+    result = run_cli(["memory", "refs", "--repo-root", str(project), "--item", "example-item"])
+
+    assert result.returncode == 0
+    assert "__pycache__" not in result.stdout
+    assert "non_note_refs: 1" in result.stdout
 
 
 def test_cleanup_dry_run_does_not_delete(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
-    wave_dir = project / "docs-ai" / "current-work" / "example-wave"
+    item_dir = project / "docs-ai" / "current-work" / "example-item"
 
-    result = run_cli(["wave", "cleanup", "--repo-root", str(project), "--wave", "example-wave"])
+    result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "example-item"])
 
     assert result.returncode == 0
-    assert f"DRY RUN: {wave_dir}" in result.stdout
-    assert wave_dir.exists()
+    assert f"DRY RUN: {item_dir}" in result.stdout
+    assert item_dir.exists()
 
 
-def test_cleanup_execute_deletes_valid_wave_dir_only(tmp_path: Path) -> None:
+def test_cleanup_execute_deletes_valid_item_dir_only(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
-    wave_dir = project / "docs-ai" / "current-work" / "example-wave"
+    item_dir = project / "docs-ai" / "current-work" / "example-item"
 
-    result = run_cli(["wave", "cleanup", "--repo-root", str(project), "--wave", "example-wave", "--execute"])
+    result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "example-item", "--execute"])
 
     assert result.returncode == 0
-    assert f"DELETED: {wave_dir}" in result.stdout
-    assert not wave_dir.exists()
+    assert f"DELETED: {item_dir}" in result.stdout
+    assert not item_dir.exists()
     assert (project / "docs-ai" / "current-work").exists()
 
 
@@ -90,18 +104,18 @@ def test_cleanup_execute_does_not_follow_symlink_contents(tmp_path: Path) -> Non
     project = fake_project(tmp_path)
     external = tmp_path / "external-sentinel.txt"
     external.write_text("keep me", encoding="utf-8")
-    wave_dir = project / "docs-ai" / "current-work" / "example-wave"
-    (wave_dir / "external-link").symlink_to(external)
+    item_dir = project / "docs-ai" / "current-work" / "example-item"
+    (item_dir / "external-link").symlink_to(external)
 
-    result = run_cli(["wave", "cleanup", "--repo-root", str(project), "--wave", "example-wave", "--execute"])
+    result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "example-item", "--execute"])
 
     assert result.returncode == 0
-    assert not wave_dir.exists()
+    assert not item_dir.exists()
     assert external.read_text(encoding="utf-8") == "keep me"
 
 
 def test_refs_rejects_missing_repo_root_without_traceback(tmp_path: Path) -> None:
-    result = run_cli(["wave", "refs", "--repo-root", str(tmp_path / "missing"), "--wave", "example-wave"])
+    result = run_cli(["memory", "refs", "--repo-root", str(tmp_path / "missing"), "--item", "example-item"])
 
     assert_user_error(result, "Repo root not found")
 
@@ -110,21 +124,21 @@ def test_refs_rejects_file_repo_root_without_traceback(tmp_path: Path) -> None:
     repo_file = tmp_path / "repo-file"
     repo_file.write_text("not a repo", encoding="utf-8")
 
-    result = run_cli(["wave", "refs", "--repo-root", str(repo_file), "--wave", "example-wave"])
+    result = run_cli(["memory", "refs", "--repo-root", str(repo_file), "--item", "example-item"])
 
     assert_user_error(result, "Repo root is not a directory")
 
 
-def test_refs_rejects_path_like_wave_id_without_traceback(tmp_path: Path) -> None:
+def test_refs_rejects_path_like_work_note_id_without_traceback(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
 
-    result = run_cli(["wave", "refs", "--repo-root", str(project), "--wave", "../evil"])
+    result = run_cli(["memory", "refs", "--repo-root", str(project), "--item", "../evil"])
 
-    assert_user_error(result, "Invalid wave id")
+    assert_user_error(result, "Invalid item id")
 
 
 def test_cleanup_rejects_missing_repo_root_without_traceback(tmp_path: Path) -> None:
-    result = run_cli(["wave", "cleanup", "--repo-root", str(tmp_path / "missing"), "--wave", "example-wave"])
+    result = run_cli(["memory", "cleanup", "--repo-root", str(tmp_path / "missing"), "--item", "example-item"])
 
     assert_user_error(result, "Repo root not found")
 
@@ -133,26 +147,26 @@ def test_cleanup_rejects_file_repo_root_without_traceback(tmp_path: Path) -> Non
     repo_file = tmp_path / "repo-file"
     repo_file.write_text("not a repo", encoding="utf-8")
 
-    result = run_cli(["wave", "cleanup", "--repo-root", str(repo_file), "--wave", "example-wave"])
+    result = run_cli(["memory", "cleanup", "--repo-root", str(repo_file), "--item", "example-item"])
 
     assert_user_error(result, "Repo root is not a directory")
 
 
-def test_cleanup_rejects_path_like_wave_ids_before_resolution(tmp_path: Path) -> None:
+def test_cleanup_rejects_path_like_work_note_ids_before_resolution(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
 
-    dotdot = run_cli(["wave", "cleanup", "--repo-root", str(project), "--wave", "../evil"])
-    slash = run_cli(["wave", "cleanup", "--repo-root", str(project), "--wave", "evil/name"])
+    dotdot = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "../evil"])
+    slash = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "evil/name"])
 
-    assert_user_error(dotdot, "Invalid wave id")
-    assert_user_error(slash, "Invalid wave id")
+    assert_user_error(dotdot, "Invalid item id")
+    assert_user_error(slash, "Invalid item id")
 
 
 def test_cleanup_rejects_missing_current_work_root_without_traceback(tmp_path: Path) -> None:
     project = tmp_path / "project"
     (project / "docs-ai").mkdir(parents=True)
 
-    result = run_cli(["wave", "cleanup", "--repo-root", str(project), "--wave", "example-wave"])
+    result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "example-item"])
 
     assert_user_error(result, "Current-work root not found")
 
@@ -161,7 +175,7 @@ def test_cleanup_rejects_file_current_work_root_without_traceback(tmp_path: Path
     project = tmp_path / "project"
     write(project / "docs-ai" / "current-work", "not a directory")
 
-    result = run_cli(["wave", "cleanup", "--repo-root", str(project), "--wave", "example-wave"])
+    result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "example-item"])
 
     assert_user_error(result, "Current-work root is not a directory")
 
@@ -169,46 +183,46 @@ def test_cleanup_rejects_file_current_work_root_without_traceback(tmp_path: Path
 def test_cleanup_rejects_symlink_current_work_root_and_deletes_nothing(tmp_path: Path) -> None:
     project = tmp_path / "project"
     target = tmp_path / "real-current-work"
-    write(target / "example-wave" / "wave-execution.md", "# Context Note\n")
+    write(target / "example-item" / "active-work-note.md", "# Context Note\n")
     (project / "docs-ai").mkdir(parents=True)
     (project / "docs-ai" / "current-work").symlink_to(target)
 
-    result = run_cli(["wave", "cleanup", "--repo-root", str(project), "--wave", "example-wave", "--execute"])
+    result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "example-item", "--execute"])
 
     assert_user_error(result, "Refusing symlink current-work root")
-    assert (target / "example-wave" / "wave-execution.md").exists()
+    assert (target / "example-item" / "active-work-note.md").exists()
 
 
-def test_cleanup_rejects_missing_wave_dir_without_traceback(tmp_path: Path) -> None:
+def test_cleanup_rejects_missing_item_dir_without_traceback(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
 
-    result = run_cli(["wave", "cleanup", "--repo-root", str(project), "--wave", "missing-wave"])
+    result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "missing-item"])
 
-    assert_user_error(result, "Wave directory not found")
+    assert_user_error(result, "Item directory not found")
 
 
-def test_cleanup_rejects_symlink_wave_dir_and_deletes_nothing(tmp_path: Path) -> None:
+def test_cleanup_rejects_symlink_item_dir_and_deletes_nothing(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
     current_work = project / "docs-ai" / "current-work"
-    real_wave = tmp_path / "real-wave"
-    write(real_wave / "wave-execution.md", "# Context Note\n")
-    symlink_wave = current_work / "linked-wave"
-    symlink_wave.symlink_to(real_wave)
+    real_item = tmp_path / "real-item"
+    write(real_item / "active-work-note.md", "# Context Note\n")
+    symlink_item = current_work / "linked-item"
+    symlink_item.symlink_to(real_item)
 
-    result = run_cli(["wave", "cleanup", "--repo-root", str(project), "--wave", "linked-wave", "--execute"])
+    result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "linked-item", "--execute"])
 
-    assert_user_error(result, "Refusing symlink wave directory")
-    assert (real_wave / "wave-execution.md").exists()
+    assert_user_error(result, "Refusing symlink item directory")
+    assert (real_item / "active-work-note.md").exists()
 
 
-def test_cleanup_rejects_wave_dir_without_marker_and_deletes_nothing(tmp_path: Path) -> None:
+def test_cleanup_rejects_item_dir_without_marker_and_deletes_nothing(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
-    markerless = project / "docs-ai" / "current-work" / "markerless-wave"
+    markerless = project / "docs-ai" / "current-work" / "markerless-item"
     markerless.mkdir()
 
-    result = run_cli(["wave", "cleanup", "--repo-root", str(project), "--wave", "markerless-wave", "--execute"])
+    result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "markerless-item", "--execute"])
 
-    assert_user_error(result, "Directory is not a wave execution directory")
+    assert_user_error(result, "Directory is not an active work-note directory")
     assert markerless.exists()
 
 
@@ -221,7 +235,7 @@ def test_installed_console_script_runs_outside_checkout_against_project_without_
     subprocess.run([str(python), "-m", "pip", "install", "-e", str(ROOT)], check=True)
 
     refs = subprocess.run(
-        [str(agent_harness), "wave", "refs", "--repo-root", str(project), "--wave", "example-wave"],
+        [str(agent_harness), "memory", "refs", "--repo-root", str(project), "--item", "example-item"],
         cwd=tmp_path,
         text=True,
         stdout=subprocess.PIPE,
@@ -229,7 +243,7 @@ def test_installed_console_script_runs_outside_checkout_against_project_without_
         check=False,
     )
     cleanup = subprocess.run(
-        [str(agent_harness), "wave", "cleanup", "--repo-root", str(project), "--wave", "example-wave"],
+        [str(agent_harness), "memory", "cleanup", "--repo-root", str(project), "--item", "example-item"],
         cwd=tmp_path,
         text=True,
         stdout=subprocess.PIPE,
@@ -238,7 +252,7 @@ def test_installed_console_script_runs_outside_checkout_against_project_without_
     )
 
     assert refs.returncode == 0
-    assert "non_wave_refs: 1" in refs.stdout
+    assert "non_note_refs: 1" in refs.stdout
     assert cleanup.returncode == 0
     assert "DRY RUN:" in cleanup.stdout
     assert not (project / "justfile").exists()
@@ -254,7 +268,7 @@ def test_codex_install_shim_runs_outside_checkout_against_project_without_python
     env.pop("PYTHONPATH", None)
 
     result = subprocess.run(
-        [str(shim), "wave", "refs", "--repo-root", str(project), "--wave", "example-wave"],
+        [str(shim), "memory", "refs", "--repo-root", str(project), "--item", "example-item"],
         cwd=tmp_path,
         env=env,
         text=True,
@@ -264,60 +278,56 @@ def test_codex_install_shim_runs_outside_checkout_against_project_without_python
     )
 
     assert result.returncode == 0
-    assert "non_wave_refs: 1" in result.stdout
+    assert "non_note_refs: 1" in result.stdout
 
 
-def test_wave_bootstrap_creates_discovery_required_brief(tmp_path: Path) -> None:
+def test_work_note_bootstrap_creates_work_note(tmp_path: Path) -> None:
     project = tmp_path / "project"
     project.mkdir()
 
     result = run_cli(
         [
-            "wave",
+            "memory",
             "bootstrap",
             "--repo-root",
             str(project),
-            "--wave",
-            "new-wave-1",
+            "--item",
+            "new-item-1",
             "--title",
-            "New Wave",
+            "New Work Note",
             "--task",
             "initiative/feature/task",
         ]
     )
 
-    brief = project / "docs-ai" / "docs" / "initiatives" / "waves" / "new-wave-1.md"
+    brief = project / "docs-ai" / "docs" / "initiatives" / "work-notes" / "new-item-1.md"
     assert result.returncode == 0
     assert f"CREATED: {brief}" in result.stdout
     text = brief.read_text(encoding="utf-8")
-    assert "# Wave new-wave-1 - New Wave" in text
-    assert "**Status:** discovery-required" in text
-    assert "## Objective Boundary" in text
-    assert "- original objective: `<user objective>`" in text
-    assert "- accepted reductions: `<none | explicit>`" in text
-    assert "- residual gaps: `<none | explicit>`" in text
-    assert "## Planning Gaps" in text
+    assert "# Work Note new-item-1 - New Work Note" in text
+    assert "This note is memory, not authority." in text
+    assert "## Remembered Intent" in text
     assert "## Starting Points" in text
     assert "- `initiative/feature/task`" in text
-    assert "## Promotion Requirement" in text
-    assert "The brief preserves context; it is not authority over the user objective." in " ".join(text.split())
+    assert "## Recheck During Discovery" in text
+    assert "## Possible Sequence" in text
 
 
-def test_wave_bootstrap_refuses_overwrite_without_force(tmp_path: Path) -> None:
+def test_work_note_bootstrap_refuses_overwrite_without_force(tmp_path: Path) -> None:
     project = tmp_path / "project"
-    brief = project / "docs-ai" / "docs" / "initiatives" / "waves" / "new-wave-1.md"
+    brief = project / "docs-ai" / "docs" / "initiatives" / "work-notes" / "new-item-1.md"
     write(brief, "existing\n")
 
     result = run_cli(
         [
-            "wave",
+            "memory",
             "bootstrap",
             "--repo-root",
             str(project),
-            "--wave",
-            "new-wave-1",
+            "--item",
+            "new-item-1",
             "--title",
-            "New Wave",
+            "New Work Note",
         ]
     )
 
@@ -347,61 +357,54 @@ def test_governance_check_passes_valid_project_doc_links(tmp_path: Path) -> None
     assert result.stdout == ""
 
 
-def test_governance_check_rejects_durable_completed_wave_doctrine_reference(tmp_path: Path) -> None:
+def test_governance_check_rejects_durable_work_note_memory_link(tmp_path: Path) -> None:
     project = tmp_path / "project"
-    write(
-        project / "docs-ai" / "docs" / "initiatives" / "waves" / "closed-wave.md",
-        """
-        # Wave closed-wave
-
-        **Status:** done
-        """,
-    )
-    write(project / "docs-ai" / "docs" / "policy.md", "[Old rule](initiatives/waves/closed-wave.md)\n")
+    write(project / "docs-ai" / "docs" / "initiatives" / "work-notes" / "old-note.md", "# Old Note\n")
+    write(project / "docs-ai" / "docs" / "policy.md", "[Old](initiatives/work-notes/old-note.md)\n")
 
     result = run_cli(["governance", "check", "--repo-root", str(project)])
 
     assert result.returncode == 1
-    assert "docs.completed-wave-doctrine-reference" in result.stdout
-    assert "docs-ai/docs/policy.md references completed wave files as durable doctrine" in result.stdout
-    assert "initiatives/waves/closed-wave.md" in result.stdout
+    assert "docs.work-note-memory-reference" in result.stdout
+    assert "docs-ai/docs/policy.md references work-note/current-work memory" in result.stdout
 
 
-def test_governance_check_allows_active_wave_planning_reference(tmp_path: Path) -> None:
+def test_governance_check_rejects_backticked_current_work_memory_path(tmp_path: Path) -> None:
     project = tmp_path / "project"
-    write(
-        project / "docs-ai" / "docs" / "initiatives" / "waves" / "active-wave.md",
-        """
-        # Wave active-wave
+    write(project / "docs-ai" / "current-work" / "old" / "active-work-note.md", "# Old Note\n")
+    write(project / "docs-ai" / "docs" / "policy.md", "See `../current-work/old/active-work-note.md`.\n")
 
-        **Status:** execution-ready
-        """,
+    result = run_cli(["governance", "check", "--repo-root", str(project)])
+
+    assert result.returncode == 1
+    assert "docs.work-note-memory-reference" in result.stdout
+    assert "../current-work/old/active-work-note.md" in result.stdout
+
+
+def test_governance_check_rejects_anchored_backticked_memory_path(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    write(project / "docs-ai" / "current-work" / "old" / "active-work-note.md", "# Old Note\n")
+    write(project / "docs-ai" / "docs" / "policy.md", "See `../current-work/old/active-work-note.md#closeout`.\n")
+
+    result = run_cli(["governance", "check", "--repo-root", str(project)])
+
+    assert result.returncode == 1
+    assert "docs.work-note-memory-reference" in result.stdout
+    assert "../current-work/old/active-work-note.md#closeout" in result.stdout
+
+
+def test_governance_check_allows_work_notes_to_link_each_other(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    write(project / "docs-ai" / "docs" / "initiatives" / "work-notes" / "old-note.md", "# Old Note\n")
+    write(
+        project / "docs-ai" / "docs" / "initiatives" / "work-notes" / "new-note.md",
+        "[Old](old-note.md)\n",
     )
-    write(project / "docs-ai" / "docs" / "policy.md", "[Active](initiatives/waves/active-wave.md)\n")
 
     result = run_cli(["governance", "check", "--repo-root", str(project)])
 
     assert result.returncode == 0
     assert result.stdout == ""
-
-
-def test_governance_check_rejects_inline_completed_wave_path(tmp_path: Path) -> None:
-    project = tmp_path / "project"
-    write(
-        project / "docs-ai" / "docs" / "initiatives" / "waves" / "closed-wave.md",
-        """
-        # Wave closed-wave
-
-        **Status:** done
-        """,
-    )
-    write(project / "docs-ai" / "docs" / "policy.md", "See `initiatives/waves/closed-wave.md`.\n")
-
-    result = run_cli(["governance", "check", "--repo-root", str(project)])
-
-    assert result.returncode == 1
-    assert "docs.completed-wave-doctrine-reference" in result.stdout
-    assert "initiatives/waves/closed-wave.md" in result.stdout
 
 
 def test_governance_check_rejects_missing_repo_root_without_traceback(tmp_path: Path) -> None:
@@ -425,7 +428,7 @@ def test_replaced_skill_scripts_are_removed() -> None:
 
 
 def test_cli_main_returns_nonzero_for_user_errors_without_traceback(tmp_path: Path, capsys) -> None:
-    status = cli.main(["wave", "refs", "--repo-root", str(tmp_path / "missing"), "--wave", "example-wave"])
+    status = cli.main(["memory", "refs", "--repo-root", str(tmp_path / "missing"), "--item", "example-item"])
 
     captured = capsys.readouterr()
     assert status == 1

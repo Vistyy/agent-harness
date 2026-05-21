@@ -4,10 +4,11 @@ set -euo pipefail
 MODE="dry-run"
 STAGE_ONLY="false"
 REPLACE_CONFLICTING_SYMLINKS="false"
+REPLACE_CONFLICTING_TARGETS="false"
 
 usage() {
   cat <<'EOF'
-Usage: install.sh [--dry-run|--apply] [--stage-harness-governance] [--replace-conflicting-symlinks]
+Usage: install.sh [--dry-run|--apply] [--stage-harness-governance] [--replace-conflicting-symlinks] [--replace-conflicting-targets]
 
 Installs Codex skills/agents and global AGENTS.md with individual symlinks.
 Full apply also merges the required Codex agent-role config into
@@ -31,6 +32,9 @@ while [[ $# -gt 0 ]]; do
       ;;
     --replace-conflicting-symlinks)
       REPLACE_CONFLICTING_SYMLINKS="true"
+      ;;
+    --replace-conflicting-targets)
+      REPLACE_CONFLICTING_TARGETS="true"
       ;;
     -h|--help)
       usage
@@ -105,11 +109,13 @@ target_matches() {
 resolved_symlink_target() {
   local target="$1"
   local source="$2"
+  local raw
   if [[ "$source" = /* ]]; then
-    realpath -m -- "$source"
+    raw="$source"
   else
-    realpath -m -- "$(dirname "$target")/$source"
+    raw="$(dirname "$target")/$source"
   fi
+  python3 -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$raw"
 }
 
 CONFLICTS=()
@@ -123,7 +129,7 @@ collect_conflicts() {
     if [[ -e "$target" || -L "$target" ]]; then
       if ! target_matches "$target" "$source"; then
         CONFLICTS+=("$target"$'\t'"$source")
-        if [[ "$REPLACE_CONFLICTING_SYMLINKS" != "true" || ! -L "$target" ]]; then
+        if [[ "$REPLACE_CONFLICTING_TARGETS" != "true" && ( "$REPLACE_CONFLICTING_SYMLINKS" != "true" || ! -L "$target" ) ]]; then
           echo "conflict: $target exists and does not point to $source" >&2
         fi
         failed="true"
@@ -131,6 +137,9 @@ collect_conflicts() {
     fi
   done
   if [[ "$failed" == "false" ]]; then
+    return 0
+  fi
+  if [[ "$REPLACE_CONFLICTING_TARGETS" == "true" ]]; then
     return 0
   fi
   if [[ "$REPLACE_CONFLICTING_SYMLINKS" == "true" ]]; then
@@ -145,6 +154,26 @@ collect_conflicts() {
     return 0
   fi
   return 1
+}
+
+target_kind() {
+  local target="$1"
+  if [[ -L "$target" ]]; then
+    echo "symlink"
+  elif [[ -d "$target" ]]; then
+    echo "directory"
+  elif [[ -f "$target" ]]; then
+    echo "file"
+  elif [[ -e "$target" ]]; then
+    echo "other"
+  else
+    echo "missing"
+  fi
+}
+
+backup_name_for_target() {
+  local target="$1"
+  python3 -c 'import re, sys; print(re.sub(r"[^A-Za-z0-9._-]+", "_", sys.argv[1].strip("/")))' "$target"
 }
 
 planned_basenames() {
@@ -232,7 +261,7 @@ write_inventory() {
   {
     for item in "$CODEX_HOME/config.toml" "$CODEX_HOME/AGENTS.md" "$CODEX_HOME/prompts" "$AGENTS_HOME" "$CLI_TARGET"; do
       if [[ -e "$item" || -L "$item" ]]; then
-        printf '%s\t%s\t%s\n' "$item" "$(stat -c '%F:%s' "$item")" "$(readlink "$item" || true)"
+        printf '%s\t%s:%s\t%s\n' "$item" "$(target_kind "$item")" "$(wc -c < "$item" 2>/dev/null || echo 0)" "$(readlink "$item" || true)"
       else
         printf '%s\tmissing\t\n' "$item"
       fi
@@ -363,19 +392,21 @@ write_manifests() {
     else
       echo "  \"config_merge\": true,"
     fi
-    echo "  \"replaced_symlinks\": ["
+    echo "  \"replaced_targets\": ["
     local first_backup="true"
     local conflict
     for conflict in "${CONFLICTS[@]}"; do
       local target="${conflict%%$'\t'*}"
       local source="${conflict#*$'\t'}"
-      local old_source
-      old_source="$(readlink "$target")"
+      local old_source kind backup_name
+      old_source="$(readlink "$target" || true)"
+      kind="$(target_kind "$target")"
+      backup_name="$(backup_name_for_target "$target")"
       if [[ "$first_backup" == "false" ]]; then
         echo ","
       fi
       first_backup="false"
-      printf '    {"target": "%s", "old_source": "%s", "new_source": "%s", "type": "symlink"}' "$target" "$old_source" "$source"
+      printf '    {"target": "%s", "old_source": "%s", "new_source": "%s", "type": "%s", "backup": "%s"}' "$target" "$old_source" "$source" "$kind" "$RUN_DIR/conflicts/$backup_name"
     done
     echo
     echo "  ],"
@@ -434,6 +465,12 @@ apply_symlinks() {
     local target="${conflict%%$'\t'*}"
     if [[ -L "$target" ]]; then
       rm "$target"
+    elif [[ "$REPLACE_CONFLICTING_TARGETS" == "true" && ( -e "$target" || -L "$target" ) ]]; then
+      local backup_name backup_path
+      backup_name="$(backup_name_for_target "$target")"
+      backup_path="$RUN_DIR/conflicts/$backup_name"
+      mkdir -p "$(dirname "$backup_path")"
+      mv "$target" "$backup_path"
     fi
   done
   local prune
@@ -518,10 +555,24 @@ else
   done
 fi
 
-echo "conflict policy: stop before replacing non-matching live targets"
+if [[ "$REPLACE_CONFLICTING_TARGETS" == "true" ]]; then
+  echo "conflict policy: back up and replace non-matching live targets"
+elif [[ "$REPLACE_CONFLICTING_SYMLINKS" == "true" ]]; then
+  echo "conflict policy: replace non-matching symlinks only"
+else
+  echo "conflict policy: stop before replacing non-matching live targets"
+fi
 
 if ! collect_conflicts < <({ planned_global_agents_md; planned_skills; planned_agents; planned_cli; }); then
   exit 1
+fi
+
+if [[ "${#CONFLICTS[@]}" -gt 0 && "$REPLACE_CONFLICTING_TARGETS" == "true" ]]; then
+  echo "planned conflicting target backups:"
+  for conflict in "${CONFLICTS[@]}"; do
+    target="${conflict%%$'\t'*}"
+    echo "$target ($(target_kind "$target")) -> $RUN_DIR/conflicts/$(backup_name_for_target "$target")"
+  done
 fi
 
 if [[ "$MODE" == "apply" ]]; then

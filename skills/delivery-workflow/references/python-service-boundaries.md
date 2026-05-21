@@ -1,9 +1,7 @@
 # Python Service Boundaries
 
-Use only when the touched owner is a Python service, unit of work, repository,
+Use when the touched owner is a Python service, unit of work, repository,
 handler, or dynamic input boundary.
-
-## Rules
 
 - One boundary owns transaction lifecycle, request context, and persistence
   dispatch.
@@ -17,4 +15,4 @@ handler, or dynamic input boundary.
 - Framework casts stay in adapters; business logic receives real contracts.
 
 If a service owns transaction lifecycle, repository choreography, mapping,
-workflow policy, and error translation at once, recheck the interface depth.
+workflow policy, and error translation at once, recheck interface depth.

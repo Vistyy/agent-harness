@@ -1,78 +1,74 @@
 ---
 name: initiatives-workflow
-description: "Use for durable wave/backlog context: delivery-map structure, context notes, backlog entries, and closeout cleanup."
+description: "Use for delivery-map, backlog, and active work-note memory; not for execution authority."
 ---
 
 # Initiatives Workflow
 
-Owns durable context: delivery map, wave briefs, context notes, and backlog
-entries. It does not own design, readiness, review, proof, runtime, or test
+Owns delivery-map, backlog, and active work-note memory. It does not own
+execution authority, design, proof, review, runtime, test, or completion
 doctrine.
 
 ## Rule
 
-Use durable context only when the work must survive queue tracking, handoff,
-interruption, resume, review, or multiple slices. Durable context is memory, not
-authority. When it conflicts with the binding objective, repo reality, or the
-simplest correct end state, amend, supersede, or close it before continuing.
+The delivery map is remembered intent and rough sequencing. Everything listed
+there is a discovery starting point, not executable scope. Picking a lane
+or item starts `../delivery-workflow/SKILL.md` discovery from the current user
+objective and repo reality.
 
-Read `references/durable-context-contract.md` when creating or updating durable
-context.
+Use durable notes only when work must survive handoff, interruption, resume, or
+multiple slices. Notes are hypotheses. When they conflict with the objective,
+repo reality, or a simpler coherent shape, amend, supersede, or discard them
+before relying on them.
 
-## State
+Read `references/durable-context-contract.md` when creating or updating
+delivery-map, backlog, or active work-note memory.
 
-- map: `docs-ai/current-work/delivery-map.md`
-- brief: `docs-ai/docs/initiatives/waves/<wave-id>.md` when queue-visible status
-  is needed
-- context note: `docs-ai/current-work/<wave-id>/wave-execution.md`
-- draft context note: `docs-ai/current-work/<wave-id>/wave-execution.draft.md`
-- delivery brief: `docs-ai/current-work/<wave-id>/delivery-brief.md` only when
-  a durable closeout artifact is useful
-- backlog: `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md`
+## Memory Shapes
 
-Statuses: `discovery-required`, `execution-ready`, `done`, `retired`.
+- delivery map: `docs-ai/current-work/delivery-map.md`
+- work note: `docs-ai/docs/initiatives/work-notes/<item-id>.md` when a visible
+  map item needs remembered detail
+- active note: `docs-ai/current-work/<item-id>/active-work-note.md` when branch
+  work needs resumable memory
+- draft note: `docs-ai/current-work/<item-id>/active-work-note.draft.md`
+- backlog detail: `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md`
 
-`execution-ready` means durable context is usable. It does not mean the plan is
-still the right engineering move.
+The map stays terse: lanes are independently pickable initiative tracks, lane
+order is sequential by default, and each item is one or two lines with a link.
+If strict dependencies exist across lanes, prefer one longer lane; rare
+exceptions may be called out inline.
 
-## Execute
+## Active Notes
 
-Before execution:
+An active note records objective, current reality, objective coverage,
+decisions, target shape, decomposition, evidence strategy, cleanup, blockers,
+and remaining required work. It may link subordinate notes, but the top note
+owns the branch-level objective.
 
-- durable context, when used, preserves objective, accepted reductions, simplest
-  correct end state, owner/interface, order, blockers, readiness claim, and
-  evidence needs across handoff/resume
-- `planning_critic` and `quality_guard` objections are resolved for
-  non-trivial planning
+Do not encode status gates in the map. Do not treat lane order, work notes,
+backlog notes, packets, plans, or summaries as authority.
 
-During execution:
+## Backlog
 
-- execute in dependency order; if a later lane becomes the right lane, amend or
-  supersede the context instead of silently jumping
-- classify user checkpoints or feedback through `../feedback-address/SKILL.md`
-  before code changes
-- amend context objective, checkpoint, decisions, slices, readiness, or proof
-  before code when feedback changes the work shape
-- update blockers, decisions, evidence, residuals, and follow-up in the context
-- use `quality_guard` after each non-trivial implementation chunk to challenge
-  the current diff against the objective and end state
+Backlog files preserve work that should not be lost. They are not promises that
+the next implementation shape is known. Keep problem, why it remains visible,
+suggested next discovery move, references, and removal condition.
 
-Stop on objective drift, stale context, missing design/readiness state,
-discovery leakage, or current-scope owner defects not fixed/routed/accepted.
+Current-scope cleanup cannot be dumped into backlog unless the user accepts a
+reduction or the work is genuinely separate from the active objective.
 
 ## Closeout
 
-Close only after verification, final review, and `../readiness-claim/SKILL.md`
-support the final claim and delivery brief when the work is non-trivial.
+Close memory only after `../delivery-workflow/SKILL.md` closeout names completed
+work, remaining required work, evidence, reviewer verdicts, and repo-health
+cleanup.
 
-Extract retained value to the owning durable surface or valid backlog. Dispose
-of every current-scope issue by fixing it, routing it to valid backlog, or
-recording accepted temporary debt. Then remove, mark done, or supersede active
-context and any durable delivery brief so no stale lane can steer later work.
+Update the map/backlog only to preserve useful future starting points, remove
+completed or obsolete memory, or keep remaining required work visible.
 
 ## Assets
 
-- discovery brief: `assets/wave-brief-discovery-required.md`
-- execution-ready brief: `assets/wave-brief-execution-ready.md`
-- context note: `assets/wave-execution.md`
+- work note: `assets/work-note.md`
+- active note: `assets/active-work-note.md`
 - backlog item: `assets/backlog-entry.md`

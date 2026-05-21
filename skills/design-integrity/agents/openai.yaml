@@ -1,4 +1,0 @@
-interface:
-  display_name: "Design Integrity"
-  short_description: "Judge owner/interface coherence and module depth"
-  default_prompt: "Use $design-integrity to check owner/interface adequacy, module depth, seams, and integrity verdicts."

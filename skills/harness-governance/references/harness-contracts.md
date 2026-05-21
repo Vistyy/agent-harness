@@ -35,9 +35,9 @@ convention.
 `AGENTS.md`, `docs-ai/docs/**`, and `docs-ai/current-work/**`. It ignores
 external URLs, anchors, and template-like paths.
 
-`docs.completed-wave-doctrine-reference` rejects durable non-wave docs that
-link to `done` wave briefs. It scans markdown links and backticked local paths
-in `AGENTS.md` and `docs-ai/docs/**`, excluding wave briefs themselves.
+`docs.work-note-memory-reference` rejects durable docs that link to work-note or
+current-work memory. It scans markdown links and backticked local paths in
+`AGENTS.md` and `docs-ai/docs/**`, excluding work notes themselves.
 
 Reusable checks must stay narrow, high-signal, and tied to owned policy
 surfaces.
@@ -52,6 +52,6 @@ Reusable harness gates are blocking contracts, not advisory guidance.
 - `not-applicable`: the gate is outside the claim and the reason is named.
 
 Do not classify required rule, proof, review, runtime, architecture,
-design-integrity, or validation failures as advisory. Non-blocking observations
+delivery-workflow, or validation failures as advisory. Non-blocking observations
 are not code-review verdicts and are valid only outside the binding objective or
 as accepted temporary debt with owner, risk, and removal condition.

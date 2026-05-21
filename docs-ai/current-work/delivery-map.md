@@ -1,15 +1,13 @@
-# Delivery Map (Waves + Backlog)
+# Delivery Map
 
-The wave brief `**Status:**` is the execution gate.
+This map is remembered intent, not execution authority. It shows lane-level
+starting points and backlog visibility. Picking an item starts discovery through
+`delivery-workflow`.
 
-## Wave Plan
-
-None.
-
-## Current Evidence
+## Lanes
 
 None.
 
-## Deferred Backlog
+## Backlog Index
 
 None.

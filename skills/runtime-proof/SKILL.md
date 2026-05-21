@@ -1,24 +1,25 @@
 ---
 name: runtime-proof
-description: "Use for live-use runtime evidence mechanics, entrypoint fidelity, artifacts, and pass/reject/blocked verdicts after readiness-claim names the claim."
+description: "Use for live-use runtime evidence mechanics, entrypoint fidelity, artifacts, and pass/reject/blocked verdicts after delivery-workflow names the claim."
 ---
 
 # Runtime Proof
 
-Owns live-use validation mechanics. `../readiness-claim/SKILL.md` owns claim
-completeness and final scope. Browser and mobile skills own platform mechanics.
+Owns live-use validation mechanics. `../delivery-workflow/SKILL.md` owns
+objective coverage and final scope. Browser and mobile skills own platform
+mechanics.
 
 ## Rule
 
 Runtime evidence uses the app, service, API, or operator path through a
 faithful entrypoint and reports whether observed behavior supports the handed
-readiness claim beyond code inspection, tests, and review approval.
+objective coverage beyond code inspection, tests, and review approval.
 
 This skill does not decide when runtime evidence is required. That requirement
-comes from `../readiness-claim/SKILL.md`, project overlays, or the active route.
+comes from `../delivery-workflow/SKILL.md`, project overlays, or the active route.
 
 Runtime evidence is blocking when required. Return `reject`, `blocked`,
-incomplete, or mis-scoped evidence to `readiness-claim`; completion waits for
+incomplete, or mis-scoped evidence to `delivery-workflow`; completion waits for
 fixed/re-proven evidence or an explicitly narrowed claim.
 
 Visual-only UI design readiness does not require runtime evidence by default;
@@ -29,7 +30,7 @@ Visual-only UI design readiness does not require runtime evidence by default;
 Name:
 
 - binding objective and accepted reductions
-- readiness claim and obligations checked
+- objective coverage and obligations checked
 - entrypoint or recipe
 - affected states, roles, data, devices, browsers, or viewports
 - UI behavior risks, if claimed
@@ -46,7 +47,7 @@ Missing or narrower handoff returns `blocked`.
   behavior
 
 Broad readiness and user-flow claims need `real-entrypoint` unless
-`readiness-claim` explicitly narrows the claim.
+`delivery-workflow` explicitly narrows the claim.
 
 ## Output
 

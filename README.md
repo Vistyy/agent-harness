@@ -10,31 +10,28 @@ Project-specific facts stay in each project overlay.
 ## Architecture
 
 Keep this section high-level. It should describe the harness shape and owner
-relationships, not restate skill bodies, adapter prompts, context-note fields, or
+relationships, not restate skill bodies, adapter prompts, work-note fields, or
 project-specific doctrine.
 
 The harness is a contract kernel, not a project playbook. It gives agents a
 small set of reusable owners and leaves product facts, runtime topology,
 roadmap, queue state, local commands, and exceptions in each project.
 
-The core workflow is:
+The core workflow is `delivery-workflow`:
 
-1. `work-routing` chooses the route that can reach the simplest correct end
-   state.
-2. `design-integrity` selects the owner/interface that should make the
-   objective true.
-3. `readiness-claim` names exactly what may be claimed and what evidence must
-   cross the selected interface.
-4. `initiatives-workflow` stores durable context only when state must survive
-   handoff, interruption, queueing, review, or multiple slices. That state is
-   memory, not authority.
-5. Execution happens through the selected owner/interface.
-6. Evidence mechanisms report to the readiness claim:
-   `runtime-proof`, `testing-best-practices`, `code-review`,
-   `webapp-testing`, `mobileapp-testing`, and `user-apps-design`.
-7. `readiness-claim` produces the final delivery brief for non-trivial work:
-   outcome, end-state shape, plan coverage, evidence, reviewer verdicts,
-   residuals, and context closeout.
+1. Start from the user objective or delivery-map memory.
+2. Discover current repo reality and owner context.
+3. Define objective coverage from entrypoint through production trigger,
+   lifecycle owner, state, proof, cleanup, and closeout.
+4. Choose the simplest coherent target system shape.
+5. Decompose implementation slices from that shape.
+6. Use adversarial planning review to test whether the note correctly
+   interprets the objective.
+7. Execute slices through the selected owner/interface.
+8. Prove real behavior through the real interface or lifecycle.
+9. Use adversarial final review to judge objective correctness and repository
+   health.
+10. Close honestly and update delivery-map/backlog memory.
 
 Mechanism skills should not redefine readiness. Platform and tool skills
 (`flutter-expert`, `svelte-code-writer`, `tailwind-design-system`,
@@ -42,25 +39,29 @@ Mechanism skills should not redefine readiness. Platform and tool skills
 Governance skills (`harness-governance`, `documentation-stewardship`) decide
 where reusable rules live and keep one durable owner per concept.
 
-Subagents are engineering capacity, not ceremony. Use `explorer` for bounded
-repository discovery and `implementer` for bounded implementation slices once
-the design interface, readiness claim, and owned scope are clear enough to
-handoff. Use `planning_critic`, `quality_guard`, and `final_reviewer` to
-challenge strategy, implementation, and merge readiness against the user
+Delivery maps and work notes are memory, not authority. A delivery-map item is
+a remembered starting point for discovery, not executable scope. The current
+objective, repo reality, owner docs, and reviewer judgment decide the work.
+
+Subagents are adversarial engineering capacity, not ceremony. Use `explorer`
+for bounded repository discovery and `implementer` for bounded implementation
+slices once objective coverage, target shape, evidence strategy, and owned
+scope are clear enough to hand off. Use `planning_critic`, `quality_guard`, and
+`final_reviewer` to challenge strategy, implementation, and merge readiness against the user
 objective and repo reality, not against artifact shape. The parent thread keeps
-orchestration, shared runtime lifecycle, final claim synthesis, and review
+orchestration, shared runtime lifecycle, closeout synthesis, and review
 routing.
 
-The intended shape is shallow at the top and precise at the edges: route to the
-simplest correct end state, design the owner/interface, execute through that
-owner, prove the claim, review the final shape, and close with a delivery brief
-a non-code owner can trust.
+The intended shape is shallow at the top and precise at the edges: preserve the
+objective, discover enough to choose the final shape, execute meaningful
+slices, prove real behavior, review repo health, and keep remaining required
+work visible.
 
 Adapter:
 - Codex: `adapters/codex/install.sh`
 
 Reusable automation:
-- `agent-harness wave refs --repo-root <project-root> --wave <wave-id>`
-- `agent-harness wave cleanup --repo-root <project-root> --wave <wave-id>`
-- `agent-harness wave bootstrap --repo-root <project-root> --wave <wave-id> --title "<title>"`
+- `agent-harness memory refs --repo-root <project-root> --item <item-id>`
+- `agent-harness memory cleanup --repo-root <project-root> --item <item-id>`
+- `agent-harness memory bootstrap --repo-root <project-root> --item <item-id> --title "<title>"`
 - `agent-harness governance check --repo-root <project-root>`

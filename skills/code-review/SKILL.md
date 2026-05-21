@@ -1,93 +1,71 @@
 ---
 name: code-review
-description: "Use when the user asks for code review or when verified implementation requires final isolated closeout review."
+description: "Use when the user asks for code review or when delivery-workflow needs final isolated repo-health review."
 ---
 
 # Code Review
 
-Owns isolated skeptical review and report shape.
+Owns isolated skeptical review and report shape. `../delivery-workflow/SKILL.md`
+owns when final review is required and what objective is being closed.
 
 ## Contract
 
-Review against the binding objective, accepted reductions, simplest correct end
-state, `design-integrity`, and `readiness-claim`. Do not approve a narrower
-task summary, finding, file, diff-only slice, implementer summary, prior
-correction, handoff prompt, plan, durable context, or brief.
+Review against the original objective, accepted reductions, repo reality,
+owner docs, current code/runtime topology, objective coverage, evidence, and
+repo health. Plans, work notes, delivery maps, summaries, and claims are
+hypotheses/context only.
 
-Plans, waves, context notes, and briefs are context only; their validity is not
-evidence that the change is good.
-
-Handoffs route attention; they are not authority. Review authority comes from
-the binding user objective, accepted reductions, repo reality, durable context
-when useful, readiness claim, design source, and relevant owner docs. If the
-handoff narrows, summarizes, or conflicts with that authority, review against
-the authority or `BLOCK` for prompt/source mismatch.
+Before judging implementation consistency, decide whether the note or plan is a
+valid interpretation of the objective. An internally consistent plan that
+implements the wrong shape is `BLOCK`.
 
 Approval is binary: `APPROVE` or `BLOCK`. Approval means:
 
-- the claim-relevant changed surface was reviewed deeply enough to support the
-  authoritative claim
-- the final shape is the simplest coherent implementation of the objective
-- reviewed evidence can support the readiness claim
-- no current-scope blocker remains
-- delivery-brief support is credible for non-trivial completion
+- the objective-relevant changed surface and adjacent owner paths were reviewed
+  deeply enough
+- the final shape is coherent for the objective
+- evidence crosses the real interface or lifecycle
+- obsolete current-scope paths, tests, docs, and proof-only entrypoints are
+  removed or explicitly retained with reason
+- remaining required work is visible and not hidden behind a narrowed claim
 
-Claim-relevant changed surface means edited paths plus unedited
-owner/interface paths needed to judge the authoritative claim and selected
-design interface. It is not diff-only, and it is not an unbounded repository
-scan.
-
-Apply every owner skill triggered by the binding objective, touched
-owner/interface, readiness claim, proof path, and changed artifacts. Do not
-duplicate owner-skill doctrine; report the triggered skill, verdict, and
-blocker if any.
-
-When `readiness-claim` material risks are in scope, review the readiness-owned
-material-risk disposition as claim support. Block unassessed, mis-disposed, or
-contradicted current-scope material risk without redefining the lens semantics.
+Diff-only approval is invalid for non-trivial work.
 
 ## Check
 
 - Use fresh context and stay read-only.
-- Try to falsify the readiness claim through risky paths.
-- Ask what the change deleted, collapsed, reused, or avoided; added code, tests,
-  docs, or process state must be justified by the objective and owner.
-- Check design integrity, stale paths, proof scope, runtime/design coverage,
-  readiness-owned material-risk disposition, delivery-brief support, and issue
-  disposition.
-- Approve only after credible, current-scope, claim-relevant failure paths have
-  been pursued or dropped with a stated reason.
+- Read `../delivery-workflow/SKILL.md` before non-trivial review; use its
+  review lenses through that owner.
+- Treat the plan/note as something to falsify, not as authority.
+- Ask whether the proof could pass while the requested behavior is absent; if
+  yes, block.
+- Inspect edited paths plus adjacent owner/interface paths needed to judge the
+  objective.
+- Use delivery-workflow review lenses to falsify the shape, proof, and
+  repository state; unassessed current-scope lens impact blocks approval.
+- Ask what was deleted, collapsed, reused, avoided, or added and why.
+- Check stale code, duplicate owners, stale tests/docs, fake proof paths,
+  runtime proof scope, and remaining work disposition.
 - Cite exact `file/path:line` findings.
 
 ## Issue Disposition
 
-Every concrete issue is fixed, routed, tracked, or dropped.
+Every concrete issue is fixed, routed, tracked, accepted by the user as a
+reduction/debt, or dropped as unevidenced.
 
-- Current-scope blocker: fix now or route through `work-routing`.
-- Separate debt outside approval boundary: track through `initiatives-workflow`.
-- Accepted temporary debt: requires explicit user acceptance, owner, risk,
-  removal condition, and backlog link.
-- Taste, speculation, or unevidenced concern: drop.
+Current-scope cleanup cannot be moved to backlog merely to approve the branch.
 
 ## Output
 
 Report:
 
 - verdict: `APPROVE` or `BLOCK`
-- Binding objective
-- Accepted reductions
-- Reviewed scope against authoritative claim
-- Reviewed-scope sufficiency for `APPROVE`/`BLOCK`
-- Existing authority checked
-- Authority source inspected
-- Prompt/source mismatch
-- Plan/design alignment
-- Triggered owner skills
-- design-integrity verdict
-- readiness claim reviewed
-- Proof reviewed, including runtime/design evidence when applicable
-- Delivery brief support: outcome, end-state shape, evidence map, residuals,
-  and context closeout
-- findings with location, impact, fix, disposition
-- Issue disposition
-- residual risks or `none`
+- binding objective and accepted reductions
+- authority inspected
+- reviewed scope and why it is sufficient or insufficient
+- plan/note interpretation verdict
+- objective coverage verdict
+- evidence/proof validity
+- repo-health verdict
+- findings with location, impact, required fix, and disposition
+- remaining required work or `none`

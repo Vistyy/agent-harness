@@ -10,91 +10,64 @@ Precedence:
 
 ## Scope
 
-- Keep project identity, product facts, runtime topology, local command bodies,
-  roadmap, queue state, and active execution state in the target project.
-- Treat project-local `AGENTS.md` as a compact first-hop map, not a doctrine
-  dump.
-- Start from the matching owner skill or project owner doc; read only what the
-  current task needs.
-- For non-trivial work, read `design-integrity` before shaping the approach,
-  handoff, review, proof, or completion claim.
-- Use installed harness automation when a command exists.
+- Project facts, runtime topology, commands, roadmap, queue state, and active
+  work stay in the target project.
+- Project-local `AGENTS.md` is a compact first-hop map.
+- Non-trivial work starts from `delivery-workflow`.
 
 ## Always-Loaded Guardrails
 
 - Do not replace the binding user objective with a convenient subset.
 - Do not patch around a current-objective owner defect and call it complete.
-- When the binding objective cannot be completed in the current route, route it
-  into durable planning or stop as blocked; a diff-sized success claim is
-  invalid.
-- For non-trivial work, `not assessed` design integrity is not approvable.
-- Final claims must pass `readiness-claim` and stay within the binding
-  objective, selected design interface, proof, runtime evidence, design
-  judgment, and approved review scope.
+- When the binding objective cannot be completed, keep remaining required work
+  visible or stop as blocked; a diff-sized success claim is invalid.
+- Final claims must stay within the binding objective, objective coverage,
+  selected system shape, proof, runtime evidence, design judgment, repo-health
+  review, and visible residual work.
 
 ## Routing
 
-- Route selection: `work-routing`.
+- End-to-end delivery workflow: `delivery-workflow`.
 - Reusable harness posture and project overlays: `harness-governance`.
 - Documentation ownership: `documentation-stewardship`.
-- Design, owner/interface adequacy, and integrity verdicts: `design-integrity`.
-- Planning readiness and route selection: `work-routing`.
-- Durable wave/backlog context and closeout: `initiatives-workflow`.
+- Delivery-map, backlog, and active work-note memory: `initiatives-workflow`.
 - Delegation and role boundaries: `subagent-orchestration`.
 - Feedback-caused edits: `feedback-address`.
 - End-user and mobile UI design: `user-apps-design`.
-- Claim completeness and proof admissibility: `readiness-claim`.
 - Runtime proof mechanics and evidence verdicts: `runtime-proof`.
 - Browser runtime proof mechanics: `webapp-testing`.
 - Mobile runtime proof mechanics: `mobileapp-testing`.
-- Review and approval semantics: `code-review`.
 - Test design and cleanup: `testing-best-practices`.
-- Architecture and owner-boundary changes: `design-integrity`.
 
 ## Operating Rules
 
-- Push back when a request conflicts with the active owner skill, design
-  integrity, safety, readiness claim, proof, review, or boundary rule. Name the
-  conflict and recommend the compliant path before execution unless the harness
-  permits an explicit accepted exception.
-- Optimize for the simplest correct end state, not the smallest local diff.
-  Use as much investigation, planning, implementation, deletion, rewrite,
-  review, and proof as needed to reach that end state. Delete, collapse,
-  demote, or reuse before adding structure.
-- For non-trivial work, assess the touched owner/interface and adequacy of the
-  selected scope, not only the diff. `not assessed` is not approvable.
-- Replace obsolete paths in the same change. Do not leave dead code, unused
-  flags, obsolete fallbacks, or migration bridges unless a durable owner names
-  the protected surface and removal condition.
-- Do not execute while implementation-shaping planning is open.
-- Keep project overlays concise maps to owning skills and project docs.
+- Push back on conflicts with owner skill, safety, delivery workflow, proof,
+  review, or boundary rule before execution.
+- Optimize for the simplest correct end state; delete, collapse, demote, or
+  reuse before adding structure.
+- Delivery maps, work notes, plans, and summaries are memory, not authority.
+  Picking a map item starts discovery.
+- Non-trivial slices preserve objective coverage from entrypoint through
+  trigger, lifecycle, state, failure behavior, proof, cleanup, and closeout.
+- Replace obsolete paths in the same change. No dead code, unused flags,
+  obsolete fallbacks, or migration bridges without owner and removal condition.
 - No silent reverts or deletions of unknown files.
 
 ## Subagent Policy
 
-- This `AGENTS.md` is the user's standing instruction to use harness
-  subagents. In a fresh conversation, the agent does not need the user to
-  mention subagents, delegation, or parallel work again before using the named
-  roles below.
+- This `AGENTS.md` is the user's standing instruction to use harness subagents.
 - The user explicitly authorizes use of the spawn/subagent tool for these
   harness-defined roles when this `AGENTS.md` is in force:
   `explorer`, `planning_critic`, `implementer`, `quality_guard`,
   `final_reviewer`, `runtime_evidence`, and `design_judge`.
-- This is standing user authorization. It satisfies any general rule requiring
-  explicit user permission before spawning subagents. Do not ask again before
-  using these named roles.
-- Follow `subagent-orchestration` for delegation, handoffs, worker reuse, and
-  active-worker handling. When its default-delegation conditions match, spawn
-  the subagent; do not wait for a fresh user request to delegate.
+- This is standing user authorization. Do not ask again before using these
+  named roles. Follow `subagent-orchestration`.
 - This preauthorization applies only to those named roles and only when the
   workflow calls for them. Adapter/runtime hard limits, unsafe handoff, or lack
   of a bounded task are the skip reasons.
-- Reuse the same role/domain subagent for every continuation, revision, or
-  follow-up until the work is approved, explicitly blocked pending parent
-  decision, or explicitly out of scope.
-  Do not spawn a replacement with a rephrased prompt to restart the same work.
-  Spawn a replacement only for a different role/domain or intentionally fresh
-  independent review.
+- Reuse the same role/domain subagent until approved, blocked pending parent
+  decision, or out of scope. Do not restart the same work with a rephrased
+  prompt.
 - Never close, replace, or reclaim an active worker or write scope because it is
   slow, silent, timed out, or blocking local work.
 

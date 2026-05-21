@@ -1,35 +1,36 @@
 # Durable Context Contract
 
-Owns durable context notes for wave execution.
+Owns durable memory notes for delivery-map lanes, backlog, and active branch
+work.
 
 ## Purpose
 
-A durable context note exists only when context would otherwise be lost or
-twisted across queueing, handoff, interruption, resume, review, or multiple
-slices. It is memory, not authority.
+A durable note exists only when context would otherwise be lost or twisted
+across queueing, handoff, interruption, resume, review, or multiple slices. It
+is memory, not authority.
 
 ## Sufficiency
 
 The note is sufficient only when a future agent can recover:
 
 - original objective, accepted reductions, residual gaps, and current checkpoint
-- simplest correct end state and rejected alternatives
-- selected owner/interface, key decisions, design-integrity verdict, and
-  blocker status
+- current repo/product reality
+- objective coverage across entrypoint, production trigger, state authority,
+  lifecycle owner, behavior, failure/recovery, visibility, persistence,
+  cleanup, observability, proof, docs, and residual work
+- target system shape and rejected alternatives
 - current slice, owned surfaces, dependency order, blockers, decisions,
-  evidence, and follow-up
-- exact readiness claim, claimed interface, evidence status, unproved
-  boundaries, and residual risks
-- context closeout state: removed, superseded, extracted, or intentionally
-  active with reason
+  evidence strategy, and follow-up
+- repo-health cleanup and remaining required work
+- closeout state: removed, superseded, extracted, or intentionally active with
+  reason
 
 Use headings or prose that make those facts hard to lose. Do not add fields to
 satisfy a template.
 
 ## Authority
 
-The binding user objective, repo reality, `../../design-integrity/SKILL.md`,
-`../../readiness-claim/SKILL.md`, and reviewer judgments outrank durable
-context. Stop when context is stale, narrows the objective, omits a material
-dependency, or points at a route that is no longer the simplest correct end
-state.
+The binding user objective, repo reality, `../../delivery-workflow/SKILL.md`,
+owner docs, and reviewer judgments outrank durable memory. Stop when context is
+stale, narrows the objective, omits a material dependency, or points at a shape
+that is no longer coherent.

@@ -27,7 +27,7 @@ For parity work, record:
 - shared-logic equivalence proof when separate codebases implement the same
   domain behavior
 
-Missing matrix means the work is not execution-ready.
+Missing matrix means the work is not ready for implementation.
 
 ## Blockers
 

@@ -65,8 +65,8 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
         if role == "quality_guard":
             codex_body = (
                 f'name = "{role}"\n'
-                "# design integrity gate\n"
-                "# active durable context\n# binding objective\n# accepted reductions\n# readiness claim\n# artifacts\n# final approval\n"
+                "# delivery workflow gate\n"
+                "# active durable context\n# binding objective\n# accepted reductions\n# objective coverage\n# artifacts\n# final approval\n"
                 "# Do not claim final approval.\n"
                 "# Diff-only approval is invalid\n"
                 "# why inspected scope is sufficient\n"
@@ -78,31 +78,54 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
                 "# context, not authority\n"
                 "# authority source inspected\n"
                 "# prompt/source mismatch\n"
-                "# plan/design alignment\n"
-                "# material non-correctness risks\n"
-                "# material risks\n"
-                "# readiness-owned lens\n"
-                "# delivery-brief support\n"
+                "# Parent handoff is orientation, not authority\n"
+                "# same delivery-workflow review lenses as final review\n"
+                "# plan/objective alignment\n"
+                "# review lenses\n"
+                "# delivery-workflow review-lens concerns\n"
+                "# closeout notes\n"
             )
         elif role == "explorer":
             codex_body = (
                 f'name = "{role}"\n'
-                "# design integrity gate\n"
+                "# delivery workflow gate\n"
                 "# Stay read-only\n# Do not edit code or take implementation ownership.\n"
             )
         elif role in {"implementer", "planning_critic", "runtime_evidence", "final_reviewer"}:
+            role_extra = ""
+            if role == "planning_critic":
+                role_extra = (
+                    "# Stay read-only\n"
+                    "# do not implement\n"
+                    "# strategy reviewer\n"
+                    "# Parent handoff is orientation, not authority\n"
+                    "# delivery-workflow review lenses\n"
+                    "# Use review lenses to falsify\n"
+                    "# prompt/source mismatch\n"
+                )
+            elif role == "final_reviewer":
+                role_extra = (
+                    "# Parent handoff is orientation, not authority\n"
+                    "# delivery-workflow review lenses\n"
+                    "# Apply delivery-workflow review lenses\n"
+                    "# prompt/source mismatch\n"
+                    "# binding objective\n"
+                    "# accepted reductions\n"
+                    "# owned scope\n"
+                    "# proof artifacts\n"
+                )
             codex_body = (
                 f'name = "{role}"\n'
-                "# design integrity gate\n"
-                "# material non-correctness risks\n"
-                "# material risks\n"
-                "# readiness-owned lens\n"
-                "# readiness claim\n"
-                "# delivery-brief support\n"
+                "# delivery workflow gate\n"
+                f"{role_extra}"
+                "# review lenses\n"
+                "# delivery-workflow review-lens concerns\n"
+                "# objective coverage\n"
+                "# closeout notes\n"
                 "# context, not authority\n"
             )
         else:
-            codex_body = f'name = "{role}"\n# design integrity gate\n'
+            codex_body = f'name = "{role}"\n# delivery workflow gate\n'
         write(
             root / "adapters" / "codex" / "agents" / f"{role.replace('_', '-')}.toml",
             codex_body,
@@ -112,7 +135,7 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
 
 def valid_context_note() -> str:
     return """
-    # Wave example Context Note
+    # Work Note example Context Note
 
     ## Objective
 
@@ -121,54 +144,61 @@ def valid_context_note() -> str:
     - residual gaps: `none`
     - checkpoint: `current`
 
-    ## Design Integrity
+    ## Current Reality
 
-    - owner/interface: `example`
-    - key decisions: `none`
-    - verdict: `acceptable`
-    - accepted temporary debt: `none`
+    - repo/product state: `example`
 
-    ## Execution
+    ## Objective Coverage
 
-    - current slice: `example.md`
-    - blockers/decisions: `none`
+    - entrypoint/actor: `covered`
+    - production trigger path: `covered`
+    - state authority: `covered`
+    - runtime/lifecycle owner: `covered`
+    - cleanup/legacy removal: `covered`
 
-    ## Readiness Claim
+    ## Target Shape
 
-    - exact claim: `Example claim.`
-    - claimed interface: `example interface`
-    - required evidence: `uv run python scripts/validate_harness.py`
-    - evidence status: `planned`
-    - unproved boundaries: `none`
-    - residual risks: `none`
+    - final shape: `example`
+
+    ## Evidence And Review
+
+    - evidence strategy: `uv run python scripts/validate_harness.py`
+    - planning review: `not needed`
+    - final repo-health review: `pending`
     """
 
 
-def add_material_risk_lens_contract(root: Path) -> None:
-    add_skill(root, "readiness-claim")
+def add_review_lenses_contract(root: Path) -> None:
+    add_skill(root, "delivery-workflow")
     write(
-        root / "skills" / "readiness-claim" / "SKILL.md",
+        root / "skills" / "delivery-workflow" / "SKILL.md",
         """
         ---
-        name: readiness-claim
-        description: Test readiness claim skill.
+        name: delivery-workflow
+        description: Test objective coverage skill.
         ---
 
-        # Readiness Claim
+        # Delivery Workflow
 
-        Before proof, review, runtime evidence, handoff, or completion, load
-        `references/material-risk-lenses.md` when material
-        non-correctness risks may affect the claim.
+        solution correctness
+
+        Read `references/review-lenses.md` before proof, review, runtime
+        evidence, handoff, or completion when review-lens concerns may affect
+        the claim.
         """,
     )
     write(
-        root / "skills" / "readiness-claim" / "references" / "material-risk-lenses.md",
+        root / "skills" / "delivery-workflow" / "references" / "review-lenses.md",
         """
-        # Material Risk Lenses
+        # Review Lenses
 
-        The material-risk lens includes security/privacy, data integrity,
+        The material-risk lenses include security/privacy, data integrity,
         reliability, operability, observability/diagnosability,
         performance/cost, compatibility, and accessibility.
+
+        The engineering-quality lenses include simplicity, cohesion/ownership,
+        testability/provability, evolvability, maintainability/readability,
+        migration/cleanup, slice integrity, and dependency/tooling fit.
 
         Disposition labels are `not-applicable`, `covered`, `blocked`,
         `separate debt`, and `accepted temporary debt`.
@@ -184,14 +214,14 @@ def add_material_risk_lens_contract(root: Path) -> None:
         Legal/licensing/compliance stays out of default scope.
 
         Splitting becomes valid only if the reference grows beyond compact
-        readiness disposition.
+        review-lens disposition.
         """,
     )
 
 
 def minimal_valid_root(root: Path) -> None:
     add_skill(root, "test-skill")
-    add_material_risk_lens_contract(root)
+    add_review_lenses_contract(root)
     write(
         root / "skills" / "runtime-proof" / "SKILL.md",
         """
@@ -553,7 +583,7 @@ def test_validate_rejects_agents_route_map_drift(tmp_path: Path) -> None:
 
         ## Routing
 
-        - Full wave execution: `wave-autopilot`.
+        - Full work note execution: `wave-autopilot`.
         - Missing route: `missing-skill`.
         - Runtime proof policy: `runtime-proof`.
         """,
@@ -614,17 +644,17 @@ def test_validate_rejects_optional_reference_wording(tmp_path: Path) -> None:
 
 def test_validate_rejects_non_gated_reference_row_in_staged_skill(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    add_skill(tmp_path, "design-integrity")
-    write(tmp_path / "skills" / "design-integrity" / "references" / "web-boundaries.md", "# Web Boundaries\n")
+    add_skill(tmp_path, "delivery-workflow")
+    write(tmp_path / "skills" / "delivery-workflow" / "references" / "web-boundaries.md", "# Web Boundaries\n")
     write(
-        tmp_path / "skills" / "design-integrity" / "SKILL.md",
+        tmp_path / "skills" / "delivery-workflow" / "SKILL.md",
         """
         ---
-        name: design-integrity
-        description: Use when reviewing design integrity.
+        name: delivery-workflow
+        description: Use when reviewing objective coverage.
         ---
 
-        # Design Integrity
+        # Delivery Workflow
 
         - Web boundary detail: `references/web-boundaries.md`
         """,
@@ -633,7 +663,7 @@ def test_validate_rejects_non_gated_reference_row_in_staged_skill(tmp_path: Path
     errors = validate_harness.validate(tmp_path)
 
     assert (
-        "skills/design-integrity/SKILL.md:8 has non-gated reference row in staged reference-gate skill; "
+        "skills/delivery-workflow/SKILL.md:8 has non-gated reference row in staged reference-gate skill; "
         "use `Read <reference> when/before/for ...`"
     ) in errors
 
@@ -703,13 +733,13 @@ def test_validate_rejects_owner_only_doctrine_duplicates(tmp_path: Path) -> None
 
 def test_validate_rejects_solution_correctness_duplicate_doctrine(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    add_skill(tmp_path, "design-integrity")
+    add_skill(tmp_path, "delivery-workflow")
     add_skill(tmp_path, "other-owner")
     write(
-        tmp_path / "skills" / "design-integrity" / "SKILL.md",
+        tmp_path / "skills" / "delivery-workflow" / "SKILL.md",
         """
         ---
-        name: design-integrity
+        name: delivery-workflow
         description: Test owner.
         ---
 
@@ -732,18 +762,18 @@ def test_validate_rejects_solution_correctness_duplicate_doctrine(tmp_path: Path
 
     assert (
         "skills/other-owner/SKILL.md duplicates owner-only doctrine 'solution correctness'; "
-        "owner is skills/design-integrity/SKILL.md"
+        "owner is skills/delivery-workflow/SKILL.md"
     ) in errors
 
 
 def test_validate_rejects_solution_correctness_duplicate_adapter_doctrine(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    add_skill(tmp_path, "design-integrity")
+    add_skill(tmp_path, "delivery-workflow")
     write(
-        tmp_path / "skills" / "design-integrity" / "SKILL.md",
+        tmp_path / "skills" / "delivery-workflow" / "SKILL.md",
         """
         ---
-        name: design-integrity
+        name: delivery-workflow
         description: Test owner.
         ---
 
@@ -763,11 +793,11 @@ def test_validate_rejects_solution_correctness_duplicate_adapter_doctrine(tmp_pa
 
     assert (
         "adapters/codex/README.md duplicates owner-only doctrine 'solution correctness'; "
-        "owner is skills/design-integrity/SKILL.md"
+        "owner is skills/delivery-workflow/SKILL.md"
     ) in errors
 
 
-def test_validate_rejects_duplicate_material_risk_lens_doctrine(tmp_path: Path) -> None:
+def test_validate_rejects_duplicate_review_lens_doctrine(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "skills" / "code-review" / "SKILL.md",
@@ -789,7 +819,33 @@ def test_validate_rejects_duplicate_material_risk_lens_doctrine(tmp_path: Path) 
         "skills/code-review/SKILL.md duplicates owner-only doctrine "
         "'security/privacy, data integrity, reliability, operability, observability/diagnosability, "
         "performance/cost, compatibility, and accessibility'; owner is "
-        "skills/readiness-claim/references/material-risk-lenses.md"
+        "skills/delivery-workflow/references/review-lenses.md"
+    ) in errors
+
+
+def test_validate_rejects_duplicate_engineering_quality_lens_doctrine(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    write(
+        tmp_path / "skills" / "code-review" / "SKILL.md",
+        """
+        ---
+        name: code-review
+        description: Test duplicate.
+        ---
+
+        simplicity, cohesion/ownership, testability/provability, evolvability,
+        maintainability/readability, migration/cleanup, slice integrity, and
+        dependency/tooling fit
+        """,
+    )
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "skills/code-review/SKILL.md duplicates owner-only doctrine "
+        "'simplicity, cohesion/ownership, testability/provability, evolvability, "
+        "maintainability/readability, migration/cleanup, slice integrity, and dependency/tooling fit'; "
+        "owner is skills/delivery-workflow/references/review-lenses.md"
     ) in errors
 
 
@@ -800,14 +856,13 @@ def test_validate_rejects_implementer_role_boundary_drift(tmp_path: Path) -> Non
         tmp_path / "adapters" / "codex" / "agents" / "implementer.toml",
         """
         name = "implementer"
-        # design integrity gate
+        # delivery workflow gate
         # one bounded assigned implementation slice
         # direct-route slices
-        # explicit route classification
+        # objective coverage
         # Do not claim final approval.
         # binding objective
         # accepted reductions
-        # readiness claim
         # owned scope
         """,
     )
@@ -826,12 +881,12 @@ def test_validate_rejects_implementer_role_boundary_drift(tmp_path: Path) -> Non
 
 def test_validate_allows_solution_correctness_active_context_note_and_validator(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    add_skill(tmp_path, "design-integrity")
+    add_skill(tmp_path, "delivery-workflow")
     write(
-        tmp_path / "skills" / "design-integrity" / "SKILL.md",
+        tmp_path / "skills" / "delivery-workflow" / "SKILL.md",
         """
         ---
-        name: design-integrity
+        name: delivery-workflow
         description: Test owner.
         ---
 
@@ -843,12 +898,12 @@ def test_validate_allows_solution_correctness_active_context_note_and_validator(
         """,
     )
     write(
-        tmp_path / "docs-ai" / "current-work" / "active-wave" / "wave-execution.md",
+        tmp_path / "docs-ai" / "current-work" / "active-note" / "active-work-note.md",
         textwrap.dedent(valid_context_note()).lstrip() + "\nsolution correctness\n",
     )
     write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "active-wave.md",
-        "# Wave active-wave\n\n**Status:** execution-ready\n",
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "work-notes" / "active-note.md",
+        "# Work Note active-note\n\nState: implementation-ready\n",
     )
     write(tmp_path / "scripts" / "validate_harness.py", "solution correctness\n")
     write(tmp_path / "tests" / "test_validate_harness.py", "solution correctness\n")
@@ -870,18 +925,18 @@ def test_validate_rejects_other_owner_only_doctrine_in_active_context_note(tmp_p
         """,
     )
     write(
-        tmp_path / "docs-ai" / "current-work" / "active-wave" / "wave-execution.md",
+        tmp_path / "docs-ai" / "current-work" / "active-note" / "active-work-note.md",
         textwrap.dedent(valid_context_note()).lstrip() + "\nEvery durable rule has one owner.\n",
     )
     write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "active-wave.md",
-        "# Wave active-wave\n\n**Status:** execution-ready\n",
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "work-notes" / "active-note.md",
+        "# Work Note active-note\n\nState: implementation-ready\n",
     )
 
     errors = validate_harness.validate(tmp_path)
 
     assert (
-        "docs-ai/current-work/active-wave/wave-execution.md duplicates owner-only doctrine "
+        "docs-ai/current-work/active-note/active-work-note.md duplicates owner-only doctrine "
         "'Every durable rule has one owner.'; owner is skills/documentation-stewardship/SKILL.md"
     ) in errors
 
@@ -988,16 +1043,60 @@ def test_validate_rejects_subagent_metadata_preauthorization_duplicate(tmp_path:
     ) in errors
 
 
-def test_validate_rejects_adapter_handoff_context_missing_readiness_claim(tmp_path: Path) -> None:
+def test_validate_rejects_adapter_handoff_context_missing_objective_coverage(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     path = tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml"
-    text = path.read_text(encoding="utf-8").replace("# readiness claim\n", "")
+    text = path.read_text(encoding="utf-8").replace("# objective coverage\n", "")
     path.write_text(text, encoding="utf-8")
 
     errors = validate_harness.validate(tmp_path)
 
     assert (
-        "adapters/codex/agents/quality-guard.toml missing adapter handoff context term 'readiness claim'"
+        "adapters/codex/agents/quality-guard.toml missing adapter handoff context term 'objective coverage'"
+        in errors
+    )
+
+
+def test_validate_rejects_quality_guard_missing_parent_handoff_authority(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    path = tmp_path / "adapters" / "codex" / "agents" / "quality-guard.toml"
+    text = path.read_text(encoding="utf-8").replace("# Parent handoff is orientation, not authority\n", "")
+    path.write_text(text, encoding="utf-8")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/quality-guard.toml missing role boundary contract term "
+        "'Parent handoff is orientation, not authority'"
+    ) in errors
+
+
+def test_validate_rejects_final_reviewer_missing_review_lenses(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_roles(tmp_path, ("explorer", "quality_guard", "final_reviewer"))
+    path = tmp_path / "adapters" / "codex" / "agents" / "final-reviewer.toml"
+    text = path.read_text(encoding="utf-8").replace("# Apply delivery-workflow review lenses\n", "")
+    path.write_text(text, encoding="utf-8")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/final-reviewer.toml missing role boundary contract term "
+        "'Apply delivery-workflow review lenses'"
+    ) in errors
+
+
+def test_validate_rejects_final_reviewer_handoff_missing_owned_scope(tmp_path: Path) -> None:
+    minimal_valid_root(tmp_path)
+    add_roles(tmp_path, ("explorer", "quality_guard", "final_reviewer"))
+    path = tmp_path / "adapters" / "codex" / "agents" / "final-reviewer.toml"
+    text = path.read_text(encoding="utf-8").replace("# owned scope\n", "")
+    path.write_text(text, encoding="utf-8")
+
+    errors = validate_harness.validate(tmp_path)
+
+    assert (
+        "adapters/codex/agents/final-reviewer.toml missing adapter handoff context term 'owned scope'"
         in errors
     )
 
@@ -1024,7 +1123,7 @@ def test_broad_ui_design_does_not_require_runtime_evidence_by_default(tmp_path: 
         """
         name = "quality_guard"
         developer_instructions = \"\"\"
-        design integrity gate
+        delivery workflow gate
         binding objective accepted reductions Diff-only approval is invalid
         why inspected scope is sufficient Do not claim final approval.
         For broad product UI work, verify required `runtime_evidence` and
@@ -1064,7 +1163,7 @@ def test_validate_rejects_role_boundary_contract_drift(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     write(
         tmp_path / "adapters" / "codex" / "agents" / "explorer.toml",
-        'name = "explorer"\n# design integrity gate\n# Stay read-only\n',
+        'name = "explorer"\n# delivery workflow gate\n# Stay read-only\n',
     )
 
     errors = validate_harness.validate(tmp_path)
@@ -1151,111 +1250,55 @@ def test_validate_rejects_stale_runtime_optional_helper_wording(tmp_path: Path) 
 def test_validate_rejects_context_note_obsolete_top_level_ceremony(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
     context_note = valid_context_note().replace(
-        "    ## Execution",
-        "    ## Work Context\n\n    old duplicate context\n\n    ## Required Gates\n\n    | Claim | Required gate | Owner | Proof/artifacts | Blocks when |\n    | --- | --- | --- | --- | --- |\n    | old | old | old | old | old |\n\n    ## Execution",
+        "    ## Evidence And Review",
+        "    ## Work Context\n\n    old duplicate context\n\n    ## Required Gates\n\n    | Claim | Required gate | Owner | Proof/artifacts | Blocks when |\n    | --- | --- | --- | --- | --- |\n    | old | old | old | old | old |\n\n    ## Evidence And Review",
         1,
     )
-    write(tmp_path / "docs-ai" / "current-work" / "bad-wave" / "wave-execution.md", context_note)
+    write(tmp_path / "docs-ai" / "current-work" / "bad-note" / "active-work-note.md", context_note)
     write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "bad-wave.md",
-        "# Wave bad-wave\n\n**Status:** execution-ready\n",
+        tmp_path / "docs-ai" / "docs" / "initiatives" / "work-notes" / "bad-note.md",
+        "# Work Note bad-note\n\nState: implementation-ready\n",
     )
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "docs-ai/current-work/bad-wave/wave-execution.md contains obsolete top-level section 'Work Context'" in errors
-    assert "docs-ai/current-work/bad-wave/wave-execution.md contains obsolete top-level section 'Required Gates'" in errors
+    assert "docs-ai/current-work/bad-note/active-work-note.md contains obsolete top-level section 'Work Context'" in errors
+    assert "docs-ai/current-work/bad-note/active-work-note.md contains obsolete top-level section 'Required Gates'" in errors
 
 
-def test_validate_enforces_wave_lifecycle_from_status_and_context_note_existence(tmp_path: Path) -> None:
+def test_validate_rejects_removed_authority_sections_in_active_notes(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "discovery.md",
-        "# Wave discovery\n\n**Status:** discovery-required\n",
+    context_note = valid_context_note().replace(
+        "    ## Target Shape",
+        "    ## Design Integrity\n\n    - verdict: `old`\n\n    ## Readiness Claim\n\n    - exact claim: `old`\n\n    ## Target Shape",
+        1,
     )
-    write(tmp_path / "docs-ai" / "current-work" / "discovery" / "wave-execution.md", valid_context_note())
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "ready.md",
-        "# Wave ready\n\n**Status:** execution-ready\n",
-    )
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "done.md",
-        "# Wave done\n\n**Status:** done\n",
-    )
-    write(tmp_path / "docs-ai" / "current-work" / "done" / "wave-execution.draft.md", valid_context_note())
+    write(tmp_path / "docs-ai" / "current-work" / "bad-note" / "active-work-note.md", context_note)
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "docs-ai/docs/initiatives/waves/discovery.md is discovery-required but canonical context note exists" in errors
-    assert "docs-ai/docs/initiatives/waves/ready.md is execution-ready but canonical context note is missing" in errors
-    assert "docs-ai/docs/initiatives/waves/done.md is done but current-work context note exists" in errors
+    assert "docs-ai/current-work/bad-note/active-work-note.md contains obsolete top-level section 'Design Integrity'" in errors
+    assert "docs-ai/current-work/bad-note/active-work-note.md contains obsolete top-level section 'Readiness Claim'" in errors
 
 
-def test_validate_enforces_delivery_brief_lifecycle(tmp_path: Path) -> None:
+def test_validate_rejects_stale_delivery_map_status_authority_phrases(tmp_path: Path) -> None:
     minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "orphan.md",
-        "# Wave orphan\n\n**Status:** execution-ready\n",
-    )
-    write(
-        tmp_path / "docs-ai" / "current-work" / "orphan" / "delivery-brief.md",
-        "# Delivery Brief\n",
-    )
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "done.md",
-        "# Wave done\n\n**Status:** done\n",
-    )
-    write(
-        tmp_path / "docs-ai" / "current-work" / "done" / "delivery-brief.md",
-        "# Delivery Brief\n",
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "docs-ai/docs/initiatives/waves/orphan.md is execution-ready but canonical context note is missing" in errors
-    assert "docs-ai/current-work/orphan/delivery-brief.md exists without active canonical context note" in errors
-    assert "docs-ai/current-work/done/delivery-brief.md exists without active canonical context note" in errors
-    assert "docs-ai/docs/initiatives/waves/done.md is done but current-work delivery brief exists" in errors
-
-
-def test_validate_rejects_delivery_brief_missing_durable_wave_brief(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "docs-ai" / "current-work" / "missing-brief" / "delivery-brief.md",
-        "# Delivery Brief\n",
-    )
-
-    errors = validate_harness.validate(tmp_path)
-
-    assert "docs-ai/current-work/missing-brief has active durable context but missing durable wave brief" in errors
-
-
-def test_validate_rejects_closed_wave_left_in_delivery_map(tmp_path: Path) -> None:
-    minimal_valid_root(tmp_path)
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "done-wave.md",
-        "# Wave done-wave\n\n**Status:** done\n",
-    )
-    write(
-        tmp_path / "docs-ai" / "docs" / "initiatives" / "waves" / "retired-wave.md",
-        "# Wave retired-wave\n\n**Status:** retired\n",
-    )
     write(
         tmp_path / "docs-ai" / "current-work" / "delivery-map.md",
         """
-        # Delivery Map (Waves + Backlog)
+        # Delivery Map 
 
-        ## Wave Plan
-
-        ### Wave done-wave - Done Wave
-
-        - `initiative/feature/task`
-
-        - [retired](../docs/initiatives/waves/retired-wave.md)
+        Brief status is the execution gate for implementation-ready work.
         """,
     )
 
     errors = validate_harness.validate(tmp_path)
 
-    assert "docs-ai/current-work/delivery-map.md lists done wave done-wave" in errors
-    assert "docs-ai/current-work/delivery-map.md lists retired wave retired-wave" in errors
+    assert (
+        "docs-ai/current-work/delivery-map.md contains stale status/authority phrase "
+        "'execution gate'"
+    ) in errors
+    assert (
+        "docs-ai/current-work/delivery-map.md contains stale status/authority phrase "
+        "'implementation-ready'"
+    ) in errors

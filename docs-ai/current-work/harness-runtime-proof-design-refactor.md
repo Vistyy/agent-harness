@@ -2,5 +2,5 @@
 
 Superseded by `harness-core-workflow-consolidation-1`.
 
-Runtime evidence mechanics now stay narrow, while claim completeness belongs to
-`readiness-claim` and design/boundary authority belongs to `design-integrity`.
+Runtime evidence mechanics now stay narrow; objective coverage, design shape,
+and proof scope belong to `delivery-workflow`.

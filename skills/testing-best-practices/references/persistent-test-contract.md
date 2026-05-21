@@ -16,7 +16,7 @@ Before adding or keeping one, name:
 - claim boundary left outside the test
 
 Weak answers mean delete, shrink, rewrite, or route to
-`../../readiness-claim/SKILL.md`.
+`../../delivery-workflow/SKILL.md`.
 
 ## Layer
 
@@ -57,7 +57,7 @@ private wiring, call counts, raw mock choreography, broad fixture history, or
 did-not-crash presence checks.
 
 Hand-built state proves only the constructed contract. It does not prove
-workflow readiness unless `../../readiness-claim/SKILL.md` accepts producer-path
+workflow readiness unless `../../delivery-workflow/SKILL.md` accepts producer-path
 evidence too.
 
 Exact strings are valid only for governed copy, CLI/help/diagnostic ABI,

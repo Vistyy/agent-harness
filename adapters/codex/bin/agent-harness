@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SOURCE="$(python3 -c 'import pathlib, sys; print(pathlib.Path(sys.argv[1]).resolve())' "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd -- "$(dirname -- "$SOURCE")" && pwd)"
 ROOT="$(cd -- "$SCRIPT_DIR/../../.." && pwd)"
 
-PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}" python3 -m agent_harness.cli "$@"
+if command -v python3.12 >/dev/null 2>&1; then
+  PYTHON_BIN="$(command -v python3.12)"
+elif [[ -x /opt/homebrew/bin/python3.12 ]]; then
+  PYTHON_BIN="/opt/homebrew/bin/python3.12"
+elif [[ -x /usr/local/bin/python3.12 ]]; then
+  PYTHON_BIN="/usr/local/bin/python3.12"
+else
+  PYTHON_BIN="python3"
+fi
+
+PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}" "$PYTHON_BIN" -m agent_harness.cli "$@"

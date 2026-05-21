@@ -8,17 +8,21 @@ from typing import TextIO
 from urllib.parse import unquote
 
 MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
-INLINE_LOCAL_PATH_PATTERN = re.compile(r"`([^`]+)`")
+BACKTICK_PATH_PATTERN = re.compile(r"`([^`\s]+)`")
 MARKDOWN_LINK_SCAN_ROOTS = ("AGENTS.md", "docs-ai/docs", "docs-ai/current-work")
 MARKDOWN_LINK_TEMPLATE_CHARS = ("<", ">", "{", "}", "*")
-COMPLETED_WAVE_STATUS_PATTERN = re.compile(r"^\*\*Status:\*\*\s*done\s*$", re.MULTILINE)
+DOCTRINE_SCAN_ROOTS = ("AGENTS.md", "docs-ai/docs")
+WORK_NOTE_MEMORY_PREFIXES = (
+    Path("docs-ai/current-work"),
+    Path("docs-ai/docs/initiatives/work-notes"),
+)
 
 
 class GovernanceCommandError(ValueError):
     pass
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class CheckFailure:
     check_id: str
     message: str
@@ -54,51 +58,55 @@ def _link_target_exists(markdown_file: Path, target: str) -> bool:
     return target_path.exists()
 
 
-def _is_relative_to(path: Path, parent: Path) -> bool:
+def _relative_to_root(path: Path, repo_root: Path) -> Path | None:
     try:
-        path.relative_to(parent)
+        return path.resolve(strict=False).relative_to(repo_root.resolve())
     except ValueError:
+        return None
+
+
+def _is_work_note_memory_path(path: Path, repo_root: Path) -> bool:
+    relative = _relative_to_root(path, repo_root)
+    if relative is None:
         return False
-    return True
+    return any(relative == prefix or prefix in relative.parents for prefix in WORK_NOTE_MEMORY_PREFIXES)
 
 
-def _iter_completed_wave_reference_sources(repo_root: Path) -> list[Path]:
+def _is_work_note_file(path: Path, repo_root: Path) -> bool:
+    relative = _relative_to_root(path, repo_root)
+    if relative is None:
+        return False
+    return (
+        relative.parent == Path("docs-ai/docs/initiatives/work-notes")
+        and path.suffix == ".md"
+    )
+
+
+def _iter_doctrine_scan_files(repo_root: Path) -> list[Path]:
     files: list[Path] = []
-    agents_path = repo_root / "AGENTS.md"
-    if agents_path.is_file():
-        files.append(agents_path)
-    docs_path = repo_root / "docs-ai" / "docs"
-    wave_dir = docs_path / "initiatives" / "waves"
-    if docs_path.is_dir():
-        for markdown_file in sorted(docs_path.rglob("*.md")):
-            if _is_relative_to(markdown_file.resolve(), wave_dir.resolve()):
-                continue
-            files.append(markdown_file)
-    return sorted(files)
+    for root in DOCTRINE_SCAN_ROOTS:
+        path = repo_root / root
+        if path.is_file():
+            files.append(path)
+        elif path.is_dir():
+            files.extend(sorted(path.rglob("*.md")))
+    return sorted(path for path in files if not _is_work_note_file(path, repo_root))
 
 
-def _is_done_wave_brief(repo_root: Path, target_path: Path) -> bool:
-    wave_dir = (repo_root / "docs-ai" / "docs" / "initiatives" / "waves").resolve()
-    resolved_target = target_path.resolve()
-    if not _is_relative_to(resolved_target, wave_dir):
-        return False
-    if resolved_target.suffix != ".md" or not resolved_target.is_file():
-        return False
-    return bool(COMPLETED_WAVE_STATUS_PATTERN.search(resolved_target.read_text(encoding="utf-8")))
-
-
-def _completed_wave_references(markdown_file: Path, repo_root: Path) -> list[str]:
+def _work_note_memory_references(markdown_file: Path, repo_root: Path) -> list[str]:
     text = markdown_file.read_text(encoding="utf-8")
     targets = [match.group(1) for match in MARKDOWN_LINK_PATTERN.finditer(text)]
-    targets.extend(match.group(1) for match in INLINE_LOCAL_PATH_PATTERN.finditer(text))
-    completed_wave_targets: list[str] = []
+    targets.extend(
+        match.group(1)
+        for match in BACKTICK_PATH_PATTERN.finditer(text)
+        if "/" in match.group(1) and match.group(1).split("#", 1)[0].endswith(".md")
+    )
+    references: list[str] = []
     for target in targets:
         target_path = _local_target_path(markdown_file, target)
-        if target_path is None:
-            continue
-        if _is_done_wave_brief(repo_root, target_path):
-            completed_wave_targets.append(target)
-    return completed_wave_targets
+        if target_path is not None and _is_work_note_memory_path(target_path, repo_root):
+            references.append(target)
+    return sorted(set(references))
 
 
 def run_harness_checks(*, repo_root: Path) -> list[CheckFailure]:
@@ -123,17 +131,17 @@ def run_harness_checks(*, repo_root: Path) -> list[CheckFailure]:
                     remediation="Retarget links to the owning local project doc or global harness reference.",
                 )
             )
-    for markdown_file in _iter_completed_wave_reference_sources(repo_root):
-        completed_wave_targets = _completed_wave_references(markdown_file, repo_root)
-        if completed_wave_targets:
+    for markdown_file in _iter_doctrine_scan_files(repo_root):
+        references = _work_note_memory_references(markdown_file, repo_root)
+        if references:
             failures.append(
                 CheckFailure(
-                    check_id="docs.completed-wave-doctrine-reference",
+                    check_id="docs.work-note-memory-reference",
                     message=(
-                        f"{markdown_file.relative_to(repo_root)} references completed wave files as durable "
-                        f"doctrine: {', '.join(completed_wave_targets)}"
+                        f"{markdown_file.relative_to(repo_root)} references work-note/current-work memory: "
+                        + ", ".join(references)
                     ),
-                    remediation="Extract retained context to the owning durable doc or valid backlog, then remove the completed-wave reference.",
+                    remediation="Move retained doctrine to its durable owner or backlog; durable docs must not depend on work-note memory.",
                 )
             )
     return failures

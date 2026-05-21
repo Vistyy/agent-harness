@@ -7,12 +7,12 @@ description: "Use for browser runtime proof mechanics: Playwright vehicles, brow
 
 Owns browser proof mechanics for browser-visible behavior.
 
-Claim scope routes to `../readiness-claim/SKILL.md`; runtime mechanics route to
+Claim scope routes to `../delivery-workflow/SKILL.md`; runtime mechanics route to
 `../runtime-proof/SKILL.md`. Use `runtime_evidence` only when the runtime proof
 plan requires an independent live-use verifier.
 
-Does not own claim completeness, completion triggers, or visual approval.
-Use `../readiness-claim/SKILL.md` for claim scope and
+Does not own objective coverage, completion triggers, or visual approval.
+Use `../delivery-workflow/SKILL.md` for final scope and
 `../runtime-proof/SKILL.md` for entrypoint fidelity, blocking verdicts, and
 evidence-of-record mechanics.
 

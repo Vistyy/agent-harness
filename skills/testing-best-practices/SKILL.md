@@ -8,8 +8,8 @@ description: "Use for persistent test work: adding, editing, deleting, reviewing
 Owns persistent-test admission, cleanup, layer choice, test strength, and
 meaningful persistent red evidence.
 
-Does not own runtime verdicts, readiness claims, final readiness scope,
-browser mechanics, or mobile mechanics. Use `../readiness-claim/SKILL.md`,
+Does not own runtime verdicts, delivery claims, final delivery scope,
+browser mechanics, or mobile mechanics. Use `../delivery-workflow/SKILL.md`,
 `../runtime-proof/SKILL.md`, `../webapp-testing/SKILL.md`, and
 `../mobileapp-testing/SKILL.md` for those owners.
 
@@ -25,7 +25,7 @@ Rules:
 - never fake red evidence
 - never replace runtime proof with persistent tests
 - e2e tests are written by implementers when an approved task owns them; they
-  support runtime evidence only when `readiness-claim` accepts that they
+  support runtime evidence only when `delivery-workflow` accepts that they
   exercise the same claim through a faithful entrypoint and leave inspectable
   artifacts
 

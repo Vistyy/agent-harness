@@ -2,12 +2,12 @@
 
 Owns mobile stack setup, device targeting, interaction, recovery, and
 mobile-specific evidence. Claim scope belongs to
-`../../readiness-claim/SKILL.md`; runtime evidence mechanics belong to
+`../../delivery-workflow/SKILL.md`; runtime evidence mechanics belong to
 `../../runtime-proof/SKILL.md`.
 
 ## Handoffs
 
-- Claim scope and interface obligations: `../../readiness-claim/SKILL.md`
+- Claim scope and interface obligations: `../../delivery-workflow/SKILL.md`
 - Entrypoint fidelity, verdict, and reviewed-evidence mechanics:
   `../../runtime-proof/SKILL.md`
 - Durable test versus one-shot proof: `../../testing-best-practices/SKILL.md`

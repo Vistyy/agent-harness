@@ -26,15 +26,15 @@ Every durable concept has one owner.
 
 ## Placement
 
-- global reusable policy: harness skill references
+- global reusable policy: harness skill docs
 - project durable truth: project `docs-ai/docs/**`
 - project active state: project `docs-ai/current-work/**`
 - cleanup, migration, evidence, queue, resume state: current-work
 - durable owner docs may link durable owners or exact validation surfaces
 - current-work may link the durable owner being changed
-- completed-wave context is retained only by extraction to the durable owner or
-  valid backlog; do not preserve it through closed audit archives, ADR defaults,
-  or closed-wave indexes.
+- closed work-note context is retained only by extraction to the durable owner
+  or valid backlog; do not preserve it through closed audit archives, ADR
+  defaults, or closed-note indexes.
 
 ## Successor Review
 

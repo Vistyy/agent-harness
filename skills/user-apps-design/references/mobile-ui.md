@@ -4,7 +4,7 @@ Owner for mobile-specific UI constraints inside end-user app design.
 
 Runtime mechanics belong to `../../mobileapp-testing/SKILL.md`. Backend,
 offline, sync, and API contracts belong to
-`../../design-integrity/references/mobile-client-boundaries.md`.
+`../../delivery-workflow/references/mobile-client-boundaries.md`.
 
 ## Rule
 
