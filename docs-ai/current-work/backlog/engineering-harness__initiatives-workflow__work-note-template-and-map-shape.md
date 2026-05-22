@@ -17,11 +17,18 @@ project-local delivery map:
   mini-briefs,
 - durable item memory should use
   `docs-ai/docs/initiatives/work-notes/<item-id>.md`,
+- revisit whether visible item memory belongs under
+  `docs-ai/current-work/work-notes/` instead, since these notes are memory
+  and not durable project truth,
 - work notes should state that they are memory, not authority, without adding a
   separate local status field,
 - acceptance-style anchors in memory notes should be expressed as discovery
   recheck points unless they are actual delivery acceptance criteria owned by
-  the executing workflow.
+  the executing workflow,
+- closeout instructions should say what to do with active notes, closeout
+  briefs, and extracted current-work context after delivery-workflow closeout
+  names completed work, residual work, evidence, reviewer verdicts, and
+  repo-health cleanup.
 
 ## Next Action
 
