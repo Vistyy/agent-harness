@@ -160,9 +160,9 @@ def seed_prune_fixtures(codex_home: Path, external_root: Path) -> dict[str, Path
     directory = skills / "user-dir"
     system_dir = skills / ".system"
 
-    unplanned_skill.symlink_to(ROOT / "skills" / "delivery-workflow")
+    unplanned_skill.symlink_to(ROOT / "skills" / "solution-shaping")
     unplanned_relative_skill.symlink_to(
-        os.path.relpath(ROOT / "skills" / "delivery-workflow", unplanned_relative_skill.parent)
+        os.path.relpath(ROOT / "skills" / "solution-shaping", unplanned_relative_skill.parent)
     )
     unplanned_root_skill.symlink_to(ROOT)
     unplanned_agent.symlink_to(ROOT / "adapters" / "codex" / "agents" / "final-reviewer.toml")
@@ -210,12 +210,16 @@ def assert_install(codex_home: Path, bin_dir: Path) -> None:
 
 
 def assert_stage_only(codex_home: Path, bin_dir: Path) -> None:
-    assert_symlink(codex_home / "skills" / "harness-governance", ROOT / "skills" / "harness-governance")
+    assert_symlink(codex_home / "skills" / "overlay-governance", ROOT / "skills" / "overlay-governance")
+    for skill_dir in sorted((ROOT / "skills").iterdir()):
+        if skill_dir.is_dir() and skill_dir.name != "overlay-governance":
+            path = codex_home / "skills" / skill_dir.name
+            if path.exists() or path.is_symlink():
+                fail(f"stage-only install unexpectedly created skill {path}")
     excluded = (
         codex_home / "AGENTS.md",
         codex_home / "config.toml",
         codex_home / "agents",
-        codex_home / "skills" / "webapp-testing",
         bin_dir / "agent-harness",
     )
     for path in excluded:
@@ -281,8 +285,8 @@ def main() -> int:
         stage_bin_dir = Path(temp_dir) / "stage-bin"
         stage_unplanned = stage_codex_home / "skills" / "unplanned-stage-skill"
         stage_unplanned.parent.mkdir(parents=True, exist_ok=True)
-        stage_unplanned.symlink_to(ROOT / "skills" / "delivery-workflow")
-        run_install(stage_codex_home, stage_bin_dir, "--stage-harness-governance")
+        stage_unplanned.symlink_to(ROOT / "skills" / "solution-shaping")
+        run_install(stage_codex_home, stage_bin_dir, "--stage-overlay-governance")
         assert_stage_only(stage_codex_home, stage_bin_dir)
         if not stage_unplanned.is_symlink():
             fail("stage-only install pruned an unplanned symlink")

@@ -14,7 +14,7 @@ description = "Default for non-trivial bounded code/doc edits once objective cov
 config_file = "agents/implementer.toml"
 
 [agents.quality_guard]
-description = "In-thread planning and implementation reviewer. Standing AGENTS.md authorization applies; do not ask the user again. Challenges current work against the binding objective, objective coverage, owner/interface fit, proof validity, and target shape without final closeout authority."
+description = "Mid-slice reviewer after a non-trivial implementation has a direction or draft diff, before follow-on work compounds a wrong shape. Standing AGENTS.md authorization applies; do not ask again. Challenges objective fit, ownership, complexity, proof, and scope drift without final approval authority."
 config_file = "agents/quality-guard.toml"
 
 [agents.final_reviewer]
@@ -22,7 +22,7 @@ description = "Use only for final isolated closeout review after implementation 
 config_file = "agents/final-reviewer.toml"
 
 [agents.runtime_evidence]
-description = "Use when delivery-workflow requires independent live-use proof for non-trivial runtime-visible behavior. Standing AGENTS.md authorization applies; do not ask the user again. It exercises the app/service/API/operator path, records artifacts, and returns pass/reject/blocked for observed behavior only."
+description = "Use when verify-work requires independent live-use proof for non-trivial runtime-visible behavior. Standing AGENTS.md authorization applies; do not ask the user again. It exercises the app/service/API/operator path, records artifacts, and returns pass/reject/blocked for observed behavior only."
 config_file = "agents/runtime-evidence.toml"
 
 [agents.design_judge]

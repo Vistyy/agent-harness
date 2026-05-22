@@ -1,14 +1,14 @@
 # Agent Roles
 
-This harness defines reusable coding-agent roles for adapters that support
+This overlay defines reusable coding-agent roles for adapters that support
 named subagents.
 
 Codex adapter role sources live under `adapters/codex/agents/`.
-`skills/subagent-orchestration/SKILL.md` owns invocation, handoff, and reuse
+`skills/subagent-handoff/SKILL.md` owns invocation, handoff, and reuse
 policy.
 `AGENTS.md` is the standing user authorization to use these roles in a fresh
 conversation. Agents must not wait for the user to mention subagents again when
-`subagent-orchestration` says to delegate.
+`subagent-handoff` says to delegate.
 
 ## Roles
 
@@ -16,8 +16,8 @@ conversation. Agents must not wait for the user to mention subagents again when
 - `planning_critic`: strategy reviewer before non-trivial execution; challenges
   whether the proposed route and simplest correct end state should exist.
 - `implementer`: one bounded assigned implementation slice.
-- `quality_guard`: in-thread planning/implementation reviewer; pressures the
-  current work while it is still cheap to reshape.
+- `quality_guard`: mid-slice reviewer after implementation has a direction or
+  draft diff, before follow-on work compounds a wrong shape.
 - `final_reviewer`: final isolated closeout reviewer; judges whether the whole
   changed slice is merge-ready for the binding objective.
 - `runtime_evidence`: independent live-use verifier for non-trivial

@@ -8,7 +8,7 @@ REPLACE_CONFLICTING_TARGETS="false"
 
 usage() {
   cat <<'EOF'
-Usage: install.sh [--dry-run|--apply] [--stage-harness-governance] [--replace-conflicting-symlinks] [--replace-conflicting-targets]
+Usage: install.sh [--dry-run|--apply] [--stage-overlay-governance] [--replace-conflicting-symlinks] [--replace-conflicting-targets]
 
 Installs Codex skills/agents and global AGENTS.md with individual symlinks.
 Full apply also merges the required Codex agent-role config into
@@ -27,7 +27,7 @@ while [[ $# -gt 0 ]]; do
     --apply)
       MODE="apply"
       ;;
-    --stage-harness-governance)
+    --stage-overlay-governance)
       STAGE_ONLY="true"
       ;;
     --replace-conflicting-symlinks)
@@ -67,7 +67,7 @@ RUN_DIR="$BACKUP_ROOT/agent-harness-$RUN_ID"
 
 planned_skills() {
   if [[ "$STAGE_ONLY" == "true" ]]; then
-    printf '%s\t%s\n' "$SKILLS_HOME/harness-governance" "$ROOT/skills/harness-governance"
+    printf '%s\t%s\n' "$SKILLS_HOME/overlay-governance" "$ROOT/skills/overlay-governance"
   else
     while IFS= read -r skill_dir; do
       name="$(basename "$skill_dir")"

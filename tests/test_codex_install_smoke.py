@@ -36,7 +36,7 @@ def test_assert_stage_only_rejects_unexpected_full_install_surface(tmp_path: Pat
     bin_dir = tmp_path / "bin"
     skills_home = codex_home / "skills"
     skills_home.mkdir(parents=True)
-    (skills_home / "harness-governance").symlink_to(codex_install_smoke.ROOT / "skills" / "harness-governance")
+    (skills_home / "overlay-governance").symlink_to(codex_install_smoke.ROOT / "skills" / "overlay-governance")
     (codex_home / "AGENTS.md").write_text("unexpected\n", encoding="utf-8")
 
     try:
@@ -53,7 +53,7 @@ def test_assert_stage_only_rejects_cli_link(tmp_path: Path) -> None:
     skills_home = codex_home / "skills"
     skills_home.mkdir(parents=True)
     bin_dir.mkdir()
-    (skills_home / "harness-governance").symlink_to(codex_install_smoke.ROOT / "skills" / "harness-governance")
+    (skills_home / "overlay-governance").symlink_to(codex_install_smoke.ROOT / "skills" / "overlay-governance")
     (bin_dir / "agent-harness").symlink_to(codex_install_smoke.ROOT / "adapters" / "codex" / "bin" / "agent-harness")
 
     try:

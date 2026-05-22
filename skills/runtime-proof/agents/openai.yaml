@@ -1,4 +1,0 @@
-interface:
-  display_name: Runtime Proof
-  short_description: "Validate live-use runtime claims beyond tests and reviews"
-  default_prompt: "Use $runtime-proof for live-use runtime evidence mechanics: faithful entrypoint, observed behavior, artifacts, and pass/reject/blocked verdict."

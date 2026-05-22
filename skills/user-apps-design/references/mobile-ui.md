@@ -2,9 +2,9 @@
 
 Owner for mobile-specific UI constraints inside end-user app design.
 
-Runtime mechanics belong to `../../mobileapp-testing/SKILL.md`. Backend,
-offline, sync, and API contracts belong to
-`../../delivery-workflow/references/mobile-client-boundaries.md`.
+Proof selection belongs to `../../verify-work/SKILL.md`. Backend, offline,
+sync, and API contracts belong to
+`../../solution-shaping/references/mobile-client-boundaries.md`.
 
 ## Rule
 
@@ -37,5 +37,5 @@ the user experience.
 ## Proof
 
 Mobile design claims require proof for the affected states and device classes.
-Use `../../runtime-proof/SKILL.md` for runtime verdict authority and
-`../../mobileapp-testing/SKILL.md` for emulator/device mechanics.
+Use `../../verify-work/SKILL.md` for proof selection and the Test Android Apps
+plugin for Android emulator/device mechanics.

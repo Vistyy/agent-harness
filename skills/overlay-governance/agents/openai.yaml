@@ -1,0 +1,4 @@
+interface:
+  display_name: "Overlay Governance"
+  short_description: "Govern workflow overlay policy"
+  default_prompt: "Use $overlay-governance when changing reusable skills, global or project AGENTS overlays, adapter install behavior, role/prompt contracts, validation checks, or reusable agent policy ownership."

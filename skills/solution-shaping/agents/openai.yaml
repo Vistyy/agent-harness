@@ -1,0 +1,4 @@
+interface:
+  display_name: "Solution Shaping"
+  short_description: "Shape objective-preserving implementation"
+  default_prompt: "Use $solution-shaping to research current reality, preserve the objective, choose the simplest coherent final architecture, and decompose work without scope narrowing."

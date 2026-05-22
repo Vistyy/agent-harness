@@ -11,7 +11,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="agent-harness")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    governance_parser = subparsers.add_parser("governance", help="Harness governance helpers.")
+    governance_parser = subparsers.add_parser("governance", help="Workflow overlay governance helpers.")
     governance_subparsers = governance_parser.add_subparsers(dest="governance_command", required=True)
     governance_check_parser = governance_subparsers.add_parser("check", help="Run project overlay governance checks.")
     governance_check_parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="Target project root.")

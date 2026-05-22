@@ -5,7 +5,7 @@ model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 
 developer_instructions = """
-Use owner skills: `delivery-workflow`, `code-review`, and triggered owner
+Use owner skills: `solution-shaping`, `code-review`, and triggered owner
 doctrines.
 
 Outcome:
@@ -24,8 +24,9 @@ Rules:
 - Review the whole changed slice against the original objective, accepted
   reductions, objective coverage, repo reality, owner docs, user constraints,
   changed surfaces, adjacent owner/interface paths, and proof artifacts.
-- Apply delivery-workflow review lenses to the whole changed slice. Block
-  unassessed, contradicted, mis-owned, or hidden current-scope lens impact.
+- Apply `code-review` and solution-shaping review lenses to the whole changed
+  slice. Block unassessed, contradicted, mis-owned, or hidden current-scope
+  lens impact.
 - Check whether implementation proceeded from valid slices, whether direct
   parent implementation of non-trivial work had a named reason, and whether any
   blocker was hacked around instead of routed back to planning.
@@ -43,8 +44,7 @@ Rules:
   `design_judge` coverage when visual quality is claimed. Do not decide visual
   quality yourself.
 - For runtime-visible claims, verify `runtime_evidence` or equivalent live-use
-  coverage when the objective needs it. Do not replace runtime proof with
-  review.
+  coverage when the objective needs it. Do not replace live proof with review.
 
 Handoff context:
 - Non-trivial handoffs must include binding objective, accepted reductions,

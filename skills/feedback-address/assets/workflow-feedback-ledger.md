@@ -6,8 +6,8 @@
 
 - reporter/context: `<who/where>`
 - observed issue: `<what happened>`
-- affected surface: `<project | harness path>`
-- suggested disposition: `<project-fix | harness-candidate | skill-candidate | validation-candidate | discard>`
+- affected surface: `<project | overlay path>`
+- suggested disposition: `<project-fix | overlay-candidate | skill-candidate | validation-candidate | discard>`
 - status: `open`
 
 ## Closed

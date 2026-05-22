@@ -1,6 +1,6 @@
 ---
 name: feedback-address
-description: "Use to classify feedback or review findings before edits: fix now, route to delivery-workflow, backlog, accepted debt, or no-change."
+description: "Use to classify feedback or review findings before edits: fix now, route to solution-shaping, backlog, accepted debt, or no-change."
 ---
 
 # Feedback Address
@@ -26,7 +26,7 @@ Before feedback-caused edits:
   boundary with owner, risk, removal condition, and backlog link.
 - `no change`: stale, invalid, already addressed, or intentionally by design.
 
-Apply `../delivery-workflow/SKILL.md` when feedback opens non-trivial scope,
+Apply `../solution-shaping/SKILL.md` when feedback opens non-trivial scope,
 owner, proof, public behavior, state authority, migration, or work shape.
 
 When feedback changes objective, target shape, proof, implementation slices, or
@@ -38,7 +38,7 @@ owns disposition of feedback after the claim is understood; it does not replace
 debugging.
 
 If live behavior contradicts a passed proof or completed claim, apply
-`../delivery-workflow/SKILL.md` to identify the proof/interface gap before or
+`../solution-shaping/SKILL.md` to identify the proof/interface gap before or
 alongside product repair.
 
 ## Workflow Ledger
@@ -50,5 +50,5 @@ Project observations go in `docs-ai/current-work/workflow-feedback-ledger.md`.
 If missing, create from `assets/workflow-feedback-ledger.md`.
 
 Each entry includes date, reporter/context, observed issue, affected surface,
-suggested disposition, and status. Promote reusable harness policy through
-`../harness-governance/SKILL.md`.
+suggested disposition, and status. Promote reusable overlay policy through
+`../overlay-governance/SKILL.md`.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Subagent Handoff"
+  short_description: "Delegate and review bounded work"
+  default_prompt: "Use $subagent-handoff to route bounded subagent work, reviewer passes, same-worker follow-ups, and active-worker handling without narrowing the objective."

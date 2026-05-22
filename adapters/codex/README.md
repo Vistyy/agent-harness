@@ -17,7 +17,7 @@ role registry into it with a backup. Baseline install excludes prompt files.
 ## Prompt Contract
 
 Global `AGENTS.md` is the installed Codex adapter prompt source for reusable
-harness policy. Adapter install must preserve that source instead of relocating
+overlay policy. Adapter install must preserve that source instead of relocating
 global policy into project overlays or role files.
 
 Provider install/config prompts are maps, not doctrine owners.

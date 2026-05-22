@@ -4,7 +4,7 @@ model = "gpt-5.5"
 model_reasoning_effort = "low"
 
 developer_instructions = """
-Use owner skills: `delivery-workflow` and `initiatives-workflow` when durable
+Use owner skills: `solution-shaping` and `work-memory` when durable
 memory exists.
 
 Outcome:

@@ -47,7 +47,7 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
 
         `AGENTS.md` is the standing user authorization to use these roles in a
         fresh conversation. Agents must not wait for the user to mention
-        subagents again when `subagent-orchestration` says to delegate.
+        subagents again when `subagent-handoff` says to delegate.
 
         {role_lines}
         """,
@@ -106,12 +106,12 @@ def valid_context_note() -> str:
 
 
 def add_review_lenses_contract(root: Path) -> None:
-    add_skill(root, "delivery-workflow")
+    add_skill(root, "solution-shaping")
     write(
-        root / "skills" / "delivery-workflow" / "SKILL.md",
+        root / "skills" / "solution-shaping" / "SKILL.md",
         """
         ---
-        name: delivery-workflow
+        name: solution-shaping
         description: Test objective coverage skill.
         ---
 
@@ -125,7 +125,7 @@ def add_review_lenses_contract(root: Path) -> None:
         """,
     )
     write(
-        root / "skills" / "delivery-workflow" / "references" / "review-lenses.md",
+        root / "skills" / "solution-shaping" / "references" / "review-lenses.md",
         """
         # Review Lenses
 
@@ -160,10 +160,10 @@ def minimal_valid_root(root: Path) -> None:
     add_skill(root, "test-skill")
     add_review_lenses_contract(root)
     write(
-        root / "skills" / "runtime-proof" / "SKILL.md",
+        root / "skills" / "verify-work" / "SKILL.md",
         """
         ---
-        name: runtime-proof
+        name: verify-work
         description: Test runtime proof skill.
         ---
 
@@ -181,12 +181,12 @@ def minimal_valid_root(root: Path) -> None:
         """,
     )
     write(
-        root / "skills" / "runtime-proof" / "agents" / "openai.yaml",
+        root / "skills" / "verify-work" / "agents" / "openai.yaml",
         """
         interface:
           display_name: "Runtime Proof"
           short_description: "Valid runtime proof metadata"
-          default_prompt: "Use $runtime-proof for runtime proof."
+          default_prompt: "Use $verify-work for runtime proof."
         """,
     )
     add_roles(root)
@@ -204,12 +204,12 @@ def add_repo_codex_live_install(root: Path) -> None:
         ## Routing
 
         - Test work: `test-skill`.
-        - Runtime proof: `runtime-proof`.
+        - Runtime proof: `verify-work`.
 
         ## Subagent Policy
 
         The user explicitly authorizes use of the spawn/subagent tool for these
-        harness-defined roles when this `AGENTS.md` is in force:
+        overlay-defined roles when this `AGENTS.md` is in force:
         `explorer` and `quality_guard`.
 
         This preauthorization applies only to those named roles.
@@ -268,7 +268,7 @@ def test_validate_rejects_drifted_repo_codex_live_install(tmp_path: Path) -> Non
         ".codex/agents/quality-guard.toml is not a symlink to "
         "adapters/codex/agents/quality-guard.toml"
     ) in errors
-    assert any(".codex/skills/extra-skill is an unplanned harness symlink" in error for error in errors)
+    assert any(".codex/skills/extra-skill is an unplanned overlay symlink" in error for error in errors)
     assert ".codex/config.toml missing or changed agents.quality_guard block" in errors
     assert ".codex/config.toml contains unknown agents.extra_agent block" in errors
 
@@ -471,7 +471,7 @@ def test_validate_rejects_agents_route_map_drift(tmp_path: Path) -> None:
         ## Routing
 
         - Missing route: `missing-skill`.
-        - Runtime proof policy: `runtime-proof`.
+        - Runtime proof policy: `verify-work`.
         """,
     )
 
@@ -499,4 +499,3 @@ def test_validate_rejects_role_parity_drift(tmp_path: Path) -> None:
     errors = validate_harness.validate(tmp_path)
 
     assert "missing Codex agent file adapters/codex/agents/quality-guard.toml" in errors
-

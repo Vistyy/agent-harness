@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Work"
+  short_description: "Choose proof that matches the claim"
+  default_prompt: "Use $verify-work before claiming non-trivial work is done to select tests, runtime evidence, screenshots, performance, security, CI, static checks, or repo inspection that would fail if the claim were false."

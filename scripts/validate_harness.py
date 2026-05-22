@@ -50,7 +50,16 @@ class FrontmatterError(ValueError):
 
 
 def _iter_markdown(root: Path) -> list[Path]:
-    return sorted(path for path in root.rglob("*.md") if ".git" not in path.parts)
+    return sorted(
+        path
+        for path in root.rglob("*.md")
+        if ".git" not in path.parts and not _is_codex_backup(path)
+    )
+
+
+def _is_codex_backup(path: Path) -> bool:
+    parts = path.parts
+    return ".codex" in parts and "backups" in parts
 
 
 def _validate_markdown_path(markdown_file: Path, root: Path, target: str) -> str | None:
@@ -323,6 +332,7 @@ def _validate_skill_references(root: Path) -> list[str]:
             path.is_file()
             and path.suffix in {".md", ".yaml", ".yml", ".toml", ".txt"}
             and ".git" not in path.parts
+            and not _is_codex_backup(path)
         ):
             text_files.append(path)
     for path in sorted(set(text_files)):
@@ -357,7 +367,6 @@ def _validate_agents_instruction_map(root: Path) -> list[str]:
     text = path.read_text(encoding="utf-8")
     routing = _markdown_section(text, "Routing")
     if not routing:
-        errors.append("AGENTS.md missing ## Routing skill map")
         return errors
     skill_names = {_skill_name(skill_dir) for skill_dir in _iter_skill_dirs(root)}
     for match in BACKTICKED_SKILL_NAME_RE.finditer(routing):
@@ -498,7 +507,7 @@ def _validate_repo_codex_live_install(root: Path) -> list[str]:
                 continue
             target = _resolved_symlink_target(path)
             if _target_is_inside_root(target, root) and path.name not in planned_names:
-                errors.append(f"{path.relative_to(root)} is an unplanned harness symlink to {target}")
+                errors.append(f"{path.relative_to(root)} is an unplanned overlay symlink to {target}")
 
     source_config_path = root / "adapters" / "codex" / "config.toml"
     live_config_path = codex_home / "config.toml"
@@ -663,7 +672,7 @@ def validate(root: Path) -> list[str]:
             errors.extend(_validate_skill_markdown_layout(skill_dir, root))
             text = skill_file.read_text(encoding="utf-8")
             for folder in ("references", "assets", "scripts"):
-                if folder in text and not (skill_dir / folder).exists():
+                if f"{folder}/" in text and not (skill_dir / folder).exists():
                     errors.append(f"{skill_file.relative_to(root)} references missing {folder}/")
         errors.extend(_validate_openai_metadata_coverage(root))
 

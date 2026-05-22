@@ -1,6 +1,6 @@
 ---
 name: documentation-stewardship
-description: Use when editing durable docs, assigning one source of truth, or deciding whether reusable policy belongs in the global harness or a project overlay.
+description: Use when editing durable docs, assigning one source of truth, or deciding whether reusable policy belongs in the workflow overlay or a project overlay.
 ---
 
 # Documentation Stewardship
@@ -13,7 +13,7 @@ doc density.
 Every durable rule has one owner.
 Every durable concept has one owner.
 
-- reusable agent workflow policy: global harness
+- reusable agent workflow policy: workflow overlay
 - project product, architecture, runtime, roadmap, queue truth: project overlay
 - active execution detail: current-work
 - exact behavior: code and tests
@@ -26,7 +26,7 @@ Every durable concept has one owner.
 
 ## Placement
 
-- global reusable policy: harness skill docs
+- global reusable policy: overlay skill docs
 - project durable truth: project `docs-ai/docs/**`
 - project active state: project `docs-ai/current-work/**`
 - cleanup, migration, evidence, queue, resume state: current-work

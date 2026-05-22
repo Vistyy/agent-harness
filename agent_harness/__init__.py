@@ -1,2 +1,1 @@
-"""Reusable agent-harness command helpers."""
-
+"""Reusable workflow-overlay command helpers."""

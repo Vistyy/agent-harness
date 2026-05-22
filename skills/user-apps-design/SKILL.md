@@ -27,7 +27,7 @@ workflow choices.
 
 If the project design source or declared local design workflow is missing or
 contradictory, stop or narrow the claim. Do not invent visual direction in the
-global harness.
+workflow overlay.
 
 ## Approval
 
@@ -66,7 +66,7 @@ that defines visual intent for the claim. It can be a local doc, design-system
 contract, mockup, screenshot, reference, workflow artifact, or direct user
 decision.
 
-The global harness does not prescribe that source's format, tool, artifact
+The global overlay does not prescribe that source's format, tool, artifact
 names, or design method. It only checks that the declared source was followed
 for the claim.
 

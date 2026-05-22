@@ -13,6 +13,8 @@ SKILLS_HOME = CODEX_HOME / "skills"
 AGENTS_HOME = CODEX_HOME / "agents"
 SOURCE_CONFIG = ROOT / "adapters" / "codex" / "config.toml"
 LIVE_CONFIG = CODEX_HOME / "config.toml"
+BIN_DIR = Path(os.environ.get("AGENT_HARNESS_BIN_DIR", Path.home() / ".local" / "bin"))
+CLI_SOURCE = ROOT / "adapters" / "codex" / "bin" / "agent-harness"
 
 
 def fail(message: str) -> None:
@@ -60,7 +62,7 @@ def target_is_inside_repo(target: Path) -> bool:
     return True
 
 
-def assert_no_unplanned_harness_symlinks(directory: Path, planned_names: set[str]) -> None:
+def assert_no_unplanned_overlay_symlinks(directory: Path, planned_names: set[str]) -> None:
     if not directory.exists():
         fail(f"{directory} is missing")
     for path in sorted(directory.iterdir()):
@@ -70,7 +72,7 @@ def assert_no_unplanned_harness_symlinks(directory: Path, planned_names: set[str
             continue
         target = resolved_symlink_target(path)
         if target_is_inside_repo(target) and path.name not in planned_names:
-            fail(f"{path} is an unplanned harness symlink to {target}")
+            fail(f"{path} is an unplanned overlay symlink to {target}")
 
 
 def assert_backup_manifest() -> None:
@@ -111,9 +113,10 @@ def main() -> int:
         assert_symlink(SKILLS_HOME / name, source)
     for name, source in agents.items():
         assert_symlink(AGENTS_HOME / name, source)
+    assert_symlink(BIN_DIR / "agent-harness", CLI_SOURCE)
 
-    assert_no_unplanned_harness_symlinks(SKILLS_HOME, set(skills))
-    assert_no_unplanned_harness_symlinks(AGENTS_HOME, set(agents))
+    assert_no_unplanned_overlay_symlinks(SKILLS_HOME, set(skills))
+    assert_no_unplanned_overlay_symlinks(AGENTS_HOME, set(agents))
     if (SKILLS_HOME / ".system").exists() and not (SKILLS_HOME / ".system").is_dir():
         fail(f"{SKILLS_HOME / '.system'} is not a directory")
     assert_backup_manifest()

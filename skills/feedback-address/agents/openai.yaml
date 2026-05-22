@@ -1,4 +1,4 @@
 interface:
   display_name: "Feedback Address"
   short_description: "Classify feedback before edits"
-  default_prompt: "Use $feedback-address to classify feedback or review findings as surface fix, owner fix, delivery-workflow re-entry, tracked separate debt, accepted temporary debt, or no change."
+  default_prompt: "Use $feedback-address to classify feedback or review findings as surface fix, owner fix, solution-shaping re-entry, tracked separate debt, accepted temporary debt, or no change."

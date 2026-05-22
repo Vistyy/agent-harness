@@ -128,7 +128,7 @@ def run_harness_checks(*, repo_root: Path) -> list[CheckFailure]:
                 CheckFailure(
                     check_id="docs.cross-doc-links",
                     message=f"{markdown_file.relative_to(repo_root)} has broken markdown links: {', '.join(broken_links)}",
-                    remediation="Retarget links to the owning local project doc or global harness reference.",
+                    remediation="Retarget links to the owning local project doc or global overlay reference.",
                 )
             )
     for markdown_file in _iter_doctrine_scan_files(repo_root):

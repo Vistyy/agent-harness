@@ -16,7 +16,7 @@ Before adding or keeping one, name:
 - claim boundary left outside the test
 
 Weak answers mean delete, shrink, rewrite, or route to
-`../../delivery-workflow/SKILL.md`.
+`../../solution-shaping/SKILL.md` and `../../verify-work/SKILL.md`.
 
 ## Layer
 
@@ -27,7 +27,7 @@ Use the cheapest honest layer:
 - architecture boundary: static check
 - workflow/infra/runtime wiring: integration or smoke
 - live UI/API behavior: durable spec only when regression-worthy; one-shot live
-  proof stays with runtime owners
+  proof stays with `../../verify-work/SKILL.md`
 
 DB persistence tests prove DB contracts only. Do not put route, UI, redirect,
 script, adapter, or operational proof there merely because rows are involved.
@@ -57,7 +57,7 @@ private wiring, call counts, raw mock choreography, broad fixture history, or
 did-not-crash presence checks.
 
 Hand-built state proves only the constructed contract. It does not prove
-workflow readiness unless `../../delivery-workflow/SKILL.md` accepts producer-path
+workflow readiness unless `../../verify-work/SKILL.md` accepts producer-path
 evidence too.
 
 Exact strings are valid only for governed copy, CLI/help/diagnostic ABI,
