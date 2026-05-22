@@ -22,8 +22,8 @@ The note is sufficient only when a future agent can recover:
 - current slice, owned surfaces, dependency order, blockers, decisions,
   evidence strategy, and follow-up
 - repo-health cleanup and remaining required work
-- closeout state: removed, superseded, extracted, or intentionally active with
-  reason
+- closeout state for each memory artifact: deleted, extracted, moved to
+  backlog, or intentionally active with reason
 
 Use headings or prose that make those facts hard to lose. Do not add fields to
 satisfy a template.

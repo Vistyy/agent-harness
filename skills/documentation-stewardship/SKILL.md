@@ -41,8 +41,22 @@ Every durable concept has one owner.
 Before deleting or merging durable docs, prove every retained invariant exists
 in the successor owner.
 
-Stale-reference scans and line-count reduction are insufficient. If an
-invariant has no successor owner, stop or get explicit accepted deletion.
+Inventory the durable outcomes, rules, terms, exceptions, proof obligations,
+and links that future work would rely on. For each one, choose exactly one
+disposition:
+
+- `moved`: copied or rewritten into the successor owner and linked or named
+- `obsolete`: no longer true because code, tests, runtime, or project facts
+  changed
+- `accepted deletion`: the user explicitly accepts losing the invariant
+
+Stale-reference scans, line-count reduction, and "the old doc looks unused" are
+insufficient. If a retained invariant has no successor owner, stop or get
+explicit accepted deletion.
+
+After deleting or merging a durable doc, remove or retarget direct consumers in
+the same change. Do not leave durable docs pointing at current-work memory,
+closed notes, deleted paths, or superseded owner names.
 
 ## Writing Contract
 

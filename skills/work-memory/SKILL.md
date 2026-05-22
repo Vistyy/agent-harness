@@ -56,15 +56,63 @@ removal condition. Current-scope cleanup cannot be dumped into backlog unless
 the user accepts a reduction or the work is genuinely separate from the active
 objective.
 
+## Document Lifecycle
+
+Every memory document needs a live reason to exist. At closeout, decide the
+fate of each touched or related memory artifact instead of leaving it because
+it was useful during the work.
+
+- active note: delete after branch closeout unless it still contains unresolved
+  required work, an active blocker, or accepted temporary debt that cannot yet
+  move to backlog
+- draft note: delete after it is merged into the active note, superseded, or no
+  longer needed for recovery
+- work note: keep only when it remains a useful future discovery starting
+  point; delete it when completed, invalidated, or fully extracted
+- backlog detail: delete when completed, invalidated, superseded, or merged
+  into a more accurate backlog item
+- delivery-map entry: remove completed or obsolete entries; keep only terse
+  starting points for real future discovery
+- durable doc: delete or merge only under
+  `../documentation-stewardship/SKILL.md` successor review, or with explicit
+  user-accepted deletion of the invariant
+- evidence artifact: keep only when project policy, review, audit, or future
+  reproduction needs the raw artifact; otherwise summarize the needed fact in
+  the owning note/doc and remove the transient artifact
+
+Do not create archive folders, closed-note indexes, or historical ledgers just
+to preserve completed execution context. If the content is reusable doctrine,
+extract it to the owning skill or durable doc. If it is future work, move the
+smallest useful problem statement to backlog. If it is only run history, delete
+it.
+
 ## Closeout
 
 Close memory only after the actual work outcome, evidence, reviewer verdicts
 when used, repo-health cleanup, and remaining required work are known.
 
-On closeout, delete active notes with no durable value, extract reusable
-doctrine to the owning skill/doc, or move future work into backlog. Update the
-map/backlog only to preserve useful future starting points, remove completed or
-obsolete memory, or keep remaining required work visible.
+Closeout is a cleanup step, not a summary-writing step. For each memory
+artifact, choose exactly one disposition:
+
+- `delete`: no durable value remains after outcome, evidence, and residual work
+  are recorded elsewhere or no longer matter
+- `extract`: reusable rule, decision, term, or invariant moved to its owning
+  skill/doc under `../documentation-stewardship/SKILL.md`
+- `backlog`: future work preserved as a small owned problem with next action,
+  user acceptance and removal condition when it is accepted temporary debt
+- `keep active`: still needed for resume because required work, blocker,
+  evidence, or accepted debt remains unresolved
+
+Use `agent-harness memory cleanup --repo-root <project-root> --item <item-id>`
+for active-note directories after confirming deletion is the right
+disposition; run without `--execute` first unless the user explicitly asked for
+immediate deletion.
+
+Update the map/backlog only to preserve useful future starting points, remove
+completed or obsolete memory, or keep remaining required work visible. Do not
+leave completed current-work notes behind merely as proof that the work
+happened; the proof belongs in the final report, durable owner, or retained
+artifact named by project policy.
 
 ## Assets
 
