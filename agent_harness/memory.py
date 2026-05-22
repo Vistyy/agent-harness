@@ -44,6 +44,21 @@ class BootstrapResult:
     note_path: Path
 
 
+@dataclass(frozen=True)
+class LifecycleReport:
+    item: str
+    active_dir: Path
+    active_note_exists: bool
+    draft_notes: tuple[Path, ...]
+    work_note: Path
+    work_note_exists: bool
+    backlog_details: tuple[Path, ...]
+    delivery_map: Path
+    delivery_map_exists: bool
+    reference_report: ReferenceReport
+    memory_refs: tuple[ReferenceHit, ...]
+
+
 def validate_item_id(item: str) -> None:
     if not ITEM_ID_RE.fullmatch(item):
         raise MemoryCommandError(f"Invalid item id: {item!r}")
@@ -118,6 +133,112 @@ def render_reference_report(report: ReferenceReport) -> str:
     return "\n".join(lines)
 
 
+def _collect_token_references(*, repo_root: Path, tokens: tuple[str, ...]) -> tuple[ReferenceHit, ...]:
+    token_bytes = tuple(token.encode("utf-8") for token in tokens)
+    hits: list[ReferenceHit] = []
+    for path in _iter_repo_files(repo_root):
+        relative_path = path.relative_to(repo_root)
+        try:
+            raw = path.read_bytes()
+        except FileNotFoundError:
+            continue
+        if not any(token in raw for token in token_bytes):
+            continue
+        text = raw.decode("utf-8", errors="ignore")
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            if any(token in line for token in tokens):
+                hits.append(ReferenceHit(path=relative_path, line_number=line_number, line=line.strip()))
+    return tuple(hits)
+
+
+def collect_memory_lifecycle(*, repo_root: Path, item: str) -> LifecycleReport:
+    validate_item_id(item)
+    resolved_root = resolve_repo_root(repo_root)
+    current_work = resolved_root / CURRENT_WORK_RELATIVE_ROOT
+    active_dir = CURRENT_WORK_RELATIVE_ROOT / item
+    active_dir_path = resolved_root / active_dir
+    active_note = active_dir_path / "active-work-note.md"
+    draft_notes = tuple(
+        path.relative_to(resolved_root)
+        for path in sorted(active_dir_path.glob("active-work-note*.draft.md"))
+    ) if active_dir_path.is_dir() else ()
+    work_note = WORK_NOTE_RELATIVE_ROOT / f"{item}.md"
+    backlog_root = resolved_root / CURRENT_WORK_RELATIVE_ROOT / "backlog"
+    backlog_details = tuple(
+        path.relative_to(resolved_root)
+        for path in sorted(backlog_root.glob(f"*__{item}.md"))
+    ) if backlog_root.is_dir() else ()
+    delivery_map = CURRENT_WORK_RELATIVE_ROOT / "delivery-map.md"
+    reference_report = collect_work_note_references(repo_root=resolved_root, item=item)
+    memory_tokens = (
+        str(active_dir),
+        str(active_dir / "active-work-note.md"),
+        *(str(path) for path in backlog_details),
+    )
+    memory_refs = _collect_token_references(repo_root=resolved_root, tokens=memory_tokens)
+    return LifecycleReport(
+        item=item,
+        active_dir=active_dir,
+        active_note_exists=active_note.exists(),
+        draft_notes=draft_notes,
+        work_note=work_note,
+        work_note_exists=(resolved_root / work_note).exists(),
+        backlog_details=backlog_details,
+        delivery_map=delivery_map,
+        delivery_map_exists=(current_work / "delivery-map.md").exists(),
+        reference_report=reference_report,
+        memory_refs=memory_refs,
+    )
+
+
+def _present(value: bool) -> str:
+    return "present" if value else "missing"
+
+
+def render_lifecycle_report(report: LifecycleReport) -> str:
+    lines = [
+        f"item: {report.item}",
+        "artifacts:",
+        f"  active_dir: {report.active_dir}",
+        f"  active_note: {_present(report.active_note_exists)}",
+        f"  draft_notes: {len(report.draft_notes)}",
+    ]
+    lines.extend(f"    {path}" for path in report.draft_notes)
+    lines.extend(
+        [
+            f"  work_note: {_present(report.work_note_exists)} {report.work_note}",
+            f"  backlog_details: {len(report.backlog_details)}",
+        ]
+    )
+    lines.extend(f"    {path}" for path in report.backlog_details)
+    lines.extend(
+        [
+            f"  delivery_map: {_present(report.delivery_map_exists)} {report.delivery_map}",
+            "references:",
+            f"  work_note_note_refs: {len(report.reference_report.note_refs)}",
+        ]
+    )
+    lines.extend(
+        f"    W {hit.path}:{hit.line_number}: {hit.line}"
+        for hit in report.reference_report.note_refs
+    )
+    lines.append(f"  work_note_non_note_refs: {len(report.reference_report.non_note_refs)}")
+    lines.extend(
+        f"    N {hit.path}:{hit.line_number}: {hit.line}"
+        for hit in report.reference_report.non_note_refs
+    )
+    lines.append(f"  active_or_backlog_refs: {len(report.memory_refs)}")
+    lines.extend(f"    M {hit.path}:{hit.line_number}: {hit.line}" for hit in report.memory_refs)
+    lines.extend(
+        [
+            "closeout:",
+            "  choose one disposition per artifact: delete | extract | backlog | keep active",
+            f"  active-note cleanup dry-run: agent-harness memory cleanup --repo-root <project-root> --item {report.item}",
+        ]
+    )
+    return "\n".join(lines)
+
+
 def resolve_cleanup_target(*, repo_root: Path, item: str) -> CleanupTarget:
     validate_item_id(item)
     resolved_repo = resolve_repo_root(repo_root)
@@ -176,8 +297,8 @@ def _render_work_note(*, item: str, title: str, tasks: list[str]) -> str:
     task_lines = "\n".join(f"- `{task}`" for task in tasks)
     return f"""# Work Note {item} - {title}
 
-This note is memory, not authority. Picking it starts discovery through the
-delivery workflow; it does not authorize direct execution.
+This note is memory, not authority. Picking it starts discovery through
+solution-shaping; it does not authorize direct execution.
 
 ## Remembered Intent
 
@@ -231,6 +352,24 @@ def command_refs(
         print(str(exc), file=stderr)
         return 1
     print(render_reference_report(report), file=stdout)
+    return 0
+
+
+def command_lifecycle(
+    *,
+    repo_root: Path,
+    item: str,
+    stdout: TextIO | None = None,
+    stderr: TextIO | None = None,
+) -> int:
+    stdout = sys.stdout if stdout is None else stdout
+    stderr = sys.stderr if stderr is None else stderr
+    try:
+        report = collect_memory_lifecycle(repo_root=repo_root, item=item)
+    except MemoryCommandError as exc:
+        print(str(exc), file=stderr)
+        return 1
+    print(render_lifecycle_report(report), file=stdout)
     return 0
 
 

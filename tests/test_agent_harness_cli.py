@@ -77,6 +77,47 @@ def test_refs_ignores_cache_files(tmp_path: Path) -> None:
     assert "non_note_refs: 1" in result.stdout
 
 
+def test_lifecycle_reports_memory_artifacts_and_refs(tmp_path: Path) -> None:
+    project = fake_project(tmp_path)
+    write(
+        project / "docs-ai" / "current-work" / "example-item" / "active-work-note.draft.md",
+        "# Draft\n",
+    )
+    write(
+        project / "docs-ai" / "current-work" / "backlog" / "initiative__feature__example-item.md",
+        "# Backlog\n",
+    )
+    write(
+        project / "docs-ai" / "docs" / "handoff.md",
+        "See docs-ai/current-work/example-item/active-work-note.md\n",
+    )
+
+    result = run_cli(["memory", "lifecycle", "--repo-root", str(project), "--item", "example-item"])
+
+    assert result.returncode == 0
+    assert "item: example-item" in result.stdout
+    assert "active_note: present" in result.stdout
+    assert "draft_notes: 1" in result.stdout
+    assert "active-work-note.draft.md" in result.stdout
+    assert "work_note: present docs-ai/docs/initiatives/work-notes/example-item.md" in result.stdout
+    assert "backlog_details: 1" in result.stdout
+    assert "initiative__feature__example-item.md" in result.stdout
+    assert "delivery_map: present docs-ai/current-work/delivery-map.md" in result.stdout
+    assert "work_note_non_note_refs: 1" in result.stdout
+    assert "active_or_backlog_refs:" in result.stdout
+    assert "handoff.md:1" in result.stdout
+    assert "choose one disposition per artifact: delete | extract | backlog | keep active" in result.stdout
+    assert "agent-harness memory cleanup --repo-root <project-root> --item example-item" in result.stdout
+
+
+def test_lifecycle_rejects_path_like_item_without_traceback(tmp_path: Path) -> None:
+    project = fake_project(tmp_path)
+
+    result = run_cli(["memory", "lifecycle", "--repo-root", str(project), "--item", "../evil"])
+
+    assert_user_error(result, "Invalid item id")
+
+
 def test_cleanup_dry_run_does_not_delete(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
     item_dir = project / "docs-ai" / "current-work" / "example-item"
@@ -306,6 +347,8 @@ def test_work_note_bootstrap_creates_work_note(tmp_path: Path) -> None:
     text = brief.read_text(encoding="utf-8")
     assert "# Work Note new-item-1 - New Work Note" in text
     assert "This note is memory, not authority." in text
+    assert "solution-shaping" in text
+    assert "delivery workflow" not in text
     assert "## Remembered Intent" in text
     assert "## Starting Points" in text
     assert "- `initiative/feature/task`" in text

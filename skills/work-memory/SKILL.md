@@ -58,27 +58,14 @@ objective.
 
 ## Document Lifecycle
 
-Every memory document needs a live reason to exist. At closeout, decide the
-fate of each touched or related memory artifact instead of leaving it because
-it was useful during the work.
+Every memory document needs a live reason to exist. Before closeout, run:
 
-- active note: delete after branch closeout unless it still contains unresolved
-  required work, an active blocker, or accepted temporary debt that cannot yet
-  move to backlog
-- draft note: delete after it is merged into the active note, superseded, or no
-  longer needed for recovery
-- work note: keep only when it remains a useful future discovery starting
-  point; delete it when completed, invalidated, or fully extracted
-- backlog detail: delete when completed, invalidated, superseded, or merged
-  into a more accurate backlog item
-- delivery-map entry: remove completed or obsolete entries; keep only terse
-  starting points for real future discovery
-- durable doc: delete or merge only under
-  `../documentation-stewardship/SKILL.md` successor review, or with explicit
-  user-accepted deletion of the invariant
-- evidence artifact: keep only when project policy, review, audit, or future
-  reproduction needs the raw artifact; otherwise summarize the needed fact in
-  the owning note/doc and remove the transient artifact
+```bash
+agent-harness memory lifecycle --repo-root <project-root> --item <item-id>
+```
+
+Use the report to inventory active notes, drafts, work notes, backlog details,
+delivery-map presence, and references before deciding what remains.
 
 Do not create archive folders, closed-note indexes, or historical ledgers just
 to preserve completed execution context. If the content is reusable doctrine,
@@ -91,8 +78,8 @@ it.
 Close memory only after the actual work outcome, evidence, reviewer verdicts
 when used, repo-health cleanup, and remaining required work are known.
 
-Closeout is a cleanup step, not a summary-writing step. For each memory
-artifact, choose exactly one disposition:
+Closeout is cleanup, not summary-writing. For each artifact reported by
+`agent-harness memory lifecycle`, choose exactly one disposition:
 
 - `delete`: no durable value remains after outcome, evidence, and residual work
   are recorded elsewhere or no longer matter
@@ -104,9 +91,8 @@ artifact, choose exactly one disposition:
   evidence, or accepted debt remains unresolved
 
 Use `agent-harness memory cleanup --repo-root <project-root> --item <item-id>`
-for active-note directories after confirming deletion is the right
-disposition; run without `--execute` first unless the user explicitly asked for
-immediate deletion.
+for active-note directories with disposition `delete`; run without `--execute`
+first unless the user explicitly asked for immediate deletion.
 
 Update the map/backlog only to preserve useful future starting points, remove
 completed or obsolete memory, or keep remaining required work visible. Do not

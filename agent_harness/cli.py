@@ -30,6 +30,10 @@ def _build_parser() -> argparse.ArgumentParser:
     refs_parser.add_argument("--repo-root", type=Path, required=True, help="Target project root.")
     refs_parser.add_argument("--item", required=True, help="Item id.")
 
+    lifecycle_parser = memory_subparsers.add_parser("lifecycle", help="Inspect memory artifacts before closeout.")
+    lifecycle_parser.add_argument("--repo-root", type=Path, required=True, help="Target project root.")
+    lifecycle_parser.add_argument("--item", required=True, help="Item id.")
+
     cleanup_parser = memory_subparsers.add_parser("cleanup", help="Delete a current-work active note directory.")
     cleanup_parser.add_argument("--repo-root", type=Path, required=True, help="Target project root.")
     cleanup_parser.add_argument("--item", required=True, help="Item id.")
@@ -52,6 +56,8 @@ def main(argv: list[str] | None = None) -> int:
         )
     if args.command == "memory" and args.memory_command == "refs":
         return memory.command_refs(repo_root=args.repo_root, item=args.item)
+    if args.command == "memory" and args.memory_command == "lifecycle":
+        return memory.command_lifecycle(repo_root=args.repo_root, item=args.item)
     if args.command == "memory" and args.memory_command == "cleanup":
         return memory.command_cleanup(repo_root=args.repo_root, item=args.item, execute=args.execute)
     raise AssertionError("unreachable command route")
