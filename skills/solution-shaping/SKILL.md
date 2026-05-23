@@ -32,9 +32,29 @@ Decompose only after the final shape is understood. A slice may narrow the
 implementation surface; it must not narrow the objective or final claim unless
 the user accepts that reduction.
 
-Each slice names its objective contribution, owner/interface, expected changed
-surface, evidence path, cleanup boundary, residual work, and stop conditions.
-Invalid slices are blockers, not implementation challenges.
+Discovery findings are not decomposition. Before a finding becomes work, route
+it as one of:
+
+- required for the binding objective
+- invalidates the current shape or slice order
+- slice-local implementation detail
+- blocker or user decision
+- separate future work
+- accepted temporary debt
+- rejected or no-change
+
+When a finding is required for the binding objective, fold it into the required
+slice list or current slice. When it invalidates the shape, re-enter shaping.
+When it is separate future work, backlog the smallest owned problem and next
+action. Current-scope work can move to accepted temporary debt only with
+explicit user acceptance, owner, risk, removal condition, and backlog link.
+
+Required slices are the accepted decomposition of the binding objective. Each
+required slice names its objective contribution, owner/interface, expected
+changed surface, evidence path, cleanup boundary, residual work, and stop
+conditions. Every required slice must be completed, blocked, or removed by an
+explicit user-accepted reduction before completion is claimed. Invalid slices
+are blockers, not implementation challenges.
 
 ## Escape Hatch
 

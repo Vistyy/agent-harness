@@ -45,6 +45,22 @@ decisions, target shape, decomposition, evidence strategy, cleanup, blockers,
 and remaining required work. It may link subordinate notes, but the top note
 owns the branch-level objective.
 
+Separate discovery findings from required slices. Discovery findings need a
+route: required slice, invalidates shape, slice-local detail, blocker or user
+decision, separate backlog work, accepted temporary debt, or rejected/no-change.
+Record the reason, owner/interface, and next action or evidence boundary.
+
+Required slices are the accepted objective-preserving decomposition from
+`solution-shaping`. Record each required slice with current status, evidence
+and review state, residual/cleanup boundary, and blocker or accepted reduction
+when relevant. Required slices remain required until completed, blocked, or
+removed by explicit user-accepted reduction; they cannot be hidden in backlog or
+left unrouted to make closeout easier.
+
+A finding or slice does not become current-scope authority merely by appearing
+in a note. `solution-shaping` still owns validity, owner, objective coverage,
+and stop conditions.
+
 ## Backlog
 
 Backlog files preserve work that should not be lost. They are not promises that
@@ -77,6 +93,11 @@ it.
 
 Close memory only after the actual work outcome, evidence, reviewer verdicts
 when used, repo-health cleanup, and remaining required work are known.
+If an active note has discovery findings or required slices, closeout first
+verifies that every finding is routed and every required slice is completed,
+blocked, or removed by explicit user-accepted reduction. The final objective
+claim must match that state; unrouted findings or unfinished required slices
+block a completion claim.
 
 Closeout is cleanup, not summary-writing. For each artifact reported by
 `agent-harness memory lifecycle`, choose exactly one disposition:

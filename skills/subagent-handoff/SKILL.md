@@ -27,9 +27,10 @@ judgment. Keep urgent blocking work local when the next step depends on it.
 
 Use `planning_critic` before risky planning, architecture, scope expansion, or
 work where the objective could be misread. Use `quality_guard` after a
-non-trivial implementation slice has a real direction or draft diff, before
-that direction hardens into follow-on work. Use `final_reviewer` after
-non-trivial implementation and verification, before completion is claimed.
+non-trivial required slice has a real direction or draft diff, before that
+direction hardens into dependent slices. Use `final_reviewer` after
+non-trivial implementation and verification, with required-slice and
+discovery-routing state, before completion is claimed.
 
 Use `implementer` for bounded code/doc edits when the target shape,
 owner/interface, evidence strategy, and write scope are clear enough to hand
@@ -55,9 +56,10 @@ because it is slow, silent, timed out, or blocking local work.
 - `explorer`: before or during planning when repo reality is unclear.
 - `planning_critic`: before risky planning, implementation, or scope expansion.
 - `implementer`: executes one bounded slice after scope is clear.
-- `quality_guard`: mid-slice after implementation begins, before follow-on work
-  compounds a wrong shape.
-- `final_reviewer`: after implementation and verification for non-trivial work.
+- `quality_guard`: mid-slice after non-trivial required-slice implementation
+  begins, before dependent work compounds a wrong shape.
+- `final_reviewer`: after implementation and verification for non-trivial work,
+  with required-slice and discovery-routing state.
 - `runtime_evidence`: live-use behavior evidence under `verify-work`.
 - `design_judge`: screenshot/contact-sheet visual-quality approval.
 
@@ -74,7 +76,8 @@ Pass:
 
 - binding objective, accepted reductions, and residual gaps
 - target shape, owner/interface, and rejected alternatives
-- valid slice, expected change surface, and cleanup/residual boundary
+- required slice, routed discovery findings, expected change surface, and
+  cleanup/residual boundary
 - evidence strategy and required proof artifacts
 - role task and owned/read-only scope
 - active durable context path when it exists
