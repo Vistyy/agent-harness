@@ -66,3 +66,7 @@ Precedence:
 
 - Default: compact and direct. Expand only for safety clarity, irreversible
   confirmation, explicit user request, or clear user confusion.
+- Conversation replies are in English, regardless of the user's input language
+  or mixed-language phrasing. Non-English text is allowed only when the task
+  explicitly asks for translation, quoted source text, or a non-English
+  artifact.
