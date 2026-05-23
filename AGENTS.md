@@ -30,6 +30,8 @@ Precedence:
   review, or boundary rule before execution.
 - Optimize for the simplest correct end state; delete, collapse, demote, or
   reuse before adding structure.
+- Treat unnecessary concepts, branches, defensive paths, wrappers, states, and
+  tests as defects unless a real owner and failure mode justify them.
 - Delivery maps, work notes, plans, and summaries are memory, not authority.
   Picking a map item starts discovery through the current user objective and
   repo reality.

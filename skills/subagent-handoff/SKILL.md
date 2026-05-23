@@ -84,10 +84,10 @@ Pass:
 - artifacts, commands, screenshots, logs, or changed surfaces to inspect
 - risks, blockers, and stop conditions
 
-Reviewer handoffs ask for falsification, not validation of the parent summary.
-Ask whether the plan or change preserves the objective, whether proof could pass
-while behavior is absent, and what should be deleted, collapsed, reused,
-rewritten, simplified, or blocked.
+Reviewer handoffs require falsification, not validation of the parent summary.
+Require the reviewer to check objective preservation, proof substitution, and
+unnecessary concepts, branches, wrappers, states, defensive paths, tests, docs,
+or proof entrypoints that must be deleted, collapsed, rewritten, or blocked.
 
 Stop when delegation would narrow the objective, split one owner across
 conflicting workers, require hidden material decisions, or preserve a

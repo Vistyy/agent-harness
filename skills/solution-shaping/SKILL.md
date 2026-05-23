@@ -23,8 +23,14 @@ owner/interface, state and lifecycle ownership, production trigger, cleanup,
 refactors, migrations, debt disposition, material risk, and verification
 strategy needed for the solution to be correct.
 
-Prefer delete, collapse, reuse, and rewrite before adding new owners, wrappers,
-flags, compatibility paths, process state, or documentation.
+Do not shape code that is more complex than the objective requires. Extra
+concepts, branches, defensive checks, wrappers, states, public methods, tests,
+or docs are defects unless a real product, runtime, data, security, or
+maintenance reason justifies them.
+
+Delete, collapse, reuse, and rewrite before adding new owners, wrappers, flags,
+fallback paths, compatibility paths, process state, or documentation.
+Tests protect required behavior, not accidental shape.
 
 ## Decomposition
 
