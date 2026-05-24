@@ -7,11 +7,16 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TextIO
+from urllib.parse import unquote
 
 WORK_NOTE_RELATIVE_ROOT = Path("docs-ai/current-work/work-notes")
 CURRENT_WORK_RELATIVE_ROOT = Path("docs-ai/current-work")
-IGNORED_PARTS = frozenset({".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", "__pycache__"})
+IGNORED_PARTS = frozenset({".fallow", ".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", "__pycache__"})
 ITEM_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+BACKTICK_PATH_PATTERN = re.compile(r"`([^`\s]+)`")
+LOCAL_PATH_ROOTS = frozenset({"docs-ai", ".codex", "AGENTS.md", "README.md"})
+MARKDOWN_LINK_TEMPLATE_CHARS = ("<", ">", "{", "}", "*")
 
 
 class MemoryCommandError(ValueError):
@@ -84,12 +89,52 @@ def _iter_repo_files(repo_root: Path) -> list[Path]:
     return sorted(files)
 
 
+def _read_text_file(path: Path) -> str | None:
+    try:
+        raw = path.read_bytes()
+    except FileNotFoundError:
+        return None
+    if b"\0" in raw:
+        return None
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return None
+
+
+def _local_target_path(*, repo_root: Path, source_path: Path, target: str) -> Path | None:
+    if "://" in target or target.startswith("#"):
+        return None
+    raw_target = unquote(target.split("#", 1)[0])
+    if not raw_target or any(char in raw_target for char in MARKDOWN_LINK_TEMPLATE_CHARS):
+        return None
+    raw_path = Path(raw_target)
+    if raw_path.is_absolute():
+        return raw_path
+    if raw_path.parts and raw_path.parts[0] in LOCAL_PATH_ROOTS:
+        return repo_root / raw_path
+    return source_path.parent / raw_path
+
+
+def _line_references_path(*, repo_root: Path, source_path: Path, line: str, target_path: Path) -> bool:
+    targets = [match.group(1) for match in MARKDOWN_LINK_PATTERN.finditer(line)]
+    targets.extend(
+        match.group(1)
+        for match in BACKTICK_PATH_PATTERN.finditer(line)
+        if "/" in match.group(1) and match.group(1).split("#", 1)[0].endswith(".md")
+    )
+    for target in targets:
+        resolved = _local_target_path(repo_root=repo_root, source_path=source_path, target=target)
+        if resolved is not None and resolved.resolve(strict=False) == target_path.resolve(strict=False):
+            return True
+    return False
+
+
 def collect_work_note_references(*, repo_root: Path, item: str) -> ReferenceReport:
     validate_item_id(item)
     resolved_root = resolve_repo_root(repo_root)
     target_relative_path = WORK_NOTE_RELATIVE_ROOT / f"{item}.md"
-    target_token = str(target_relative_path)
-    target_bytes = target_token.encode("utf-8")
+    target_path = resolved_root / target_relative_path
     note_refs: list[ReferenceHit] = []
     non_note_refs: list[ReferenceHit] = []
 
@@ -97,15 +142,16 @@ def collect_work_note_references(*, repo_root: Path, item: str) -> ReferenceRepo
         relative_path = path.relative_to(resolved_root)
         if relative_path == target_relative_path:
             continue
-        try:
-            raw = path.read_bytes()
-        except FileNotFoundError:
+        text = _read_text_file(path)
+        if text is None:
             continue
-        if target_bytes not in raw:
-            continue
-        text = raw.decode("utf-8", errors="ignore")
         for line_number, line in enumerate(text.splitlines(), start=1):
-            if target_token not in line:
+            if not _line_references_path(
+                repo_root=resolved_root,
+                source_path=path,
+                line=line,
+                target_path=target_path,
+            ):
                 continue
             hit = ReferenceHit(path=relative_path, line_number=line_number, line=line.strip())
             if relative_path.parent == WORK_NOTE_RELATIVE_ROOT:
@@ -134,17 +180,14 @@ def render_reference_report(report: ReferenceReport) -> str:
 
 
 def _collect_token_references(*, repo_root: Path, tokens: tuple[str, ...]) -> tuple[ReferenceHit, ...]:
-    token_bytes = tuple(token.encode("utf-8") for token in tokens)
     hits: list[ReferenceHit] = []
     for path in _iter_repo_files(repo_root):
         relative_path = path.relative_to(repo_root)
-        try:
-            raw = path.read_bytes()
-        except FileNotFoundError:
+        text = _read_text_file(path)
+        if text is None:
             continue
-        if not any(token in raw for token in token_bytes):
+        if not any(token in text for token in tokens):
             continue
-        text = raw.decode("utf-8", errors="ignore")
         for line_number, line in enumerate(text.splitlines(), start=1):
             if any(token in line for token in tokens):
                 hits.append(ReferenceHit(path=relative_path, line_number=line_number, line=line.strip()))

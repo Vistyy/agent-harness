@@ -26,7 +26,7 @@ def fake_project(tmp_path: Path, item: str = "example-item") -> Path:
     )
     write(
         project / "docs-ai" / "current-work" / "delivery-map.md",
-        f"Context: docs-ai/current-work/work-notes/{item}.md\n",
+        f"Context: [{item}](work-notes/{item}.md)\n",
     )
     return project
 
@@ -61,6 +61,7 @@ def test_refs_reports_non_work_note_references_from_target_repo(tmp_path: Path) 
     assert "target: docs-ai/current-work/work-notes/example-item.md" in result.stdout
     assert "non_note_refs: 1" in result.stdout
     assert "delivery-map.md:1" in result.stdout
+    assert "[example-item](work-notes/example-item.md)" in result.stdout
 
 
 def test_refs_ignores_cache_files(tmp_path: Path) -> None:
@@ -74,6 +75,19 @@ def test_refs_ignores_cache_files(tmp_path: Path) -> None:
 
     assert result.returncode == 0
     assert "__pycache__" not in result.stdout
+    assert "non_note_refs: 1" in result.stdout
+
+
+def test_refs_ignores_generated_binary_files(tmp_path: Path) -> None:
+    project = fake_project(tmp_path)
+    binary_path = project / "apps" / "web" / ".fallow" / "churn.bin"
+    binary_path.parent.mkdir(parents=True)
+    binary_path.write_bytes(b"\0docs-ai/current-work/work-notes/example-item.md\n")
+
+    result = run_cli(["memory", "refs", "--repo-root", str(project), "--item", "example-item"])
+
+    assert result.returncode == 0
+    assert ".fallow" not in result.stdout
     assert "non_note_refs: 1" in result.stdout
 
 
@@ -421,6 +435,18 @@ def test_governance_check_rejects_durable_work_note_memory_link(tmp_path: Path) 
     assert result.returncode == 1
     assert "docs.work-note-memory-reference" in result.stdout
     assert "docs-ai/docs/policy.md references work-note/current-work memory" in result.stdout
+
+
+def test_governance_check_rejects_root_style_durable_current_work_path(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    write(project / "docs-ai" / "current-work" / "delivery-map.md", "# Delivery Map\n")
+    write(project / "docs-ai" / "docs" / "policy.md", "`docs-ai/current-work/delivery-map.md`\n")
+
+    result = run_cli(["governance", "check", "--repo-root", str(project)])
+
+    assert result.returncode == 1
+    assert "docs.work-note-memory-reference" in result.stdout
+    assert "docs-ai/current-work/delivery-map.md" in result.stdout
 
 
 def test_governance_check_rejects_legacy_durable_work_note_location(tmp_path: Path) -> None:

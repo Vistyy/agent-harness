@@ -12,6 +12,7 @@ BACKTICK_PATH_PATTERN = re.compile(r"`([^`\s]+)`")
 MARKDOWN_LINK_SCAN_ROOTS = ("AGENTS.md", "docs-ai/docs", "docs-ai/current-work")
 MARKDOWN_LINK_TEMPLATE_CHARS = ("<", ">", "{", "}", "*")
 DOCTRINE_SCAN_ROOTS = ("AGENTS.md", "docs-ai/docs")
+LOCAL_PATH_ROOTS = frozenset({"docs-ai", ".codex", "AGENTS.md", "README.md"})
 WORK_NOTE_MEMORY_PREFIXES = (
     Path("docs-ai/current-work"),
 )
@@ -41,19 +42,22 @@ def _iter_markdown_files(repo_root: Path) -> list[Path]:
     return sorted(files)
 
 
-def _local_target_path(markdown_file: Path, target: str) -> Path | None:
+def _local_target_path(markdown_file: Path, target: str, repo_root: Path | None = None) -> Path | None:
     if "://" in target or target.startswith("#"):
         return None
     raw_target = unquote(target.split("#", 1)[0])
     if not raw_target or any(char in raw_target for char in MARKDOWN_LINK_TEMPLATE_CHARS):
         return None
-    if raw_target.startswith("/"):
-        return Path(raw_target)
-    return markdown_file.parent / raw_target
+    raw_path = Path(raw_target)
+    if raw_path.is_absolute():
+        return raw_path
+    if repo_root is not None and raw_path.parts and raw_path.parts[0] in LOCAL_PATH_ROOTS:
+        return repo_root / raw_path
+    return markdown_file.parent / raw_path
 
 
-def _link_target_exists(markdown_file: Path, target: str) -> bool:
-    target_path = _local_target_path(markdown_file, target)
+def _link_target_exists(markdown_file: Path, target: str, repo_root: Path) -> bool:
+    target_path = _local_target_path(markdown_file, target, repo_root)
     if target_path is None:
         return True
     return target_path.exists()
@@ -94,7 +98,7 @@ def _work_note_memory_references(markdown_file: Path, repo_root: Path) -> list[s
     )
     references: list[str] = []
     for target in targets:
-        target_path = _local_target_path(markdown_file, target)
+        target_path = _local_target_path(markdown_file, target, repo_root)
         if (
             markdown_file.relative_to(repo_root) == Path("AGENTS.md")
             and target.split("#", 1)[0] == AGENTS_DELIVERY_MAP_POINTER
@@ -129,7 +133,7 @@ def run_harness_checks(*, repo_root: Path) -> list[CheckFailure]:
         broken_links = [
             match.group(1)
             for match in MARKDOWN_LINK_PATTERN.finditer(text)
-            if not _link_target_exists(markdown_file, match.group(1))
+            if not _link_target_exists(markdown_file, match.group(1), repo_root)
         ]
         if broken_links:
             failures.append(
