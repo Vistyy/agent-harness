@@ -39,6 +39,11 @@ Delete, collapse, reuse, and rewrite before adding new owners, wrappers, flags,
 fallback paths, compatibility paths, process state, or documentation.
 Tests protect required behavior, not accidental shape.
 
+Before centralizing, extracting, or polishing duplicated complexity, prove the
+underlying concept is still necessary and has a durable owner. If the likely
+target architecture would obsolete it, route it as explicit future work or
+accepted temporary debt instead of making the current shape nicer.
+
 ## Decomposition
 
 Decompose only after the final shape is understood. A slice may narrow the
