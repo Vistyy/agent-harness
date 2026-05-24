@@ -16,6 +16,13 @@ objective with a convenient slice, note, plan, claim, test, or map item.
 Research current repo reality before choosing the shape. Plans, maps, notes,
 summaries, and parent conclusions are context only.
 
+Concrete files, methods, tests, scripts, docs, and failures are evidence, not
+automatically the work boundary. For non-trivial work, inspect the owning
+workflow and adjacent peers enough to decide whether the issue is local or
+points to wrong ownership, a missing boundary, obsolete residue,
+over-abstraction, under-abstraction, weak proof, or stale documentation. Choose
+a file-local fix only when the surrounding owner remains coherent.
+
 ## Shape
 
 Choose the simplest coherent final solution, not the smallest diff. Include the
