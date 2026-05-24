@@ -26,8 +26,8 @@ delivery-map, backlog, or active work-note memory.
 ## Memory Shapes
 
 - delivery map: `docs-ai/current-work/delivery-map.md`
-- work note: `docs-ai/docs/initiatives/work-notes/<item-id>.md` when a visible
-  map item needs remembered detail
+- work note: `docs-ai/current-work/work-notes/<item-id>.md` when a visible map
+  item needs remembered detail
 - active note: `docs-ai/current-work/<item-id>/active-work-note.md` when branch
   work needs resumable memory
 - draft note: `docs-ai/current-work/<item-id>/active-work-note.draft.md`

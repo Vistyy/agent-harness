@@ -827,21 +827,21 @@ def run_self_test() -> list[str]:
 {"proof_plan": [}
 ```
 """
-        (root / "docs-ai" / "docs" / "initiatives" / "work-notes").mkdir(parents=True)
+        (root / "docs-ai" / "current-work" / "work-notes").mkdir(parents=True)
         (root / "docs-ai" / "current-work" / "invalid").mkdir(parents=True)
         (root / "docs-ai" / "current-work" / "invalid" / "active-work-note.md").write_text(
             invalid_context,
             encoding="utf-8",
         )
-        (root / "docs-ai" / "docs" / "initiatives" / "work-notes" / "invalid.md").write_text(
+        (root / "docs-ai" / "current-work" / "work-notes" / "invalid.md").write_text(
             "# Work Note invalid\n",
             encoding="utf-8",
         )
-        (root / "docs-ai" / "docs" / "initiatives" / "work-notes" / "ready.md").write_text(
+        (root / "docs-ai" / "current-work" / "work-notes" / "ready.md").write_text(
             "# Work Note ready\n",
             encoding="utf-8",
         )
-        (root / "docs-ai" / "docs" / "initiatives" / "work-notes" / "done.md").write_text(
+        (root / "docs-ai" / "current-work" / "work-notes" / "done.md").write_text(
             "# Work Note done\n",
             encoding="utf-8",
         )
@@ -855,9 +855,9 @@ def run_self_test() -> list[str]:
                 [
                     "# Delivery Map",
                     "",
-                    "- [invalid](../docs/initiatives/work-notes/invalid.md)",
-                    "- [ready](../docs/initiatives/work-notes/ready.md)",
-                    "- [done](../docs/initiatives/work-notes/done.md)",
+                    "- [invalid](work-notes/invalid.md)",
+                    "- [ready](work-notes/ready.md)",
+                    "- [done](work-notes/done.md)",
                     "",
                 ]
             ),

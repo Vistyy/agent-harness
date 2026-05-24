@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TextIO
 
-WORK_NOTE_RELATIVE_ROOT = Path("docs-ai/docs/initiatives/work-notes")
+WORK_NOTE_RELATIVE_ROOT = Path("docs-ai/current-work/work-notes")
 CURRENT_WORK_RELATIVE_ROOT = Path("docs-ai/current-work")
 IGNORED_PARTS = frozenset({".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", "__pycache__"})
 ITEM_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")

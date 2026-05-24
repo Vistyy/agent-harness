@@ -19,14 +19,14 @@ def write(path: Path, text: str = "") -> None:
 
 def fake_project(tmp_path: Path, item: str = "example-item") -> Path:
     project = tmp_path / "project"
-    write(project / "docs-ai" / "docs" / "initiatives" / "work-notes" / f"{item}.md", "# Work Note\n")
+    write(project / "docs-ai" / "current-work" / "work-notes" / f"{item}.md", "# Work Note\n")
     write(
         project / "docs-ai" / "current-work" / item / "active-work-note.md",
         "# Context Note\n",
     )
     write(
         project / "docs-ai" / "current-work" / "delivery-map.md",
-        f"Context: docs-ai/docs/initiatives/work-notes/{item}.md\n",
+        f"Context: docs-ai/current-work/work-notes/{item}.md\n",
     )
     return project
 
@@ -58,7 +58,7 @@ def test_refs_reports_non_work_note_references_from_target_repo(tmp_path: Path) 
 
     assert result.returncode == 0
     assert "item: example-item" in result.stdout
-    assert "target: docs-ai/docs/initiatives/work-notes/example-item.md" in result.stdout
+    assert "target: docs-ai/current-work/work-notes/example-item.md" in result.stdout
     assert "non_note_refs: 1" in result.stdout
     assert "delivery-map.md:1" in result.stdout
 
@@ -67,7 +67,7 @@ def test_refs_ignores_cache_files(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
     write(
         project / "__pycache__" / "cached.pyc",
-        "docs-ai/docs/initiatives/work-notes/example-item.md\n",
+        "docs-ai/current-work/work-notes/example-item.md\n",
     )
 
     result = run_cli(["memory", "refs", "--repo-root", str(project), "--item", "example-item"])
@@ -99,7 +99,7 @@ def test_lifecycle_reports_memory_artifacts_and_refs(tmp_path: Path) -> None:
     assert "active_note: present" in result.stdout
     assert "draft_notes: 1" in result.stdout
     assert "active-work-note.draft.md" in result.stdout
-    assert "work_note: present docs-ai/docs/initiatives/work-notes/example-item.md" in result.stdout
+    assert "work_note: present docs-ai/current-work/work-notes/example-item.md" in result.stdout
     assert "backlog_details: 1" in result.stdout
     assert "initiative__feature__example-item.md" in result.stdout
     assert "delivery_map: present docs-ai/current-work/delivery-map.md" in result.stdout
@@ -341,7 +341,7 @@ def test_work_note_bootstrap_creates_work_note(tmp_path: Path) -> None:
         ]
     )
 
-    brief = project / "docs-ai" / "docs" / "initiatives" / "work-notes" / "new-item-1.md"
+    brief = project / "docs-ai" / "current-work" / "work-notes" / "new-item-1.md"
     assert result.returncode == 0
     assert f"CREATED: {brief}" in result.stdout
     text = brief.read_text(encoding="utf-8")
@@ -358,7 +358,7 @@ def test_work_note_bootstrap_creates_work_note(tmp_path: Path) -> None:
 
 def test_work_note_bootstrap_refuses_overwrite_without_force(tmp_path: Path) -> None:
     project = tmp_path / "project"
-    brief = project / "docs-ai" / "docs" / "initiatives" / "work-notes" / "new-item-1.md"
+    brief = project / "docs-ai" / "current-work" / "work-notes" / "new-item-1.md"
     write(brief, "existing\n")
 
     result = run_cli(
@@ -402,14 +402,25 @@ def test_governance_check_passes_valid_project_doc_links(tmp_path: Path) -> None
 
 def test_governance_check_rejects_durable_work_note_memory_link(tmp_path: Path) -> None:
     project = tmp_path / "project"
-    write(project / "docs-ai" / "docs" / "initiatives" / "work-notes" / "old-note.md", "# Old Note\n")
-    write(project / "docs-ai" / "docs" / "policy.md", "[Old](initiatives/work-notes/old-note.md)\n")
+    write(project / "docs-ai" / "current-work" / "work-notes" / "old-note.md", "# Old Note\n")
+    write(project / "docs-ai" / "docs" / "policy.md", "[Old](../current-work/work-notes/old-note.md)\n")
 
     result = run_cli(["governance", "check", "--repo-root", str(project)])
 
     assert result.returncode == 1
     assert "docs.work-note-memory-reference" in result.stdout
     assert "docs-ai/docs/policy.md references work-note/current-work memory" in result.stdout
+
+
+def test_governance_check_rejects_legacy_durable_work_note_location(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    write(project / "docs-ai" / "docs" / "initiatives" / "work-notes" / "old-note.md", "# Old Note\n")
+
+    result = run_cli(["governance", "check", "--repo-root", str(project)])
+
+    assert result.returncode == 1
+    assert "docs.work-note-location" in result.stdout
+    assert "docs-ai/docs/initiatives/work-notes/old-note.md" in result.stdout
 
 
 def test_governance_check_rejects_backticked_current_work_memory_path(tmp_path: Path) -> None:
@@ -438,9 +449,9 @@ def test_governance_check_rejects_anchored_backticked_memory_path(tmp_path: Path
 
 def test_governance_check_allows_work_notes_to_link_each_other(tmp_path: Path) -> None:
     project = tmp_path / "project"
-    write(project / "docs-ai" / "docs" / "initiatives" / "work-notes" / "old-note.md", "# Old Note\n")
+    write(project / "docs-ai" / "current-work" / "work-notes" / "old-note.md", "# Old Note\n")
     write(
-        project / "docs-ai" / "docs" / "initiatives" / "work-notes" / "new-note.md",
+        project / "docs-ai" / "current-work" / "work-notes" / "new-note.md",
         "[Old](old-note.md)\n",
     )
 

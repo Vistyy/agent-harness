@@ -14,8 +14,8 @@ MARKDOWN_LINK_TEMPLATE_CHARS = ("<", ">", "{", "}", "*")
 DOCTRINE_SCAN_ROOTS = ("AGENTS.md", "docs-ai/docs")
 WORK_NOTE_MEMORY_PREFIXES = (
     Path("docs-ai/current-work"),
-    Path("docs-ai/docs/initiatives/work-notes"),
 )
+LEGACY_WORK_NOTE_ROOT = Path("docs-ai/docs/initiatives/work-notes")
 
 
 class GovernanceCommandError(ValueError):
@@ -72,16 +72,6 @@ def _is_work_note_memory_path(path: Path, repo_root: Path) -> bool:
     return any(relative == prefix or prefix in relative.parents for prefix in WORK_NOTE_MEMORY_PREFIXES)
 
 
-def _is_work_note_file(path: Path, repo_root: Path) -> bool:
-    relative = _relative_to_root(path, repo_root)
-    if relative is None:
-        return False
-    return (
-        relative.parent == Path("docs-ai/docs/initiatives/work-notes")
-        and path.suffix == ".md"
-    )
-
-
 def _iter_doctrine_scan_files(repo_root: Path) -> list[Path]:
     files: list[Path] = []
     for root in DOCTRINE_SCAN_ROOTS:
@@ -90,7 +80,7 @@ def _iter_doctrine_scan_files(repo_root: Path) -> list[Path]:
             files.append(path)
         elif path.is_dir():
             files.extend(sorted(path.rglob("*.md")))
-    return sorted(path for path in files if not _is_work_note_file(path, repo_root))
+    return sorted(files)
 
 
 def _work_note_memory_references(markdown_file: Path, repo_root: Path) -> list[str]:
@@ -116,6 +106,18 @@ def run_harness_checks(*, repo_root: Path) -> list[CheckFailure]:
         raise GovernanceCommandError(f"Repo root is not a directory: {repo_root}")
 
     failures: list[CheckFailure] = []
+    legacy_work_notes = sorted((repo_root / LEGACY_WORK_NOTE_ROOT).glob("*.md"))
+    if legacy_work_notes:
+        failures.append(
+            CheckFailure(
+                check_id="docs.work-note-location",
+                message=(
+                    "work notes live under docs-ai/current-work/work-notes, not durable docs: "
+                    + ", ".join(str(path.relative_to(repo_root)) for path in legacy_work_notes)
+                ),
+                remediation="Move active memory to docs-ai/current-work/work-notes, extract durable content to its owner, or delete completed run history.",
+            )
+        )
     for markdown_file in _iter_markdown_files(repo_root):
         text = markdown_file.read_text(encoding="utf-8")
         broken_links = [

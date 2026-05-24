@@ -36,9 +36,10 @@ convention.
 `AGENTS.md`, `docs-ai/docs/**`, and `docs-ai/current-work/**`. It ignores
 external URLs, anchors, and template-like paths.
 
+`docs.work-note-location` rejects work notes under durable docs.
 `docs.work-note-memory-reference` rejects durable docs that link to work-note or
 current-work memory. It scans markdown links and backticked local paths in
-`AGENTS.md` and `docs-ai/docs/**`, excluding work notes themselves.
+`AGENTS.md` and `docs-ai/docs/**`.
 
 Reusable checks must stay narrow, high-signal, and tied to owned policy
 surfaces.
