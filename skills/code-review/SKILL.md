@@ -15,6 +15,12 @@ owner docs, current code/runtime topology, objective coverage, evidence, and
 repo health. Plans, work notes, delivery maps, summaries, and claims are
 hypotheses/context only.
 
+For non-trivial work, first restate the expected finished repo state that would
+make the objective true. Do not inherit that state from the diff, branch
+history, backlog wording, PR status, or previous completion claims. A review
+approves only when the implementation and routed residual work match that
+finished state.
+
 Before judging implementation consistency, decide whether the note or plan is a
 valid interpretation of the objective. An internally consistent plan that
 implements the wrong shape is `BLOCK`.
@@ -23,7 +29,7 @@ Approval is binary: `APPROVE` or `BLOCK`. Approval means:
 
 - the objective-relevant changed surface and adjacent owner paths were reviewed
   deeply enough
-- the final shape is coherent for the objective
+- the final shape matches the expected finished repo state for the objective
 - evidence crosses the real interface or lifecycle
 - obsolete current-scope paths, tests, docs, and proof-only entrypoints are
   removed or explicitly retained with reason
@@ -112,6 +118,7 @@ Report:
 
 - verdict: `APPROVE` or `BLOCK`
 - binding objective and accepted reductions
+- expected finished repo state
 - authority inspected
 - reviewed scope and why it is sufficient or insufficient
 - plan/note interpretation verdict

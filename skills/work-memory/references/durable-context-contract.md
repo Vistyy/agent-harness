@@ -14,6 +14,8 @@ is memory, not authority.
 The note is sufficient only when a future agent can recover:
 
 - original objective, accepted reductions, residual gaps, and current checkpoint
+- expected finished repo state: what must be true for the objective to be
+  solved, independent of previous notes or completion claims
 - current repo/product reality
 - objective coverage across entrypoint, production trigger, state authority,
   lifecycle owner, behavior, failure/recovery, visibility, persistence,

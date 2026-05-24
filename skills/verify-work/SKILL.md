@@ -17,6 +17,11 @@ claim were false.
 Start from the claim, not from convenient commands. Pick the smallest proof
 surface that honestly covers the claim and material risks.
 
+For non-trivial work, the claim must include the expected finished repo state
+or an explicit accepted reduction. Do not prove only the latest edit, failing
+test, or PR comment when the user objective requires a broader state to be
+true.
+
 Use unit tests, integration tests, e2e/browser/mobile flows, runtime evidence,
 screenshots, performance traces, security scans, CI logs, static checks, or
 repo inspection as appropriate. Read specialist skills in tandem for mechanics.

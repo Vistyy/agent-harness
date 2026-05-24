@@ -7,6 +7,7 @@ repo reality contradicts it.
 ## Objective
 
 - original objective: `<user objective>`
+- expected finished repo state: `<what must be true for the objective to be solved>`
 - accepted reductions: `<none | explicit>`
 - residual gaps: `<none | explicit>`
 

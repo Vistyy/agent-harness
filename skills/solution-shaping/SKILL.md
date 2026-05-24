@@ -16,6 +16,14 @@ objective with a convenient slice, note, plan, claim, test, or map item.
 Research current repo reality before choosing the shape. Plans, maps, notes,
 summaries, and parent conclusions are context only.
 
+For non-trivial work, independently describe the expected finished repo state
+before narrowing the work or accepting that the current implementation is close
+to done. Derive that state from the user's objective and current repo reality,
+not from branch history, backlog wording, PR status, previous completion
+claims, or the files that happened to be mentioned. If the current repo falls
+short, either include the gap in current scope, route it as future work or
+accepted debt, reject it with evidence, or stop for a decision.
+
 Concrete files, methods, tests, scripts, docs, and failures are evidence, not
 automatically the work boundary. For non-trivial work, inspect the owning
 workflow and adjacent peers enough to decide whether the issue is local or
@@ -29,6 +37,7 @@ For broad, ambiguous, or multi-owner work, keep a compact working model before
 narrowing to tasks. The model should let you answer:
 
 - what objective is still binding
+- what finished repo state would make that objective true
 - which owners/workflows and boundaries are involved
 - what is known, unknown, and risky
 - which findings point to local fixes, upstream design issues, future work,
@@ -90,11 +99,11 @@ confidence, and next evidence path. Do not leave "investigated" as the final
 state.
 
 Required slices are the accepted decomposition of the binding objective. Each
-required slice names its objective contribution, owner/interface, expected
-changed surface, evidence path, cleanup boundary, residual work, and stop
-conditions. Every required slice must be completed, blocked, or removed by an
-explicit user-accepted reduction before completion is claimed. Invalid slices
-are blockers, not implementation challenges.
+required slice names its contribution to the expected finished state,
+owner/interface, expected changed surface, evidence path, cleanup boundary,
+residual work, and stop conditions. Every required slice must be completed,
+blocked, or removed by an explicit user-accepted reduction before completion is
+claimed. Invalid slices are blockers, not implementation challenges.
 
 ## Escape Hatch
 

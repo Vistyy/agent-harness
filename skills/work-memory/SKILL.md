@@ -40,10 +40,10 @@ this skill, not in each project map.
 
 ## Active Notes
 
-An active note records objective, current reality, objective coverage,
-decisions, target shape, decomposition, evidence strategy, cleanup, blockers,
-and remaining required work. It may link subordinate notes, but the top note
-owns the branch-level objective.
+An active note records objective, expected finished repo state, current reality,
+objective coverage, decisions, target shape, decomposition, evidence strategy,
+cleanup, blockers, and remaining required work. It may link subordinate notes,
+but the top note owns the branch-level objective.
 
 Separate discovery findings from required slices. Discovery findings need a
 route: required slice, invalidates shape, slice-local detail, blocker or user
@@ -53,9 +53,11 @@ Record the reason, owner/interface, and next action or evidence boundary.
 Required slices are the accepted objective-preserving decomposition from
 `solution-shaping`. Record each required slice with current status, evidence
 and review state, residual/cleanup boundary, and blocker or accepted reduction
-when relevant. Required slices remain required until completed, blocked, or
-removed by explicit user-accepted reduction; they cannot be hidden in backlog or
-left unrouted to make closeout easier.
+when relevant. Record material gaps against the expected finished state as
+fix-now, future work, accepted debt, rejected/no-change, or blocker. Required
+slices remain required until completed, blocked, or removed by explicit
+user-accepted reduction; they cannot be hidden in backlog or left unrouted to
+make closeout easier.
 
 A finding or slice does not become current-scope authority merely by appearing
 in a note. `solution-shaping` still owns validity, owner, objective coverage,
