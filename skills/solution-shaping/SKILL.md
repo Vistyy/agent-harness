@@ -23,6 +23,23 @@ points to wrong ownership, a missing boundary, obsolete residue,
 over-abstraction, under-abstraction, weak proof, or stale documentation. Choose
 a file-local fix only when the surrounding owner remains coherent.
 
+## Working Model
+
+For broad, ambiguous, or multi-owner work, keep a compact working model before
+narrowing to tasks. The model should let you answer:
+
+- what objective is still binding
+- which owners/workflows and boundaries are involved
+- what is known, unknown, and risky
+- which findings point to local fixes, upstream design issues, future work,
+  accepted debt, or no-change
+- what evidence would change the plan
+
+Update the model as repo evidence changes. Files, failures, notes, and visible
+symptoms are signals, not automatic scope. If a finding changes owner,
+root-cause, target architecture, proof, or cleanup assumptions, re-shape before
+continuing.
+
 ## Shape
 
 Choose the simplest coherent final solution, not the smallest diff. Include the
@@ -66,6 +83,11 @@ slice list or current slice. When it invalidates the shape, re-enter shaping.
 When it is separate future work, backlog the smallest owned problem and next
 action. Current-scope work can move to accepted temporary debt only with
 explicit user acceptance, owner, risk, removal condition, and backlog link.
+
+End investigation by routing each material finding to address-now, future work,
+accepted debt, rejected/no-change, or blocker/user decision, with owner, reason,
+confidence, and next evidence path. Do not leave "investigated" as the final
+state.
 
 Required slices are the accepted decomposition of the binding objective. Each
 required slice names its objective contribution, owner/interface, expected

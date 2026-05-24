@@ -67,6 +67,12 @@ Backlog files preserve work that should not be lost. They are not promises that
 the next implementation shape is known. Keep problem, owner, bucket, affected
 surface, and suggested next discovery move.
 
+When a backlog item replaces investigation memory, make it resumable without
+archaeology. Preserve the compact working model needed for pickup: findings,
+uncertainty, owner/boundary, next action or evidence path, promotion/removal
+condition, and references. Keep run history out unless it affects a future
+decision.
+
 Accepted temporary debt needs explicit user acceptance, owner, risk, and
 removal condition. Current-scope cleanup cannot be dumped into backlog unless
 the user accepts a reduction or the work is genuinely separate from the active
@@ -88,6 +94,12 @@ to preserve completed execution context. If the content is reusable doctrine,
 extract it to the owning skill or durable doc. If it is future work, move the
 smallest useful problem statement to backlog. If it is only run history, delete
 it.
+
+Before deleting a non-trivial work note, verify successor coverage for its
+durable value. Findings, decisions, uncertainties, owner boundaries, and next
+evidence steps must be extracted to a durable doc/backlog item, obsolete by repo
+reality, or explicitly accepted as deleted. If coverage is incomplete, keep the
+note or keep the unresolved successor state visible.
 
 ## Closeout
 
