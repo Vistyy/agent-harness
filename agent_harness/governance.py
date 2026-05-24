@@ -16,6 +16,7 @@ WORK_NOTE_MEMORY_PREFIXES = (
     Path("docs-ai/current-work"),
 )
 LEGACY_WORK_NOTE_ROOT = Path("docs-ai/docs/initiatives/work-notes")
+AGENTS_DELIVERY_MAP_POINTER = "docs-ai/current-work/delivery-map.md"
 
 
 class GovernanceCommandError(ValueError):
@@ -94,6 +95,11 @@ def _work_note_memory_references(markdown_file: Path, repo_root: Path) -> list[s
     references: list[str] = []
     for target in targets:
         target_path = _local_target_path(markdown_file, target)
+        if (
+            markdown_file.relative_to(repo_root) == Path("AGENTS.md")
+            and target.split("#", 1)[0] == AGENTS_DELIVERY_MAP_POINTER
+        ):
+            continue
         if target_path is not None and _is_work_note_memory_path(target_path, repo_root):
             references.append(target)
     return sorted(set(references))

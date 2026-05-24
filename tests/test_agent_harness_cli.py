@@ -400,6 +400,17 @@ def test_governance_check_passes_valid_project_doc_links(tmp_path: Path) -> None
     assert result.stdout == ""
 
 
+def test_governance_check_allows_agents_delivery_map_pointer(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    write(project / "docs-ai" / "current-work" / "delivery-map.md", "# Delivery Map\n")
+    write(project / "AGENTS.md", "`docs-ai/current-work/delivery-map.md`\n")
+
+    result = run_cli(["governance", "check", "--repo-root", str(project)])
+
+    assert result.returncode == 0
+    assert result.stdout == ""
+
+
 def test_governance_check_rejects_durable_work_note_memory_link(tmp_path: Path) -> None:
     project = tmp_path / "project"
     write(project / "docs-ai" / "current-work" / "work-notes" / "old-note.md", "# Old Note\n")
