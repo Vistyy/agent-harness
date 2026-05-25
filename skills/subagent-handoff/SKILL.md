@@ -27,10 +27,11 @@ judgment. Keep urgent blocking work local when the next step depends on it.
 
 Use `planning_critic` before risky planning, architecture, scope expansion, or
 work where the objective could be misread. Use `quality_guard` after a
-non-trivial required slice has a real direction or draft diff, before that
-direction hardens into dependent slices. Use `final_reviewer` after
-non-trivial implementation and verification, with required-slice and
-discovery-routing state, before completion is claimed.
+non-trivial required slice has a real direction or draft diff, before bugs,
+drift, unreadable code, or bad structure compound. Use `final_reviewer` after
+non-trivial implementation and verification, with required-slice,
+discovery-routing, proof, cleanup, and finding-disposition state, before
+completion is claimed.
 
 Use `implementer` for bounded code/doc edits when the target shape,
 owner/interface, evidence strategy, and write scope are clear enough to hand
@@ -56,10 +57,12 @@ because it is slow, silent, timed out, or blocking local work.
 - `explorer`: before or during planning when repo reality is unclear.
 - `planning_critic`: before risky planning, implementation, or scope expansion.
 - `implementer`: executes one bounded slice after scope is clear.
-- `quality_guard`: mid-slice after non-trivial required-slice implementation
-  begins, before dependent work compounds a wrong shape.
-- `final_reviewer`: after implementation and verification for non-trivial work,
-  with required-slice and discovery-routing state.
+- `quality_guard`: early code-quality gate after non-trivial required-slice
+  implementation begins; blocks continuation on current-scope correctness,
+  quality, objective, proof, or owner defects.
+- `final_reviewer`: final merge-readiness gate after implementation and
+  verification for non-trivial work, with required-slice, discovery-routing,
+  prior-finding, proof, cleanup, and residual-work state.
 - `runtime_evidence`: live-use behavior evidence under `verify-work`.
 - `design_judge`: screenshot/contact-sheet visual-quality approval.
 
@@ -78,7 +81,7 @@ Pass:
 - target shape, owner/interface, and rejected alternatives
 - required slice, routed discovery findings, expected change surface, and
   cleanup/residual boundary
-- evidence strategy and required proof artifacts
+- evidence strategy, required proof, and any available proof artifacts
 - role task and owned/read-only scope
 - active durable context path when it exists
 - artifacts, commands, screenshots, logs, or changed surfaces to inspect
@@ -86,8 +89,10 @@ Pass:
 
 Reviewer handoffs require falsification, not validation of the parent summary.
 Require the reviewer to check objective preservation, proof substitution, and
+current-scope bugs, implementation quality, pre-existing issue disposition, and
 unnecessary concepts, branches, wrappers, states, defensive paths, tests, docs,
-or proof entrypoints that must be deleted, collapsed, rewritten, or blocked.
+or proof entrypoints that must be deleted, collapsed, rewritten, fixed, routed,
+or blocked.
 
 Stop when delegation would narrow the objective, split one owner across
 conflicting workers, require hidden material decisions, or preserve a

@@ -1,129 +1,129 @@
 ---
 name: code-review
-description: "Review code or repository changes skeptically for bugs, objective fit, proof validity, maintainability, changed state, and final repo health. Use when the user asks for review or before claiming non-trivial work complete. Use this skill for review findings only; it does not own implementation, proof mechanics, or scope shaping."
+description: "Review code or repository changes ruthlessly for bugs, quality regressions, objective fit, proof validity, maintainability, changed state, and final repo health. Use when the user asks for review or before claiming non-trivial work complete. Use this skill for always-on review doctrine, findings, and verdicts only; role prompts and handoffs own reference selection."
 ---
 
 # Code Review
 
-Owns isolated skeptical review and report shape. `../solution-shaping/SKILL.md`
-owns when final review is required and what objective is being closed.
+Owns always-on review doctrine, finding standards, and report shape.
+`../solution-shaping/SKILL.md` owns review timing, the binding objective, valid
+slice shape, and whether a finding changes scope.
+`../verify-work/SKILL.md` owns proof selection. Reviewers may reject invalid
+proof; they do not replace runtime, design, security, or test owners.
 
 ## Contract
 
-Review against the original objective, accepted reductions, repo reality,
-owner docs, current code/runtime topology, objective coverage, evidence, and
-repo health. Plans, work notes, delivery maps, summaries, and claims are
-hypotheses/context only.
+Review is a blocking gate, not encouragement. A reviewer is expected to falsify
+the parent story and find real defects.
 
-For non-trivial work, first restate the expected finished repo state that would
-make the objective true. Do not inherit that state from the diff, branch
-history, backlog wording, PR status, or previous completion claims. A review
-approves only when the implementation and routed residual work match that
-finished state.
+Plans, work notes, delivery maps, summaries, previous approvals, and parent
+claims are hypotheses. Code, owner docs, tests, runtime topology, data shape,
+diffs, proof artifacts, and repository state are evidence.
 
-Before judging implementation consistency, decide whether the note or plan is a
-valid interpretation of the objective. An internally consistent plan that
-implements the wrong shape is `BLOCK`.
+For non-trivial work, approval is binary: every reference selected by the
+caller, role prompt, or handoff must be applied deeply enough for the claim. If
+required context is skipped, uncertain, or impossible from available context,
+return `BLOCKED` or `BLOCK`, not approval.
 
-Approval is binary: `APPROVE` or `BLOCK`. Approval means:
+Valid verdicts:
 
-- the objective-relevant changed surface and adjacent owner paths were reviewed
-  deeply enough
-- the final shape matches the expected finished repo state for the objective
-- evidence crosses the real interface or lifecycle
-- obsolete current-scope paths, tests, docs, and proof-only entrypoints are
-  removed or explicitly retained with reason
-- remaining required work is visible and not hidden behind a narrowed claim
+- `APPROVE`: the selected review scope passed, with no
+  unresolved current-scope findings.
+- `BLOCK`: the review found an actionable current-scope issue, invalid proof,
+  incomplete objective coverage, or unclassified material finding.
+- `BLOCKED`: required authority, context, changed surface, proof artifacts, or
+  repo access is missing, so the reviewer cannot honestly judge the claim.
 
-Diff-only approval is invalid for non-trivial work.
+Diff-only approval is invalid for non-trivial work. Plan-compliance approval is
+invalid. Test-pass approval is invalid.
 
-## Check
+## Always-On Review Setup
 
-- Use fresh context and stay read-only.
-- Read `../solution-shaping/SKILL.md` before non-trivial review; use its
-  review lenses through that owner.
-- Treat the plan/note as something to falsify, not as authority.
-- Reject proof that could pass while the requested behavior is absent.
-- Inspect edited paths plus adjacent owner/interface paths needed to judge the
-  objective.
-- Use solution-shaping review lenses to falsify the shape, proof, and
-  repository state; unassessed current-scope lens impact blocks approval.
-- Require an account of what was deleted, collapsed, reused, avoided, or added
-  and why.
-- Check stale code, duplicate owners, stale tests/docs, fake proof paths,
-  runtime proof scope, and remaining work disposition.
-- Cite exact `file/path:line` findings.
+Before trusting the diff or parent story, reconstruct the review target:
 
-## Maintainability Bar
+- binding objective and user-accepted reductions
+- expected finished repo state that would make the objective true
+- authority inspected: owner docs, code paths, runtime topology, data/state
+  shape, tests, changed surface, adjacent owner/interface paths, and proof
+  artifacts treated as authority
+- plan/note interpretation verdict
+- known findings, finding dispositions, accepted temporary debt, and residual
+  work
 
-Working behavior is not enough. Block current-scope code that is heavier than
-the objective requires.
+Do not inherit the finished state from the diff, branch history, backlog
+wording, PR status, previous completion claims, or parent handoff. An internally
+consistent plan that implements the wrong shape is `BLOCK`.
 
-Complexity requires a concrete owner and failure mode. Defensive code is valid
-only at real boundaries: external input, auth, money, storage, concurrency,
-migrations, distributed runtime, or security. Internal trusted flows stay
-direct.
+Use `../solution-shaping/SKILL.md` and its review lenses for non-trivial review.
+Unassessed current-scope lens impact blocks approval.
 
-Approve only after confirming the objective cannot be met with fewer concepts,
-branches, states, wrappers, fallback paths, public methods, defensive checks,
-tests, or docs. Tests protect required behavior, not accidental shape.
+## Finding Standard
 
-## Presumptive Blockers
+Prefer fewer high-confidence findings over many weak comments. A finding is
+valid only when it is concrete, actionable, and useful to the author.
 
-Treat these as blockers unless the implementation gives a clear local reason
-and the reason survives objective, owner, and proof review:
+Each finding must include:
 
-- The change preserves incidental complexity when a plausible simpler model,
-  owner, or boundary would delete it.
-- A file crosses roughly 1000 lines because of the change, or a large file
-  absorbs new responsibility that could have a focused owner.
-- New ad hoc branching, flags, nullable modes, fallback paths, or special cases
-  are inserted into an already busy flow.
-- The change adds a thin wrapper, identity abstraction, generic dispatcher, or
-  pass-through helper that does not reduce caller knowledge.
-- The contract becomes cast-heavy, `any`/`unknown`-heavy, loosely shaped, or
-  unnecessarily optional instead of making the invariant explicit.
-- Tests, docs, or proof entrypoints preserve obsolete or accidental API shape.
+- severity: `P0`, `P1`, `P2`, or `P3`
+- confidence: `high`, `medium`, or `low`
+- exact location: `file/path:line`
+- current-scope reason: why this blocks the reviewed objective or approved
+  scope
+- impact: the failure mode, affected path/data/user, and when it happens
+- required fix: the smallest owner-correct repair, not just a symptom patch
+- disposition: fixed, current-scope blocker, separate debt, accepted temporary
+  debt, no-change, or blocked
 
-## Required Remedies
+Severity guide:
 
-When a maintainability issue is real, require a structural fix, not cosmetic
-cleanup:
+- `P0`: must stop release immediately; critical security, data loss,
+  corruption, irreversible migration/deployment breakage, or broad outage.
+- `P1`: blocks the objective or normal-use correctness, security, reliability,
+  data integrity, migration, or recovery path.
+- `P2`: real current-scope bug or quality regression in a plausible edge path,
+  secondary workflow, admin/observability path, or maintainability surface.
+- `P3`: lower-severity current-scope cleanup or structural concern that should
+  be fixed before approval because it will make the code harder to own.
 
-- Delete an indirection layer instead of renaming or polishing it.
-- Collapse duplicate branches into one clear flow.
-- Move feature logic to the layer that owns the concept.
-- Replace special cases with an explicit model, policy, state object, or typed
-  contract.
-- Reuse the canonical helper instead of adding a near-duplicate.
-- Make type, state, and lifecycle boundaries explicit so control flow gets
-  simpler.
-- Delete obsolete fallback paths and tests instead of carrying compatibility
-  for no current owner.
+Unclassified material findings block approval. A `NON-BLOCKING` observation is
+valid only for separate debt or explicitly accepted temporary debt.
 
-Do not spend review attention on naming nits while structural issues remain.
-Report high-confidence findings with required fixes; omit cosmetic findings
-while structural issues remain.
+## Reference Index
 
-## Issue Disposition
+Reference files are optional review lenses selected by the caller, role prompt,
+or handoff before applying this skill. They are not activation rules.
 
-Every concrete issue is fixed, routed, tracked, accepted by the user as a
-reduction/debt, or dropped as unevidenced.
+- `references/patch-native-bug-hunt.md`: changed-surface bug finding.
+- `references/structural-quality.md`: maintainability, abstraction, ownership,
+  and simplification review.
+- `references/objective-proof-closeout.md`: objective coverage, proof validity,
+  cleanup, repo health, and closeout review.
+- `references/finding-disposition.md`: current-scope, separate debt, accepted
+  temporary debt, and no-change classification.
 
-Current-scope cleanup cannot be moved to backlog merely to approve the branch.
+## Method
+
+- Stay read-only.
+- Use fresh context.
+- Inspect the diff, changed files, adjacent owner/interface paths, tests, docs,
+  proof artifacts, generated artifacts, and active finding ledger needed to
+  judge the claim.
+- Apply selected references only. Do not treat the reference index itself as an
+  activation rule.
+- If no findings remain, state which bug classes and quality classes were
+  inspected and why the reviewed scope was sufficient.
 
 ## Output
 
 Report:
 
-- verdict: `APPROVE` or `BLOCK`
+- verdict: `APPROVE`, `BLOCK`, or `BLOCKED`
 - binding objective and accepted reductions
 - expected finished repo state
 - authority inspected
 - reviewed scope and why it is sufficient or insufficient
 - plan/note interpretation verdict
-- objective coverage verdict
-- evidence/proof validity
-- repo-health verdict
-- findings with location, impact, required fix, and disposition
+- selected references and verdict for each
+- findings with exact location, impact, severity, confidence, required fix, and
+  disposition
 - remaining required work or `none`
