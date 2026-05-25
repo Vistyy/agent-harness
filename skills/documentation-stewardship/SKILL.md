@@ -14,9 +14,31 @@ Durable docs are authority, not notes. Before preserving, moving, or deleting a
 claim, identify its owner and verify whether it is current, obsolete, future
 work, or accepted deletion.
 
+Before keeping a durable doc or claim, challenge whether prose is the right
+source of truth. Durable prose must earn its place by carrying non-obvious
+ownership, rationale, invariant, boundary, exception, routing, or proof value.
+Prefer the mechanically checked source when it can answer the question cheaply
+and unambiguously.
+
 Optimize durable docs for humans and agents: short entrypoints, clear owner
 boundaries, grep-friendly terms, and on-demand detail instead of bloated
 always-loaded instructions.
+
+## Admission Test
+
+Keep durable prose only when it preserves at least one of:
+
+- ownership or routing that is not obvious from paths
+- rationale, tradeoff, constraint, or rejected alternative
+- invariant, boundary, exception, stop condition, or failure policy
+- source-of-truth and proof pointers for a reader or agent
+- glossary term, alias, or domain language that prevents ambiguity
+- current unresolved or future work routed to current-work or backlog
+
+Do not keep durable prose only because it is accurate, nicely written, recently
+created, or linked. Delete, replace with an owner pointer, move to ADR,
+current-work, backlog, or generate/check it from source when another owner is
+better.
 
 ## Source Of Truth
 
@@ -26,7 +48,10 @@ Every durable concept has one owner.
 - reusable agent workflow policy: workflow overlay
 - project product, architecture, runtime, roadmap, queue truth: project overlay
 - active execution detail: current-work
-- exact behavior: code and tests
+- exact behavior: code, tests, config, migrations, schemas, and generated
+  artifacts
+- decision rationale and alternatives: ADRs
+- temporary state, evidence, cleanup, and future work: current-work or backlog
 - secondary docs point to owners instead of copying full policy
 - consumers may name another owner for routing/handoff only
 - consumers may state local input, output, stop condition, or consequence
