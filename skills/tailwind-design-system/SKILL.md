@@ -1,6 +1,6 @@
 ---
 name: tailwind-design-system
-description: "Use when implementing or refactoring Tailwind CSS v4 styles: CSS-first config, class detection, variants, theming, and maintainable web component patterns."
+description: "Implement or refactor Tailwind CSS v4 styles: CSS-first config, class detection, variants, theming, and maintainable component patterns. Use when Tailwind class structure, config, theme tokens, or styling mechanics are touched. Use this skill for Tailwind mechanics only; it does not own visual direction or broad design approval."
 ---
 
 # Tailwind Design System

@@ -1,6 +1,6 @@
 ---
 name: flutter-expert
-description: "Use when implementing or debugging Flutter/Dart mobile code: repo-consistent architecture, state management, navigation, widget composition, and performance."
+description: "Implement or debug Flutter/Dart mobile code with repo-consistent architecture, state management, navigation, widget composition, and performance. Use when changing mobile app code or diagnosing Flutter behavior. Use this skill for Flutter mechanics only; it does not own product design, runtime proof selection, or mobile backlog scope."
 ---
 
 # Flutter Expert

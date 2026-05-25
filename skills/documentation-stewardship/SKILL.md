@@ -1,12 +1,22 @@
 ---
 name: documentation-stewardship
-description: Use when editing durable docs, assigning one source of truth, or deciding whether reusable policy belongs in the workflow overlay or a project overlay.
+description: "Preserve durable documentation truth by assigning one source of truth, validating claims against repo reality, and safely moving, merging, deleting, or reorganizing docs. Use when creating, editing, auditing, or restructuring durable docs; designing doc IA or agent-readable entrypoints; or deciding whether guidance belongs in AGENTS.md, skills, project docs, current-work, or backlog. Use this skill for durable documentation ownership and lifecycle only; it does not own active execution planning, code behavior, product decisions, or backlog prioritization."
 ---
 
 # Documentation Stewardship
 
 Owns durable rule placement, one source of truth, terminology ownership, and
 doc density.
+
+## Rule
+
+Durable docs are authority, not notes. Before preserving, moving, or deleting a
+claim, identify its owner and verify whether it is current, obsolete, future
+work, or accepted deletion.
+
+Optimize durable docs for humans and agents: short entrypoints, clear owner
+boundaries, grep-friendly terms, and on-demand detail instead of bloated
+always-loaded instructions.
 
 ## Source Of Truth
 
@@ -91,3 +101,17 @@ independently of the owner.
 
 Fix by deleting the duplicate, linking to the owner, or explicitly moving
 ownership in the same change.
+
+## Agent Readability
+
+Agent-readable docs are a retrieval surface, not a substitute for loaded
+instructions.
+
+- Keep `AGENTS.md` short; point to durable entrypoints instead of loading
+  domain truth.
+- Prefer a durable docs `README.md` for human/agent navigation.
+- Prefer an agent index for task-to-owner routing in repos with broad docs.
+- Owner docs should state owner, non-owner, read-when, source-of-truth, and
+  proof/check pointers when those are not obvious from the title.
+- Use stable terms, aliases, concrete paths, and short headings.
+- Repeated agent workflows belong in skills, not durable domain docs.

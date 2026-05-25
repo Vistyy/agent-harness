@@ -1,6 +1,6 @@
 ---
 name: overlay-governance
-description: "Use when changing the workflow overlay itself: reusable skills, global or project AGENTS overlays, adapter install behavior, role/prompt contracts, validation checks, or where reusable agent policy should live. This repo is an overlay that fits agent workflows to local practice."
+description: "Govern reusable workflow overlay changes: skills, AGENTS overlays, adapters, role/prompt contracts, validation checks, and reusable agent-policy ownership. Use when changing overlay structure or deciding where agent workflow policy belongs. Use this skill for overlay contracts only; it does not own project facts, product architecture, runtime commands, active work, or project-only exceptions."
 ---
 
 # Overlay Governance
@@ -37,7 +37,8 @@ and project-overlay contracts.
   valid only outside the binding objective or for explicitly accepted temporary
   debt with owner, risk, and removal condition.
 - Keep `AGENTS.md` and skill bodies as maps/contracts, not manuals.
-- Frontmatter `description` owns ordinary trigger/routing text.
+- Frontmatter `description` owns ordinary trigger/routing text: purpose,
+  positive triggers, and likely exclusions.
 - Skill bodies are post-selection contracts.
 - Reference rows are mandatory purpose gates; matched gates must be read, and
   unmatched references must not be loaded speculatively.

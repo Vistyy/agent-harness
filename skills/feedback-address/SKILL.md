@@ -1,6 +1,6 @@
 ---
 name: feedback-address
-description: "Use to classify feedback or review findings before edits: fix now, route to solution-shaping, backlog, accepted debt, or no-change."
+description: "Classify feedback or review findings before edits by deciding whether they are a surface fix, owner fix, separate backlog work, accepted temporary debt, or no-change. Use when comments, review findings, PR feedback, or user concerns need disposition before implementation. Use this skill for feedback disposition only; it does not replace root-cause debugging, solution shaping, or code repair."
 ---
 
 # Feedback Address

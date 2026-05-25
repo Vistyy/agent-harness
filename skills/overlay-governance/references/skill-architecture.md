@@ -9,6 +9,16 @@ Reusable skills are small post-selection contracts.
 - references = mandatory purpose gates.
 - scripts/assets = owned supporting artifacts.
 
+Descriptions should follow this shape when useful:
+
+1. purpose: what job the skill helps perform
+2. positive triggers: user wording, work type, or repo condition that should
+   load the skill
+3. exclusion boundary: what adjacent skill or artifact the skill does not own
+
+Do not put process, checklists, doctrine, examples, or proof mechanics in the
+description. Move those to the skill body or a reference gate.
+
 ## Body
 
 Include only content needed for correct use after selection:

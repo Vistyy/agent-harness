@@ -1,6 +1,6 @@
 ---
 name: cli-creator
-description: "Build durable composable CLIs from APIs, SDKs, curl examples, web apps, admin tools, or local scripts; use when the user wants an agent-facing command available from any repo."
+description: "Build durable, composable, agent-facing CLIs from APIs, SDKs, curl examples, web apps, admin tools, or local scripts. Use when the user wants a command available from any repo with stable help, auth, JSON, and smoke checks. Use this skill for durable tools only; it does not own one-off repo scripts or ordinary shell command selection."
 ---
 
 # CLI Creator

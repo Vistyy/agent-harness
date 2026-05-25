@@ -1,6 +1,6 @@
 ---
 name: subagent-handoff
-description: "Use when deciding whether to delegate to a subagent or reviewer, preparing a handoff, routing explorer/planning_critic/implementer/quality_guard/final_reviewer/runtime_evidence/design_judge, or handling follow-up with an active subagent."
+description: "Route and manage bounded subagent delegation or reviewer handoffs. Use when deciding whether to delegate, preparing handoffs, routing explorer/planning_critic/implementer/quality_guard/final_reviewer/runtime_evidence/design_judge, or handling active-subagent follow-up. Use this skill for delegation mechanics only; it does not replace parent ownership of objective, integration, or final claims."
 ---
 
 # Subagent Handoff

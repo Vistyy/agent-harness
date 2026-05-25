@@ -1,6 +1,6 @@
 ---
 name: "screenshot"
-description: "Use when the user explicitly asks for a desktop or system screenshot (full screen, specific app or window, or a pixel region), or when tool-specific capture capabilities are unavailable and an OS-level capture is needed."
+description: "Capture desktop or system screenshots: full screen, app/window, active window, or pixel region. Use when the user explicitly asks for an OS screenshot or when tool-specific capture is unavailable. Use this skill for OS-level capture only; prefer browser, Figma, or app-specific screenshot tools when they apply."
 ---
 
 

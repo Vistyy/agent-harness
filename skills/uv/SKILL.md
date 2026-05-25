@@ -1,6 +1,6 @@
 ---
 name: uv
-description: Use for Python command execution, dependencies, or tooling in uv-managed projects; prefer project just commands first, otherwise use uv instead of raw python, pip, pytest, or manual virtualenvs.
+description: "Run Python commands, dependencies, and tooling through `uv` in uv-managed projects. Use when project `just` recipes do not already own the Python action, and avoid raw python, pip, pytest, or manual virtualenvs. Use this skill for Python execution routing only; it does not own test strategy or project command policy."
 ---
 
 # uv

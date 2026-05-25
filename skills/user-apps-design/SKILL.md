@@ -1,6 +1,6 @@
 ---
 name: user-apps-design
-description: "Use for product-facing UI work that needs project design context, rendered artifacts, or screenshot-led visual approval."
+description: "Judge broad product-facing UI completion against project design context, rendered artifacts, and screenshot-led visual approval. Use when a UI change claims visual/product quality across screens, states, viewports, or clients. Use this skill for design-quality approval only; it does not own runtime proof, code review, or project taste itself."
 ---
 
 # User Apps Design

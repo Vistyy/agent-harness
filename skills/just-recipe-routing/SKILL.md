@@ -1,6 +1,6 @@
 ---
 name: just-recipe-routing
-description: "Use when choosing `just` commands in an overlay-managed repo: namespace discovery, quality tier selection, and avoiding raw tools."
+description: "Choose appropriate `just` recipes in overlay-managed repos by discovering namespaces, selecting quality tiers, and avoiding raw tools. Use before running project format, lint, test, quality, dev, or runtime commands when `just` is available. Use this skill for command routing only; it does not own recipe bodies or project proof requirements."
 ---
 
 # Just Recipe Routing

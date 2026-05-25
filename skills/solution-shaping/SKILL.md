@@ -1,6 +1,6 @@
 ---
 name: solution-shaping
-description: "Shape non-trivial implementation before coding or review. Use when the objective, scope, owner/interface, architecture, decomposition, cleanup, refactors, risk, or verification strategy could change the final solution. Preserves the full user objective while choosing the simplest coherent end state and work slices."
+description: "Shape non-trivial work before coding or review by preserving the full objective and choosing the simplest coherent end state and slices. Use when objective, scope, owner/interface, architecture, decomposition, cleanup, refactors, risk, or verification strategy could change the solution. Use this skill for solution shape only; it does not own durable memory, proof mechanics, or implementation."
 ---
 
 # Solution Shaping

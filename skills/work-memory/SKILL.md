@@ -1,6 +1,6 @@
 ---
 name: work-memory
-description: "Use when work needs remembered state across turns, compaction, subagents, backlog, or document lifecycle: delivery maps, active notes, work notes, incoming work, closeout notes, and cleanup. Memory only; not execution authority."
+description: "Manage lightweight remembered work state: delivery maps, active notes, work notes, incoming work, backlog details, closeout notes, and cleanup. Use when work must survive turns, compaction, subagents, backlog routing, or document lifecycle. Use this skill for memory only; it does not own execution authority, solution shape, proof, review, runtime, tests, or completion doctrine."
 ---
 
 # Work Memory

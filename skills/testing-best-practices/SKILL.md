@@ -1,6 +1,6 @@
 ---
 name: testing-best-practices
-description: "Use when adding, changing, deleting, reviewing, or relying on persistent tests, or when choosing whether a test is the right proof layer. Covers test layer, admission, durability, fake red evidence, and cleanup."
+description: "Steward persistent tests by choosing the right layer, admission standard, durability, fake-red safeguards, and cleanup. Use when adding, changing, deleting, reviewing, or relying on persistent tests, or when deciding whether a test is the right proof layer. Use this skill for persistent-test quality only; it does not own final proof selection or runtime evidence mechanics."
 ---
 
 # Testing Best Practices

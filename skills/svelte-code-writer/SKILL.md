@@ -1,6 +1,6 @@
 ---
 name: svelte-code-writer
-description: "Use whenever creating, editing, or analyzing Svelte `.svelte`, `.svelte.ts`, or `.svelte.js`; includes official docs lookup, autofixer workflow, and core Svelte posture."
+description: "Create, edit, or analyze Svelte `.svelte`, `.svelte.ts`, and `.svelte.js` files with official docs lookup, autofixer workflow, and core Svelte posture. Use whenever Svelte source changes or Svelte-specific analysis is needed. Use this skill for Svelte mechanics only; it does not own product design, Tailwind policy, or runtime proof."
 ---
 
 # Svelte Code Writer

@@ -1,6 +1,6 @@
 ---
 name: verify-work
-description: "Choose honest proof for a work claim. Use before claiming non-trivial work is done, when deciding what evidence is needed, or when tests, runtime evidence, screenshots, performance, security, CI, static checks, or repo inspection must prove behavior, cleanup, migration, or replacement."
+description: "Choose honest proof for a work claim and reject proof that could pass while the claim is false. Use before claiming non-trivial work done or when tests, runtime evidence, screenshots, performance, security, CI, static checks, or repo inspection must prove behavior, cleanup, migration, or replacement. Use this skill for proof selection only; specialist skills own proof mechanics."
 ---
 
 # Verify Work

@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: Use when a bug, failing check, build failure, performance issue, or unexpected behavior appears during work; find root cause before fixes.
+description: "Find root cause before fixing bugs, failing checks, build failures, performance issues, or unexpected runtime behavior. Use when symptoms need reproduction, diagnosis, or boundary tracing before repair. Use this skill for diagnosis only; it does not decide current-scope disposition, final architecture, or proof selection."
 ---
 
 # Systematic Debugging

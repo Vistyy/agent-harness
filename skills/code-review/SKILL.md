@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "Use when the user asks for code review or when a non-trivial change needs skeptical review of objective fit, proof validity, maintainability, changed repository state, or final repo health before completion."
+description: "Review code or repository changes skeptically for bugs, objective fit, proof validity, maintainability, changed state, and final repo health. Use when the user asks for review or before claiming non-trivial work complete. Use this skill for review findings only; it does not own implementation, proof mechanics, or scope shaping."
 ---
 
 # Code Review

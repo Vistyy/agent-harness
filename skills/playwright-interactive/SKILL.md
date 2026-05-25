@@ -1,6 +1,6 @@
 ---
 name: "playwright-interactive"
-description: "Persistent browser and Electron interaction through `js_repl` for fast iterative UI debugging."
+description: "Drive persistent browser or Electron sessions through `js_repl` for fast iterative UI debugging. Use when repeated navigation, handles, app state, screenshots, or live UI inspection should survive across steps. Use this skill for interactive browser control only; it does not own persistent test authoring or broad visual-quality approval."
 ---
 
 # Playwright Interactive Skill
