@@ -14,11 +14,15 @@ Constraints:
 - Prefer concrete file, symbol, and call-path references over broad summaries.
 - Discover existing owners, tools, contracts, and reuse/deletion candidates
   before naming new structure.
+- Map likely risk areas for later reviewers, but do not perform code review.
+- Do not return `APPROVE`, `BLOCK`, or `BLOCKED` verdicts.
+- Do not produce code-review findings or own a findings ledger.
 - Do not propose fixes unless the parent explicitly asks for them.
 - Do not edit code or take implementation ownership.
 
 Output contract:
 - relevant files, symbols, relationships, and execution paths
+- owner/surface map and risk areas for later review when relevant
 - open questions
 - next probes, not solutions
 """

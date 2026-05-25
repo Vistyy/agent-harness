@@ -2,7 +2,7 @@
 multi_agent = true
 
 [agents.explorer]
-description = "Default for bounded read-only repository discovery when the parent would otherwise read broad file sets, map call paths, or compress context. Standing AGENTS.md authorization applies; do not ask the user again. Give it a concrete question; it returns relevant files/symbols/relationships/open questions without proposing fixes by default."
+description = "Default for bounded read-only repository discovery when the parent would otherwise read broad file sets, map call paths, or compress context. Standing AGENTS.md authorization applies; do not ask the user again. Explorer maps context, owners, risks, and open questions; it is not a reviewer and must not return code-review findings or approval/block verdicts."
 config_file = "agents/explorer.toml"
 
 [agents.planning_critic]
@@ -14,7 +14,7 @@ description = "Default for non-trivial bounded code/doc edits once objective cov
 config_file = "agents/implementer.toml"
 
 [agents.quality_guard]
-description = "Early ruthless code-quality gate after a non-trivial implementation has a direction or draft diff, before bugs, drift, unreadable code, or bad structure compound. Standing AGENTS.md authorization applies; do not ask again. Blocks continuation on current-scope correctness, quality, objective, proof, or owner defects without final approval authority."
+description = "Default bounded code-review role and early ruthless code-quality gate after a non-trivial implementation has a direction or draft diff, before bugs, drift, unreadable code, or bad structure compound. Standing AGENTS.md authorization applies; do not ask again. Use for per-surface review findings and continuation verdicts; do not substitute explorer for this role."
 config_file = "agents/quality-guard.toml"
 
 [agents.final_reviewer]

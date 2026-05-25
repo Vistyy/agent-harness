@@ -25,6 +25,13 @@ Use subagents for bounded discovery, bounded implementation, planning critique,
 implementation-shape review, final review, runtime evidence, and visual design
 judgment. Keep urgent blocking work local when the next step depends on it.
 
+Use `explorer` only for discovery, inventory, context mapping, and open
+questions. Explorer output is context, not review evidence. Never substitute
+`explorer` for `quality_guard` because a review task is read-only. If a
+bounded surface needs code review, use `quality_guard` by default; if
+`quality_guard` is unavailable, stop or ask instead of downgrading to
+discovery.
+
 Use `planning_critic` before risky planning, architecture, scope expansion, or
 work where the objective could be misread. Use `quality_guard` after a
 non-trivial required slice has a real direction or draft diff, before bugs,
@@ -54,12 +61,13 @@ because it is slow, silent, timed out, or blocking local work.
 
 ## Role Timing
 
-- `explorer`: before or during planning when repo reality is unclear.
+- `explorer`: before or during planning when repo reality is unclear; returns
+  maps and questions, not code-review findings or approve/block verdicts.
 - `planning_critic`: before risky planning, implementation, or scope expansion.
 - `implementer`: executes one bounded slice after scope is clear.
-- `quality_guard`: early code-quality gate after non-trivial required-slice
-  implementation begins; blocks continuation on current-scope correctness,
-  quality, objective, proof, or owner defects.
+- `quality_guard`: default bounded code-review role and early code-quality gate
+  after non-trivial required-slice implementation begins; blocks continuation
+  on current-scope correctness, quality, objective, proof, or owner defects.
 - `final_reviewer`: final merge-readiness gate after implementation and
   verification for non-trivial work, with required-slice, discovery-routing,
   prior-finding, proof, cleanup, and residual-work state.
@@ -68,10 +76,10 @@ because it is slow, silent, timed out, or blocking local work.
 
 Normal non-trivial loop:
 
-`shape objective -> planning_critic when risk warrants -> implementer draft or
-parent draft -> quality_guard for non-trivial slices -> same implementer
-revision loop -> verify work -> final_reviewer for non-trivial completion ->
-closeout`
+`shape objective -> explorer when repo reality is unclear -> planning_critic
+when risk warrants -> implementer draft or parent draft -> quality_guard for
+non-trivial slices -> same implementer revision loop -> verify work ->
+final_reviewer for non-trivial completion -> closeout`
 
 ## Handoff
 

@@ -12,13 +12,15 @@ conversation. Agents must not wait for the user to mention subagents again when
 
 ## Roles
 
-- `explorer`: read-only repository discovery and context compression.
+- `explorer`: read-only repository discovery and context compression; maps
+  files, owners, call paths, risks, and open questions, but never returns code
+  review findings or approval/block verdicts.
 - `planning_critic`: strategy reviewer before non-trivial execution; challenges
   whether the proposed route and simplest correct end state should exist.
 - `implementer`: one bounded assigned implementation slice.
-- `quality_guard`: early ruthless code-quality gate after implementation has a
-  direction or draft diff, before bugs, drift, unreadable code, or bad
-  structure compound.
+- `quality_guard`: default bounded code-review role and early ruthless
+  code-quality gate after implementation has a direction or draft diff, before
+  bugs, drift, unreadable code, or bad structure compound.
 - `final_reviewer`: final isolated closeout reviewer; judges whether the whole
   changed surface is merge-ready for the binding objective.
 - `runtime_evidence`: independent live-use verifier for non-trivial
