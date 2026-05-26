@@ -16,6 +16,11 @@ objective with a convenient slice, note, plan, claim, test, or map item.
 Research current repo reality before choosing the shape. Plans, maps, notes,
 summaries, and parent conclusions are context only.
 
+Ask one decision question at a time. If repo discovery can answer the question,
+inspect the repo instead of asking the user. For broad investigation or
+adaptation work, return a disposition ledger and proposed owner changes for
+user signoff before implementation.
+
 For non-trivial work, independently describe the expected finished repo state
 before narrowing the work or accepting that the current implementation is close
 to done. Derive that state from the user's objective and current repo reality,
@@ -30,6 +35,10 @@ workflow and adjacent peers enough to decide whether the issue is local or
 points to wrong ownership, a missing boundary, obsolete residue,
 over-abstraction, under-abstraction, weak proof, or stale documentation. Choose
 a file-local fix only when the surrounding owner remains coherent.
+
+When the area is unfamiliar, zoom out before drilling into edits: map relevant
+owners, modules, callers, lifecycle/state paths, and proof surfaces using the
+project vocabulary.
 
 ## Working Model
 
@@ -69,6 +78,12 @@ Before centralizing, extracting, or polishing duplicated complexity, prove the
 underlying concept is still necessary and has a durable owner. If the likely
 target architecture would obsolete it, route it as explicit future work or
 accepted temporary debt instead of making the current shape nicer.
+
+Use the deletion test before adding, preserving, or polishing an abstraction:
+if deleting it removes complexity instead of concentrating necessary behavior
+behind a clearer owner/interface, it is probably shallow. For broad
+architecture cleanup, present candidate directions with confidence and wait for
+the user to choose before editing.
 
 ## Decomposition
 

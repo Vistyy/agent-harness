@@ -125,7 +125,7 @@ def run_harness_checks(*, repo_root: Path) -> list[CheckFailure]:
                     "work notes live under docs-ai/current-work/work-notes, not durable docs: "
                     + ", ".join(str(path.relative_to(repo_root)) for path in legacy_work_notes)
                 ),
-                remediation="Move active memory to docs-ai/current-work/work-notes, extract durable content to its owner, or delete completed run history.",
+                remediation="Move work-note memory to docs-ai/current-work/work-notes, extract durable content to its owner, or delete completed run history.",
             )
         )
     for markdown_file in _iter_markdown_files(repo_root):

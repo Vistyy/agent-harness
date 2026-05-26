@@ -9,7 +9,8 @@ Reusable skills are small post-selection contracts.
 - references = mandatory purpose gates.
 - scripts/assets = owned supporting artifacts.
 
-Descriptions should follow this shape when useful:
+Descriptions are routing contracts, not miniature manuals. They should follow
+this shape when useful:
 
 1. purpose: what job the skill helps perform
 2. positive triggers: user wording, work type, or repo condition that should
@@ -31,7 +32,9 @@ Include only content needed for correct use after selection:
 - correctness gotchas
 
 Delete rationale, examples, and process prose unless needed to prevent misuse.
-Do not restate ordinary trigger text.
+Do not restate ordinary trigger text. Keep detailed guidance behind matched
+reference gates, scripts, or assets when the skill needs progressive
+disclosure.
 
 ## References
 

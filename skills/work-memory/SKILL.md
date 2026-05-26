@@ -14,11 +14,12 @@ Delivery maps, notes, plans, and summaries are memory. They are never
 authority. Picking an item starts `../solution-shaping/SKILL.md` from the
 current user objective and repo reality.
 
-Create or update an active note by default for non-trivial work. Skip only for
-trivial, single-turn, low-risk work with no subagent, compaction, resume, or
-multi-slice state. Notes are hypotheses. When they conflict with the objective,
-repo reality, or a simpler coherent shape, amend, supersede, or discard them
-before relying on them.
+Create or update an active note by default for non-trivial work after the user
+has accepted the plan when the work moved through discovery or shaping first.
+Skip only for trivial, single-turn, low-risk work with no subagent, compaction,
+resume, or multi-slice state. Notes are hypotheses. When they conflict with the
+objective, repo reality, or a simpler coherent shape, amend, supersede, or
+discard them before relying on them.
 
 Read `references/durable-context-contract.md` when creating or updating
 delivery-map, backlog, or active work-note memory.
@@ -27,16 +28,20 @@ delivery-map, backlog, or active work-note memory.
 
 - delivery map: `docs-ai/current-work/delivery-map.md`
 - work note: `docs-ai/current-work/work-notes/<item-id>.md` when a visible map
-  item needs remembered detail
-- active note: `docs-ai/current-work/<item-id>/active-work-note.md` when branch
-  work needs resumable memory
-- draft note: `docs-ai/current-work/<item-id>/active-work-note.draft.md`
+  item or future candidate needs remembered starting detail but work has not
+  started
+- active note:
+  `docs-ai/current-work/active/<item-id>/active-work-note.md` when current
+  branch work needs resumable memory and progress visibility
+- draft note:
+  `docs-ai/current-work/active/<item-id>/active-work-note.draft.md`
 - backlog detail: `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md`
 
-The map stays terse. Do not encode status gates in the map. Do not treat lane
-order, work notes, backlog notes, packets, plans, or summaries as authority.
-Use `assets/delivery-map.md` as the map shape. Keep process instructions in
-this skill, not in each project map.
+The map stays terse. Do not encode status gates in the map. Work notes are not
+active progress ledgers; they preserve queued or future starting context only.
+Do not treat lane order, work notes, backlog notes, packets, plans, or
+summaries as authority. Use `assets/delivery-map.md` as the map shape. Keep
+process instructions in this skill, not in each project map.
 
 ## Active Notes
 
@@ -44,6 +49,11 @@ An active note records objective, expected finished repo state, current reality,
 objective coverage, decisions, target shape, decomposition, evidence strategy,
 cleanup, blockers, and remaining required work. It may link subordinate notes,
 but the top note owns the branch-level objective.
+
+For broad investigation or adaptation work, stop after discovery with a compact
+disposition ledger and proposed owner changes, then wait for user signoff
+before implementation. After signoff, the active note is the coarse progress
+ledger.
 
 Separate discovery findings from required slices. Discovery findings need a
 route: required slice, invalidates shape, slice-local detail, blocker or user
@@ -53,11 +63,14 @@ Record the reason, owner/interface, and next action or evidence boundary.
 Required slices are the accepted objective-preserving decomposition from
 `solution-shaping`. Record each required slice with current status, evidence
 and review state, residual/cleanup boundary, and blocker or accepted reduction
-when relevant. Record material gaps against the expected finished state as
-fix-now, future work, accepted debt, rejected/no-change, or blocker. Required
-slices remain required until completed, blocked, or removed by explicit
-user-accepted reduction; they cannot be hidden in backlog or left unrouted to
-make closeout easier.
+when relevant. Use a small status vocabulary: `pending`, `implementing`,
+`completed`, `blocked`, or `removed by user-accepted reduction`. Review state
+names the next gate or result, including `quality_guard pending` for
+non-trivial slice drafts before dependent work continues. Record material gaps
+against the expected finished state as fix-now, future work, accepted debt,
+rejected/no-change, or blocker. Required slices remain required until
+completed, blocked, or removed by explicit user-accepted reduction; they cannot
+be hidden in backlog or left unrouted to make closeout easier.
 
 A finding or slice does not become current-scope authority merely by appearing
 in a note. `solution-shaping` still owns validity, owner, objective coverage,
@@ -85,17 +98,19 @@ objective.
 Every memory document needs a live reason to exist. Before closeout, run:
 
 ```bash
+agent-harness memory status --repo-root <project-root>
 agent-harness memory lifecycle --repo-root <project-root> --item <item-id>
 ```
 
-Use the report to inventory active notes, drafts, work notes, backlog details,
-delivery-map presence, and references before deciding what remains.
+Use status to see active notes, work notes, and backlog details at a glance.
+Use lifecycle to inventory one item's active note, drafts, work note, backlog
+details, delivery-map presence, and references before deciding what remains.
 
 Do not create archive folders, closed-note indexes, or historical ledgers just
 to preserve completed execution context. If the content is reusable doctrine,
-extract it to the owning skill or durable doc. If it is future work, move the
-smallest useful problem statement to backlog. If it is only run history, delete
-it.
+extract it to the owning skill or durable doc and reference existing artifacts
+instead of duplicating them. If it is future work, move the smallest useful
+problem statement to backlog. If it is only run history, delete it.
 
 Before deleting a non-trivial work note, verify successor coverage for its
 durable value. Findings, decisions, uncertainties, owner boundaries, and next

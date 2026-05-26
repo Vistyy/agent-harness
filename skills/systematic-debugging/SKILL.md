@@ -10,6 +10,8 @@ Root cause first. No guess-fixing.
 ## Iron Law
 
 No fix before root-cause investigation.
+Build or identify a feedback loop before hypothesis-heavy debugging. The loop
+must reproduce the reported symptom or explain why reproduction is blocked.
 
 ## Loop
 
@@ -22,7 +24,9 @@ No fix before root-cause investigation.
 6. Fix the source, not the symptom.
 7. Add bounded guards or proof only where supported paths can still bypass the
    source fix.
-8. Verify the fix and surrounding checks.
+8. Remove temporary debug instrumentation, probes, and throwaway harnesses
+   unless a durable owner accepts them.
+9. Verify the fix and surrounding checks.
 
 For multi-component failures, record what enters and leaves each boundary until
 the failing layer is known.

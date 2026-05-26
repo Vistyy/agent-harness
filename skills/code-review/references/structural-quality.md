@@ -31,6 +31,9 @@ local reason that survives objective, owner, and proof review:
   leaking through public APIs
 - thin wrappers, identity abstractions, generic dispatchers, pass-through
   helpers, or indirection that does not reduce caller knowledge
+- shallow abstractions that fail the deletion test: deleting them removes
+  complexity instead of concentrating necessary behavior behind a clearer
+  owner/interface
 - cast-heavy, `any`/`unknown`-heavy, loosely shaped, or unnecessarily optional
   contracts instead of explicit invariants
 - bespoke helpers where the codebase already has a canonical utility
@@ -48,6 +51,8 @@ code messier, harder to scan, or less natural for its owner.
 Require structural fixes instead of cosmetic cleanup:
 
 - delete an indirection layer instead of renaming or polishing it
+- apply the deletion test before preserving, extracting, or polishing an
+  abstraction
 - collapse duplicate branches into one clear flow
 - move feature logic to the layer that owns the concept
 - replace special cases with an explicit model, policy, state object, or typed

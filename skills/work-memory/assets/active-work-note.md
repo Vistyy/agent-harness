@@ -1,4 +1,4 @@
-# Work Note: <objective-id>
+# Active Work Note: <objective-id>
 
 This note is memory, not authority. It is a hypothesis under
 `solution-shaping` and must be amended or discarded when current objective or
@@ -43,16 +43,26 @@ repo reality contradicts it.
   rejected/no-change; owner/interface; reason; next action or evidence
   boundary>`
 
+## Disposition Ledger
+
+- `<for investigation/adaptation work: source/finding; disposition =
+  adapt now | already covered | no-change | future backlog | accepted debt;
+  owner; reason; next action>`
+
 ## Required Slices
 
 - `<slice: contribution, owner/interface, change surface, evidence path,
-  review state, cleanup/residual boundary, status = pending | implementing |
-  completed | blocked | removed by user-accepted reduction; accepted reduction =
-  none | user decision and reduced objective, plus owner/risk/removal
-  condition/backlog link when current-scope debt remains>`
-- blocker/escape hatch: `<none | inspected evidence, contradiction or missing
-  decision, why continuing risks wrong implementation or fake proof, smallest
-  planning decision or revised slice needed>`
+  review state = pending | quality_guard pending | passed | blocked,
+  cleanup/residual boundary, status = pending | implementing | completed |
+  blocked | removed by user-accepted reduction; accepted reduction = none |
+  user decision and reduced objective, plus owner/risk/removal condition/
+  backlog link when current-scope debt remains>`
+
+## Blocker / Escape Hatch
+
+- `<none | inspected evidence, contradiction or missing decision, why
+  continuing risks wrong implementation or fake proof, smallest planning
+  decision or revised slice needed>`
 
 ## Evidence And Review
 

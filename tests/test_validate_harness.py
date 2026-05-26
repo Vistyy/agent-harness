@@ -72,7 +72,7 @@ def add_roles(root: Path, roles: tuple[str, ...] = ("explorer", "quality_guard")
 
 def valid_context_note() -> str:
     return """
-    # Work Note example Context Note
+    # Active Work Note example
 
     ## Objective
 

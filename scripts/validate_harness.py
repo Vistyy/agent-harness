@@ -570,7 +570,7 @@ def _validate_memory_lifecycle(root: Path) -> list[str]:
     docs_ai = root / "docs-ai"
     if not docs_ai.exists():
         return errors
-    for context_path in sorted((root / "docs-ai" / "current-work").glob("*/active-work-note*.md")):
+    for context_path in sorted((root / "docs-ai" / "current-work" / "active").glob("*/active-work-note*.md")):
         if context_path.name not in {"active-work-note.md", "active-work-note.draft.md"}:
             continue
         errors.extend(_validate_context_note(context_path, root))
@@ -828,8 +828,8 @@ def run_self_test() -> list[str]:
 ```
 """
         (root / "docs-ai" / "current-work" / "work-notes").mkdir(parents=True)
-        (root / "docs-ai" / "current-work" / "invalid").mkdir(parents=True)
-        (root / "docs-ai" / "current-work" / "invalid" / "active-work-note.md").write_text(
+        (root / "docs-ai" / "current-work" / "active" / "invalid").mkdir(parents=True)
+        (root / "docs-ai" / "current-work" / "active" / "invalid" / "active-work-note.md").write_text(
             invalid_context,
             encoding="utf-8",
         )
@@ -845,8 +845,8 @@ def run_self_test() -> list[str]:
             "# Work Note done\n",
             encoding="utf-8",
         )
-        (root / "docs-ai" / "current-work" / "done").mkdir(parents=True)
-        (root / "docs-ai" / "current-work" / "done" / "active-work-note.draft.md").write_text(
+        (root / "docs-ai" / "current-work" / "active" / "done").mkdir(parents=True)
+        (root / "docs-ai" / "current-work" / "active" / "done" / "active-work-note.draft.md").write_text(
             invalid_context,
             encoding="utf-8",
         )

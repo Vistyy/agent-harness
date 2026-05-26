@@ -14,6 +14,11 @@ Durable docs are authority, not notes. Before preserving, moving, or deleting a
 claim, identify its owner and verify whether it is current, obsolete, future
 work, or accepted deletion.
 
+When discovery or planning resolves durable terminology, ownership, or a
+hard-to-recover decision, extract it to the owning durable doc or skill as it
+crystallizes. Do not leave durable value stranded in an active note, handoff,
+closed note, or duplicated summary.
+
 Before keeping a durable doc or claim, challenge whether prose is the right
 source of truth. Durable prose must earn its place by carrying non-obvious
 ownership, rationale, invariant, boundary, exception, routing, or proof value.

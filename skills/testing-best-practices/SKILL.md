@@ -27,6 +27,10 @@ Rules:
 - delete, shrink, or rewrite bad touched tests
 - never fake red evidence
 - never replace required live-use proof with persistent tests
+- prefer vertical red-green slices when changing behavior: one behavior test,
+  minimal implementation, then next behavior
+- avoid horizontal batches that write many tests or specs before the first
+  behavior path is validated
 - for migration/runtime failures, prefer the real failed path or faithful
   integration/smoke proof before mocked persistent tests
 - e2e tests are written by implementers when an approved task owns them; they

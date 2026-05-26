@@ -21,7 +21,7 @@ def fake_project(tmp_path: Path, item: str = "example-item") -> Path:
     project = tmp_path / "project"
     write(project / "docs-ai" / "current-work" / "work-notes" / f"{item}.md", "# Work Note\n")
     write(
-        project / "docs-ai" / "current-work" / item / "active-work-note.md",
+        project / "docs-ai" / "current-work" / "active" / item / "active-work-note.md",
         "# Context Note\n",
     )
     write(
@@ -94,7 +94,7 @@ def test_refs_ignores_generated_binary_files(tmp_path: Path) -> None:
 def test_lifecycle_reports_memory_artifacts_and_refs(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
     write(
-        project / "docs-ai" / "current-work" / "example-item" / "active-work-note.draft.md",
+        project / "docs-ai" / "current-work" / "active" / "example-item" / "active-work-note.draft.md",
         "# Draft\n",
     )
     write(
@@ -103,7 +103,7 @@ def test_lifecycle_reports_memory_artifacts_and_refs(tmp_path: Path) -> None:
     )
     write(
         project / "docs-ai" / "docs" / "handoff.md",
-        "See docs-ai/current-work/example-item/active-work-note.md\n",
+        "See docs-ai/current-work/active/example-item/active-work-note.md\n",
     )
 
     result = run_cli(["memory", "lifecycle", "--repo-root", str(project), "--item", "example-item"])
@@ -124,6 +124,59 @@ def test_lifecycle_reports_memory_artifacts_and_refs(tmp_path: Path) -> None:
     assert "agent-harness memory cleanup --repo-root <project-root> --item example-item" in result.stdout
 
 
+def test_status_reports_active_work_note_and_backlog_memory(tmp_path: Path) -> None:
+    project = fake_project(tmp_path)
+    write(
+        project / "docs-ai" / "current-work" / "active" / "example-item" / "active-work-note.md",
+        """
+        # Active Work Note
+
+        ## Required Slices
+
+        - `slice one: review state = quality_guard pending; status = implementing`
+        - `slice two: review state = blocked; status = blocked`
+        - `slice three: review state = pending`
+        - `slice four: review state = custom review; status = custom status`
+
+        ## Closeout
+
+        - required slices closed: `status = closed should not count`
+        """,
+    )
+    write(
+        project / "docs-ai" / "current-work" / "backlog" / "initiative__feature__example-item.md",
+        """
+        # Backlog Entry: initiative/feature/example-item
+
+        ## Metadata
+
+        - status: `open`
+        - owner: `work-memory`
+        - bucket: `discovered separate debt`
+        - location: `skills/work-memory`
+        """,
+    )
+
+    result = run_cli(["memory", "status", "--repo-root", str(project)])
+
+    assert result.returncode == 0
+    assert "memory_status:" in result.stdout
+    assert "active_notes: 1" in result.stdout
+    assert "A example-item: docs-ai/current-work/active/example-item/active-work-note.md" in result.stdout
+    assert "slice_statuses: blocked=1, implementing=1" in result.stdout
+    assert "review_states: blocked=1, pending=1, quality_guard pending=1" in result.stdout
+    assert "invalid_slice_statuses: custom status=1" in result.stdout
+    assert "invalid_review_states: custom review=1" in result.stdout
+    assert "required_slices_missing_status: 1" in result.stdout
+    assert "work_notes: 1" in result.stdout
+    assert "W example-item: docs-ai/current-work/work-notes/example-item.md" in result.stdout
+    assert "backlog_details: 1" in result.stdout
+    assert (
+        "B initiative/feature/example-item: docs-ai/current-work/backlog/initiative__feature__example-item.md "
+        "status=open owner=work-memory bucket=discovered separate debt"
+    ) in result.stdout
+
+
 def test_lifecycle_rejects_path_like_item_without_traceback(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
 
@@ -134,7 +187,7 @@ def test_lifecycle_rejects_path_like_item_without_traceback(tmp_path: Path) -> N
 
 def test_cleanup_dry_run_does_not_delete(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
-    item_dir = project / "docs-ai" / "current-work" / "example-item"
+    item_dir = project / "docs-ai" / "current-work" / "active" / "example-item"
 
     result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "example-item"])
 
@@ -145,7 +198,7 @@ def test_cleanup_dry_run_does_not_delete(tmp_path: Path) -> None:
 
 def test_cleanup_execute_deletes_valid_item_dir_only(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
-    item_dir = project / "docs-ai" / "current-work" / "example-item"
+    item_dir = project / "docs-ai" / "current-work" / "active" / "example-item"
 
     result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "example-item", "--execute"])
 
@@ -159,7 +212,7 @@ def test_cleanup_execute_does_not_follow_symlink_contents(tmp_path: Path) -> Non
     project = fake_project(tmp_path)
     external = tmp_path / "external-sentinel.txt"
     external.write_text("keep me", encoding="utf-8")
-    item_dir = project / "docs-ai" / "current-work" / "example-item"
+    item_dir = project / "docs-ai" / "current-work" / "active" / "example-item"
     (item_dir / "external-link").symlink_to(external)
 
     result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "example-item", "--execute"])
@@ -238,13 +291,26 @@ def test_cleanup_rejects_file_current_work_root_without_traceback(tmp_path: Path
 def test_cleanup_rejects_symlink_current_work_root_and_deletes_nothing(tmp_path: Path) -> None:
     project = tmp_path / "project"
     target = tmp_path / "real-current-work"
-    write(target / "example-item" / "active-work-note.md", "# Context Note\n")
+    write(target / "active" / "example-item" / "active-work-note.md", "# Context Note\n")
     (project / "docs-ai").mkdir(parents=True)
     (project / "docs-ai" / "current-work").symlink_to(target)
 
     result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "example-item", "--execute"])
 
     assert_user_error(result, "Refusing symlink current-work root")
+    assert (target / "active" / "example-item" / "active-work-note.md").exists()
+
+
+def test_cleanup_rejects_symlink_active_work_root_and_deletes_nothing(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    target = tmp_path / "real-active-work"
+    write(target / "example-item" / "active-work-note.md", "# Context Note\n")
+    (project / "docs-ai" / "current-work").mkdir(parents=True)
+    (project / "docs-ai" / "current-work" / "active").symlink_to(target)
+
+    result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "example-item", "--execute"])
+
+    assert_user_error(result, "Refusing symlink active-work root")
     assert (target / "example-item" / "active-work-note.md").exists()
 
 
@@ -258,10 +324,10 @@ def test_cleanup_rejects_missing_item_dir_without_traceback(tmp_path: Path) -> N
 
 def test_cleanup_rejects_symlink_item_dir_and_deletes_nothing(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
-    current_work = project / "docs-ai" / "current-work"
+    active_work = project / "docs-ai" / "current-work" / "active"
     real_item = tmp_path / "real-item"
     write(real_item / "active-work-note.md", "# Context Note\n")
-    symlink_item = current_work / "linked-item"
+    symlink_item = active_work / "linked-item"
     symlink_item.symlink_to(real_item)
 
     result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "linked-item", "--execute"])
@@ -272,7 +338,7 @@ def test_cleanup_rejects_symlink_item_dir_and_deletes_nothing(tmp_path: Path) ->
 
 def test_cleanup_rejects_item_dir_without_marker_and_deletes_nothing(tmp_path: Path) -> None:
     project = fake_project(tmp_path)
-    markerless = project / "docs-ai" / "current-work" / "markerless-item"
+    markerless = project / "docs-ai" / "current-work" / "active" / "markerless-item"
     markerless.mkdir()
 
     result = run_cli(["memory", "cleanup", "--repo-root", str(project), "--item", "markerless-item", "--execute"])
@@ -360,7 +426,8 @@ def test_work_note_bootstrap_creates_work_note(tmp_path: Path) -> None:
     assert f"CREATED: {brief}" in result.stdout
     text = brief.read_text(encoding="utf-8")
     assert "# Work Note new-item-1 - New Work Note" in text
-    assert "This note is memory, not authority." in text
+    assert "This work note is memory, not authority." in text
+    assert "not active working state" in text
     assert "solution-shaping" in text
     assert "delivery workflow" not in text
     assert "## Remembered Intent" in text
@@ -427,7 +494,7 @@ def test_governance_check_allows_agents_delivery_map_pointer(tmp_path: Path) -> 
 
 def test_governance_check_rejects_durable_work_note_memory_link(tmp_path: Path) -> None:
     project = tmp_path / "project"
-    write(project / "docs-ai" / "current-work" / "work-notes" / "old-note.md", "# Old Note\n")
+    write(project / "docs-ai" / "current-work" / "work-notes" / "old-note.md", "# Work Note\n")
     write(project / "docs-ai" / "docs" / "policy.md", "[Old](../current-work/work-notes/old-note.md)\n")
 
     result = run_cli(["governance", "check", "--repo-root", str(project)])
@@ -462,31 +529,31 @@ def test_governance_check_rejects_legacy_durable_work_note_location(tmp_path: Pa
 
 def test_governance_check_rejects_backticked_current_work_memory_path(tmp_path: Path) -> None:
     project = tmp_path / "project"
-    write(project / "docs-ai" / "current-work" / "old" / "active-work-note.md", "# Old Note\n")
-    write(project / "docs-ai" / "docs" / "policy.md", "See `../current-work/old/active-work-note.md`.\n")
+    write(project / "docs-ai" / "current-work" / "active" / "old" / "active-work-note.md", "# Old Note\n")
+    write(project / "docs-ai" / "docs" / "policy.md", "See `../current-work/active/old/active-work-note.md`.\n")
 
     result = run_cli(["governance", "check", "--repo-root", str(project)])
 
     assert result.returncode == 1
     assert "docs.work-note-memory-reference" in result.stdout
-    assert "../current-work/old/active-work-note.md" in result.stdout
+    assert "../current-work/active/old/active-work-note.md" in result.stdout
 
 
 def test_governance_check_rejects_anchored_backticked_memory_path(tmp_path: Path) -> None:
     project = tmp_path / "project"
-    write(project / "docs-ai" / "current-work" / "old" / "active-work-note.md", "# Old Note\n")
-    write(project / "docs-ai" / "docs" / "policy.md", "See `../current-work/old/active-work-note.md#closeout`.\n")
+    write(project / "docs-ai" / "current-work" / "active" / "old" / "active-work-note.md", "# Old Note\n")
+    write(project / "docs-ai" / "docs" / "policy.md", "See `../current-work/active/old/active-work-note.md#closeout`.\n")
 
     result = run_cli(["governance", "check", "--repo-root", str(project)])
 
     assert result.returncode == 1
     assert "docs.work-note-memory-reference" in result.stdout
-    assert "../current-work/old/active-work-note.md#closeout" in result.stdout
+    assert "../current-work/active/old/active-work-note.md#closeout" in result.stdout
 
 
 def test_governance_check_allows_work_notes_to_link_each_other(tmp_path: Path) -> None:
     project = tmp_path / "project"
-    write(project / "docs-ai" / "current-work" / "work-notes" / "old-note.md", "# Old Note\n")
+    write(project / "docs-ai" / "current-work" / "work-notes" / "old-note.md", "# Work Note\n")
     write(
         project / "docs-ai" / "current-work" / "work-notes" / "new-note.md",
         "[Old](old-note.md)\n",

@@ -20,6 +20,9 @@ owned/read-only scope.
 Handoffs are orientation packets, not authority. Parent conclusions, plans,
 work notes, summaries, and implementation claims are hypotheses until checked
 against the objective, repo reality, owner docs, code, tests, and evidence.
+Reference existing artifacts instead of duplicating them, name suggested
+owners/skills and stop conditions, and do not include secrets or sensitive
+context.
 
 Use subagents for bounded discovery, bounded implementation, planning critique,
 implementation-shape review, final review, runtime evidence, and visual design
@@ -35,8 +38,10 @@ discovery.
 Use `planning_critic` before risky planning, architecture, scope expansion, or
 work where the objective could be misread. Use `quality_guard` after a
 non-trivial required slice has a real direction or draft diff, before bugs,
-drift, unreadable code, or bad structure compound. Use `final_reviewer` after
-non-trivial implementation and verification, with required-slice,
+drift, unreadable code, or bad structure compound; dependent work should not
+continue until its current-scope findings are fixed, routed, or explicitly
+blocked for parent decision. Use `final_reviewer` after non-trivial
+implementation and verification, with required-slice,
 discovery-routing, proof, cleanup, and finding-disposition state, before
 completion is claimed.
 
