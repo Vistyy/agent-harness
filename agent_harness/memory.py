@@ -88,11 +88,19 @@ class BacklogDetailStatus:
 
 
 @dataclass(frozen=True)
+class MemoryOwnerConflict:
+    item: str
+    active_note: Path
+    work_note: Path
+
+
+@dataclass(frozen=True)
 class MemoryStatusReport:
     delivery_map: Path
     delivery_map_exists: bool
     active_notes: tuple[ActiveNoteStatus, ...]
     work_notes: tuple[Path, ...]
+    owner_conflicts: tuple[MemoryOwnerConflict, ...]
     backlog_details: tuple[BacklogDetailStatus, ...]
 
 
@@ -282,9 +290,14 @@ def render_lifecycle_report(report: LifecycleReport) -> str:
     lines.extend(
         [
             f"  work_note: {_present(report.work_note_exists)} {report.work_note}",
-            f"  backlog_details: {len(report.backlog_details)}",
         ]
     )
+    if report.active_note_exists and report.work_note_exists:
+        lines.append(
+            "  owner_conflict: active note and work note both exist; "
+            "promote retained context to the active note and delete or retire the work note"
+        )
+    lines.append(f"  backlog_details: {len(report.backlog_details)}")
     lines.extend(f"    {path}" for path in report.backlog_details)
     lines.extend(
         [
@@ -438,11 +451,22 @@ def collect_memory_status(*, repo_root: Path) -> MemoryStatusReport:
         _extract_backlog_detail_status(path, resolved_root)
         for path in sorted(backlog_root.glob("*.md"))
     ) if backlog_root.is_dir() else ()
+    active_by_item = {note.item: note.path for note in active_notes}
+    owner_conflicts = tuple(
+        MemoryOwnerConflict(
+            item=path.stem,
+            active_note=active_by_item[path.stem],
+            work_note=path,
+        )
+        for path in work_notes
+        if path.stem in active_by_item
+    )
     return MemoryStatusReport(
         delivery_map=delivery_map,
         delivery_map_exists=(resolved_root / delivery_map).exists(),
         active_notes=tuple(active_notes),
         work_notes=work_notes,
+        owner_conflicts=owner_conflicts,
         backlog_details=backlog_details,
     )
 
@@ -480,6 +504,12 @@ def render_memory_status(report: MemoryStatusReport) -> str:
             lines.append(f"      closeout: {closeout}")
     lines.append(f"  work_notes: {len(report.work_notes)}")
     lines.extend(f"    W {path.stem}: {path}" for path in report.work_notes)
+    lines.append(f"  owner_conflicts: {len(report.owner_conflicts)}")
+    lines.extend(
+        f"    ! {conflict.item}: active={conflict.active_note} work_note={conflict.work_note}; "
+        "promote retained context to active and delete or retire the work note"
+        for conflict in report.owner_conflicts
+    )
     lines.append(f"  backlog_details: {len(report.backlog_details)}")
     lines.extend(
         f"    B {detail.item}: {detail.path} status={detail.status} owner={detail.owner} bucket={detail.bucket}"

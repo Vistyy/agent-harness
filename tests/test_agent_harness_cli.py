@@ -114,6 +114,7 @@ def test_lifecycle_reports_memory_artifacts_and_refs(tmp_path: Path) -> None:
     assert "draft_notes: 1" in result.stdout
     assert "active-work-note.draft.md" in result.stdout
     assert "work_note: present docs-ai/current-work/work-notes/example-item.md" in result.stdout
+    assert "owner_conflict: active note and work note both exist" in result.stdout
     assert "backlog_details: 1" in result.stdout
     assert "initiative__feature__example-item.md" in result.stdout
     assert "delivery_map: present docs-ai/current-work/delivery-map.md" in result.stdout
@@ -170,6 +171,8 @@ def test_status_reports_active_work_note_and_backlog_memory(tmp_path: Path) -> N
     assert "required_slices_missing_status: 1" in result.stdout
     assert "work_notes: 1" in result.stdout
     assert "W example-item: docs-ai/current-work/work-notes/example-item.md" in result.stdout
+    assert "owner_conflicts: 1" in result.stdout
+    assert "! example-item: active=docs-ai/current-work/active/example-item/active-work-note.md work_note=docs-ai/current-work/work-notes/example-item.md" in result.stdout
     assert "backlog_details: 1" in result.stdout
     assert (
         "B initiative/feature/example-item: docs-ai/current-work/backlog/initiative__feature__example-item.md "

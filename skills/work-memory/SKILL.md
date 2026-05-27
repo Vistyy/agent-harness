@@ -37,10 +37,17 @@ delivery-map, backlog, or active work-note memory.
   `docs-ai/current-work/active/<item-id>/active-work-note.draft.md`
 - backlog detail: `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md`
 
-The map stays terse. Do not encode status gates in the map. Work notes are not
+The delivery map is a high-level project queue and dependency index. It stays
+terse and preserves only the ordering, dependency, and ownership cues needed to
+choose the next work item. Do not encode status gates in the map. Exact runtime
+behavior belongs in code, tests, schemas, config, generated artifacts, or the
+durable owner docs named by `documentation-stewardship`. Work notes are not
 active progress ledgers; they preserve queued or future starting context only.
-Do not treat lane order, work notes, backlog notes, packets, plans, or
-summaries as authority. Use `assets/delivery-map.md` as the map shape. Keep
+When a queued item becomes active, move retained context into the active note,
+retarget the delivery-map link to the active note, and delete or explicitly
+retire the work note. An item must not have both a work note and active note as
+live owners. Do not treat lane order, work notes, backlog notes, packets, plans,
+or summaries as authority. Use `assets/delivery-map.md` as the map shape. Keep
 process instructions in this skill, not in each project map.
 
 ## Active Notes
