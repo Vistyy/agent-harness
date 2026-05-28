@@ -16,9 +16,9 @@ proof; they do not replace runtime, design, security, or test owners.
 Review is a blocking gate, not encouragement. A reviewer is expected to falsify
 the parent story and find real defects.
 
-Plans, work notes, delivery maps, summaries, previous approvals, and parent
-claims are hypotheses. Code, owner docs, tests, runtime topology, data shape,
-diffs, proof artifacts, and repository state are evidence.
+Plans, work state, summaries, previous approvals, and parent claims are
+hypotheses. Code, owner docs, tests, runtime topology, data shape, diffs, proof
+artifacts, and repository state are evidence.
 
 For non-trivial work, approval is binary: every reference selected by the
 caller, role prompt, or handoff must be applied deeply enough for the claim. If
@@ -39,16 +39,15 @@ invalid. Test-pass approval is invalid.
 
 ## Always-On Review Setup
 
-Before trusting the diff or parent story, independently reconstruct the review
-target from repo evidence:
+Before trusting the diff or parent story, independently reconstruct from repo
+evidence:
 
 - binding objective and user-accepted reductions
 - expected finished repo state that would make the objective true
 - atomic claims or objective coverage units in the reviewed scope
 - owner/interface, lifecycle, state authority, failure policy, and proof route
-- authority inspected: owner docs, code paths, runtime topology, data/state
-  shape, tests, changed surface, adjacent owner/interface paths, and proof
-  artifacts treated as authority
+- inspected authority: owner docs, code paths, runtime topology, data/state
+  shape, tests, changed surface, adjacent paths, and proof artifacts
 - plan/note interpretation verdict
 - known findings, finding dispositions, accepted temporary debt, and residual
   work
@@ -88,7 +87,7 @@ Reconstruction depth is role-bounded:
 
 ## Simplicity And Fix-Now Review
 
-Working behavior is not enough. Review whether the solution is simpler,
+Working behavior is not enough. Review whether the solution is simple,
 owner-correct, and unified with established peer patterns.
 
 Block unnecessary owners, wrappers, shims, flags, fallback paths, compatibility

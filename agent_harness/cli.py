@@ -19,7 +19,7 @@ def _build_parser() -> argparse.ArgumentParser:
     memory_parser = subparsers.add_parser("memory", help="Delivery memory helpers.")
     memory_subparsers = memory_parser.add_subparsers(dest="memory_command", required=True)
 
-    bootstrap_parser = memory_subparsers.add_parser("bootstrap", help="Scaffold a work note.")
+    bootstrap_parser = memory_subparsers.add_parser("bootstrap", help="Scaffold a queued work item.")
     bootstrap_parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="Target project root.")
     bootstrap_parser.add_argument("--item", "--item-id", dest="item", required=True, help="Item id.")
     bootstrap_parser.add_argument("--title", required=True, help="Human-readable item title.")
@@ -34,7 +34,7 @@ def _build_parser() -> argparse.ArgumentParser:
     lifecycle_parser.add_argument("--repo-root", type=Path, required=True, help="Target project root.")
     lifecycle_parser.add_argument("--item", required=True, help="Item id.")
 
-    status_parser = memory_subparsers.add_parser("status", help="Summarize active, work-note, and backlog memory.")
+    status_parser = memory_subparsers.add_parser("status", help="Summarize current-work state.")
     status_parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="Target project root.")
 
     cleanup_parser = memory_subparsers.add_parser("cleanup", help="Delete a current-work active note directory.")

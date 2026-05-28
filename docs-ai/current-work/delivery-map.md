@@ -6,8 +6,6 @@ starting points and backlog visibility. Picking an item starts discovery through
 
 ## Lanes
 
-- `overlay-contract-redesign` - `active/overlay-contract-redesign/active-work-note.md` - `active` - redesign of work-state, shaping, reviewer, and CLI gates
+- `python-skill-candidate` - `work-notes/python-skill-candidate.md` - `ready` - decide whether Python needs a reusable skill or a focused review reference
 
 ## Backlog Index
-
-- `overlay-governance/work-memory/promotion-lifecycle-and-granularity`

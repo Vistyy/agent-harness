@@ -17,12 +17,11 @@ Delegate only when the handoff preserves the binding objective, accepted
 reductions, target shape, selected owner/interface, atomic claim boundaries,
 evidence strategy, and owned/read-only scope.
 
-Handoffs are orientation packets, not authority. Parent conclusions, plans,
-work notes, summaries, and implementation claims are hypotheses until checked
-against the objective, repo reality, owner docs, code, tests, and evidence.
-Reference existing artifacts instead of duplicating them, name suggested
-owners/skills and stop conditions, and do not include secrets or sensitive
-context.
+Handoffs are orientation, not authority. Parent conclusions, plans, work state,
+summaries, and implementation claims are hypotheses until checked against the
+objective, repo reality, owner docs, code, tests, and evidence. Reference
+existing artifacts instead of duplicating them, name suggested owners/skills and
+stop conditions, and do not include secrets or sensitive context.
 
 Use subagents for bounded discovery, bounded implementation, planning critique,
 implementation-shape review, final review, runtime evidence, and visual design
@@ -35,17 +34,11 @@ bounded surface needs code review, use `quality_guard` by default; if
 `quality_guard` is unavailable, stop or ask instead of downgrading to
 discovery.
 
-Use `planning_critic` before risky planning, architecture, scope expansion, or
-work where the objective could be misread. It reconstructs objective, target
-state, owner model, and atomic claim boundaries. Use `quality_guard` after a
-non-trivial required claim has a real direction or draft diff, before bugs,
-drift, unreadable code, or bad structure compound. It reconstructs the assigned
-claim and enough lifecycle context to judge implementation quality and plan
-validity; dependent work should not continue until current-scope findings are
-fixed, routed, or explicitly blocked for parent decision. Use `final_reviewer`
-after non-trivial implementation and verification, with required-claim,
-discovery-routing, proof, cleanup, artifact-disposition, and
-finding-disposition state, before completion is claimed.
+Use `planning_critic` when objective, architecture, scope, or decomposition
+could be wrong. Use `quality_guard` after a non-trivial required claim has a
+real direction or draft diff; dependent work waits until current-scope findings
+are fixed, routed, or blocked for parent decision. Use `final_reviewer` after
+non-trivial implementation and verification, before completion is claimed.
 
 Use `implementer` for bounded code/doc edits when the target shape,
 owner/interface, evidence strategy, and write scope are clear enough to hand

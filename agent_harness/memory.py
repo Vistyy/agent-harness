@@ -449,6 +449,10 @@ def _extract_queued_item_status(path: Path, repo_root: Path) -> QueuedItemStatus
     )
 
 
+def _backlog_detail_matches_item(path: Path, item: str) -> bool:
+    return path.stem == item or path.stem.endswith(f"__{item}")
+
+
 def collect_memory_status(*, repo_root: Path) -> MemoryStatusReport:
     resolved_root = resolve_repo_root(repo_root)
     delivery_map = CURRENT_WORK_RELATIVE_ROOT / "delivery-map.md"
@@ -472,7 +476,7 @@ def collect_memory_status(*, repo_root: Path) -> MemoryStatusReport:
         for path in sorted(backlog_root.glob("*.md"))
     ) if backlog_root.is_dir() else ()
     active_by_item = {note.item: note.path for note in active_notes}
-    owner_conflicts = tuple(
+    work_note_conflicts = tuple(
         MemoryOwnerConflict(
             item=queued.item,
             active_note=active_by_item[queued.item],
@@ -481,12 +485,22 @@ def collect_memory_status(*, repo_root: Path) -> MemoryStatusReport:
         for queued in work_notes
         if queued.item in active_by_item
     )
+    backlog_conflicts = tuple(
+        MemoryOwnerConflict(
+            item=item,
+            active_note=active_note,
+            work_note=detail.path,
+        )
+        for detail in backlog_details
+        for item, active_note in active_by_item.items()
+        if _backlog_detail_matches_item(detail.path, item)
+    )
     return MemoryStatusReport(
         delivery_map=delivery_map,
         delivery_map_exists=(resolved_root / delivery_map).exists(),
         active_notes=tuple(active_notes),
         work_notes=work_notes,
-        owner_conflicts=owner_conflicts,
+        owner_conflicts=work_note_conflicts + backlog_conflicts,
         backlog_details=backlog_details,
     )
 

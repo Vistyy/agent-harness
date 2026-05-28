@@ -175,8 +175,9 @@ def test_status_reports_active_work_note_and_backlog_memory(tmp_path: Path) -> N
     assert "required_claims_missing_status: 1" in result.stdout
     assert "queued_items: 1" in result.stdout
     assert "Q example-item: docs-ai/current-work/work-notes/example-item.md queue_state=unknown" in result.stdout
-    assert "owner_conflicts: 1" in result.stdout
+    assert "owner_conflicts: 2" in result.stdout
     assert "! example-item: active=docs-ai/current-work/active/example-item/active-work-note.md queued=docs-ai/current-work/work-notes/example-item.md" in result.stdout
+    assert "! example-item: active=docs-ai/current-work/active/example-item/active-work-note.md queued=docs-ai/current-work/backlog/initiative__feature__example-item.md" in result.stdout
     assert "backlog_details: 1" in result.stdout
     assert (
         "B initiative/feature/example-item: docs-ai/current-work/backlog/initiative__feature__example-item.md "
@@ -207,12 +208,26 @@ def test_work_state_check_reports_mechanical_state_errors(tmp_path: Path) -> Non
         - `claim two: review state = pending`
         """,
     )
+    write(
+        project / "docs-ai" / "current-work" / "backlog" / "initiative__feature__example-item.md",
+        """
+        # Backlog Entry
+
+        ## Metadata
+
+        - status: `open`
+        - owner: `work-memory`
+        - bucket: `discovered separate debt`
+        - queue state: `ready`
+        """,
+    )
 
     result = run_cli(["work-state", "check", "--repo-root", str(project)])
 
     assert result.returncode == 1
     assert "work_state_check: fail" in result.stderr
     assert "owner conflict for example-item" in result.stderr
+    assert "queued=docs-ai/current-work/backlog/initiative__feature__example-item.md" in result.stderr
     assert "docs-ai/current-work/work-notes/example-item.md: invalid or missing queue state 'unknown'" in result.stderr
     assert "invalid claim status 'custom status'" in result.stderr
     assert "invalid review state 'custom review'" in result.stderr

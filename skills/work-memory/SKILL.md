@@ -41,14 +41,12 @@ delivery-map, backlog, or active work-note memory.
 - draft note:
   `docs-ai/current-work/active/<item-id>/active-work-note.draft.md`
 
-The delivery map is a high-level queue view and dependency index. It stays
-terse and preserves only the ordering, dependency, and ownership cues needed to
-choose the next work item. It renders state; it does not own implementation
-authority, status gates, or completion claims. Exact runtime behavior belongs
-in code, tests, schemas, config, generated artifacts, or durable owner docs.
-Do not treat lane order, queued items, backlog notes, plans, or summaries as
-authority. Use `assets/delivery-map.md` as the map shape. Keep process
-instructions in this skill, not in each project map.
+The delivery map is a terse queue view and dependency index. It renders the
+ordering, dependency, state, and ownership cues needed to choose the next item;
+it does not own implementation authority, status gates, or completion claims.
+Exact behavior belongs in code, tests, schemas, config, generated artifacts, or
+durable owner docs. Use `assets/delivery-map.md` as the map shape and keep
+process instructions in this skill, not in each project map.
 
 ## Queued Items
 
@@ -135,11 +133,11 @@ agent-harness memory lifecycle --repo-root <project-root> --item <item-id>
 agent-harness memory cleanup --repo-root <project-root> --item <item-id>
 ```
 
-Use status to see active control sheets, queued items, and owner conflicts at a
-glance. Use check to fail mechanical gaps such as owner conflicts, invalid
-claim/review statuses, missing claim statuses, or missing review states. Use
-lifecycle to inventory one item's active sheet, drafts, queued item, backlog
-details, delivery-map presence, and references before deciding what remains.
+Use status to see active control sheets, queued items, backlog details, owner
+conflicts, claim/review state, queue state, and closeout text. Use check to
+fail mechanical gaps: missing delivery map, duplicate live ownership, invalid
+or missing queue state, invalid claim/review statuses, and missing claim/review
+state. Use lifecycle to inventory one item's artifacts before closeout.
 
 Do not create archive folders, closed-note indexes, or historical ledgers just
 to preserve completed execution context. If the content is reusable doctrine,
@@ -155,13 +153,10 @@ note or keep the unresolved successor state visible.
 
 ## Closeout
 
-Close work state only after the actual work outcome, evidence, reviewer verdicts
-when used, repo-health cleanup, and remaining required work are known.
-If an active control sheet has discovery findings or required claims, closeout
-first verifies that every finding is routed and every required claim is completed,
-blocked, or removed by explicit user-accepted reduction. The final objective
-claim must match that state; unrouted findings or unfinished required claims
-block a completion claim.
+Close work state only after outcome, evidence, reviewer verdicts when used,
+repo-health cleanup, and remaining required work are known. Every discovery
+finding must be routed and every required claim completed, blocked, or removed
+by explicit user-accepted reduction; otherwise completion is blocked.
 
 Closeout is cleanup, not summary-writing. For each artifact reported by
 `agent-harness memory lifecycle`, choose exactly one disposition:

@@ -61,11 +61,9 @@ lifecycle, state authority, risk, and proof surface. First-found cleanup is not
 a simplification pass.
 
 For broad, ambiguous, or multi-owner work, keep a compact working model before
-narrowing to tasks. It should answer what objective is binding, what finished
-repo state would make it true, which owners/workflows and boundaries are
-involved, what is known/unknown/risky, how findings are routed, and what
-evidence would change the plan. Files, failures, notes, and visible symptoms
-are signals, not automatic scope.
+narrowing to tasks: objective, finished repo state, owners/boundaries,
+knowns/unknowns/risks, finding routes, and plan-changing evidence. Files,
+failures, notes, and visible symptoms are signals, not automatic scope.
 
 ## Shape
 
@@ -131,16 +129,12 @@ it as one of:
 - accepted temporary debt
 - rejected or no-change
 
-When a finding is required for the binding objective, fold it into the required
-slice list or current slice. When it invalidates the shape, re-enter shaping.
-When it is separate future work, backlog the smallest owned problem and next
-action. Current-scope work can move to accepted temporary debt only with
-explicit user acceptance, owner, risk, removal condition, and backlog link.
-
-End investigation by routing each material finding to address-now, future work,
-accepted debt, rejected/no-change, or blocker/user decision, with owner, reason,
-confidence, and next evidence path. Do not leave "investigated" as the final
-state.
+End investigation by routing each material finding with owner, reason,
+confidence, and next evidence path. Required findings enter the slice list or
+current slice; invalidating findings re-enter shaping; future work gets the
+smallest owned backlog problem; current-scope debt needs explicit user
+acceptance, owner, risk, removal condition, and backlog link. Do not leave
+"investigated" as the final state.
 
 Required slices are atomic repo claims. Use this shape:
 
