@@ -29,6 +29,11 @@ local reason that survives objective, owner, and proof review:
   temporary logic inserted into an already busy flow
 - feature logic leaking into shared/general paths, or implementation details
   leaking through public APIs
+- parsing, framework adaptation, persistence, external I/O, transaction
+  control, workflow policy, and domain decisions mixed into one owner without a
+  durable boundary
+- hidden side-effect owners for time, configuration, background work,
+  transactions, retries, cleanup, logging, or external calls
 - thin wrappers, identity abstractions, generic dispatchers, pass-through
   helpers, or indirection that does not reduce caller knowledge
 - shallow abstractions that fail the deletion test: deleting them removes

@@ -6,6 +6,4 @@ starting points and backlog visibility. Picking an item starts discovery through
 
 ## Lanes
 
-- `python-skill-candidate` - `work-notes/python-skill-candidate.md` - `ready` - decide whether Python needs a reusable skill or a focused review reference
-
 ## Backlog Index

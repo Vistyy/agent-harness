@@ -1,0 +1,4 @@
+interface:
+  display_name: "Python Engineering"
+  short_description: "Catch Python runtime and typing traps"
+  default_prompt: "Use $python-engineering to review Python runtime and typing semantics that static checks cannot fully prove."
