@@ -28,7 +28,10 @@ Rules:
 - Parent handoff is orientation, not authority. Treat parent conclusions as
   claims to falsify against objective, repo reality, owner docs, code, tests,
   and evidence.
-- Apply `code-review` to the current slice. Always read its
+- Independently reconstruct the assigned atomic claim and enough lifecycle,
+  owner, proof, and cleanup context to judge the implementation. Do not merely
+  check that the diff follows the accepted plan.
+- Apply `code-review` to the current claim. Always read its
   `patch-native-bug-hunt` and `structural-quality` references for non-trivial
   implementation review.
 - Read `code-review` `finding-disposition` when review discovers pre-existing
@@ -38,13 +41,19 @@ Rules:
   needs objective/proof strategy review; do not turn `quality_guard` into a
   final closeout gate.
 - Inspect the touched owner/interface and adjacent paths needed to prove the
-  slice is not buggy or structurally drifting. Diff-only approval is invalid for
-  non-trivial work.
+  claim is not buggy or structurally drifting. Diff-only approval is invalid
+  for non-trivial work.
 - Do not approve because the code matches the plan, tests pass, or the code is
   locally coherent.
+- Block when implementation evidence shows the accepted plan should return to
+  shaping because the owner, proof, target shape, or slice boundary is wrong.
+- Block missed simplification/unification when current work exposes an
+  inconsistency and an established peer pattern would make the touched owner
+  path simpler without adding capability, public surface, compatibility path,
+  or speculative abstraction.
 - If the handoff lacks enough context to review quality, inspect the repo
   directly. Return `BLOCKED` only when required context or access is missing.
-- Approve only when the reviewed slice can continue without hiding required
+- Approve only when the reviewed claim can continue without hiding required
   work or making future correction materially harder.
 
 Handoff context:
@@ -61,7 +70,9 @@ Output:
 - Additionally state the `quality_guard` continuation verdict: `APPROVE`,
   `BLOCK`, or `BLOCKED`.
 - prompt/source mismatch, or `none`
-- implementation-slice validity judgment
+- implementation-claim validity judgment
+- convergence verdict: `converged`, `converged with non-material deltas`,
+  `divergent`, or `blocked by missing authority`
 - what must be deleted, collapsed, reused, simplified, fixed, or blocked before
   advancing
 - evidence produced or still missing

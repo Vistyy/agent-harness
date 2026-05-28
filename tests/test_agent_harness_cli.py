@@ -139,6 +139,10 @@ def test_status_reports_active_work_note_and_backlog_memory(tmp_path: Path) -> N
         - `slice three: review state = pending`
         - `slice four: review state = custom review; status = custom status`
 
+        ## Required Claims
+
+        - `claim one: review state = pending; status = completed`
+
         ## Closeout
 
         - required slices closed: `status = closed should not count`
@@ -161,23 +165,100 @@ def test_status_reports_active_work_note_and_backlog_memory(tmp_path: Path) -> N
     result = run_cli(["memory", "status", "--repo-root", str(project)])
 
     assert result.returncode == 0
-    assert "memory_status:" in result.stdout
-    assert "active_notes: 1" in result.stdout
+    assert "work_state_status:" in result.stdout
+    assert "active_control_sheets: 1" in result.stdout
     assert "A example-item: docs-ai/current-work/active/example-item/active-work-note.md" in result.stdout
-    assert "slice_statuses: blocked=1, implementing=1" in result.stdout
-    assert "review_states: blocked=1, pending=1, quality_guard pending=1" in result.stdout
-    assert "invalid_slice_statuses: custom status=1" in result.stdout
+    assert "claim_statuses: blocked=1, completed=1, implementing=1" in result.stdout
+    assert "review_states: blocked=1, pending=2, quality_guard pending=1" in result.stdout
+    assert "invalid_claim_statuses: custom status=1" in result.stdout
     assert "invalid_review_states: custom review=1" in result.stdout
-    assert "required_slices_missing_status: 1" in result.stdout
-    assert "work_notes: 1" in result.stdout
-    assert "W example-item: docs-ai/current-work/work-notes/example-item.md" in result.stdout
+    assert "required_claims_missing_status: 1" in result.stdout
+    assert "queued_items: 1" in result.stdout
+    assert "Q example-item: docs-ai/current-work/work-notes/example-item.md queue_state=unknown" in result.stdout
     assert "owner_conflicts: 1" in result.stdout
-    assert "! example-item: active=docs-ai/current-work/active/example-item/active-work-note.md work_note=docs-ai/current-work/work-notes/example-item.md" in result.stdout
+    assert "! example-item: active=docs-ai/current-work/active/example-item/active-work-note.md queued=docs-ai/current-work/work-notes/example-item.md" in result.stdout
     assert "backlog_details: 1" in result.stdout
     assert (
         "B initiative/feature/example-item: docs-ai/current-work/backlog/initiative__feature__example-item.md "
-        "status=open owner=work-memory bucket=discovered separate debt"
+        "status=open owner=work-memory bucket=discovered separate debt queue_state=unknown"
     ) in result.stdout
+
+
+def test_work_state_status_aliases_memory_status(tmp_path: Path) -> None:
+    project = fake_project(tmp_path)
+
+    legacy = run_cli(["memory", "status", "--repo-root", str(project)])
+    current = run_cli(["work-state", "status", "--repo-root", str(project)])
+
+    assert current.returncode == 0
+    assert current.stdout == legacy.stdout
+
+
+def test_work_state_check_reports_mechanical_state_errors(tmp_path: Path) -> None:
+    project = fake_project(tmp_path)
+    write(
+        project / "docs-ai" / "current-work" / "active" / "example-item" / "active-work-note.md",
+        """
+        # Active Control Sheet
+
+        ## Required Claims
+
+        - `claim one: review state = custom review; status = custom status`
+        - `claim two: review state = pending`
+        """,
+    )
+
+    result = run_cli(["work-state", "check", "--repo-root", str(project)])
+
+    assert result.returncode == 1
+    assert "work_state_check: fail" in result.stderr
+    assert "owner conflict for example-item" in result.stderr
+    assert "docs-ai/current-work/work-notes/example-item.md: invalid or missing queue state 'unknown'" in result.stderr
+    assert "invalid claim status 'custom status'" in result.stderr
+    assert "invalid review state 'custom review'" in result.stderr
+    assert "required claims missing status (1)" in result.stderr
+
+
+def test_work_state_check_passes_clean_state(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    write(project / "docs-ai" / "current-work" / "delivery-map.md", "# Delivery Map\n")
+    write(
+        project / "docs-ai" / "current-work" / "active" / "example-item" / "active-work-note.md",
+        """
+        # Active Control Sheet
+
+        ## Required Claims
+
+        - `claim one: review state = pending; status = pending`
+        """,
+    )
+
+    result = run_cli(["work-state", "check", "--repo-root", str(project)])
+
+    assert result.returncode == 0
+    assert result.stdout.strip() == "work_state_check: pass"
+
+
+def test_work_state_check_reports_invalid_backlog_queue_state(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    write(project / "docs-ai" / "current-work" / "delivery-map.md", "# Delivery Map\n")
+    write(
+        project / "docs-ai" / "current-work" / "backlog" / "initiative__feature__item.md",
+        """
+        # Backlog Entry
+
+        ## Metadata
+
+        - status: `open`
+        - owner: `work-memory`
+        - bucket: `discovered separate debt`
+        """,
+    )
+
+    result = run_cli(["work-state", "check", "--repo-root", str(project)])
+
+    assert result.returncode == 1
+    assert "docs-ai/current-work/backlog/initiative__feature__item.md: invalid or missing queue state 'unknown'" in result.stderr
 
 
 def test_lifecycle_rejects_path_like_item_without_traceback(tmp_path: Path) -> None:
@@ -428,12 +509,13 @@ def test_work_note_bootstrap_creates_work_note(tmp_path: Path) -> None:
     assert result.returncode == 0
     assert f"CREATED: {brief}" in result.stdout
     text = brief.read_text(encoding="utf-8")
-    assert "# Work Note new-item-1 - New Work Note" in text
-    assert "This work note is memory, not authority." in text
-    assert "not active working state" in text
+    assert "# Queued Work Item: new-item-1" in text
+    assert "This queued item is memory, not authority." in text
+    assert "not active progress state" in text
     assert "solution-shaping" in text
     assert "delivery workflow" not in text
-    assert "## Remembered Intent" in text
+    assert "## Queue" in text
+    assert "- queue state: `ready`" in text
     assert "## Starting Points" in text
     assert "- `initiative/feature/task`" in text
     assert "## Recheck During Discovery" in text

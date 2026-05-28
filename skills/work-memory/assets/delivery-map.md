@@ -4,7 +4,7 @@ This map is remembered intent, not execution authority.
 
 ## Lanes
 
-- `<lane/item>` - `<relative-note-or-backlog-path.md>` - `<one-line starting point>`
+- `<lane/item>` - `<relative-note-or-backlog-path.md>` - `<active | ready | waiting | deferred>` - `<one-line starting point>`
 
 ## Backlog Index
 

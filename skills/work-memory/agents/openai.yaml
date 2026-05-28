@@ -1,4 +1,4 @@
 interface:
-  display_name: "Work Memory"
-  short_description: "Maintain lightweight work memory"
-  default_prompt: "Use $work-memory for delivery maps, backlog details, active notes, resumable context, incoming work, and document lifecycle memory."
+  display_name: "Work State"
+  short_description: "Maintain lightweight work state"
+  default_prompt: "Use $work-memory for delivery maps, queued items, active control sheets, resumable context, incoming work, and document lifecycle state."

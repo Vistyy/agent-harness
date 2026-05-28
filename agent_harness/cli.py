@@ -42,6 +42,19 @@ def _build_parser() -> argparse.ArgumentParser:
     cleanup_parser.add_argument("--item", required=True, help="Item id.")
     cleanup_parser.add_argument("--execute", action="store_true", help="Delete after validation.")
 
+    work_state_parser = subparsers.add_parser("work-state", help="Current-work state helpers.")
+    work_state_subparsers = work_state_parser.add_subparsers(dest="work_state_command", required=True)
+    work_state_status_parser = work_state_subparsers.add_parser(
+        "status",
+        help="Summarize active control sheets, queued items, and closeout blockers.",
+    )
+    work_state_status_parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="Target project root.")
+    work_state_check_parser = work_state_subparsers.add_parser(
+        "check",
+        help="Run mechanical current-work state checks.",
+    )
+    work_state_check_parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="Target project root.")
+
     return parser
 
 
@@ -65,6 +78,10 @@ def main(argv: list[str] | None = None) -> int:
         return memory.command_status(repo_root=args.repo_root)
     if args.command == "memory" and args.memory_command == "cleanup":
         return memory.command_cleanup(repo_root=args.repo_root, item=args.item, execute=args.execute)
+    if args.command == "work-state" and args.work_state_command == "status":
+        return memory.command_status(repo_root=args.repo_root)
+    if args.command == "work-state" and args.work_state_command == "check":
+        return memory.command_work_state_check(repo_root=args.repo_root)
     raise AssertionError("unreachable command route")
 
 

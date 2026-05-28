@@ -5,7 +5,8 @@ description: "Shape non-trivial work before coding or review by preserving the f
 
 # Solution Shaping
 
-Owns objective-preserving shape and decomposition before non-trivial work.
+Owns the objective-preserving probe, shape, and slice loop before non-trivial
+work and when new evidence invalidates a plan.
 
 ## Rule
 
@@ -40,23 +41,31 @@ When the area is unfamiliar, zoom out before drilling into edits: map relevant
 owners, modules, callers, lifecycle/state paths, and proof surfaces using the
 project vocabulary.
 
-## Working Model
+## Core Loop
+
+Use one loop: probe, shape, slice, execute/review, close. This skill owns the
+first three steps and the replan trigger. Large-change audit is a probe mode.
+Atomic claims are the slice rule. Do not add separate gates for these concepts.
+
+## Probe
+
+Probe falsifies the assumption that work is local, simple, or already scoped.
+Before treating work as trivial or implementation-ready, inspect enough repo
+reality to identify the owner/interface, lifecycle/state path, production
+trigger, failure behavior, proof surface, nearby peer patterns, and obvious
+cleanup or simplification pressure.
+
+For large branches, simplification passes, broad reviews, or multi-owner
+requests, probe with mechanical diff facts first, then cluster by owner,
+lifecycle, state authority, risk, and proof surface. First-found cleanup is not
+a simplification pass.
 
 For broad, ambiguous, or multi-owner work, keep a compact working model before
-narrowing to tasks. The model should let you answer:
-
-- what objective is still binding
-- what finished repo state would make that objective true
-- which owners/workflows and boundaries are involved
-- what is known, unknown, and risky
-- which findings point to local fixes, upstream design issues, future work,
-  accepted debt, or no-change
-- what evidence would change the plan
-
-Update the model as repo evidence changes. Files, failures, notes, and visible
-symptoms are signals, not automatic scope. If a finding changes owner,
-root-cause, target architecture, proof, or cleanup assumptions, re-shape before
-continuing.
+narrowing to tasks. It should answer what objective is binding, what finished
+repo state would make it true, which owners/workflows and boundaries are
+involved, what is known/unknown/risky, how findings are routed, and what
+evidence would change the plan. Files, failures, notes, and visible symptoms
+are signals, not automatic scope.
 
 ## Shape
 
@@ -85,7 +94,27 @@ behind a clearer owner/interface, it is probably shallow. For broad
 architecture cleanup, present candidate directions with confidence and wait for
 the user to choose before editing.
 
-## Decomposition
+### Fix-Now Disposition
+
+Current-scope findings must be dispositioned immediately. A finding is
+`fix now` only when all are true:
+
+- it is exposed by the current work or lies on the touched owner path
+- it affects owner coherence, lifecycle consistency, proof validity, cleanup,
+  or the simplicity of the current target shape
+- the repair uses an established peer pattern already present in the repo
+- the repair reduces or unifies structure instead of adding capability, public
+  surface, optional behavior, compatibility path, or speculative abstraction
+- the repair can be proved inside the current atomic claim or a directly
+  adjacent atomic claim
+
+Queue the smallest owned problem or stop for a decision when the finding adds
+product/runtime capability, introduces a new abstraction or pattern, requires
+broad migration outside the touched owner path, has multiple valid target
+patterns, or cannot be proved within the current or directly adjacent atomic
+claim.
+
+## Slice
 
 Decompose only after the final shape is understood. A slice may narrow the
 implementation surface; it must not narrow the objective or final claim unless
@@ -113,12 +142,32 @@ accepted debt, rejected/no-change, or blocker/user decision, with owner, reason,
 confidence, and next evidence path. Do not leave "investigated" as the final
 state.
 
-Required slices are the accepted decomposition of the binding objective. Each
-required slice names its contribution to the expected finished state,
-owner/interface, expected changed surface, evidence path, cleanup boundary,
-residual work, and stop conditions. Every required slice must be completed,
-blocked, or removed by an explicit user-accepted reduction before completion is
-claimed. Invalid slices are blockers, not implementation challenges.
+Required slices are atomic repo claims. Use this shape:
+
+`For <owner/interface>, <behavior/state/contract> changes from <current> to
+<target> through <entrypoint/lifecycle>, proved by <proof>.`
+
+Each slice includes every changed path needed to make that one claim true end
+to end, and nothing whose correctness is a separate claim. It names its
+contribution to the expected finished state, owner/interface, expected changed
+surface, evidence path, cleanup boundary, residual work, and stop conditions.
+
+Split a proposed slice when it has more than one primary owner, state
+authority, production trigger, failure policy, independent proof path, or
+cleanup disposition. Merge a proposed slice when it cannot prove a behavior or
+owner-visible claim alone, such as "models only", "tests only", or "docs only"
+work that leaves the real lifecycle unproved.
+
+Every required claim must be completed, blocked, or removed by an explicit
+user-accepted reduction before completion is claimed. Invalid claims are
+blockers, not implementation challenges.
+
+## Replan
+
+Plan acceptance is not a lock. Re-enter shaping when discovery,
+implementation, review, or proof evidence invalidates owner/interface, target
+shape, slice order, proof strategy, current-scope boundary, or accepted
+complexity. Stop rather than reward-hack a stale plan.
 
 ## Escape Hatch
 

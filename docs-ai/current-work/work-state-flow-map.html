@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Work State Flow Map</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17202a;
+      --muted: #5d6673;
+      --line: #b9c1cc;
+      --panel: #ffffff;
+      --page: #f5f7fa;
+      --queue: #eef1f5;
+      --active: #e8f3ff;
+      --active-line: #2f6fad;
+      --durable: #e9f6ef;
+      --durable-line: #2f7d52;
+      --warn: #fff2df;
+      --warn-line: #b46a12;
+      --stop: #ffecec;
+      --stop-line: #b83d3d;
+      --agent: #f2edff;
+      --agent-line: #6b4bb8;
+      --cli: #e8f7f6;
+      --cli-line: #257b75;
+      --radius: 8px;
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    header {
+      background: #16202d;
+      color: white;
+      padding: 30px 28px 24px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    header p {
+      max-width: 980px;
+      margin: 12px 0 0;
+      color: #d8dee7;
+      font-size: 16px;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    section {
+      margin: 0 0 28px;
+      background: var(--panel);
+      border: 1px solid #d8dee7;
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 14px;
+      color: var(--muted);
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: #344054;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92em;
+      background: #eef1f5;
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cell {
+      border: 1px solid #d8dee7;
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #fbfcfe;
+      min-height: 100%;
+    }
+
+    .cell.queue {
+      background: var(--queue);
+    }
+
+    .cell.active {
+      background: var(--active);
+      border-color: #b8d6f2;
+    }
+
+    .cell.warn {
+      background: var(--warn);
+      border-color: #e6c28b;
+    }
+
+    .cell.stop {
+      background: var(--stop);
+      border-color: #efb3b3;
+    }
+
+    .cell.durable {
+      background: var(--durable);
+      border-color: #aedbc0;
+    }
+
+    .cell.cli {
+      background: var(--cli);
+      border-color: #a9d8d5;
+    }
+
+    .cell.agent {
+      background: var(--agent);
+      border-color: #cbbcf0;
+    }
+
+    .note {
+      border-left: 4px solid var(--active-line);
+      padding: 10px 12px;
+      background: #f7fbff;
+      color: #344054;
+      margin-top: 12px;
+    }
+
+    .note.bad {
+      border-left-color: var(--stop-line);
+      background: #fff7f7;
+    }
+
+    .diagram {
+      width: 100%;
+      overflow-x: auto;
+      padding: 10px 0 2px;
+    }
+
+    svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .box {
+      rx: 8;
+      ry: 8;
+      stroke-width: 1.5;
+    }
+
+    .queue-fill {
+      fill: var(--queue);
+      stroke: #8d99a8;
+    }
+
+    .active-fill {
+      fill: var(--active);
+      stroke: var(--active-line);
+    }
+
+    .durable-fill {
+      fill: var(--durable);
+      stroke: var(--durable-line);
+    }
+
+    .warn-fill {
+      fill: var(--warn);
+      stroke: var(--warn-line);
+    }
+
+    .stop-fill {
+      fill: var(--stop);
+      stroke: var(--stop-line);
+    }
+
+    .cli-fill {
+      fill: var(--cli);
+      stroke: var(--cli-line);
+    }
+
+    .agent-fill {
+      fill: var(--agent);
+      stroke: var(--agent-line);
+    }
+
+    .label {
+      font-size: 15px;
+      fill: var(--ink);
+      font-weight: 700;
+    }
+
+    .small {
+      font-size: 12px;
+      fill: #485465;
+    }
+
+    .tiny {
+      font-size: 11px;
+      fill: #5d6673;
+    }
+
+    .arrow {
+      stroke: #6c7786;
+      stroke-width: 1.6;
+      fill: none;
+      marker-end: url(#arrow);
+    }
+
+    .arrow-active {
+      stroke: var(--active-line);
+      stroke-width: 1.8;
+      fill: none;
+      marker-end: url(#arrow-active);
+    }
+
+    .arrow-warn {
+      stroke: var(--warn-line);
+      stroke-width: 1.8;
+      fill: none;
+      marker-end: url(#arrow-warn);
+    }
+
+    @media (max-width: 840px) {
+      header {
+        padding: 26px 18px 22px;
+      }
+
+      header h1 {
+        font-size: 28px;
+      }
+
+      main {
+        padding: 18px;
+      }
+
+      section {
+        padding: 16px;
+      }
+
+      .grid,
+      .two {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Work State Flow Map</h1>
+    <p>
+      Working visualization for the simplified overlay workflow. The core
+      model is five steps; detailed checks are rules inside those steps, not
+      separate process gates.
+    </p>
+    <nav aria-label="Page sections">
+      <a href="#core">Core Flow</a>
+      <a href="#work-state">Work State</a>
+      <a href="#rules">Rules</a>
+      <a href="#review">Review</a>
+      <a href="#cli">CLI</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="core">
+      <h2>Five-Step Core Flow</h2>
+      <p>
+        The workflow should feel like one loop. Large-branch audits, slice
+        admission, reviewer reconstruction, and closeout disposition are
+        embedded rules, not standalone ceremonies.
+      </p>
+      <div class="diagram" role="img" aria-label="Five step workflow diagram">
+        <svg viewBox="0 0 1180 430" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#6c7786"></path>
+            </marker>
+            <marker id="arrow-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f6fad"></path>
+            </marker>
+            <marker id="arrow-warn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#b46a12"></path>
+            </marker>
+          </defs>
+
+          <rect class="box warn-fill" x="30" y="145" width="170" height="110"></rect>
+          <text class="label" x="115" y="184" text-anchor="middle">Probe</text>
+          <text class="small" x="115" y="210" text-anchor="middle">falsify small scope</text>
+          <text class="small" x="115" y="230" text-anchor="middle">or inventory large diff</text>
+
+          <rect class="box active-fill" x="250" y="145" width="170" height="110"></rect>
+          <text class="label" x="335" y="184" text-anchor="middle">Shape</text>
+          <text class="small" x="335" y="210" text-anchor="middle">target repo state</text>
+          <text class="small" x="335" y="230" text-anchor="middle">simplest owner shape</text>
+
+          <rect class="box agent-fill" x="470" y="145" width="170" height="110"></rect>
+          <text class="label" x="555" y="184" text-anchor="middle">Slice</text>
+          <text class="small" x="555" y="210" text-anchor="middle">atomic claims</text>
+          <text class="small" x="555" y="230" text-anchor="middle">proof per claim</text>
+
+          <rect class="box active-fill" x="690" y="145" width="170" height="110"></rect>
+          <text class="label" x="775" y="184" text-anchor="middle">Execute</text>
+          <text class="label" x="775" y="206" text-anchor="middle">Review</text>
+          <text class="small" x="775" y="230" text-anchor="middle">replan on new evidence</text>
+
+          <rect class="box durable-fill" x="910" y="145" width="170" height="110"></rect>
+          <text class="label" x="995" y="184" text-anchor="middle">Close</text>
+          <text class="small" x="995" y="210" text-anchor="middle">proof, residuals,</text>
+          <text class="small" x="995" y="230" text-anchor="middle">artifact disposition</text>
+
+          <path d="M 200 200 L 250 200" class="arrow-active"></path>
+          <path d="M 420 200 L 470 200" class="arrow-active"></path>
+          <path d="M 640 200 L 690 200" class="arrow-active"></path>
+          <path d="M 860 200 L 910 200" class="arrow-active"></path>
+
+          <path d="M 775 255 C 740 325, 425 330, 335 255" class="arrow-warn"></path>
+          <text class="tiny" x="510" y="337">new evidence invalidates target shape, owner, proof, or slice order</text>
+
+          <rect class="box stop-fill" x="250" y="20" width="170" height="78"></rect>
+          <text class="label" x="335" y="52" text-anchor="middle">Decision</text>
+          <text class="small" x="335" y="76" text-anchor="middle">scope, blocked path</text>
+
+          <path d="M 115 145 C 145 80, 210 58, 250 58" class="arrow-warn"></path>
+          <path d="M 420 58 C 520 86, 650 120, 690 155" class="arrow-warn"></path>
+        </svg>
+      </div>
+      <div class="grid">
+        <article class="cell warn">
+          <h3>Probe</h3>
+          <ul>
+            <li>Every non-trivial task starts by checking owner, lifecycle, nearby peers, proof risk, and failure mode.</li>
+            <li>Large change is just probe-plus: mechanical diff inventory, owner clusters, risk ranking.</li>
+          </ul>
+        </article>
+        <article class="cell active">
+          <h3>Shape</h3>
+          <ul>
+            <li>Define expected finished repo state before implementation.</li>
+            <li>Prefer delete, collapse, reuse, rewrite, and unification before adding structure.</li>
+          </ul>
+        </article>
+        <article class="cell agent">
+          <h3>Slice</h3>
+          <ul>
+            <li>Use atomic claims, not folders, tests, docs, or prompt-sized chunks.</li>
+            <li>Every required claim stays visible until completed, blocked, or user-reduced.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="work-state">
+      <h2>Work State Artifacts</h2>
+      <p>
+        Work state is memory and coordination. It is not authority. The
+        binding objective, repo reality, owner docs, proof, and reviewer
+        judgments outrank notes.
+      </p>
+      <div class="grid">
+        <article class="cell queue">
+          <h3>Delivery Map</h3>
+          <ul>
+            <li>Queue view only: what is active, ready, waiting, or deferred.</li>
+            <li>Does not encode implementation authority or completion claims.</li>
+          </ul>
+        </article>
+        <article class="cell queue">
+          <h3>Queued Item</h3>
+          <ul>
+            <li>Minimum: <code>queue_state</code>, problem, suspected owner, next discovery move.</li>
+            <li>Add rank, dependency, wake-up condition, or why-not-now only when useful.</li>
+            <li>Use states: <code>ready</code>, <code>waiting</code>, <code>deferred</code>.</li>
+          </ul>
+        </article>
+        <article class="cell active">
+          <h3>Active Control Sheet</h3>
+          <ul>
+            <li>One live objective, target state, current model, required claims, blockers, proof/review state, and links.</li>
+            <li>Deep reasoning goes to detail notes only when the sheet would stop being readable.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="note">
+        The active sheet should answer "where are we and what remains?" It
+        should not become an investigation diary or a rigid template that
+        rewards filling fields instead of thinking.
+      </div>
+    </section>
+
+    <section id="rules">
+      <h2>Core Rules Inside The Flow</h2>
+      <div class="grid">
+        <article class="cell active">
+          <h3>Atomic Claim Rule</h3>
+          <ul>
+            <li>Shape: <code>For owner X, behavior/state Y changes from current to target through lifecycle Z, proved by P.</code></li>
+            <li>Include every changed path needed for that claim and nothing that belongs to a separate claim.</li>
+            <li>Split on independent owners, triggers, failure policies, proofs, or cleanup dispositions.</li>
+          </ul>
+        </article>
+        <article class="cell warn">
+          <h3>Unification Fix-Now Rule</h3>
+          <ul>
+            <li>Fix now when current work exposes inconsistency and applying an established peer pattern makes the touched system simpler or more unified.</li>
+            <li>Queue when the change adds capability, introduces new abstraction, expands product scope, or requires a broad migration decision.</li>
+            <li>Every material finding still needs a disposition; "noticed" is not a final state.</li>
+          </ul>
+        </article>
+        <article class="cell stop">
+          <h3>Replan Trigger</h3>
+          <ul>
+            <li>Stop implementation when evidence changes owner, target shape, proof, slice order, or current-scope boundary.</li>
+            <li>Do not polish a stale plan into passing checks.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="grid two">
+        <article class="cell agent">
+          <h3>Example-Derived Lessons</h3>
+          <ul>
+            <li>A domain label can still be too broad; split by falsifiable claims.</li>
+            <li>Review-only claims are valid when they block wrong implementation.</li>
+            <li>Models-only, tests-only, or docs-only slices are invalid unless tied to a real owner claim.</li>
+          </ul>
+        </article>
+        <article class="cell warn">
+          <h3>Scope Guard</h3>
+          <ul>
+            <li>Fix-now is not permission to absorb every adjacent cleanup.</li>
+            <li>It applies to simplification or unification of the touched owner path or a peer boundary the current claim already crosses.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="review">
+      <h2>Reviewer Validation</h2>
+      <p>
+        Reviewers do not validate the parent story. They reconstruct enough
+        context from repo evidence to decide whether the objective, shape,
+        slices, proof, and cleanup converge.
+      </p>
+      <div class="grid">
+        <article class="cell warn">
+          <h3>Planning Critic</h3>
+          <ul>
+            <li>Reconstruct objective, target state, owner model, and atomic slice boundaries.</li>
+            <li>Block if the proposed plan narrows the objective, misses a current-scope claim, or overcomplicates shape.</li>
+          </ul>
+        </article>
+        <article class="cell agent">
+          <h3>Quality Guard</h3>
+          <ul>
+            <li>Reconstruct the assigned atomic claim and enough lifecycle context to judge the implementation.</li>
+            <li>Block if implementation evidence invalidates the accepted plan or simpler owner-correct shape exists.</li>
+          </ul>
+        </article>
+        <article class="cell durable">
+          <h3>Final Reviewer</h3>
+          <ul>
+            <li>Reconstruct whole objective coverage from completed claims, proof, residuals, repo state, and artifact disposition.</li>
+            <li>Approve only when convergence, proof, cleanup, and residual work all match the final claim.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="note bad">
+        Material divergence means <code>BLOCK</code>. Missing authority means
+        <code>BLOCKED</code>. Test-pass, diff-only, and plan-compliance
+        approvals are invalid for non-trivial work.
+      </div>
+    </section>
+
+    <section id="cli">
+      <h2>Minimum CLI Surface</h2>
+      <p>
+        The CLI exists only where mechanical checks are reliable. It speeds the
+        agent up by handling inventory and structure, not by judging
+        architecture.
+      </p>
+      <div class="grid">
+        <article class="cell cli">
+          <h3>Core</h3>
+          <ul>
+            <li><code>work-state status</code>: inventory active control sheets, queued items, backlog details, duplicate live ownership, claim/review state, queue state, and closeout text.</li>
+            <li><code>work-state check</code>: mechanically fail missing delivery map, duplicate live ownership, invalid or missing queue state, invalid claim/review statuses, and missing claim/review state.</li>
+          </ul>
+        </article>
+        <article class="cell cli">
+          <h3>Deferred Idea</h3>
+          <ul>
+            <li>Large-change diff inventory can be considered later only if repo teams need a reusable wrapper around ordinary git facts.</li>
+            <li>No such command exists in this workflow today; agents should inspect diffs directly and interpret owner, scope, current debt, and claim boundaries themselves.</li>
+          </ul>
+        </article>
+        <article class="cell stop">
+          <h3>Rejected Automation</h3>
+          <ul>
+            <li>No CLI command should pretend to classify architecture, design quality, or whether debt is current scope.</li>
+            <li>The CLI can require a disposition; the agent and reviewers own the disposition.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

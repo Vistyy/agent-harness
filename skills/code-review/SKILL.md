@@ -39,10 +39,13 @@ invalid. Test-pass approval is invalid.
 
 ## Always-On Review Setup
 
-Before trusting the diff or parent story, reconstruct the review target:
+Before trusting the diff or parent story, independently reconstruct the review
+target from repo evidence:
 
 - binding objective and user-accepted reductions
 - expected finished repo state that would make the objective true
+- atomic claims or objective coverage units in the reviewed scope
+- owner/interface, lifecycle, state authority, failure policy, and proof route
 - authority inspected: owner docs, code paths, runtime topology, data/state
   shape, tests, changed surface, adjacent owner/interface paths, and proof
   artifacts treated as authority
@@ -56,6 +59,52 @@ consistent plan that implements the wrong shape is `BLOCK`.
 
 Use `../solution-shaping/SKILL.md` and its review lenses for non-trivial review.
 Unassessed current-scope lens impact blocks approval.
+
+## Convergence
+
+After independent reconstruction, compare against the parent plan,
+implementation, proof, and final claim.
+
+Convergence verdicts:
+
+- `converged`: objective, target shape, atomic claims, proof route, and cleanup
+  disposition match repo evidence.
+- `converged with non-material deltas`: wording or sequencing differs, but no
+  owner, proof, scope, cleanup, or objective coverage changes.
+- `divergent`: reviewer finds a materially different objective interpretation,
+  simpler target shape, atomic claim boundary, proof route, current-scope
+  disposition, or replan trigger. Verdict must be `BLOCK`.
+- `blocked by missing authority`: reviewer cannot inspect enough evidence to
+  reconstruct the target independently. Verdict must be `BLOCKED`.
+
+Reconstruction depth is role-bounded:
+
+- planning critic: objective, expected finished state, owner model, and atomic
+  claim boundaries
+- quality guard: assigned atomic claim and enough lifecycle context to judge
+  implementation quality and plan validity
+- final reviewer: whole objective coverage from completed claims, proof,
+  residuals, repo state, and artifact disposition
+
+## Simplicity And Fix-Now Review
+
+Working behavior is not enough. Review whether the solution is simpler,
+owner-correct, and unified with established peer patterns.
+
+Block unnecessary owners, wrappers, shims, flags, fallback paths, compatibility
+paths, defensive branches, stale tests/docs, proof-only entrypoints, and
+speculative abstractions unless a real owner and failure mode justify them.
+
+Block missed simplification/unification when current work exposes an
+inconsistency and applying an established peer pattern would make the touched
+system simpler or more unified without adding capability, public surface,
+optional behavior, compatibility path, or speculative abstraction.
+
+Queue or require a parent decision instead of blocking as fix-now when the
+finding adds product/runtime capability, introduces a new abstraction or
+pattern, requires broad migration outside the touched owner path, has multiple
+valid target patterns, or cannot be proved within the current or directly
+adjacent atomic claim.
 
 ## Finding Standard
 
@@ -118,8 +167,10 @@ or handoff before applying this skill. They are not activation rules.
 Report:
 
 - verdict: `APPROVE`, `BLOCK`, or `BLOCKED`
+- convergence verdict
 - binding objective and accepted reductions
 - expected finished repo state
+- reconstructed atomic claims or coverage units
 - authority inspected
 - reviewed scope and why it is sufficient or insufficient
 - plan/note interpretation verdict

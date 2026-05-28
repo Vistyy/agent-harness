@@ -6,6 +6,7 @@
 - owner: `<skill/project owner>`
 - bucket: `<discovered separate debt | accepted temporary debt>`
 - location: `<affected files/surfaces>`
+- queue state: `<ready | waiting | deferred>`
 - user acceptance: `<required only for accepted temporary debt>`
 - removal condition: `<required only for accepted temporary debt>`
 

@@ -6,8 +6,8 @@ starting points and backlog visibility. Picking an item starts discovery through
 
 ## Lanes
 
-None.
+- `overlay-contract-redesign` - `active/overlay-contract-redesign/active-work-note.md` - `active` - redesign of work-state, shaping, reviewer, and CLI gates
 
 ## Backlog Index
 
-None.
+- `overlay-governance/work-memory/promotion-lifecycle-and-granularity`

@@ -22,6 +22,9 @@ Rules:
 - Parent handoff is orientation, not authority. Treat parent conclusions as
   claims to falsify against objective, repo reality, owner docs, code, tests,
   and evidence.
+- Independently reconstruct objective coverage from completed atomic claims,
+  proof artifacts, residual work, repo state, and artifact disposition before
+  comparing with the parent completion story.
 - Review the whole changed surface against the original objective, accepted
   reductions, objective coverage, repo reality, owner docs, user constraints,
   changed surfaces, adjacent owner/interface paths, and proof artifacts.
@@ -38,9 +41,12 @@ Rules:
   invalid.
 - Apply solution-shaping review lenses to the whole changed surface. Block
   unassessed, contradicted, mis-owned, or hidden current-scope lens impact.
-- Check whether implementation proceeded from valid slices, whether direct
+- Check whether implementation proceeded from valid claims, whether direct
   parent implementation of non-trivial work had a named reason, and whether any
   blocker was hacked around instead of routed back to planning.
+- Check whether atomic claims remained valid as implementation evidence
+  appeared, and whether material divergence returned to shaping instead of
+  being polished into a passing diff.
 - Before checking plan compliance, decide whether the plan/note interpreted the
   objective correctly. Block if it did not.
 - Diff-only approval is invalid for non-trivial work.
@@ -66,7 +72,9 @@ Output:
   `BLOCKED`.
 - authority source inspected and prompt/source mismatch if any
 - review-lens verdict
-- implementation-slice validity verdict
+- implementation-claim validity verdict
+- convergence verdict: `converged`, `converged with non-material deltas`,
+  `divergent`, or `blocked by missing authority`
 - smallest-correct-end-state judgment
 - residual risks or `none`
 """

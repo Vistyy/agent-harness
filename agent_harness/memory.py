@@ -85,6 +85,14 @@ class BacklogDetailStatus:
     status: str
     owner: str
     bucket: str
+    queue_state: str
+
+
+@dataclass(frozen=True)
+class QueuedItemStatus:
+    item: str
+    path: Path
+    queue_state: str
 
 
 @dataclass(frozen=True)
@@ -99,7 +107,7 @@ class MemoryStatusReport:
     delivery_map: Path
     delivery_map_exists: bool
     active_notes: tuple[ActiveNoteStatus, ...]
-    work_notes: tuple[Path, ...]
+    work_notes: tuple[QueuedItemStatus, ...]
     owner_conflicts: tuple[MemoryOwnerConflict, ...]
     backlog_details: tuple[BacklogDetailStatus, ...]
 
@@ -360,6 +368,7 @@ SLICE_STATUS_VALUES = frozenset(
     {"pending", "implementing", "completed", "blocked", "removed by user-accepted reduction"}
 )
 REVIEW_STATE_VALUES = frozenset({"pending", "quality_guard pending", "passed", "blocked"})
+QUEUE_STATE_VALUES = frozenset({"ready", "waiting", "deferred"})
 
 
 def _field_value(item: str, field: str) -> str | None:
@@ -379,7 +388,8 @@ def _extract_active_note_status(path: Path, repo_root: Path) -> ActiveNoteStatus
     text = _read_text_file(path) or ""
     required_slice_items = [
         item
-        for item in _section_list_items(_extract_heading_section(text, "Required Slices"))
+        for heading in ("Required Slices", "Required Claims")
+        for item in _section_list_items(_extract_heading_section(text, heading))
         if not item.startswith("- blocker/escape hatch:")
     ]
     raw_slice_statuses = [_field_value(item, "status") for item in required_slice_items]
@@ -426,6 +436,16 @@ def _extract_backlog_detail_status(path: Path, repo_root: Path) -> BacklogDetail
         status=_metadata_value(text, "status"),
         owner=_metadata_value(text, "owner"),
         bucket=_metadata_value(text, "bucket"),
+        queue_state=_metadata_value(text, "queue state"),
+    )
+
+
+def _extract_queued_item_status(path: Path, repo_root: Path) -> QueuedItemStatus:
+    text = _read_text_file(path) or ""
+    return QueuedItemStatus(
+        item=path.stem,
+        path=path.relative_to(repo_root),
+        queue_state=_metadata_value(text, "queue state"),
     )
 
 
@@ -443,7 +463,7 @@ def collect_memory_status(*, repo_root: Path) -> MemoryStatusReport:
                 active_notes.append(_extract_active_note_status(active_note, resolved_root))
     work_notes_root = resolved_root / WORK_NOTE_RELATIVE_ROOT
     work_notes = tuple(
-        path.relative_to(resolved_root)
+        _extract_queued_item_status(path, resolved_root)
         for path in sorted(work_notes_root.glob("*.md"))
     ) if work_notes_root.is_dir() else ()
     backlog_root = resolved_root / CURRENT_WORK_RELATIVE_ROOT / "backlog"
@@ -454,12 +474,12 @@ def collect_memory_status(*, repo_root: Path) -> MemoryStatusReport:
     active_by_item = {note.item: note.path for note in active_notes}
     owner_conflicts = tuple(
         MemoryOwnerConflict(
-            item=path.stem,
-            active_note=active_by_item[path.stem],
-            work_note=path,
+            item=queued.item,
+            active_note=active_by_item[queued.item],
+            work_note=queued.path,
         )
-        for path in work_notes
-        if path.stem in active_by_item
+        for queued in work_notes
+        if queued.item in active_by_item
     )
     return MemoryStatusReport(
         delivery_map=delivery_map,
@@ -473,17 +493,17 @@ def collect_memory_status(*, repo_root: Path) -> MemoryStatusReport:
 
 def render_memory_status(report: MemoryStatusReport) -> str:
     lines = [
-        "memory_status:",
+        "work_state_status:",
         f"  delivery_map: {_present(report.delivery_map_exists)} {report.delivery_map}",
-        f"  active_notes: {len(report.active_notes)}",
+        f"  active_control_sheets: {len(report.active_notes)}",
     ]
     for note in report.active_notes:
         lines.append(f"    A {note.item}: {note.path}")
         if note.slice_statuses:
             statuses = ", ".join(f"{status}={count}" for status, count in note.slice_statuses)
-            lines.append(f"      slice_statuses: {statuses}")
+            lines.append(f"      claim_statuses: {statuses}")
         else:
-            lines.append("      slice_statuses: none")
+            lines.append("      claim_statuses: none")
         if note.review_states:
             review_states = ", ".join(f"{state}={count}" for state, count in note.review_states)
             lines.append(f"      review_states: {review_states}")
@@ -491,30 +511,67 @@ def render_memory_status(report: MemoryStatusReport) -> str:
             lines.append("      review_states: none")
         if note.invalid_slice_statuses:
             invalid_statuses = ", ".join(f"{status}={count}" for status, count in note.invalid_slice_statuses)
-            lines.append(f"      invalid_slice_statuses: {invalid_statuses}")
+            lines.append(f"      invalid_claim_statuses: {invalid_statuses}")
         if note.invalid_review_states:
             invalid_states = ", ".join(f"{state}={count}" for state, count in note.invalid_review_states)
             lines.append(f"      invalid_review_states: {invalid_states}")
         if note.required_slices_missing_status:
-            lines.append(f"      required_slices_missing_status: {note.required_slices_missing_status}")
+            lines.append(f"      required_claims_missing_status: {note.required_slices_missing_status}")
         if note.required_slices_missing_review_state:
-            lines.append(f"      required_slices_missing_review_state: {note.required_slices_missing_review_state}")
+            lines.append(f"      required_claims_missing_review_state: {note.required_slices_missing_review_state}")
         if note.closeout:
             closeout = "; ".join(line.removeprefix("- ").strip() for line in note.closeout)
             lines.append(f"      closeout: {closeout}")
-    lines.append(f"  work_notes: {len(report.work_notes)}")
-    lines.extend(f"    W {path.stem}: {path}" for path in report.work_notes)
+    lines.append(f"  queued_items: {len(report.work_notes)}")
+    lines.extend(f"    Q {queued.item}: {queued.path} queue_state={queued.queue_state}" for queued in report.work_notes)
     lines.append(f"  owner_conflicts: {len(report.owner_conflicts)}")
     lines.extend(
-        f"    ! {conflict.item}: active={conflict.active_note} work_note={conflict.work_note}; "
-        "promote retained context to active and delete or retire the work note"
+        f"    ! {conflict.item}: active={conflict.active_note} queued={conflict.work_note}; "
+        "promote retained context to active and delete or retire the queued item"
         for conflict in report.owner_conflicts
     )
     lines.append(f"  backlog_details: {len(report.backlog_details)}")
     lines.extend(
-        f"    B {detail.item}: {detail.path} status={detail.status} owner={detail.owner} bucket={detail.bucket}"
+        f"    B {detail.item}: {detail.path} status={detail.status} owner={detail.owner} "
+        f"bucket={detail.bucket} queue_state={detail.queue_state}"
         for detail in report.backlog_details
     )
+    return "\n".join(lines)
+
+
+def collect_work_state_check_errors(report: MemoryStatusReport) -> tuple[str, ...]:
+    errors: list[str] = []
+    if not report.delivery_map_exists:
+        errors.append(f"missing delivery map: {report.delivery_map}")
+    errors.extend(
+        f"owner conflict for {conflict.item}: active={conflict.active_note} queued={conflict.work_note}"
+        for conflict in report.owner_conflicts
+    )
+    for queued in report.work_notes:
+        if queued.queue_state not in QUEUE_STATE_VALUES:
+            errors.append(f"{queued.path}: invalid or missing queue state {queued.queue_state!r}")
+    for detail in report.backlog_details:
+        if detail.queue_state not in QUEUE_STATE_VALUES:
+            errors.append(f"{detail.path}: invalid or missing queue state {detail.queue_state!r}")
+    for note in report.active_notes:
+        for status, count in note.invalid_slice_statuses:
+            errors.append(f"{note.path}: invalid claim status {status!r} ({count})")
+        for state, count in note.invalid_review_states:
+            errors.append(f"{note.path}: invalid review state {state!r} ({count})")
+        if note.required_slices_missing_status:
+            errors.append(f"{note.path}: required claims missing status ({note.required_slices_missing_status})")
+        if note.required_slices_missing_review_state:
+            errors.append(
+                f"{note.path}: required claims missing review state ({note.required_slices_missing_review_state})"
+            )
+    return tuple(errors)
+
+
+def render_work_state_check(errors: tuple[str, ...]) -> str:
+    if not errors:
+        return "work_state_check: pass"
+    lines = ["work_state_check: fail", "errors:"]
+    lines.extend(f"  - {error}" for error in errors)
     return "\n".join(lines)
 
 
@@ -582,16 +639,18 @@ def _ensure_writable(path: Path, *, force: bool) -> None:
 
 def _render_work_note(*, item: str, title: str, tasks: list[str]) -> str:
     task_lines = "\n".join(f"- `{task}`" for task in tasks)
-    return f"""# Work Note {item} - {title}
+    return f"""# Queued Work Item: {item}
 
-This work note is memory, not authority. It is queued or future starting-point
-memory, not active working state. Picking it starts discovery through
-solution-shaping and creates/updates an active note under
-`docs-ai/current-work/active/<item>/active-work-note.md` only when work begins.
+This queued item is memory, not authority. Picking it starts discovery through
+solution-shaping; it does not authorize direct execution. It is queued starting
+context, not active progress state.
 
-## Remembered Intent
+## Queue
 
-- `<why this map item exists>`
+- problem: {title}
+- queue state: `ready`
+- owner or suspected owner: `<owner>`
+- next discovery move: `<smallest useful probe>`
 
 ## Starting Points
 
@@ -677,6 +736,25 @@ def command_status(
         return 1
     print(render_memory_status(report), file=stdout)
     return 0
+
+
+def command_work_state_check(
+    *,
+    repo_root: Path,
+    stdout: TextIO | None = None,
+    stderr: TextIO | None = None,
+) -> int:
+    stdout = sys.stdout if stdout is None else stdout
+    stderr = sys.stderr if stderr is None else stderr
+    try:
+        report = collect_memory_status(repo_root=repo_root)
+    except MemoryCommandError as exc:
+        print(str(exc), file=stderr)
+        return 1
+    errors = collect_work_state_check_errors(report)
+    output = render_work_state_check(errors)
+    print(output, file=stderr if errors else stdout)
+    return 1 if errors else 0
 
 
 def command_cleanup(

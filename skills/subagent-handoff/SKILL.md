@@ -14,8 +14,8 @@ owns role names and missions.
 ## Rule
 
 Delegate only when the handoff preserves the binding objective, accepted
-reductions, target shape, selected owner/interface, evidence strategy, and
-owned/read-only scope.
+reductions, target shape, selected owner/interface, atomic claim boundaries,
+evidence strategy, and owned/read-only scope.
 
 Handoffs are orientation packets, not authority. Parent conclusions, plans,
 work notes, summaries, and implementation claims are hypotheses until checked
@@ -36,14 +36,16 @@ bounded surface needs code review, use `quality_guard` by default; if
 discovery.
 
 Use `planning_critic` before risky planning, architecture, scope expansion, or
-work where the objective could be misread. Use `quality_guard` after a
-non-trivial required slice has a real direction or draft diff, before bugs,
-drift, unreadable code, or bad structure compound; dependent work should not
-continue until its current-scope findings are fixed, routed, or explicitly
-blocked for parent decision. Use `final_reviewer` after non-trivial
-implementation and verification, with required-slice,
-discovery-routing, proof, cleanup, and finding-disposition state, before
-completion is claimed.
+work where the objective could be misread. It reconstructs objective, target
+state, owner model, and atomic claim boundaries. Use `quality_guard` after a
+non-trivial required claim has a real direction or draft diff, before bugs,
+drift, unreadable code, or bad structure compound. It reconstructs the assigned
+claim and enough lifecycle context to judge implementation quality and plan
+validity; dependent work should not continue until current-scope findings are
+fixed, routed, or explicitly blocked for parent decision. Use `final_reviewer`
+after non-trivial implementation and verification, with required-claim,
+discovery-routing, proof, cleanup, artifact-disposition, and
+finding-disposition state, before completion is claimed.
 
 Use `implementer` for bounded code/doc edits when the target shape,
 owner/interface, evidence strategy, and write scope are clear enough to hand
@@ -68,23 +70,27 @@ because it is slow, silent, timed out, or blocking local work.
 
 - `explorer`: before or during planning when repo reality is unclear; returns
   maps and questions, not code-review findings or approve/block verdicts.
-- `planning_critic`: before risky planning, implementation, or scope expansion.
+- `planning_critic`: before risky planning, implementation, or scope expansion;
+  reconstructs objective, target state, owner model, and atomic claim
+  boundaries.
 - `implementer`: executes one bounded slice after scope is clear.
 - `quality_guard`: default bounded code-review role and early code-quality gate
-  after non-trivial required-slice implementation begins; blocks continuation
-  on current-scope correctness, quality, objective, proof, or owner defects.
+  after non-trivial required-claim implementation begins; reconstructs the
+  assigned claim and blocks continuation on current-scope correctness, quality,
+  objective, proof, owner, or simplicity defects.
 - `final_reviewer`: final merge-readiness gate after implementation and
-  verification for non-trivial work, with required-slice, discovery-routing,
-  prior-finding, proof, cleanup, and residual-work state.
+  verification for non-trivial work; reconstructs whole objective coverage from
+  required claims, discovery-routing, prior-finding, proof, cleanup, artifact
+  disposition, and residual-work state.
 - `runtime_evidence`: live-use behavior evidence under `verify-work`.
 - `design_judge`: screenshot/contact-sheet visual-quality approval.
 
 Normal non-trivial loop:
 
-`shape objective -> explorer when repo reality is unclear -> planning_critic
-when risk warrants -> implementer draft or parent draft -> quality_guard for
-non-trivial slices -> same implementer revision loop -> verify work ->
-final_reviewer for non-trivial completion -> closeout`
+`probe/shape/slice objective -> explorer when repo reality is unclear ->
+planning_critic when risk warrants -> implementer draft or parent draft ->
+quality_guard for non-trivial claims -> same implementer revision loop ->
+verify work -> final_reviewer for non-trivial completion -> closeout`
 
 ## Handoff
 
@@ -92,7 +98,7 @@ Pass:
 
 - binding objective, accepted reductions, and residual gaps
 - target shape, owner/interface, and rejected alternatives
-- required slice, routed discovery findings, expected change surface, and
+- required atomic claim, routed discovery findings, expected change surface, and
   cleanup/residual boundary
 - evidence strategy, required proof, and any available proof artifacts
 - role task and owned/read-only scope
@@ -100,9 +106,12 @@ Pass:
 - artifacts, commands, screenshots, logs, or changed surfaces to inspect
 - risks, blockers, and stop conditions
 
-Reviewer handoffs require falsification, not validation of the parent summary.
-Require the reviewer to check objective preservation, proof substitution, and
-current-scope bugs, implementation quality, pre-existing issue disposition, and
+Reviewer handoffs require independent reconstruction and convergence, not
+validation of the parent summary. Require the reviewer to reconstruct the
+role-bounded objective/claim/proof context from repo evidence, compare it with
+the parent story, and return a convergence verdict. Require checks for
+objective preservation, proof substitution, current-scope bugs, implementation
+quality, pre-existing issue disposition, missed simplification/unification, and
 unnecessary concepts, branches, wrappers, states, defensive paths, tests, docs,
 or proof entrypoints that must be deleted, collapsed, rewritten, fixed, routed,
 or blocked.

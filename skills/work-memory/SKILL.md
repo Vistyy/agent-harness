@@ -1,12 +1,13 @@
 ---
 name: work-memory
-description: "Manage lightweight remembered work state: delivery maps, active notes, work notes, incoming work, backlog details, closeout notes, and cleanup. Use when work must survive turns, compaction, subagents, backlog routing, or document lifecycle. Use this skill for memory only; it does not own execution authority, solution shape, proof, review, runtime, tests, or completion doctrine."
+description: "Manage lightweight work state: delivery maps, queued items, active control sheets, detail notes, closeout notes, and cleanup. Use when work must survive turns, compaction, subagents, queue routing, or document lifecycle. Use this skill for memory/state only; it does not own execution authority, solution shape, proof, review, runtime, tests, or completion doctrine."
 ---
 
 # Work Memory
 
-Owns lightweight remembered work state. It does not own execution authority,
-solution shape, proof, review, runtime, test, or completion doctrine.
+Owns lightweight work state. `work-memory` is the legacy skill name; the
+concept is current-work state. It does not own execution authority, solution
+shape, proof, review, runtime, test, or completion doctrine.
 
 ## Rule
 
@@ -14,80 +15,97 @@ Delivery maps, notes, plans, and summaries are memory. They are never
 authority. Picking an item starts `../solution-shaping/SKILL.md` from the
 current user objective and repo reality.
 
-Create or update an active note by default for non-trivial work after the user
-has accepted the plan when the work moved through discovery or shaping first.
-Skip only for trivial, single-turn, low-risk work with no subagent, compaction,
-resume, or multi-slice state. Notes are hypotheses. When they conflict with the
-objective, repo reality, or a simpler coherent shape, amend, supersede, or
-discard them before relying on them.
+Create or update active work state by default once work is non-trivial or must
+survive compaction, review, delegation, multiple slices, interruption, or
+closeout. Skip only for trivial, single-turn, low-risk work with no durable
+state need. Notes are hypotheses. When they conflict with the objective, repo
+reality, or a simpler coherent shape, amend, supersede, or discard them before
+relying on them.
 
 Read `references/durable-context-contract.md` when creating or updating
 delivery-map, backlog, or active work-note memory.
 
-## Memory Shapes
+## State Shapes
 
 - delivery map: `docs-ai/current-work/delivery-map.md`
-- work note: `docs-ai/current-work/work-notes/<item-id>.md` when a visible map
-  item or future candidate needs remembered starting detail but work has not
-  started
-- active note:
-  `docs-ai/current-work/active/<item-id>/active-work-note.md` when current
-  branch work needs resumable memory and progress visibility
+- queued item: one inactive work format. Current projects may store this under
+  `docs-ai/current-work/work-notes/<item-id>.md` or
+  `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md` until the
+  repo migrates, but the item still has one live owner.
+- active control sheet:
+  `docs-ai/current-work/active/<item-id>/active-work-note.md` when current work
+  needs resumable memory and progress visibility
+- detail note: optional files under `docs-ai/current-work/active/<item-id>/`
+  when owner mapping, large-change analysis, evidence, or slice reasoning would
+  make the control sheet unreadable
 - draft note:
   `docs-ai/current-work/active/<item-id>/active-work-note.draft.md`
-- backlog detail: `docs-ai/current-work/backlog/<initiative>__<feature>__<item>.md`
 
-The delivery map is a high-level project queue and dependency index. It stays
+The delivery map is a high-level queue view and dependency index. It stays
 terse and preserves only the ordering, dependency, and ownership cues needed to
-choose the next work item. Do not encode status gates in the map. Exact runtime
-behavior belongs in code, tests, schemas, config, generated artifacts, or the
-durable owner docs named by `documentation-stewardship`. Work notes are not
-active progress ledgers; they preserve queued or future starting context only.
-When a queued item becomes active, move retained context into the active note,
-retarget the delivery-map link to the active note, and delete or explicitly
-retire the work note. An item must not have both a work note and active note as
-live owners. Do not treat lane order, work notes, backlog notes, packets, plans,
-or summaries as authority. Use `assets/delivery-map.md` as the map shape. Keep
-process instructions in this skill, not in each project map.
+choose the next work item. It renders state; it does not own implementation
+authority, status gates, or completion claims. Exact runtime behavior belongs
+in code, tests, schemas, config, generated artifacts, or durable owner docs.
+Do not treat lane order, queued items, backlog notes, plans, or summaries as
+authority. Use `assets/delivery-map.md` as the map shape. Keep process
+instructions in this skill, not in each project map.
 
-## Active Notes
+## Queued Items
 
-An active note records objective, expected finished repo state, current reality,
-objective coverage, decisions, target shape, decomposition, evidence strategy,
-cleanup, blockers, and remaining required work. It may link subordinate notes,
-but the top note owns the branch-level objective.
+Queued items preserve work that is not active. Minimum useful fields:
+
+- problem
+- queue state: `ready`, `waiting`, or `deferred`
+- owner or suspected owner
+- next discovery move
+
+Optional fields exist only when useful: rank for multiple ready items, domain
+or type for routing, dependency/blocker/wake-up condition for waiting items,
+and reason not active now.
+
+When a queued item becomes active, move retained context into the active
+control sheet, retarget the delivery-map link, and delete or explicitly retire
+the queued item. An item must not have both queued and active owners.
+
+## Active Control Sheets
+
+An active control sheet records one live objective, expected finished repo
+state, current repo reality, owner/interface model, required atomic claims,
+proof/review state, blockers, user decisions, closeout state, and links to
+detail notes when needed. It should answer "where are we and what remains?"
+without becoming an investigation diary or rigid field checklist.
 
 For broad investigation or adaptation work, stop after discovery with a compact
 disposition ledger and proposed owner changes, then wait for user signoff
-before implementation. After signoff, the active note is the coarse progress
-ledger.
+before implementation. After signoff, the active control sheet is the coarse
+progress ledger.
 
-Separate discovery findings from required slices. Discovery findings need a
-route: required slice, invalidates shape, slice-local detail, blocker or user
+Separate discovery findings from required claims. Discovery findings need a
+route: required claim, invalidates shape, claim-local detail, blocker or user
 decision, separate backlog work, accepted temporary debt, or rejected/no-change.
 Record the reason, owner/interface, and next action or evidence boundary.
 
-Required slices are the accepted objective-preserving decomposition from
-`solution-shaping`. Record each required slice with current status, evidence
+Required atomic claims are the accepted objective-preserving decomposition from
+`solution-shaping`. Record each required claim with current status, evidence
 and review state, residual/cleanup boundary, and blocker or accepted reduction
 when relevant. Use a small status vocabulary: `pending`, `implementing`,
 `completed`, `blocked`, or `removed by user-accepted reduction`. Review state
 names the next gate or result, including `quality_guard pending` for
-non-trivial slice drafts before dependent work continues. Record material gaps
+non-trivial drafts before dependent work continues. Record material gaps
 against the expected finished state as fix-now, future work, accepted debt,
-rejected/no-change, or blocker. Required slices remain required until
+rejected/no-change, or blocker. Required claims remain required until
 completed, blocked, or removed by explicit user-accepted reduction; they cannot
 be hidden in backlog or left unrouted to make closeout easier.
 
-A finding or slice does not become current-scope authority merely by appearing
-in a note. `solution-shaping` still owns validity, owner, objective coverage,
-and stop conditions.
+A finding or claim does not become current-scope authority merely by appearing
+in work state. `solution-shaping` still owns validity, owner, objective
+coverage, and stop conditions.
 
 ## Backlog
 
-Backlog files preserve work that should not be lost. They are not promises that
-the next implementation shape is known. Keep problem, owner, bucket, affected
-surface, and suggested next discovery move.
+Backlog files and queued items preserve work that should not be lost. They are
+not promises that the next implementation shape is known. Keep the problem,
+owner, affected surface, and suggested next discovery move.
 
 When a backlog item replaces investigation memory, make it resumable without
 archaeology. Preserve the compact working model needed for pickup: findings,
@@ -96,21 +114,31 @@ condition, and references. Keep run history out unless it affects a future
 decision.
 
 Accepted temporary debt needs explicit user acceptance, owner, risk, and
-removal condition. Current-scope cleanup cannot be dumped into backlog unless
-the user accepts a reduction or the work is genuinely separate from the active
-objective.
+removal condition. Current-scope simplification, cleanup, or unification cannot
+be dumped into backlog unless the user accepts a reduction or the work is
+genuinely separate from the active objective.
 
 ## Document Lifecycle
 
 Every memory document needs a live reason to exist. Before closeout, run:
 
 ```bash
-agent-harness memory status --repo-root <project-root>
-agent-harness memory lifecycle --repo-root <project-root> --item <item-id>
+agent-harness work-state status --repo-root <project-root>
+agent-harness work-state check --repo-root <project-root>
 ```
 
-Use status to see active notes, work notes, and backlog details at a glance.
-Use lifecycle to inventory one item's active note, drafts, work note, backlog
+For per-item artifact inventory and cleanup while the CLI is migrating from
+memory to work-state naming, use the legacy commands:
+
+```bash
+agent-harness memory lifecycle --repo-root <project-root> --item <item-id>
+agent-harness memory cleanup --repo-root <project-root> --item <item-id>
+```
+
+Use status to see active control sheets, queued items, and owner conflicts at a
+glance. Use check to fail mechanical gaps such as owner conflicts, invalid
+claim/review statuses, missing claim statuses, or missing review states. Use
+lifecycle to inventory one item's active sheet, drafts, queued item, backlog
 details, delivery-map presence, and references before deciding what remains.
 
 Do not create archive folders, closed-note indexes, or historical ledgers just
@@ -127,12 +155,12 @@ note or keep the unresolved successor state visible.
 
 ## Closeout
 
-Close memory only after the actual work outcome, evidence, reviewer verdicts
+Close work state only after the actual work outcome, evidence, reviewer verdicts
 when used, repo-health cleanup, and remaining required work are known.
-If an active note has discovery findings or required slices, closeout first
-verifies that every finding is routed and every required slice is completed,
+If an active control sheet has discovery findings or required claims, closeout
+first verifies that every finding is routed and every required claim is completed,
 blocked, or removed by explicit user-accepted reduction. The final objective
-claim must match that state; unrouted findings or unfinished required slices
+claim must match that state; unrouted findings or unfinished required claims
 block a completion claim.
 
 Closeout is cleanup, not summary-writing. For each artifact reported by
@@ -148,7 +176,7 @@ Closeout is cleanup, not summary-writing. For each artifact reported by
   evidence, or accepted debt remains unresolved
 
 Use `agent-harness memory cleanup --repo-root <project-root> --item <item-id>`
-for active-note directories with disposition `delete`; run without `--execute`
+for active state directories with disposition `delete`; run without `--execute`
 first unless the user explicitly asked for immediate deletion.
 
 Update the map/backlog only to preserve useful future starting points, remove
@@ -160,6 +188,6 @@ artifact named by project policy.
 ## Assets
 
 - work note: `assets/work-note.md`
-- active note: `assets/active-work-note.md`
+- active control sheet: `assets/active-work-note.md`
 - backlog item: `assets/backlog-entry.md`
 - delivery map: `assets/delivery-map.md`

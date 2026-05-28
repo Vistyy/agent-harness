@@ -1,6 +1,6 @@
-# Active Work Note: <objective-id>
+# Active Control Sheet: <objective-id>
 
-This note is memory, not authority. It is a hypothesis under
+This sheet is memory, not authority. It is a hypothesis under
 `solution-shaping` and must be amended or discarded when current objective or
 repo reality contradicts it.
 
@@ -15,30 +15,15 @@ repo reality contradicts it.
 
 - repo/product state: `<observations>`
 
-## Objective Coverage
-
-- entrypoint/actor: `<covered | gap>`
-- production trigger path: `<covered | gap>`
-- state authority: `<covered | gap>`
-- runtime/lifecycle owner: `<covered | gap>`
-- core behavior: `<covered | gap>`
-- failure/retry/recovery: `<covered | gap>`
-- status/progress projection: `<covered | gap>`
-- user/operator visibility: `<covered | gap>`
-- persistence/side effects: `<covered | gap>`
-- cleanup/legacy removal: `<covered | gap>`
-- observability/diagnostics: `<covered | gap>`
-- tests/runtime proof: `<covered | gap>`
-- docs/memory/residual work: `<covered | gap>`
-
 ## Target Shape
 
 - final shape: `<target shape>`
 - rejected alternatives: `<none | alternatives and why rejected>`
+- owner/interface model: `<owners, lifecycle/state authority, proof surface>`
 
 ## Discovery Findings
 
-- `<finding: route = required slice | invalidates shape | slice-local detail |
+- `<finding: route = required claim | invalidates shape | claim-local detail |
   blocker/user decision | separate backlog work | accepted temporary debt |
   rejected/no-change; owner/interface; reason; next action or evidence
   boundary>`
@@ -49,9 +34,11 @@ repo reality contradicts it.
   adapt now | already covered | no-change | future backlog | accepted debt;
   owner; reason; next action>`
 
-## Required Slices
+## Required Claims
 
-- `<slice: contribution, owner/interface, change surface, evidence path,
+- `<atomic claim: for <owner/interface>, <behavior/state/contract> changes from
+  <current> to <target> through <entrypoint/lifecycle>, proved by <proof>;
+  change surface, evidence path,
   review state = pending | quality_guard pending | passed | blocked,
   cleanup/residual boundary, status = pending | implementing | completed |
   blocked | removed by user-accepted reduction; accepted reduction = none |
@@ -74,7 +61,7 @@ repo reality contradicts it.
 
 - repo-health cleanup: `<fixed/routed/accepted | none>`
 - discovery findings routed: `<all routed | gaps>`
-- required slices closed: `<all completed/blocked/reduced | gaps>`
+- required claims closed: `<all completed/blocked/reduced | gaps>`
 - accepted reductions: `<none | user decision, reduced objective, owner/risk,
   removal condition, backlog link when debt remains>`
 - remaining required work: `<none | visible path/blocker>`
